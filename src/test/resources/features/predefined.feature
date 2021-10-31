@@ -38,8 +38,8 @@ Feature: Smoke steps
     Then element with xpath "//*[@id='q']" should be present
     When I type "Behavior Driven Development" into element with xpath "//*[@id='q']"
     Then I click on element using JavaScript with xpath "//*[@id='button-addon2']"
-    Then I wait for element with xpath "//*[@id='web-results']" to be present
-    Then element with xpath "//*[@id='web-results']" should contain text "Cucumber"
+    Then I wait for element with xpath "//*[contains(@class,'gsc-resultsbox')]//*[@dir='ltr']" to be present
+    Then element with xpath "//*[contains(@class,'gsc-resultsbox')]" should contain text "Cucumber"
 
   @predefined5
   Scenario: Complete the search in DuckDuckGo
@@ -79,7 +79,7 @@ Feature: Smoke steps
     When I type "Behavior Driven Development" into element with xpath "//*[@id='q']"
     Then I click on element using JavaScript with xpath "//*[@class='search-form-home__button-desktop']"
     Then I wait for element with xpath "//*[@class='show-results']" to be present
-    Then I wait for element with xpath "//*[@class='show-results']//*[contains(text(),'cucumber')]" to be present
+    Then element with xpath "//*[@class='show-results']//*[contains(text(),'cucumber')]" should be present
 
   @predefined9
   Scenario: Complete the search in Yandex
