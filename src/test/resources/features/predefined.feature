@@ -51,7 +51,36 @@ Feature: Smoke steps
     Then I wait for element with xpath "//*[@class='results--main']" to be present
     Then element with xpath "//*[@class='results--main']" should contain text "Cucumber"
 
+  @predefined6
+  Scenario: Complete the search in Swisscows
+    Given I open url "https://swisscows.com"
+    Then I should see page title contains "Swisscows"
+    Then element with xpath "//*[@name='query']" should be present
+    When I type "Behavior Driven Development" into element with xpath "//*[@name='query']"
+    Then I click on element using JavaScript with xpath "//*[@class='search-submit']"
+    Then I wait for element with xpath "//*[@class='web-results']" to be present
+    Then element with xpath "//*[@class='web-results']" should contain text "Cucumber"
 
+  @predefined7
+  Scenario: Complete the search in Search Encrypt
+    Given I open url "https://searchencrypt.com"
+    Then I should see page title contains "Search Encrypt"
+    Then element with xpath "//*[@class='search-bar__search']" should be present
+    When I type "Behavior Driven Development" into element with xpath "//*[@class='search-bar__search']"
+    Then I click on element using JavaScript with xpath "//*[@class='search-bar__submit']"
+    Then I wait for element with xpath "//*[@class='serp__results container']" to be present
+    Then element with xpath "//*[@class='serp__results container']" should contain text "Cucumber"
+
+  @predefined8
+  Scenario: Complete the search in Startpage
+    Given I open url "https://startpage.com"
+    Then I should see page title contains "Startpage"
+    Then element with xpath "//*[@id='q']" should be present
+    When I type "Behavior Driven Development" into element with xpath "//*[@id='q']"
+    Then I click on element using JavaScript with xpath "//*[@class='search-form-home__button-desktop']"
+    Then I wait for element with xpath "//*[contains(@class,'mainline-results')]" to be present
+    Then I wait for 2 sec
+    Then element with xpath "(//*[contains(@class,'mainline-results')])[last()]" should contain text "Cucumber"
 
   @predefined200
   Scenario: Check if google search for PCS will return online class website on the first page.
