@@ -110,3 +110,25 @@ Feature: Smoke steps
     Then I click on element using JavaScript with xpath "//*[@data-test-id='search-form-submit']"
     Then I wait for element with xpath "//*[@class='mainline-results']" to be present
     Then element with xpath "//*[@class='mainline-results']" should contain text "Cucumber"
+    
+  @predefined12
+  Scenario: Verify the quote page has a responsive UI
+    Given I open url "https://skryabin.com/market/quote.html"
+    When I resize window to 400 and 800
+    #And I wait for 1 sec
+    Then element with xpath "//*[@id='location']" should not be displayed
+    When I resize window to 1200 and 800
+    #And I wait for 1 sec
+    Then element with xpath "//*[@id='location']" should be displayed
+
+  @predefined13
+  Scenario: Verify minimum length of the "Username" field
+    Given I open url "https://skryabin.com/market/quote.html"
+    When I type "a" into element with xpath "//input[@name='username']"
+    And I click on element with xpath "//*[@id='formSubmit']"
+    #And I wait for 1 sec
+    Then element with xpath "//*[@id='username-error']" should be displayed
+    And element with xpath "//*[@id='username-error']" should contain text "2 char"
+    When I type "b" into element with xpath "//input[@name='username']"
+    #And I wait for 1 sec
+    Then element with xpath "//*[@id='username-error']" should not be displayed
