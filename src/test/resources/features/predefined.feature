@@ -115,31 +115,37 @@ Feature: Smoke steps
   Scenario: Verify the quote page has a responsive UI
     Given I open url "https://skryabin.com/market/quote.html"
     When I resize window to 400 and 800
-    And I wait for 1 sec
+    * I wait for 1 sec
     Then element with xpath "//*[@id='location']" should not be displayed
     When I resize window to 1200 and 800
-    And I wait for 1 sec
+    * I wait for 1 sec
     Then element with xpath "//*[@id='location']" should be displayed
 
   @predefined13
   Scenario: Verify minimum length of the "Username" field
     Given I open url "https://skryabin.com/market/quote.html"
     When I type "a" into element with xpath "//input[@name='username']"
-    And I click on element with xpath "//*[@id='formSubmit']"
-    And I wait for 1 sec
+    * I click on element with xpath "//*[@id='formSubmit']"
+    * I wait for 1 sec
     Then element with xpath "//*[@id='username-error']" should be displayed
-    And element with xpath "//*[@id='username-error']" should contain text "2 char"
+    * element with xpath "//*[@id='username-error']" should contain text "2 char"
     When I type "b" into element with xpath "//input[@name='username']"
-    And I wait for 1 sec
+    * I wait for 1 sec
     Then element with xpath "//*[@id='username-error']" should not be displayed
 
   @predefined14
-  Scenario: Verify "Email" field is required
+  Scenario: Verify the set of required fields ("Username", "Email", "Password", "Name")
     Given I open url "https://skryabin.com/market/quote.html"
-    And I click on element with xpath "//*[@id='formSubmit']"
-    And I wait for 1 sec
-    Then element with xpath "//*[@id='email-error']" should be displayed
-    And element with xpath "//*[@id='email-error']" should contain text "required"
+    * I click on element with xpath "//*[@id='formSubmit']"
+    * I wait for 1 sec
+    Then element with xpath "//*[@id='username-error']" should be displayed
+    * element with xpath "//*[@id='username-error']" should contain text "required"
+    * element with xpath "//*[@id='email-error']" should be displayed
+    * element with xpath "//*[@id='email-error']" should contain text "required"
+    * element with xpath "//*[@id='password-error']" should be displayed
+    * element with xpath "//*[@id='password-error']" should contain text "required"
+    * element with xpath "//*[@id='name-error']" should be displayed
+    * element with xpath "//*[@id='name-error']" should contain text "required"
 
   @predefined15
   Scenario: Verify "Email" field accepts basic valid email a@b (Happy Path)
@@ -311,3 +317,33 @@ Feature: Smoke steps
     And I wait for 1 sec
     Then element with xpath "//*[@id='email-error']" should be displayed
     And element with xpath "//*[@id='email-error']" should contain text "valid"
+
+  @predefined26
+  Scenario: Verify "Password"/"Confirm Password" fields behavior
+    Given I open url "https://skryabin.com/market/quote.html"
+    * I wait for 1 sec
+    Then element with xpath "//*[@id='confirmPassword']" should be disabled
+    When I type "a" into element with xpath "//input[@id='password']"
+    * I wait for 1 sec
+    Then element with xpath "//*[@id='confirmPassword']" should be enabled
+    When I click on element using JavaScript with xpath "//*[@id='formSubmit']"
+    * I wait for 1 sec
+    Then element with xpath "//*[@id='password-error']" should be displayed
+    * element with xpath "//*[@id='password-error']" should contain text "5 char"
+    * element with xpath "//*[@id='confirmPassword-error']" should be displayed
+    * element with xpath "//*[@id='confirmPassword-error']" should contain text "required"
+    When I type "a" into element with xpath "//input[@id='confirmPassword']"
+    * I wait for 1 sec
+    Then element with xpath "//*[@id='confirmPassword-error']" should be displayed
+    * element with xpath "//*[@id='confirmPassword-error']" should contain text "5 char"
+    When I type "bcde" into element with xpath "//input[@id='password']"
+    * I wait for 1 sec
+    Then element with xpath "//*[@id='password-error']" should not be displayed
+    When I type "bcdf" into element with xpath "//input[@id='confirmPassword']"
+    * I wait for 1 sec
+    Then element with xpath "//*[@id='confirmPassword-error']" should be displayed
+    * element with xpath "//*[@id='confirmPassword-error']" should contain text "match"
+    * I clear element with xpath "//input[@id='confirmPassword']"
+    When I type "abcde" into element with xpath "//input[@id='confirmPassword']"
+    * I wait for 1 sec
+    Then element with xpath "//*[@id='confirmPassword-error']" should not be displayed
