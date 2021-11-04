@@ -144,65 +144,75 @@ Feature: Smoke steps
   @predefined15
   Scenario: Verify "Email" field accepts basic valid email a@b (Happy Path)
     Given I open url "https://skryabin.com/market/quote.html"
-    #force load error label with xpath "//*[@id='email-error']", otherwise not present
-    And I click on element with xpath "//*[@id='formSubmit']"
     When I type "a@b" into element with xpath "//input[@name='email']"
+    And I click on element with xpath "//*[@id='formSubmit']"
+    And I wait for 1 sec
+    Then element with xpath "//*[@id='email-error']" should not be present
+  
+  @predefined16
+  Scenario: Verify "Email" field clears dynamic error messages correctly
+    Given I open url "https://skryabin.com/market/quote.html"
+    And I click on element with xpath "//*[@id='formSubmit']"
+    And I wait for 1 sec
+    Then element with xpath "//*[@id='email-error']" should be displayed
+    And element with xpath "//*[@id='email-error']" should contain text "required"
+    When I type "a@b" into element with xpath "//input[@name='email']"
+    And I wait for 1 sec
+    Then element with xpath "//*[@id='email-error']" should not be displayed
+    When I type "." into element with xpath "//input[@name='email']"
+    And I wait for 1 sec
+    Then element with xpath "//*[@id='email-error']" should be displayed
+    And element with xpath "//*[@id='email-error']" should contain text "valid"
+    When I type "c" into element with xpath "//input[@name='email']"
+    And I wait for 1 sec
+    Then element with xpath "//*[@id='email-error']" should not be displayed
     And I click on element with xpath "//*[@id='formSubmit']"
     And I wait for 1 sec
     Then element with xpath "//*[@id='email-error']" should not be displayed
 
-  @predefined16
+  @predefined17
   Scenario: Verify "Email" field requires one and only one @ symbol with non-empty local/domain parts
     Given I open url "https://skryabin.com/market/quote.html"
-    And I click on element with xpath "//*[@id='formSubmit']"
     When I type "abc" into element with xpath "//input[@name='email']"
     And I click on element with xpath "//*[@id='formSubmit']"
     And I wait for 1 sec
     Then element with xpath "//*[@id='email-error']" should be displayed
     And element with xpath "//*[@id='email-error']" should contain text "valid"
-    And I clear element with xpath "//input[@name='email']"
-    When I type "@b" into element with xpath "//input[@name='email']"
-    And I click on element with xpath "//*[@id='formSubmit']"
+    When I type "@" into element with xpath "//input[@name='email']"
+    And I wait for 1 sec
+    Then element with xpath "//*[@id='email-error']" should be displayed
+    And element with xpath "//*[@id='email-error']" should contain text "valid"
+    When I type "d@e" into element with xpath "//input[@name='email']"
     And I wait for 1 sec
     Then element with xpath "//*[@id='email-error']" should be displayed
     And element with xpath "//*[@id='email-error']" should contain text "valid"
     And I clear element with xpath "//input[@name='email']"
-    When I type "a@" into element with xpath "//input[@name='email']"
-    And I click on element with xpath "//*[@id='formSubmit']"
+    When I type "@ab" into element with xpath "//input[@name='email']"
     And I wait for 1 sec
     Then element with xpath "//*[@id='email-error']" should be displayed
     And element with xpath "//*[@id='email-error']" should contain text "valid"
     And I clear element with xpath "//input[@name='email']"
     When I type "a@@b" into element with xpath "//input[@name='email']"
-    And I click on element with xpath "//*[@id='formSubmit']"
-    And I wait for 1 sec
-    Then element with xpath "//*[@id='email-error']" should be displayed
-    And element with xpath "//*[@id='email-error']" should contain text "valid"
-    And I clear element with xpath "//input[@name='email']"
-    When I type "a@b@c" into element with xpath "//input[@name='email']"
-    And I click on element with xpath "//*[@id='formSubmit']"
     And I wait for 1 sec
     Then element with xpath "//*[@id='email-error']" should be displayed
     And element with xpath "//*[@id='email-error']" should contain text "valid"
 
-  @predefined17
+    #technically should go one by one
+  @predefined18
   Scenario: Verify "Email" field accepts printable characters !#$%&'*+-/=?^_`{|}~ in the local part
     Given I open url "https://skryabin.com/market/quote.html"
-    And I click on element with xpath "//*[@id='formSubmit']"
-    #technically should go one by one
     When I type "!#$%&'*+-/=?^_`{|}~@b" into element with xpath "//input[@name='email']"
     And I click on element with xpath "//*[@id='formSubmit']"
     And I wait for 1 sec
-    Then element with xpath "//*[@id='email-error']" should not be displayed
+    Then element with xpath "//*[@id='email-error']" should not be present
 
-  @predefined18
-  Scenario: Verify "Email" field accepts . in the local part as long as its not fist, last or consecutive use
+  @predefined19
+  Scenario: Verify "Email" field accepts dot . in the local part as long as its not fist, last or consecutive use
     Given I open url "https://skryabin.com/market/quote.html"
-    And I click on element with xpath "//*[@id='formSubmit']"
     When I type "a.b@c" into element with xpath "//input[@name='email']"
     And I click on element with xpath "//*[@id='formSubmit']"
     And I wait for 1 sec
-    Then element with xpath "//*[@id='email-error']" should not be displayed
+    Then element with xpath "//*[@id='email-error']" should not be present
     And I clear element with xpath "//input[@name='email']"
     When I type ".b@c" into element with xpath "//input[@name='email']"
     And I click on element with xpath "//*[@id='formSubmit']"
@@ -211,25 +221,22 @@ Feature: Smoke steps
     And element with xpath "//*[@id='email-error']" should contain text "valid"
     And I clear element with xpath "//input[@name='email']"
     When I type "a.@c" into element with xpath "//input[@name='email']"
-    And I click on element with xpath "//*[@id='formSubmit']"
     And I wait for 1 sec
     Then element with xpath "//*[@id='email-error']" should be displayed
     And element with xpath "//*[@id='email-error']" should contain text "valid"
     And I clear element with xpath "//input[@name='email']"
     When I type "a..b@c" into element with xpath "//input[@name='email']"
-    And I click on element with xpath "//*[@id='formSubmit']"
     And I wait for 1 sec
     Then element with xpath "//*[@id='email-error']" should be displayed
     And element with xpath "//*[@id='email-error']" should contain text "valid"
 
-  @predefined19
-  Scenario: Verify "Email" field accepts . in the domain part as long as its not fist, last or consecutive use
+  @predefined20
+  Scenario: Verify "Email" field accepts dot . in the domain part as long as its not fist, last or consecutive use
     Given I open url "https://skryabin.com/market/quote.html"
-    And I click on element with xpath "//*[@id='formSubmit']"
     When I type "a@b.c" into element with xpath "//input[@name='email']"
     And I click on element with xpath "//*[@id='formSubmit']"
     And I wait for 1 sec
-    Then element with xpath "//*[@id='email-error']" should not be displayed
+    Then element with xpath "//*[@id='email-error']" should not be present
     And I clear element with xpath "//input[@name='email']"
     When I type "a@.b" into element with xpath "//input[@name='email']"
     And I click on element with xpath "//*[@id='formSubmit']"
@@ -238,57 +245,44 @@ Feature: Smoke steps
     And element with xpath "//*[@id='email-error']" should contain text "valid"
     And I clear element with xpath "//input[@name='email']"
     When I type "a@b." into element with xpath "//input[@name='email']"
-    And I click on element with xpath "//*[@id='formSubmit']"
     And I wait for 1 sec
     Then element with xpath "//*[@id='email-error']" should be displayed
     And element with xpath "//*[@id='email-error']" should contain text "valid"
     And I clear element with xpath "//input[@name='email']"
     When I type "a@b..c" into element with xpath "//input[@name='email']"
-    And I click on element with xpath "//*[@id='formSubmit']"
     And I wait for 1 sec
     Then element with xpath "//*[@id='email-error']" should be displayed
     And element with xpath "//*[@id='email-error']" should contain text "valid"
 
-  @predefined20
+  @predefined21
   Scenario: Verify "Email" field does not accept quoted " " local part
     Given I open url "https://skryabin.com/market/quote.html"
-    And I click on element with xpath "//*[@id='formSubmit']"
     When I type "\"a\"@b" into element with xpath "//input[@name='email']"
     And I click on element with xpath "//*[@id='formSubmit']"
     And I wait for 1 sec
     Then element with xpath "//*[@id='email-error']" should be displayed
     And element with xpath "//*[@id='email-error']" should contain text "valid"
 
-  @predefined21
+  @predefined22
   Scenario: Verify "Email" field accepts hyphen in the domain part, as long as its not first or last
     Given I open url "https://skryabin.com/market/quote.html"
-    And I click on element with xpath "//*[@id='formSubmit']"
-    When I type "a@b-c" into element with xpath "//input[@name='email']"
-    And I click on element with xpath "//*[@id='formSubmit']"
-    And I wait for 1 sec
-    Then element with xpath "//*[@id='email-error']" should not be displayed
-    And I clear element with xpath "//input[@name='email']"
-    When I type "a@b--c" into element with xpath "//input[@name='email']"
-    And I click on element with xpath "//*[@id='formSubmit']"
-    And I wait for 1 sec
-    Then element with xpath "//*[@id='email-error']" should not be displayed
-    And I clear element with xpath "//input[@name='email']"
-    When I type "a@-b" into element with xpath "//input[@name='email']"
-    And I click on element with xpath "//*[@id='formSubmit']"
-    And I wait for 1 sec
-    Then element with xpath "//*[@id='email-error']" should be displayed
-    And element with xpath "//*[@id='email-error']" should contain text "valid"
-    And I clear element with xpath "//input[@name='email']"
     When I type "a@b-" into element with xpath "//input[@name='email']"
     And I click on element with xpath "//*[@id='formSubmit']"
     And I wait for 1 sec
     Then element with xpath "//*[@id='email-error']" should be displayed
     And element with xpath "//*[@id='email-error']" should contain text "valid"
+    When I type "-c" into element with xpath "//input[@name='email']"
+    And I wait for 1 sec
+    Then element with xpath "//*[@id='email-error']" should not be displayed
+    And I clear element with xpath "//input[@name='email']"
+    When I type "a@-b" into element with xpath "//input[@name='email']"
+    And I wait for 1 sec
+    Then element with xpath "//*[@id='email-error']" should be displayed
+    And element with xpath "//*[@id='email-error']" should contain text "valid"
 
-  @predefined22
+  @predefined23
   Scenario: Verify "Email" field does not allow IP addresses in the domain part
     Given I open url "https://skryabin.com/market/quote.html"
-    And I click on element with xpath "//*[@id='formSubmit']"
     When I type "a@[1.1.1.1]" into element with xpath "//input[@name='email']"
     And I click on element with xpath "//*[@id='formSubmit']"
     And I wait for 1 sec
@@ -296,25 +290,22 @@ Feature: Smoke steps
     And element with xpath "//*[@id='email-error']" should contain text "valid"
     And I clear element with xpath "//input[@name='email']"
     When I type "a@[IPv6:2001:1:2:3:4:5:6:7]" into element with xpath "//input[@name='email']"
-    And I click on element with xpath "//*[@id='formSubmit']"
     And I wait for 1 sec
     Then element with xpath "//*[@id='email-error']" should be displayed
     And element with xpath "//*[@id='email-error']" should contain text "valid"
 
-  @predefined23
+  @predefined24
   Scenario: Verify "Email" field does not allow local part longer than 64 octets
     Given I open url "https://skryabin.com/market/quote.html"
-    And I click on element with xpath "//*[@id='formSubmit']"
     When I type "1234567890123456789012345678901234567890123456789012345678901234a@b" into element with xpath "//input[@name='email']"
     And I click on element with xpath "//*[@id='formSubmit']"
     And I wait for 1 sec
     Then element with xpath "//*[@id='email-error']" should be displayed
     And element with xpath "//*[@id='email-error']" should contain text "valid"
 
-  @predefined24
+  @predefined25
   Scenario: Verify "Email" field does not allow labels longer than 63 octets in the domain part
     Given I open url "https://skryabin.com/market/quote.html"
-    And I click on element with xpath "//*[@id='formSubmit']"
     When I type "a@123456789012345678901234567890123456789012345678901234567890123b" into element with xpath "//input[@name='email']"
     And I click on element with xpath "//*[@id='formSubmit']"
     And I wait for 1 sec
