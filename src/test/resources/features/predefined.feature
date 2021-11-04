@@ -110,28 +110,28 @@ Feature: Smoke steps
 #    Then I click on element using JavaScript with xpath "//*[@data-test-id='search-form-submit']"
 #    Then I wait for element with xpath "//*[@class='mainline-results']" to be present
 #    Then element with xpath "//*[@class='mainline-results']" should contain text "Cucumber"
-    
-  @predefined12
-  Scenario: Verify the quote page has a responsive UI
-    Given I open url "https://skryabin.com/market/quote.html"
-    When I resize window to 400 and 800
-    * I wait for 1 sec
-    Then element with xpath "//*[@id='location']" should not be displayed
-    When I resize window to 1200 and 800
-    * I wait for 1 sec
-    Then element with xpath "//*[@id='location']" should be displayed
-
-  @predefined13
-  Scenario: Verify minimum length of the "Username" field
-    Given I open url "https://skryabin.com/market/quote.html"
-    When I type "a" into element with xpath "//input[@name='username']"
-    * I click on element with xpath "//*[@id='formSubmit']"
-    * I wait for 1 sec
-    Then element with xpath "//*[@id='username-error']" should be displayed
-    * element with xpath "//*[@id='username-error']" should contain text "2 char"
-    When I type "b" into element with xpath "//input[@name='username']"
-    * I wait for 1 sec
-    Then element with xpath "//*[@id='username-error']" should not be displayed
+#
+#  @predefined12
+#  Scenario: Verify the quote page has a responsive UI
+#    Given I open url "https://skryabin.com/market/quote.html"
+#    When I resize window to 400 and 800
+#    * I wait for 1 sec
+#    Then element with xpath "//*[@id='location']" should not be displayed
+#    When I resize window to 1200 and 800
+#    * I wait for 1 sec
+#    Then element with xpath "//*[@id='location']" should be displayed
+#
+#  @predefined13
+#  Scenario: Verify minimum length of the "Username" field
+#    Given I open url "https://skryabin.com/market/quote.html"
+#    When I type "a" into element with xpath "//input[@name='username']"
+#    * I click on element with xpath "//*[@id='formSubmit']"
+#    * I wait for 1 sec
+#    Then element with xpath "//*[@id='username-error']" should be displayed
+#    * element with xpath "//*[@id='username-error']" should contain text "2 char"
+#    When I type "b" into element with xpath "//input[@name='username']"
+#    * I wait for 1 sec
+#    Then element with xpath "//*[@id='username-error']" should not be displayed
 
   @predefined14
   Scenario: Verify the set of required fields ("Username", "Email", "Password", "Name")
@@ -347,3 +347,25 @@ Feature: Smoke steps
     When I type "abcde" into element with xpath "//input[@id='confirmPassword']"
     * I wait for 1 sec
     Then element with xpath "//*[@id='confirmPassword-error']" should not be displayed
+
+  @predefined27
+  Scenario: Verify "Name" field with popup modal dialog behavior
+    Given I open url "https://skryabin.com/market/quote.html"
+    When I click on element with xpath "//*[@id='name']"
+    * I wait for 1 sec
+    Then element with xpath "//*[@id='nameDialog']" should be displayed
+    When I type "Dmitry" into element with xpath "//*[@id='firstName']"
+    * I type "A" into element with xpath "//*[@id='middleName']"
+    * I type "Igumnov" into element with xpath "//*[@id='lastName']"
+    * I wait for 1 sec
+    Then I click on element with xpath "//*[@id='nameDialog']/..//*[text()='Save']/.."
+    * I wait for 1 sec
+    * element with xpath "//*[@id='name']" should have attribute "value" as "Dmitry A Igumnov"
+    When I click on element with xpath "//*[@id='name']"
+    * I type "Someone" into element with xpath "//*[@id='firstName']"
+    * I type "Else\'s" into element with xpath "//*[@id='middleName']"
+    * I type "Name" into element with xpath "//*[@id='lastName']"
+    * I wait for 1 sec
+    Then I click on element with xpath "//*[@id='nameDialog']/..//*[text()='Cancel']/.."
+    * I wait for 1 sec
+    * element with xpath "//*[@id='name']" should have attribute "value" as "Dmitry A Igumnov"
