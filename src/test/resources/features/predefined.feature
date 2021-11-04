@@ -377,6 +377,24 @@ Feature: Smoke steps
     When I click on element with xpath "//*[@id='formSubmit']"
     * I wait for 1 sec
     Then element with xpath "//*[@id='agreedToPrivacyPolicy-error']" should be displayed
-    When I click on element with xpath "//*[@name='agreedToPrivacyPolicy']"
+    When I click on element with xpath "//input[@name='agreedToPrivacyPolicy']"
     * I wait for 1 sec
     Then element with xpath "//*[@id='agreedToPrivacyPolicy-error']" should not be displayed
+
+  @predefined29
+  Scenario: Verify minimal form submission (Happy Path)
+    Given I open url "https://skryabin.com/market/quote.html"
+    When I type "abc" into element with xpath "//input[@name='username']"
+    * I type "a@b" into element with xpath "//input[@name='email']"
+    * I type "abcde" into element with xpath "//input[@name='password']"
+    * I type "abcde" into element with xpath "//input[@name='confirmPassword']"
+    * I type "a b c" into element with xpath "//input[@name='name']"
+    * I click on element with xpath "//input[@name='agreedToPrivacyPolicy']"
+    * I wait for 5 sec
+    * I click on element with xpath "//*[@id='formSubmit']"
+    * I wait for 5 sec
+    Then element with xpath "//*[@id='quotePageResult']//*[@name='username']" should have text as "abc"
+    * element with xpath "//*[@id='quotePageResult']//*[@name='email']" should have text as "a@b"
+    * element with xpath "//*[@id='quotePageResult']//*[@name='password']" should have text as "[entered]"
+    * element with xpath "//*[@id='quotePageResult']//*[@name='name']" should have text as "a b c"
+    * element with xpath "//*[@id='quotePageResult']//*[@name='agreedToPrivacyPolicy']" should have text as "true"
