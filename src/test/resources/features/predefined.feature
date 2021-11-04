@@ -134,7 +134,7 @@ Feature: Smoke steps
 #    Then element with xpath "//*[@id='username-error']" should not be displayed
 
   @predefined14
-  Scenario: Verify the set of required fields ("Username", "Email", "Password", "Name")
+  Scenario: Verify the set of required fields ("Username", "Email", "Password", "Name", Privacy Policy checkbox)
     Given I open url "https://skryabin.com/market/quote.html"
     * I click on element with xpath "//*[@id='formSubmit']"
     * I wait for 1 sec
@@ -146,6 +146,7 @@ Feature: Smoke steps
     * element with xpath "//*[@id='password-error']" should contain text "required"
     * element with xpath "//*[@id='name-error']" should be displayed
     * element with xpath "//*[@id='name-error']" should contain text "required"
+    * element with xpath "//*[@id='agreedToPrivacyPolicy-error']" should be displayed
 
   @predefined15
   Scenario: Verify "Email" field accepts basic valid email a@b (Happy Path)
@@ -369,3 +370,13 @@ Feature: Smoke steps
     Then I click on element with xpath "//*[@id='nameDialog']/..//*[text()='Cancel']/.."
     * I wait for 1 sec
     * element with xpath "//*[@id='name']" should have attribute "value" as "Dmitry A Igumnov"
+
+  @predefined28
+  Scenario: Verify "I have read and accept Privacy Policy" checkbox behavior
+    Given I open url "https://skryabin.com/market/quote.html"
+    When I click on element with xpath "//*[@id='formSubmit']"
+    * I wait for 1 sec
+    Then element with xpath "//*[@id='agreedToPrivacyPolicy-error']" should be displayed
+    When I click on element with xpath "//*[@name='agreedToPrivacyPolicy']"
+    * I wait for 1 sec
+    Then element with xpath "//*[@id='agreedToPrivacyPolicy-error']" should not be displayed
