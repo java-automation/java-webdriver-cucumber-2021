@@ -398,3 +398,13 @@ Feature: Smoke steps
     * element with xpath "//*[@id='quotePageResult']//*[@name='password']" should have text as "[entered]"
     * element with xpath "//*[@id='quotePageResult']//*[@name='name']" should have text as "a b c"
     * element with xpath "//*[@id='quotePageResult']//*[@name='agreedToPrivacyPolicy']" should have text as "true"
+
+    #  @predefined200
+#  Scenario: Check if google search for PCS will return online class website on the first page.
+#    Given I open url "https://google.com"
+#    Then I should see page title as "Google"
+#    Then element with xpath "//input[@name='q']" should be present
+#    When I type "Portnov Computer School" into element with xpath "//input[@name='q']"
+#    Then I click on element with xpath "(//input[@name='btnK'])[2]"
+#    Then I wait for element with xpath "//*[@id='res']" to be present
+#    Then element with xpath "//*[@id='res']//a[@href='https://portnov.net/']" should be present
