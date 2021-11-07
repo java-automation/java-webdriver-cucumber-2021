@@ -1,6 +1,7 @@
 // Created by Viacheslav (Slava) Skryabin 04/01/2011
 package definitions;
 
+import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
@@ -53,6 +54,11 @@ public class PredefinedStepDefs {
     @Then("I wait for element with xpath {string} to be present")
     public void iWaitForElementWithXpathToBePresent(String xpath) {
         new WebDriverWait(getDriver(), 10, 200).until(ExpectedConditions.presenceOfElementLocated(By.xpath(xpath)));
+    }
+
+    @Then("I wait for element with xpath {string} to be displayed")
+    public void iWaitForElementWithXpathToBeVisible(String xpath) {
+        new WebDriverWait(getDriver(), 10, 200).until(ExpectedConditions.visibilityOfElementLocated(By.xpath(xpath)));
     }
 
     @Then("I wait for element with xpath {string} to not be present")
@@ -220,5 +226,15 @@ public class PredefinedStepDefs {
     @When("I mouse over element with xpath {string}")
     public void iMouseOverElementWithXpath(String xpath) {
         new Actions(getDriver()).moveToElement(getDriver().findElement(By.xpath(xpath))).perform();
+    }
+
+    @And("I press Enter into element with xpath {string}")
+    public void iPressEnterIntoElementWithXpath(String xpath) {
+        getDriver().findElement(By.xpath(xpath)).sendKeys(Keys.RETURN);
+    }
+
+    @And("I press Backspace into element with xpath {string}")
+    public void iPressBackspaceIntoElementWithXpath(String xpath) {
+        getDriver().findElement(By.xpath(xpath)).sendKeys(Keys.BACK_SPACE);
     }
 }
