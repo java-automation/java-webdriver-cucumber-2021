@@ -408,3 +408,10 @@ Feature: Smoke steps
 #    Then I click on element with xpath "(//input[@name='btnK'])[2]"
 #    Then I wait for element with xpath "//*[@id='res']" to be present
 #    Then element with xpath "//*[@id='res']//a[@href='https://portnov.net/']" should be present
+
+  @predefined300
+  Scenario: Scroll bars
+    Given I open url "http://uitestingplayground.com/scrollbars"
+    Then I wait for 3 sec
+    Then  I click on element with xpath "//*[@id='hidingButton']"
+    Then I wait for 3 sec
