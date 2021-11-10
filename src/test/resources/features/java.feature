@@ -46,7 +46,7 @@ Feature: Basic Java experiments
 
     Examples:
       | site             |
-      | "google"         |
+      | "Google"         |
       | "quote form"     |
       | "Portnov School" |
-      | "unknown"        |
+      | "unKnOwN"        |

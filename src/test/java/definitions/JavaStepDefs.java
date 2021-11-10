@@ -54,12 +54,12 @@ public class JavaStepDefs {
     }
 
     @Then("I print URL for {string} page")
-    public void iPrintURLForSitePage(String knownWebsite) {
-        String address = switch (knownWebsite) {
+    public void iPrintURLForSitePage(String websiteReference) {
+        String address = switch (websiteReference.toLowerCase()) {
             case "google" -> "https://google.com";
             case "quote form" -> "https://skryabin.com/market/quote.html";
-            case "Portnov School" -> "https://portnov.com";
-            default -> "This website is not in our database!";
+            case "portnov school" -> "https://portnov.com";
+            default -> throw new Error("No URL for this reference in our database: " + websiteReference);
         };
         System.out.println(address);
     }
