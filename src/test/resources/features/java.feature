@@ -50,3 +50,11 @@ Feature: Basic Java experiments
       | "quote form"     |
       | "Portnov School" |
       | "unKnOwN"        |
+
+  @java7
+  Scenario: Is number positive?
+    And I print if number 35 is positive
+
+  @java8
+  Scenario: Day of the week
+    And I print 3 th day of the week

@@ -1,5 +1,6 @@
 package definitions;
 
+import io.cucumber.java.en.And;
 import io.cucumber.java.en.Then;
 
 public class JavaStepDefs {
@@ -62,5 +63,27 @@ public class JavaStepDefs {
             default -> throw new Error("No URL for this reference in our database: " + websiteReference);
         };
         System.out.println(address);
+    }
+
+    @And("I print if number {int} is positive")
+    public void iPrintIfNumberIsPositive(int num) {
+        if (num > 0) { System.out.println("Number is positive"); }
+        else if (num < 0 ) { System.out.println("Number is negative"); }
+        else { System.out.println("Number is zero"); }
+    }
+
+    @And("I print {int} th day of the week")
+    public void iPrintThDayOfTheWeek(int dayNumber) {
+        String dayName = switch (dayNumber) {
+            case 1 -> "Monday";
+            case 2 -> "Tuesday";
+            case 3 -> "Wednesday";
+            case 4 -> "Thursday";
+            case 5 -> "Friday";
+            case 6 -> "Saturday";
+            case 7 -> "Sunday";
+            default -> throw new Error("Invalid day number: " + dayNumber);
+        };
+        System.out.println(dayName);
     }
 }
