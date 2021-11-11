@@ -3,7 +3,7 @@ Feature: Smoke steps for the Quote Form
 
   @predefinedQuote1
   Scenario: Verify the quote page has a responsive UI
-    Given I open url "https://skryabin.com/market/quote.html"
+    Given I go to "quote form" page
     When I resize window to 400 and 800
     * I wait for 1 sec
     Then element with xpath "//*[@id='location']" should not be displayed
@@ -13,7 +13,7 @@ Feature: Smoke steps for the Quote Form
 
   @predefinedQuote2
   Scenario: Verify minimum length of the "Username" field
-    Given I open url "https://skryabin.com/market/quote.html"
+    Given I go to "quote form" page
     When I type "a" into element with xpath "//input[@name='username']"
     * I click on element with xpath "//*[@id='formSubmit']"
     * I wait for 1 sec
@@ -25,7 +25,7 @@ Feature: Smoke steps for the Quote Form
 
   @predefinedQuote3
   Scenario: Verify the set of required fields ("Username", "Email", "Password", "Name", Privacy Policy checkbox)
-    Given I open url "https://skryabin.com/market/quote.html"
+    Given I go to "quote form" page
     * I click on element with xpath "//*[@id='formSubmit']"
     * I wait for 1 sec
     Then element with xpath "//*[@id='username-error']" should be displayed
@@ -40,7 +40,7 @@ Feature: Smoke steps for the Quote Form
 
   @predefinedQuote4
   Scenario: Verify "Email" field accepts basic valid email a@b (Happy Path)
-    Given I open url "https://skryabin.com/market/quote.html"
+    Given I go to "quote form" page
     When I type "a@b" into element with xpath "//input[@name='email']"
     And I click on element with xpath "//*[@id='formSubmit']"
     And I wait for 1 sec
@@ -48,7 +48,7 @@ Feature: Smoke steps for the Quote Form
   
   @predefinedQuote5
   Scenario: Verify "Email" field clears dynamic error messages correctly
-    Given I open url "https://skryabin.com/market/quote.html"
+    Given I go to "quote form" page
     And I click on element with xpath "//*[@id='formSubmit']"
     And I wait for 1 sec
     Then element with xpath "//*[@id='email-error']" should be displayed
@@ -69,7 +69,7 @@ Feature: Smoke steps for the Quote Form
 
   @predefinedQuote6
   Scenario: Verify "Email" field requires one and only one @ symbol with non-empty local/domain parts
-    Given I open url "https://skryabin.com/market/quote.html"
+    Given I go to "quote form" page
     When I type "abc" into element with xpath "//input[@name='email']"
     And I click on element with xpath "//*[@id='formSubmit']"
     And I wait for 1 sec
@@ -97,7 +97,7 @@ Feature: Smoke steps for the Quote Form
     #technically should go one by one
   @predefinedQuote7
   Scenario: Verify "Email" field accepts printable characters !#$%&'*+-/=?^_`{|}~ in the local part
-    Given I open url "https://skryabin.com/market/quote.html"
+    Given I go to "quote form" page
     When I type "!#$%&'*+-/=?^_`{|}~@b" into element with xpath "//input[@name='email']"
     And I click on element with xpath "//*[@id='formSubmit']"
     And I wait for 1 sec
@@ -105,7 +105,7 @@ Feature: Smoke steps for the Quote Form
 
   @predefinedQuote8
   Scenario: Verify "Email" field accepts dot . in the local part as long as its not fist, last or consecutive use
-    Given I open url "https://skryabin.com/market/quote.html"
+    Given I go to "quote form" page
     When I type "a.b@c" into element with xpath "//input[@name='email']"
     And I click on element with xpath "//*[@id='formSubmit']"
     And I wait for 1 sec
@@ -129,7 +129,7 @@ Feature: Smoke steps for the Quote Form
 
   @predefinedQuote9
   Scenario: Verify "Email" field accepts dot . in the domain part as long as its not fist, last or consecutive use
-    Given I open url "https://skryabin.com/market/quote.html"
+    Given I go to "quote form" page
     When I type "a@b.c" into element with xpath "//input[@name='email']"
     And I click on element with xpath "//*[@id='formSubmit']"
     And I wait for 1 sec
@@ -153,7 +153,7 @@ Feature: Smoke steps for the Quote Form
 
   @predefinedQuote10
   Scenario: Verify "Email" field does not accept quoted " " local part
-    Given I open url "https://skryabin.com/market/quote.html"
+    Given I go to "quote form" page
     When I type "\"a\"@b" into element with xpath "//input[@name='email']"
     And I click on element with xpath "//*[@id='formSubmit']"
     And I wait for 1 sec
@@ -162,7 +162,7 @@ Feature: Smoke steps for the Quote Form
 
   @predefinedQuote11
   Scenario: Verify "Email" field accepts hyphen in the domain part, as long as its not first or last
-    Given I open url "https://skryabin.com/market/quote.html"
+    Given I go to "quote form" page
     When I type "a@b-" into element with xpath "//input[@name='email']"
     And I click on element with xpath "//*[@id='formSubmit']"
     And I wait for 1 sec
@@ -179,7 +179,7 @@ Feature: Smoke steps for the Quote Form
 
   @predefinedQuote12
   Scenario: Verify "Email" field does not allow IP addresses in the domain part
-    Given I open url "https://skryabin.com/market/quote.html"
+    Given I go to "quote form" page
     When I type "a@[1.1.1.1]" into element with xpath "//input[@name='email']"
     And I click on element with xpath "//*[@id='formSubmit']"
     And I wait for 1 sec
@@ -193,7 +193,7 @@ Feature: Smoke steps for the Quote Form
 
   @predefinedQuote13
   Scenario: Verify "Email" field does not allow local part longer than 64 octets
-    Given I open url "https://skryabin.com/market/quote.html"
+    Given I go to "quote form" page
     When I type "1234567890123456789012345678901234567890123456789012345678901234a@b" into element with xpath "//input[@name='email']"
     And I click on element with xpath "//*[@id='formSubmit']"
     And I wait for 1 sec
@@ -202,7 +202,7 @@ Feature: Smoke steps for the Quote Form
 
   @predefinedQuote14
   Scenario: Verify "Email" field does not allow labels longer than 63 octets in the domain part
-    Given I open url "https://skryabin.com/market/quote.html"
+    Given I go to "quote form" page
     When I type "a@123456789012345678901234567890123456789012345678901234567890123b" into element with xpath "//input[@name='email']"
     And I click on element with xpath "//*[@id='formSubmit']"
     And I wait for 1 sec
@@ -211,7 +211,7 @@ Feature: Smoke steps for the Quote Form
 
   @predefinedQuote15
   Scenario: Verify "Password"/"Confirm Password" fields behavior
-    Given I open url "https://skryabin.com/market/quote.html"
+    Given I go to "quote form" page
     * I wait for 1 sec
     Then element with xpath "//*[@id='confirmPassword']" should be disabled
     When I type "a" into element with xpath "//input[@id='password']"
@@ -241,7 +241,7 @@ Feature: Smoke steps for the Quote Form
 
   @predefinedQuote16
   Scenario: Verify "Name" field with popup modal dialog behavior
-    Given I open url "https://skryabin.com/market/quote.html"
+    Given I go to "quote form" page
     When I click on element with xpath "//*[@id='name']"
     * I wait for 1 sec
     Then element with xpath "//*[@id='nameDialog']" should be displayed
@@ -263,7 +263,7 @@ Feature: Smoke steps for the Quote Form
 
   @predefinedQuote17
   Scenario: Verify "I have read and accept Privacy Policy" checkbox behavior
-    Given I open url "https://skryabin.com/market/quote.html"
+    Given I go to "quote form" page
     When I click on element with xpath "//*[@id='formSubmit']"
     * I wait for 1 sec
     Then element with xpath "//*[@id='agreedToPrivacyPolicy-error']" should be displayed
@@ -273,7 +273,7 @@ Feature: Smoke steps for the Quote Form
 
   @predefinedQuote18
   Scenario: Verify minimal form submission (Happy Path)
-    Given I open url "https://skryabin.com/market/quote.html"
+    Given I go to "quote form" page
     When I type "abc" into element with xpath "//input[@name='username']"
     * I type "a@b" into element with xpath "//input[@name='email']"
     * I type "abcde" into element with xpath "//input[@name='password']"

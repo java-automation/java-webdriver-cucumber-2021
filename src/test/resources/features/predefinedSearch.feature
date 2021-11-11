@@ -3,7 +3,7 @@ Feature: Verify search results in various engines
 
   @predefinedSearch1
   Scenario: Complete the search in Google
-    Given I open url "https://google.com"
+    Given I go to "Google" page
     Then I should see page title as "Google"
     Then element with xpath "//input[@name='q']" should be present
     When I type "Behavior Driven Development" into element with xpath "//input[@name='q']"
@@ -13,7 +13,7 @@ Feature: Verify search results in various engines
 
   @predefinedSearch2
   Scenario: Complete the search in Yahoo
-    Given I open url "https://yahoo.com"
+    Given I go to "Yahoo" page
     Then I should see page title contains "Yahoo"
     Then element with xpath "//*[@id='ybar-sbq']" should be present
     When I type "Behavior Driven Development" into element with xpath "//*[@id='ybar-sbq']"
@@ -23,7 +23,7 @@ Feature: Verify search results in various engines
 
   @predefinedSearch3
   Scenario: Complete the search in Bing
-    Given I open url "https://bing.com"
+    Given I go to "Bing" page
     Then I should see page title as "Bing"
     Then element with xpath "//*[@name='q']" should be present
     When I type "Behavior Driven Development" into element with xpath "//*[@name='q']"
@@ -33,7 +33,7 @@ Feature: Verify search results in various engines
 
   @predefinedSearch4
   Scenario: Complete the search in Gibiru
-    Given I open url "https://gibiru.com"
+    Given I go to "Gibiru" page
     Then I should see page title contains "Gibiru"
     Then element with xpath "//*[@id='q']" should be present
     When I type "Behavior Driven Development" into element with xpath "//*[@id='q']"
@@ -43,7 +43,7 @@ Feature: Verify search results in various engines
 
   @predefinedSearch5
   Scenario: Complete the search in DuckDuckGo
-    Given I open url "https://duckduckgo.com"
+    Given I go to "DuckDuckGo" page
     Then I should see page title contains "DuckDuckGo"
     Then element with xpath "//*[@id='search_form_input_homepage']" should be present
     When I type "Behavior Driven Development" into element with xpath "//*[@id='search_form_input_homepage']"
@@ -53,7 +53,7 @@ Feature: Verify search results in various engines
 
   @predefinedSearch6
   Scenario: Complete the search in Swisscows
-    Given I open url "https://swisscows.com"
+    Given I go to "Swisscows" page
     Then I should see page title contains "Swisscows"
     Then element with xpath "//*[@name='query']" should be present
     When I type "Behavior Driven Development" into element with xpath "//*[@name='query']"
@@ -63,7 +63,7 @@ Feature: Verify search results in various engines
 
   @predefinedSearch7
   Scenario: Complete the search in Search Encrypt
-    Given I open url "https://searchencrypt.com"
+    Given I go to "Search Encrypt" page
     Then I should see page title contains "Search Encrypt"
     Then element with xpath "//*[@class='search-bar__search']" should be present
     When I type "Behavior Driven Development" into element with xpath "//*[@class='search-bar__search']"
@@ -73,7 +73,7 @@ Feature: Verify search results in various engines
 
   @predefinedSearch8
   Scenario: Complete the search in Startpage
-    Given I open url "https://startpage.com"
+    Given I go to "Startpage" page
     Then I should see page title contains "Startpage"
     Then element with xpath "//*[@id='q']" should be present
     When I type "Behavior Driven Development" into element with xpath "//*[@id='q']"
@@ -83,7 +83,7 @@ Feature: Verify search results in various engines
 
   @predefinedSearch9
   Scenario: Complete the search in Yandex
-    Given I open url "https://yandex.com"
+    Given I go to "Yandex" page
     Then I should see page title as "Yandex"
     Then element with xpath "//*[@id='text']" should be present
     When I type "Behavior Driven Development" into element with xpath "//*[@id='text']"
@@ -93,7 +93,7 @@ Feature: Verify search results in various engines
 
   @predefinedSearch10
   Scenario: Complete the search in Boardreader
-    Given I open url "https://boardreader.com"
+    Given I go to "Boardreader" page
     Then I should see page title contains "Boardreader"
     Then element with xpath "//*[@id='title-query']" should be present
     When I type "Behavior Driven Development" into element with xpath "//*[@id='title-query']"
@@ -103,7 +103,7 @@ Feature: Verify search results in various engines
 
   @predefinedSearch11
   Scenario: Complete the search in Ecosia
-    Given I open url "https://ecosia.org"
+    Given I go to "Ecosia" page
     Then I should see page title contains "Ecosia"
     Then element with xpath "//*[@data-test-id='search-form-input']" should be present
     When I type "Behavior Driven Development" into element with xpath "//*[@data-test-id='search-form-input']"
