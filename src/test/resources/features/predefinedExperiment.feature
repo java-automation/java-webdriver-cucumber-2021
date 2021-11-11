@@ -3,7 +3,7 @@ Feature: Various experiments with WebDriver
 
   @predefinedExperiment1
   Scenario: Check if google search for PCS will return online class website on the first page.
-    Given I go to "Google search" page
+    Given I go to "Google" page
     Then I should see page title as "Google"
     Then element with xpath "//input[@name='q']" should be present
     When I type "Portnov Computer School" into element with xpath "//input[@name='q']"

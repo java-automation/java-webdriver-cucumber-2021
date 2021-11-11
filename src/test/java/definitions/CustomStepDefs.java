@@ -1,5 +1,6 @@
 package definitions;
 
+import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
 import static support.TestContext.getDriver;
 
@@ -25,5 +26,21 @@ public class CustomStepDefs {
             default -> throw new Error("No known URL for this reference: " + websiteReference);
         };
         getDriver().get(address);
+    }
+
+    @And("I print page details")
+    public void iPrintPageDetails() {
+        System.out.println("Page URL: " + getDriver().getCurrentUrl());
+        System.out.println("Page title: " + getDriver().getTitle());
+        System.out.println("Window handle: " + getDriver().getWindowHandle());
+        System.out.println("All handles: " + getDriver().getWindowHandles());
+        System.out.println("Page source: " + getDriver().getPageSource());
+    }
+
+    @And("I go back and forward, then refresh the page")
+    public void iGoBackAndForwardThenRefreshThePage() {
+        getDriver().navigate().back();
+        getDriver().navigate().forward();
+        getDriver().navigate().refresh();
     }
 }
