@@ -6,6 +6,7 @@ import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 import org.openqa.selenium.By;
 import org.openqa.selenium.Dimension;
+import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.Select;
 
@@ -117,9 +118,9 @@ public class CustomStepDefs {
     }
 
     private void verifySummaryElementIsDisplayedAndHasValue(String summaryXPath, String value) {
-        WebElement usernameElement = getDriver().findElement(By.xpath(summaryXPath));
-        assertThat(usernameElement.isDisplayed()).isTrue();
-        assertThat(usernameElement.getText()).isEqualTo(value);
+        WebElement summaryElement = getDriver().findElement(By.xpath(summaryXPath));
+        assertThat(summaryElement.isDisplayed()).isTrue();
+        assertThat(summaryElement.getText()).isEqualTo(value);
     }
 
     /*
@@ -134,7 +135,6 @@ public class CustomStepDefs {
         verifySummaryElementIsDisplayedAndHasValue("//*[@id='quotePageResult']//*[@name='name']", workingProfile.get("name"));
         verifySummaryElementIsDisplayedAndHasValue("//*[@id='quotePageResult']//*[@name='agreedToPrivacyPolicy']", "true");
         if (fullForm) {
-            System.out.println("Verifying full form!");
             verifySummaryElementIsDisplayedAndHasValue("//*[@id='quotePageResult']//*[@name='phone']", workingProfile.get("phone"));
             verifySummaryElementIsDisplayedAndHasValue("//*[@id='quotePageResult']//*[@name='dateOfBirth']", workingProfile.get("dateofbirth"));
             verifySummaryElementIsDisplayedAndHasValue("//*[@id='quotePageResult']//*[@name='countryOfOrigin']", workingProfile.get("countryoforigin"));
@@ -177,8 +177,6 @@ public class CustomStepDefs {
         getDriver().findElement(By.xpath("//input[@name='name']")).sendKeys(workingProfile.get("name"));
         getDriver().findElement(By.xpath("//input[@name='agreedToPrivacyPolicy']")).click();
         if (fullForm) {
-            System.out.println("Doing full form!");
-
             getDriver().findElement(By.xpath("//input[@name='phone']")).sendKeys(workingProfile.get("phone"));
             getDriver().findElement(By.xpath("//input[@name='dateOfBirth']")).sendKeys(workingProfile.get("dateofbirth"));
 
@@ -197,9 +195,7 @@ public class CustomStepDefs {
             String carMakeValue = workingProfile.get("carmake");
             String[] carMakeOptions = carMakeValue.split(", ");
             Select carMakeSelect = new Select(getDriver().findElement(By.xpath("//select[@name='carMake']")));
-            for (String carMakeOption : carMakeOptions) {
-                carMakeSelect.selectByValue(carMakeOption);
-            }
+            for (String carMakeOption : carMakeOptions) { carMakeSelect.selectByValue(carMakeOption); }
 
             getDriver().switchTo().frame("additionalInfo");
             getDriver().findElement(By.xpath("//input[@id='contactPersonName']")).sendKeys(workingProfile.get("contactname"));
@@ -216,5 +212,20 @@ public class CustomStepDefs {
             getDriver().findElement(By.xpath("//input[@name='attachment']")).sendKeys(pathToFile);
         }
         Thread.sleep(3000);
+    }
+
+    @When("I verify email field behavior")
+    public void iVerifyEmailFieldBehavior() throws InterruptedException {
+        getDriver().findElement(By.xpath("//input[@name='email']")).sendKeys("john.doe@corp.#");
+        Thread.sleep(1000);
+        getDriver().findElement(By.xpath("//input[@name='email']")).submit();
+        Thread.sleep(1000);
+        getDriver().findElement(By.xpath("//input[@name='email']")).sendKeys(Keys.BACK_SPACE);
+        Thread.sleep(1000);
+        getDriver().findElement(By.xpath("//input[@name='email']")).clear();
+        Thread.sleep(1000);
+        getDriver().findElement(By.xpath("//input[@name='email']")).sendKeys("john.doe@corp.com");
+        getDriver().findElement(By.xpath("//input[@name='email']")).submit();
+        Thread.sleep(1000);
     }
 }

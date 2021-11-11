@@ -12,6 +12,11 @@ Feature: Selenium WebDriver API exercises using quote form
     And I change resolution to "desktop"
 
   @customQuote2
+  Scenario: Very basic "Email" field verification
+    Given I go to "quote form" page
+    When I verify email field behavior
+
+  @customQuote3
   Scenario: Submit the form with specified field set and one of the preset profiles
     Given I go to "quote form" page
     When I fill out "all" fields with "Monica Smith" profile
