@@ -2,6 +2,8 @@ package definitions;
 
 import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
+import org.openqa.selenium.Dimension;
+
 import static support.TestContext.getDriver;
 
 public class CustomStepDefs {
@@ -29,18 +31,35 @@ public class CustomStepDefs {
     }
 
     @And("I print page details")
-    public void iPrintPageDetails() {
+    public void iPrintPageDetails() throws InterruptedException {
         System.out.println("Page URL: " + getDriver().getCurrentUrl());
         System.out.println("Page title: " + getDriver().getTitle());
         System.out.println("Window handle: " + getDriver().getWindowHandle());
         System.out.println("All handles: " + getDriver().getWindowHandles());
         System.out.println("Page source: " + getDriver().getPageSource());
+        Thread.sleep(1000);
     }
 
     @And("I go back and forward, then refresh the page")
-    public void iGoBackAndForwardThenRefreshThePage() {
+    public void iGoBackAndForwardThenRefreshThePage() throws InterruptedException {
         getDriver().navigate().back();
+        Thread.sleep(1000);
         getDriver().navigate().forward();
+        Thread.sleep(1000);
         getDriver().navigate().refresh();
+        Thread.sleep(1000);
+    }
+
+    @And("I change resolution to {string}")
+    public void iChangeResolutionTo(String desiredResolutionReference) throws InterruptedException {
+        int width;
+        int height;
+        switch (desiredResolutionReference.toLowerCase()) {
+            case "phone" -> { width = 400; height = 768; }
+            case "desktop" -> { width = 1024; height = 768; }
+            default -> throw new Error("Unknown resolution reference: " + desiredResolutionReference);
+        }
+        getDriver().manage().window().setSize(new Dimension(width, height));
+        Thread.sleep(1000);
     }
 }
