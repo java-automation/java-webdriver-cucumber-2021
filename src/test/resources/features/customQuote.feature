@@ -12,8 +12,8 @@ Feature: Selenium WebDriver API exercises using quote form
     And I change resolution to "desktop"
 
   @customQuote2
-  Scenario: Submit the form with required fields only
+  Scenario: Submit the form with specified field set and one of the preset profiles
     Given I go to "quote form" page
-    When I fill out required fields with "Alan Smith" profile
+    When I fill out "all" fields with "Monica Smith" profile
     And Submit the form
-    Then I verify that submitted required fields got saved correctly
+    Then I verify that submitted fields got saved correctly
