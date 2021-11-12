@@ -31,18 +31,30 @@ Feature: Java feature
     Then I click back arrow button in Date Picker to change month
     Then I click forward arrow button in Date Picker to change month
 
-@java2
-Scenario: Create new custom step that would accept two variables
-1) Print those variables into console as they are
-2) Print those variables uppercase into console
-3) Print those variables length into console
-4) Print result of exact comparison of those variables into console
-5) Print result of exact comparison ignoring cases of those variables into console
-6) Print result of partial comparison of those variables into console – if first
-variable contains second
-Once complete, write few steps with different variables.
-  Given I perform actions with "my var" and "my VAR"
-  Given I perform actions with "Star spangled Banner" and "Star"
+  @java2
+  Scenario: Create new custom step that would accept two variables
+  1) Print those variables into console as they are
+  2) Print those variables uppercase into console
+  3) Print those variables length into console
+  4) Print result of exact comparison of those variables into console
+  5) Print result of exact comparison ignoring cases of those variables into console
+  6) Print result of partial comparison of those variables into console – if first
+  variable contains second
+  Once complete, write few steps with different variables.
+    Given I perform actions with "my var" and "my VAR"
+    Given I perform actions with "Star spangled Banner" and "Star"
 
+  @java3
+  Scenario: Try if/else steps:
+  Expected Output :
+  Number is positive / Number is negative
+    And I print number "35"
+    And I print number "-35"
+    And I print number "0"
 
-
+  @java4
+  Scenario:I print "7" day of week
+  Expected Output :
+  Monday / Tuesday / Wednesday / Thursday / Friday / Saturday / Sunday
+    And I print "7" day of week
+    And I print "3" day of week

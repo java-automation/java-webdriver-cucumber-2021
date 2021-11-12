@@ -9,18 +9,22 @@ import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.Actions;
 
+import java.time.DayOfWeek;
+
+import static java.lang.Character.toChars;
+import static java.lang.System.out;
 import static support.TestContext.getDriver;
 
 
 public class JavaStepDefs {
   @Given("I hello world")
   public void iHelloWorld() {
-    System.out.println("Hello World!");
+    out.println("Hello World!");
   }
 
   @And("I say {string}")
   public void iSay(String arg0) {
-    System.out.println(arg0);
+    out.println(arg0);
   }
 
   @Then("I click month {string} in Date Composer")
@@ -109,31 +113,59 @@ public class JavaStepDefs {
   public void iPerformActionsWithAnd(String firstVariable, String secondVariable) {
     int firstVariableLength = firstVariable.length();
     int secondVariableLength = secondVariable.length();
-    System.out.println("1) Print those variables into console as they are: " + "\n" + firstVariable + "\n" + secondVariable);
-    System.out.println("2) Print those variables uppercase into console: " + "\n" + firstVariable.toUpperCase() + "\n" + secondVariable.toUpperCase());
-    System.out.println("3) Print those variables length into console: " + "\n" + firstVariableLength + "\n" + secondVariableLength);
-    System.out.println("4) Print result of exact comparison of those variables into console: ");
+    out.println("1) Print those variables into console as they are: " + "\n" + firstVariable + "\n" + secondVariable);
+    out.println("2) Print those variables uppercase into console: " + "\n" + firstVariable.toUpperCase() + "\n" + secondVariable.toUpperCase());
+    out.println("3) Print those variables length into console: " + "\n" + firstVariableLength + "\n" + secondVariableLength);
+    out.println("4) Print result of exact comparison of those variables into console: ");
     if (firstVariable.equals(secondVariable)) {
-      System.out.println(firstVariable + " matches " + secondVariable);
+      out.println(firstVariable + " matches " + secondVariable);
+    } else {
+      out.println(firstVariable + " doesn't matches " + secondVariable);
     }
-    else {
-      System.out.println(firstVariable + " doesn't matches "+ secondVariable);
+    out.println("5) Print result of exact comparison ignoring cases of those variables into console: ");
+    if (firstVariable.equalsIgnoreCase(secondVariable)) {
+      out.println(firstVariable + "ignoring cases matches " + secondVariable);
     }
-    System.out.println("5) Print result of exact comparison ignoring cases of those variables into console: ");
-    if(firstVariable.equalsIgnoreCase(secondVariable)) {
-      System.out.println(firstVariable + "ignoring cases matches " + secondVariable);
-    }
-    System.out.println("6) Print result of partial comparison of those variables into console – if first variable contains second:");
+    out.println("6) Print result of partial comparison of those variables into console – if first variable contains second:");
     boolean isContains = false;
     for (int i = 0; i < (firstVariableLength - secondVariableLength); i++) {
-      if (firstVariable.regionMatches(i, secondVariable, 0, secondVariableLength)){
+      if (firstVariable.regionMatches(i, secondVariable, 0, secondVariableLength)) {
         isContains = true;
-        System.out.println("first variable \""+ firstVariable + "\" contains second: \"" + secondVariable +"\"");
+        out.println("first variable \"" + firstVariable + "\" contains second: \"" + secondVariable + "\"");
         break;
       }
     }
     if (!isContains) {
-      System.out.println("First variable doesn't contain second");
+      out.println("First variable doesn't contain second");
     }
   }
+
+  @And("I print number {string}")
+  public void iPrintIfNumberIsPositive(String number) {
+    //Double numberInDouble = Double.parseDouble(number);
+    //Float numberInFloat = Float.parseFloat(number);
+    int numberInt = Integer.parseInt(number);
+    if (numberInt > 0) {
+      out.println("number " + number + " is positive");
+    } else if (numberInt < 0) {
+      out.println("number " + number + " is negative");
+    }
+   else {
+      out.println("number " + number + " is zero");
+    }
+  }
+
+
+  @And("I print {string} day of week")
+  public void iPrintDayOfWeek(String day) {
+    int i = 1;
+    int dayOfTheWeek = Integer.parseInt(day);
+    while (i <= dayOfTheWeek) {
+      out.print(" " + DayOfWeek.of(i) + " ");
+      if (i < dayOfTheWeek) out.print(toChars(92));
+      i++;
+
+    }
+  }
+
 }
