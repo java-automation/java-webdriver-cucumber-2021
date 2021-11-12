@@ -127,7 +127,7 @@ public class JavaStepDefs {
     @And("I work with arrays")
     public void iWorkWithArrays() {
         String[] days = {"Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"};
-        int[] nums = {5, 7, 1, 0, 10};
+        int[] nums = {5, 7, 1, 0, 10, 15};
         System.out.println(nums[2]);
 
         for (int i = 0; i < days.length; i++) {
@@ -165,6 +165,7 @@ public class JavaStepDefs {
         numsList.add(1);
         numsList.add(0);
         numsList.add(10);
+        numsList.add(15);
 
         System.out.println(numsList);
 
