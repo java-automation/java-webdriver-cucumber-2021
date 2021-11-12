@@ -55,6 +55,11 @@ public class PredefinedStepDefs {
         new WebDriverWait(getDriver(), 10, 200).until(ExpectedConditions.presenceOfElementLocated(By.xpath(xpath)));
     }
 
+    @Then("I wait for element with xpath {string} to be displayed")
+    public void iWaitForElementWithXpathToBeDisplayed(String xpath) {
+        new WebDriverWait(getDriver(), 10, 200).until(ExpectedConditions.visibilityOfAllElementsLocatedBy(By.xpath(xpath)));
+    }
+
     @Then("I wait for element with xpath {string} to not be present")
     public void iWaitForElementWithXpathToNotBePresent(String xpath) {
         new WebDriverWait(getDriver(), 10, 200).until(ExpectedConditions.not(ExpectedConditions.presenceOfElementLocated(By.xpath(xpath))));
@@ -221,4 +226,6 @@ public class PredefinedStepDefs {
     public void iMouseOverElementWithXpath(String xpath) {
         new Actions(getDriver()).moveToElement(getDriver().findElement(By.xpath(xpath))).perform();
     }
+
+
 }

@@ -58,6 +58,7 @@ public class TestContext {
                     chromePreferences.put("plugins.plugins_disabled", new ArrayList<String>(){{ add("Chrome PDF Viewer"); }});
                     chromePreferences.put("credentials_enable_service", false);
                     chromePreferences.put("password_manager_enabled", false);
+                    chromePreferences.put("profile.default_content_setting_values.cookies", 2);
                     ChromeOptions chromeOptions = new ChromeOptions();
                     chromeOptions.addArguments("--start-maximized");
                     chromeOptions.setExperimentalOption("prefs", chromePreferences);
