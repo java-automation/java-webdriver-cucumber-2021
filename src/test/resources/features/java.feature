@@ -53,8 +53,8 @@ Feature: Basic Java experiments
 
   @java7
   Scenario: Is number positive?
-    And I print if number 35 is positive
+    And I print if number "-5435" is positive
 
   @java8
   Scenario: Day of the week
-    And I print 3 th day of the week
+    And I print day of the week that comes 15465 days after today and today is "Monday"

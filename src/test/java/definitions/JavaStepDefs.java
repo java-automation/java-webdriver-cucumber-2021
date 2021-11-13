@@ -65,25 +65,21 @@ public class JavaStepDefs {
         System.out.println(address);
     }
 
-    @And("I print if number {int} is positive")
-    public void iPrintIfNumberIsPositive(int num) {
+    @And("I print if number {string} is positive")
+    public void iPrintIfNumberIsPositive(String numStr) {
+        int num = Integer.parseInt(numStr);
         if (num > 0) { System.out.println("Number is positive"); }
         else if (num < 0 ) { System.out.println("Number is negative"); }
         else { System.out.println("Number is zero"); }
     }
 
-    @And("I print {int} th day of the week")
-    public void iPrintThDayOfTheWeek(int dayNumber) {
-        String dayName = switch (dayNumber) {
-            case 1 -> "Monday";
-            case 2 -> "Tuesday";
-            case 3 -> "Wednesday";
-            case 4 -> "Thursday";
-            case 5 -> "Friday";
-            case 6 -> "Saturday";
-            case 7 -> "Sunday";
-            default -> throw new Error("Invalid day number: " + dayNumber);
-        };
-        System.out.println(dayName);
+    @And("I print day of the week that comes {int} days after today and today is {string}")
+    public void iPrintDayOfTheWeekThatComesDaysAfterTodayAndTodayIs(int dayNumber, String startDayStr) {
+        String[] daysOfWeek = {"Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"};
+        int dayShift = 0;
+        for (int i = 0; i < daysOfWeek.length; ++i) {
+            if (daysOfWeek[i].equals(startDayStr)) { dayShift = i; }
+        }
+        System.out.println(daysOfWeek[(dayNumber % 7) + dayShift]);
     }
 }
