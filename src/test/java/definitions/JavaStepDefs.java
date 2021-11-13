@@ -9,6 +9,7 @@ import org.openqa.selenium.Dimension;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebElement;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.Locale;
 
@@ -268,5 +269,66 @@ public class JavaStepDefs {
         assertThat(getDriver().findElement(By.xpath("//b[@name='thirdPartyAgreement']")).getText()).isEqualTo("accepted");
         assertThat(getDriver().findElement(By.xpath("//b[@name='contactPersonName']")).getText()).isEqualTo("Dima");
         assertThat(getDriver().findElement(By.xpath("//b[@name='contactPersonPhone']")).getText()).isEqualTo("89124536665");
+    }
+
+    @Given("I print numbers from zero to {int}")
+    public void iPrintNumbersFromZeroTo(int iVar1) {
+        for (int i = 0; i <= Math.abs(iVar1); i++) {
+            System.out.println(((iVar1 < 0 ) & (i != 0)) ? ("-" + i) : i);
+        }
+    }
+
+    @Given("I print integer array {string}")
+    public void iPrintIntegerArray(String sArray1) {
+        int[] iArray = convertStringArrayToInteger(sArray1);
+        for (int i = 0; i < iArray.length; i++) {
+            System.out.println(iArray[i]);
+        }
+    }
+
+    @Given("I print even numbers from integer array {string}")
+    public void iPrintEvenNumbersFromIntegerArray(String sArray1) {
+        int[] iArray = convertStringArrayToInteger(sArray1);
+        System.out.println("Even numbers form array is:");
+        for (int el: iArray) {
+            if ((el % 2) == 0) {
+                System.out.println(el);
+            }
+        }
+    }
+
+    @Given("I check array {string} is empty")
+    public void iCheckArrayIsEmpty(String sArray1) {
+        int[] iArray = convertStringArrayToInteger(sArray1);
+        System.out.println("Array is: " + ((iArray.length == 0) ? "is empty" : "not empty"));
+    }
+
+    public int[] convertStringArrayToInteger(String sArray1) {
+        String[] sTempArr;
+        if (sArray1.length() > 0) {
+            sTempArr = sArray1.split(",");
+        } else {
+            sTempArr = new String[0];
+        }
+        int[] iArray = new int[sTempArr.length];
+        if (iArray.length > 0) {
+            for (int i = 0; i < iArray.length; i++) {
+                iArray[i] = Integer.parseInt(sTempArr[i]);
+            }
+        }
+        return iArray;
+    }
+
+    @Given("I check array {string} for element {int}")
+    public void iCheckArrayForElement(String sArray1, int iEl) {
+        int[] iArray = convertStringArrayToInteger(sArray1);
+        String sFound = "haven't";
+        for (int el: iArray) {
+            if (el == iEl) {
+                sFound = "have";
+                break;
+            }
+        }
+        System.out.println("We " + sFound + " this element in array.");
     }
 }

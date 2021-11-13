@@ -64,3 +64,23 @@ Feature: Java feature
       And I submit the form
       Then I verify that submitted fields saved correctly
       And I verify all optional fields saved correctly
+
+  @javaDay6HomeWork
+    Scenario: Printing numbers from 0 to n
+      Given I print numbers from zero to 8
+
+    Scenario: Printing numbers form 0 to n including negative
+      Given I print numbers from zero to -6
+
+    Scenario: Printing integer array
+      Given I print integer array "1,-55,3,4,5,88"
+
+    Scenario: Printing even numbers from integer array
+      Given I print even numbers from integer array "1,-56,3,4,5,88"
+
+    Scenario: Checking array is empty
+      Given I check array "1,-56,3,4,5,88" is empty
+      And I check array "" is empty
+
+    Scenario: Check array for containing element
+      Given I check array "1,-56,3,4,5,88" for element 6
