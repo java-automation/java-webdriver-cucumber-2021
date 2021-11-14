@@ -58,3 +58,24 @@ Feature: Basic Java experiments
   @java8
   Scenario: Day of the week
     And I print day of the week that comes 15465 days after today and today is "Monday"
+
+  @java9
+  Scenario: Grocery list
+    And I print my grocery list
+
+  @java10
+  Scenario: Personal info HashMap
+    And I print my personal info
+
+  @java11
+  Scenario: Swap two variables
+    And I swap two variables in different ways
+
+  @java12
+  Scenario: Swap two elements in array
+    And I swap elements with positions 3 and 5 in array of integers
+    | 5 | 2 | 9 | 7 | 3 |
+
+  @java13
+  Scenario: Divisibility exercises
+    And I check if number 5 is divisible by 2 and 5
