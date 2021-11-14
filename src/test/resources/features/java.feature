@@ -54,7 +54,34 @@ Feature: Java feature
 
   @java4
   Scenario:I print "7" day of week
-  Expected Output :
-  Monday / Tuesday / Wednesday / Thursday / Friday / Saturday / Sunday
+ # Expected Output :
+ # Monday / Tuesday / Wednesday / Thursday / Friday / Saturday / Sunday
     And I print "7" day of week
     And I print "3" day of week
+
+  @java5
+  Scenario: Write a function that prints all numbers from 0 up to n
+    Given I write all number from 0 to 13
+
+  @java6
+  Scenario: Write a function that supports also negative numbers
+    Given I write all number from -13 to 13
+
+  @java7
+  Scenario: Write a function that prints all integer array
+    Given I print integer array with length 10
+
+  @java8
+  Scenario:Write a function that prints all even numbers from integer array
+    Given I print all even numbers from integer array with length 10
+
+  @java9
+  Scenario:Write a function that checks if array is empty
+    Given I check if array is empty
+
+  @java10
+  Scenario:Write a function that checks if array contains another element
+    Given I check if array with length 10 contains 37 element
+
+
+

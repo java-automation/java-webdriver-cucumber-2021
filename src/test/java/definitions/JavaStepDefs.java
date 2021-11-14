@@ -10,6 +10,8 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.Actions;
 
 import java.time.DayOfWeek;
+import java.util.Arrays;
+import java.util.List;
 
 import static java.lang.Character.toChars;
 import static java.lang.System.out;
@@ -149,8 +151,7 @@ public class JavaStepDefs {
       out.println("number " + number + " is positive");
     } else if (numberInt < 0) {
       out.println("number " + number + " is negative");
-    }
-   else {
+    } else {
       out.println("number " + number + " is zero");
     }
   }
@@ -168,4 +169,104 @@ public class JavaStepDefs {
     }
   }
 
+  @Given("I write all number from {int} to {int}")
+  public void iWriteAllNumberFromToInt(int firstNumber, int secondNumber) {
+    int i = firstNumber;
+    while (i <= secondNumber) {
+      out.print(i + " ");
+      i++;
+    }
+  }
+
+  @Given("I print integer array with length {int}")
+  public void iPrintIntegerArray(int length) {
+
+    //initialization with for loop and print primitive array
+    int[] arr1 = iInitializingIntegerArrayWithLength(10);
+
+    out.println("\n Printing with forEach loop:");
+    for (int element : arr1) {
+      out.print(element + " ");
+    }
+
+    //initializing dynamic array and print with forEach loop
+    out.println("\n Dynamic array:");
+    List<Integer> arrDynamic = Arrays.asList(2, 76, 3, 73, 2, 459);
+    for (int element : arrDynamic) {
+      out.print(element + " ");
+    }
+  }
+
+  @Given("I initializing integer array with length {int}")
+  public int[] iInitializingIntegerArrayWithLength(int length) {
+    int[] arr1 = new int[length];
+    for (int i = 0; i < length; i++) {
+      arr1[i] = (int) (Math.random() * 100);
+      out.print(arr1[i] + " ");
+    }
+    return arr1;
+  }
+
+  @Given("I print integer array")
+  public void iPrintIntegerArray(int[] array) {
+    for (int element : array) {
+      out.print(element + " ");
+    }
+  }
+
+
+  @Given("I print all even numbers from integer array with length {int}")
+  public void iPrintAllEvenNumbersFromIntegerArrayWithLength(int length) {
+    int[] array = iInitializingIntegerArrayWithLength(length);
+    out.println("\n Printing all even numbers in integer array: \n");
+    for (int element : array) {
+      if (element % 2 == 0) {
+        out.print(element + " ");
+      }
+    }
+  }
+
+  @Given("I checks if array with length {int} is empty")
+  public void iChecksIfArrayWithLengthIsEmpty(int length) {
+    int[] array = iInitializingIntegerArrayWithLength(length);
+
+  }
+
+  @Given("is array empty")
+  public void isEmpty(int[] array) {
+    if (array.length == 0) {
+      out.println("Array is empty");
+    } else {
+      out.println("Array is not empty");
+      iPrintIntegerArray(array);
+    }
+    ;
+  }
+
+  @Given("I check if array is empty")
+  public void iCheckIfArrayIsEmpty() {
+    int[] arr = new int[0];
+    isEmpty(arr);
+    int[] arr2 = iInitializingIntegerArrayWithLength(10);
+    isEmpty(arr2);
+  }
+
+  @Given("I check if array with length {int} contains {int} element")
+  public void iCheckIfArrayWithLengthContainsElement(int length, int anotherElement) {
+    int[] array = iInitializingIntegerArrayWithLength(length);
+    iPrintIntegerArray(array);
+    boolean isContain = false;
+    for (int el : array) {
+      if (el == anotherElement) {
+        isContain = true;
+        break;
+      }
+    }
+    if (isContain) {
+      out.println("\n Element " + anotherElement + " contains in array ");
+    } else {
+      out.println("\n Element " + anotherElement + " doesn't contain in array");
+    }
+
+  }
 }
