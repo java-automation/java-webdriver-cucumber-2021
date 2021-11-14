@@ -245,7 +245,7 @@ public class JavaStepDefs {
 
     }
 
-    //5
+       //5
 
     @Then("Check if array is empty")
     public void checkIfArrayIsEmpty() {
