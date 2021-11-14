@@ -114,26 +114,8 @@ public class JavaStepDefs {
         System.out.println(groceryList.get(0));
         System.out.println(groceryList.get(2));
         //groceryList.set(2, "mango");
+        //groceryList.add("melon");
         System.out.println(groceryArray[2]);
-        System.out.println();
-
-        int[] numArray = {3, 234, 23, 2, 34, 67, 9};
-        for (int el : numArray) {
-            System.out.println(el);
-        }
-        for (int i = 0; i < numArray.length; ++i) {
-            System.out.println(numArray[i]);
-        }
-        System.out.println();
-
-        List<Integer> numList = Arrays.asList(3, 234, 23, 2, 34, 67, 9);
-        for (int el : numList) {
-            System.out.println(el);
-        }
-        numList.set(0, 300);
-        for (int i = 0; i < numList.size(); ++i) {
-            System.out.println(numList.get(i));
-        }
         System.out.println();
     }
 
@@ -187,20 +169,18 @@ public class JavaStepDefs {
     }
 
     @And("I swap elements with positions {int} and {int} in array of integers")
-    public void iSwapElementsWithPositionsAndInArrayOfIntegers(int p1, int p2, @Transpose List<Integer> numList) {
-        int[] numArr = new int[numList.size()];
-        for (int i = 0; i < numList.size(); ++i) {
-            numArr[i] = numList.get(i);
-        }
-        System.out.print("Original array: ");
-        System.out.println(Arrays.toString(numArr));
+    public void iSwapElementsWithPositionsAndInArrayOfIntegers(int p1, int p2, @Transpose List<Integer> intList) {
+        int[] intArr = convertListToPrimitiveArray(intList);
 
-        int temp = numArr[p2-1];
-        numArr[p2-1] = numArr[p1-1];
-        numArr[p1-1] = temp;
+        System.out.print("Original array: ");
+        System.out.println(Arrays.toString(intArr));
+
+        int temp = intArr[p2-1];
+        intArr[p2-1] = intArr[p1-1];
+        intArr[p1-1] = temp;
 
         System.out.print("Result: ");
-        System.out.println(Arrays.toString(numArr));
+        System.out.println(Arrays.toString(intArr));
     }
 
     @And("I check if number {int} is divisible by {int} and {int}")
@@ -212,5 +192,83 @@ public class JavaStepDefs {
         } else if (num % div2 == 0) {
             System.out.println("Divisible by " + div2 + " only");
         } else System.out.println("Not divisible by " + div1 + " and " + div2);
+    }
+
+    @And("I print all numbers from zero to {int}")
+    public void iPrintAllNumbersFromZeroTo(int num) {
+        if (num >= 0) {
+            for (int i = 0; i <= num; ++i) {
+                System.out.println(i);
+            }
+        } else {
+            for (int i= 0; i >= num; --i) {
+                System.out.println(i);
+            }
+        }
+        /*
+        int sign = 1;
+        if (num < 0) sign = -1;
+        for (int i = 0; (num - i) * sign >= 0 ; i+=sign) {
+            System.out.println(i);
+        }
+        */
+    }
+
+    @And("I do my integer array exercises with number {int}")
+    public void iDoMyIntegerArrayExercises(int numToCheck, @Transpose List<Integer> intList) {
+        System.out.println("Printing the List as is: " + intList);
+        System.out.print("Printing the List with enhanced for: ");
+        for (int el : intList) {
+            System.out.print(el + " ");
+        }
+        System.out.println();
+        System.out.print("Printing the List with regular for: ");
+        for (int i = 0; i < intList.size(); ++i) {
+            System.out.print(intList.get(i) + " ");
+        }
+        System.out.println();
+
+        int[] intArr = convertListToPrimitiveArray(intList);
+        System.out.println("Printing after conversion with Array.toString(int[]): " + Arrays.toString(intArr));
+        System.out.print("Printing after conversion with enhanced for: ");
+        for (int el : intArr) {
+            System.out.print(el + " ");
+        }
+        System.out.println();
+        System.out.print("Printing after conversion with regular for: ");
+        for (int i = 0; i < intArr.length; ++i) {
+            System.out.print(intArr[i] + " ");
+        }
+        System.out.println();
+
+        System.out.print("Printing all even numbers from the array: ");
+        for (int el : intArr) {
+            if (el % 2 == 0) {
+                System.out.print(el + " ");
+            }
+        }
+        System.out.println();
+
+        System.out.print("Is array empty? ");
+        System.out.println((intArr.length == 0));
+
+
+        System.out.print("Does this array contain " + numToCheck + "? ");
+        boolean flag = false;
+        for (int el : intArr) {
+            if (el == numToCheck) {
+                flag = true;
+                break;
+            }
+        }
+        System.out.println(flag);
+    }
+
+    private int[] convertListToPrimitiveArray(List<Integer> intList) {
+        int[] intArr = new int[intList.size()];
+        for (int i = 0; i < intList.size(); ++i) {
+            intArr[i] = intList.get(i);
+        }
+        return intArr;
     }
 }

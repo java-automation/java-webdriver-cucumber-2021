@@ -79,3 +79,13 @@ Feature: Basic Java experiments
   @java13
   Scenario: Divisibility exercises
     And I check if number 5 is divisible by 2 and 5
+
+  @java14
+  Scenario: Write a function that prints all numbers from 0 to n
+    And I print all numbers from zero to -32
+
+  @java15
+  Scenario: Array exercises
+    And I do my integer array exercises with number 0
+    | 2 | 4 | 43543 | 34 | -2342 | 117799 | 0 | -94 |
+    #|
