@@ -10,6 +10,7 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.Actions;
 
 import java.time.DayOfWeek;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -182,7 +183,7 @@ public class JavaStepDefs {
   public void iPrintIntegerArray(int length) {
 
     //initialization with for loop and print primitive array
-    int[] arr1 = iInitializingIntegerArrayWithLength(10);
+    int[] arr1 = iInitializingIntegerArrayWithLength(length);
 
     out.println("\n Printing with forEach loop:");
     for (int element : arr1) {
@@ -226,29 +227,61 @@ public class JavaStepDefs {
     }
   }
 
-  @Given("I checks if array with length {int} is empty")
-  public void iChecksIfArrayWithLengthIsEmpty(int length) {
-    int[] array = iInitializingIntegerArrayWithLength(length);
-
+  @Given("is array empty")
+  public boolean isEmpty(int[] array) {
+    try {
+      if (array.length == 0) {
+        out.println("Array is Empty");
+        return true;
+      } else {
+        out.println("\n Array is not Empty and has size = " + array.length);
+        return false;
+      }
+    } catch (NullPointerException exception) {
+      out.println("Array is not initialized");
+      return false;
+    }
   }
 
-  @Given("is array empty")
-  public void isEmpty(int[] array) {
-    if (array.length == 0) {
-      out.println("Array is empty");
-    } else {
-      out.println("Array is not empty");
-      iPrintIntegerArray(array);
+  @Given("is list empty")
+  public boolean isEmpty(List<Integer> array) {
+    try {
+      if (array.size() == 0) {
+        out.println("Array is Empty");
+        return true;
+      } else {
+        out.println(array.size() + " is size of an list");
+        return false;
+      }
+    } catch (NullPointerException exception) {
+      out.println("Array isn't initialized");
+      return false;
     }
-    ;
   }
 
   @Given("I check if array is empty")
   public void iCheckIfArrayIsEmpty() {
-    int[] arr = new int[0];
-    isEmpty(arr);
+    //case primitive integer array: Null, 0 length and nonEmpty.
+    int[] arrNull = null;
+    isEmpty(arrNull);
+    int[] arrZeroLength = new int[0];
+    isEmpty(arrZeroLength);
+    int[] arrPrimitive = {2};
+    isEmpty(arrPrimitive);
     int[] arr2 = iInitializingIntegerArrayWithLength(10);
     isEmpty(arr2);
+
+
+    //case dynamic integer array
+    List<Integer> arrayDynamicNull = null;
+    isEmpty(arrayDynamicNull);
+    List<Integer> arrayDynamicEmpty = new ArrayList<>();
+    isEmpty(arrayDynamicEmpty);
+    List<Integer> arrayDynamic = new ArrayList<>();
+    arrayDynamic.add(2021);
+    isEmpty(arrayDynamic);
+    arrayDynamic.remove(0);
+    isEmpty(arrayDynamic);
   }
 
   @Given("I check if array with length {int} contains {int} element")
@@ -267,6 +300,5 @@ public class JavaStepDefs {
     } else {
       out.println("\n Element " + anotherElement + " doesn't contain in array");
     }
-
   }
 }
