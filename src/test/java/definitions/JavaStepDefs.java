@@ -182,6 +182,57 @@ public class JavaStepDefs {
         System.out.println(numsList);
 
     }
+
+    @And("I print all numbers from 0 up to {int}")
+    public void iPrintAllNumbersFrom0UpTo(int n) {
+        for (int i = 0; i <= n; i++)
+            System.out.print(i + " ");
+    }
+
+    @And("I print all numbers from {int} up to 0")
+    public void iPrintAllNumbersFromUpTo0(int n) {
+        for (int i = 0; i >= n; i--)
+            System.out.print(i + " ");
+    }
+
+    @And("I print all integer array")
+    public void iPrintAllIntegerArray() {
+        int[] array = {2, 3, 7, 9, 12, 22, 49};
+        System.out.println(Arrays.toString(array));
+    }
+
+    @And("I print all even numbers from integer array")
+    public void iPrintAllEvenNumbersFromIntegerArray() {
+        int[] array = {2, 3, 7, 9, 12, 22, 49};
+        for(int i = 0; i < array.length; i++) {
+            if (array[i] % 2 == 0)
+                System.out.print(array[i] + " ");
+        }
+    }
+
+    @And("I check if array is empty")
+    public void iCheckIfArrayIsEmpty() {
+        int[] emptyArray = {};
+        if (emptyArray.length == 0)
+            System.out.println("The array is empty");
+        else
+            System.out.println("The array is not empty");
+    }
+
+    @And("I check if array contains {int}")
+    public void iCheckIfArrayContains(int num) {
+        int[] array = {2, 3, 7, 9, 12, 22, 49};
+        boolean numContains = false;
+        for (int i = 0; i < array.length; i++) {
+            if (array[i] == num) {
+                System.out.println("The array contains " + num);
+                numContains = true;
+                break;
+            }
+        }
+        if(!numContains)
+                System.out.println("The array doesn't contain " + num);
+    }
 }
 
 
