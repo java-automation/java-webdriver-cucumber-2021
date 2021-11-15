@@ -1,6 +1,7 @@
 // Created by Viacheslav (Slava) Skryabin 04/01/2011
 package definitions;
 
+import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
@@ -58,6 +59,11 @@ public class PredefinedStepDefs {
     @Then("I wait for element with xpath {string} to not be present")
     public void iWaitForElementWithXpathToNotBePresent(String xpath) {
         new WebDriverWait(getDriver(), 10, 200).until(ExpectedConditions.not(ExpectedConditions.presenceOfElementLocated(By.xpath(xpath))));
+    }
+
+    @Then("I wait for element with xpath {string} to be displayed")
+    public void iWaitForElementWithXpathToBeDisplayed(String xpath) {
+        new WebDriverWait(getDriver(), 10, 200).until(ExpectedConditions.visibilityOfElementLocated(By.xpath(xpath)));
     }
 
     @Then("element with xpath {string} should be displayed")
@@ -221,4 +227,6 @@ public class PredefinedStepDefs {
     public void iMouseOverElementWithXpath(String xpath) {
         new Actions(getDriver()).moveToElement(getDriver().findElement(By.xpath(xpath))).perform();
     }
+
+
 }
