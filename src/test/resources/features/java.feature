@@ -36,6 +36,29 @@
       And I print 7 day of week
       And I print 1 day of week
 
+    @java6
+    Scenario: Coding challenges #1
+      And I print all numbers from zero to 7
+      And I print all numbers from zero to -7
+      And I print all numbers from 0 to 10
+      And I print all numbers from -5 to 10
+      And I print all integer array
+          |1|
+          |2|
+          |3|
+          |4|
+          |5|
+          |6|
+      And I print all even numbers from integer array
+          |1|
+          |2|
+          |3|
+          |4|
+          |5|
+          |10|
+      And I check if array is empty
+      And I check if array contains 5
+      And I check if array contains 25
 
 
 

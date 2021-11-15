@@ -1,9 +1,12 @@
 package definitions;
 
+import io.cucumber.java.Transpose;
 import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
 
+import java.sql.SQLOutput;
 import java.util.Calendar;
+import java.util.List;
 import java.util.Locale;
 
 public class JavaStepDefs {
@@ -141,6 +144,73 @@ public class JavaStepDefs {
         String[] days = new String[]{"Monday",
                 "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"};
         System.out.println(days[dayOfWeek]);
+    }
+
+    @And("I print all numbers from zero to {int}")
+    public void iPrintAllNumbersFromZeroTo(int num) {
+
+        if (num > 0) {
+            System.out.println("Positive numbers:");
+            for (int i = 0; i <= num; i++) {
+                System.out.println(i);
+            }
+        } else {
+            System.out.println("Negative numbers:");
+            for (int i = 0; i >= num; i--) {
+                System.out.println(i);
+            }
+        }
+    }
+
+    @And("I print all numbers from {int} to {int}")
+    public void iPrintAllNumbersFromTo(int num1, int num2) {
+        int i = num1;
+        while (i <= num2) {
+            System.out.print(i + " ");
+            i++;
+        }
+    }
+
+    @And("I print all integer array")
+    public void iPrintAllIntegerArray(List<Integer> intArray) {
+        for (Integer i : intArray) {
+            System.out.print(i + " ");
+        }
+    }
+
+    @And("I print all even numbers from integer array")
+    public void iPrintAllEvenNumbersFromIntegerArray(List<Integer> intArray) {
+        for (Integer i : intArray) {
+            if (i % 2 == 0) System.out.print(i + " ");
+        }
+    }
+
+    @And("I check if array is empty")
+    public void iCheckIfArrayIsEmpty() {
+        int array[] = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10};
+        if (array.length == 0) {
+            System.out.println("Array is empty");
+        }
+        else {
+            System.out.println("Array is not empty");
+        }
+    }
+
+    @And("I check if array contains {int}")
+    public void iCheckIfArrayContains(int num) {
+        boolean contains = false;
+        int array[] = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10};
+        for (int i = 0; i<array.length; i++){
+            if (array[i] == num){
+                contains = true;
+                break;
+            }
+        }
+        if (contains) {
+            System.out.println("Array contains: " + num);
+        } else {
+            System.out.println("Array doesn't contain: " + num);
+        }
     }
 }
 
