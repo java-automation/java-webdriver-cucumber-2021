@@ -36,8 +36,8 @@
 
     @java7
     Scenario: Numbers amd array exercises
-      Given List of all positive numbers
-      Then List of positive and negative numbers
+      Given Write a function that prints all numbers from 0 up to 13
+      Then Write a function that prints negative -13 to positive 13
       And Write a function that prints all integer array
       And Prints all even numbers from integer array
       Then Check if array is empty

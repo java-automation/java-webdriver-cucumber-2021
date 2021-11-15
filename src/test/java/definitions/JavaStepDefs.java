@@ -194,20 +194,21 @@ public class JavaStepDefs {
     }
 // 1
 
-    @Given("List of all positive numbers")
-    public void listOfAllPositiveNumbers() {
-        for (int i = 0; i <= 13; i++)
+    @Given("Write a function that prints all numbers from {int} up to {int}")
+    public void writeAFunctionThatPrintsAllNumbersFromUpTo(int num1, int num2) {
+        for (int i = num1; i <= num2; i++)
 
             System.out.println("Number is " + i);
 
     }
 
+
 //2
 
-    @Then("List of positive and negative numbers")
-    public void listOfPositiveAndNegativeNumbers() {
+    @Then("Write a function that prints negative {int} to positive {int}")
+    public void writeAFunctionThatPrintsNegativeToPositive(int num1, int num2) {
 
-        for (int i = -10; i <= 11; i++)
+        for (int i = num1; i <= num2; i++)
 
             System.out.println("Number is " + i);
     }
@@ -245,7 +246,7 @@ public class JavaStepDefs {
 
     }
 
-       //5
+    //5
 
     @Then("Check if array is empty")
     public void checkIfArrayIsEmpty() {
@@ -262,9 +263,9 @@ public class JavaStepDefs {
     @And("Check if array contains another element")
     public void checkIfArrayContainsAnotherElement() {
 
-        int [] num = {2, 5, 7, 8, 8, 9};
+        int[] num = {2, 5, 7, 8, 8, 9};
 
-        for (int el : num ) {
+        for (int el : num) {
             if (7 == el) {
                 System.out.println("Element found in the num list.");
             }
@@ -280,6 +281,11 @@ public class JavaStepDefs {
         }
     }
 }
+
+
+
+
+
 
 
 
