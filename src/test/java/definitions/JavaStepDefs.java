@@ -4,10 +4,7 @@ import io.cucumber.java.Transpose;
 import io.cucumber.java.en.And;
 import io.cucumber.java.en.Then;
 
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class JavaStepDefs {
 
@@ -270,5 +267,33 @@ public class JavaStepDefs {
             intArr[i] = intList.get(i);
         }
         return intArr;
+    }
+
+    @And("I print Fibonacci number for n = {int}")
+    public void iPrintFibonacciNumberForN(int elNum) {
+        if (elNum >= 0) {
+            System.out.print("Fibonacci using array: ");
+            System.out.println(fibonacciNumberArray(elNum));
+            System.out.print("Fibonacci using recursion: ");
+            System.out.println(fibonacciNumberRecursion(elNum));
+        } else throw new Error("Not a whole number: " + elNum);
+    }
+
+    private long fibonacciNumberArray(int elNum) {
+        List<Long> fibSeq = new ArrayList<>();
+        fibSeq.add((long)0);
+        fibSeq.add((long)1);
+        if (elNum > 1) {
+            for (int i = 2; i <= elNum; ++i) {
+                fibSeq.add(fibSeq.get(i - 1) + fibSeq.get(i - 2));
+            }
+        }
+        return fibSeq.get(elNum);
+    }
+
+    private long fibonacciNumberRecursion(int elNum) {
+        if (elNum > 1) {
+            return fibonacciNumberRecursion(elNum - 1) + fibonacciNumberRecursion(elNum - 2);
+        } else return elNum;
     }
 }

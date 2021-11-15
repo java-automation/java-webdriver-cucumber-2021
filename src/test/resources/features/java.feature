@@ -89,3 +89,7 @@ Feature: Basic Java experiments
     And I do my integer array exercises with number 0
     | 2 | 4 | 43543 | 34 | -2342 | 117799 | 0 | -94 |
     #|
+
+  @java16
+  Scenario: Fibonacci number
+    And I print Fibonacci number for n = 40
