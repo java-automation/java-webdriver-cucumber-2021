@@ -1,12 +1,17 @@
 package definitions;
 
+import io.cucumber.java.ParameterType;
 import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
+import org.apache.commons.lang.StringUtils;
 import org.openqa.selenium.By;
 import org.openqa.selenium.Dimension;
 import org.openqa.selenium.Keys;
+
+import java.util.Arrays;
+import java.util.stream.IntStream;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static support.TestContext.getDriver;
@@ -164,4 +169,56 @@ public class JavaStepDefs {
         }
     }
 
+    @Then("print all numbers from zero up to positive {int}")
+    public void printsAllNumbersFromZeroToPositiveN(int n) {
+        if ( n<0 ) throw new Error("Positive number expected. Actual: " + n);
+        IntStream.range(0, n+1).forEach(i -> System.out.print(i + " "));
+        System.out.println();
+    }
+
+    @Then("print all numbers from zero to {int}")
+    public void printsAllNumbersFromZeroToN(int n) {
+        int sign = (n == 0) ? 0 : n / Math.abs(n);
+        for (int i = 0; i <= Math.abs(n); i++) {
+            System.out.print( sign * i + " ");
+        }
+        System.out.println("\b");
+    }
+
+    @ParameterType("[\\{]*([^}]*)[\\}]*")
+    public int[] int_array(String str_array) {
+        if (str_array.isEmpty()) return new int[0];
+        return Arrays.stream(str_array.split(",")).map(String::strip).mapToInt(Integer::parseInt).toArray();
+    }
+
+    @Then("print all integer array {int_array}")
+    public void printAllIntegerArray(int[] arr) {
+        System.out.print("{");
+        for (int i : arr) System.out.print(i + ",");
+        System.out.println("\b}");
+    }
+
+    @Then("all even numbers from integer array {int_array}")
+    public void allEvenNumbersFromIntegerArray(int[] arr) {
+        Arrays.stream(arr).filter(num -> num % 2 == 0).forEach(i -> System.out.print(i + " "));
+        System.out.println("\b");
+    }
+
+    @Then("check if array {int_array} is empty")
+    public void checksIfArrayIsEmpty(int[] arr) {
+        System.out.println("RESULT: " + (arr.length == 0));
+    }
+
+    @Then("check if array {int_array} contains element {int}")
+    public void checksIfArrayContainsElementOtherThan(int[] arr, int search_elem) {
+        System.out.print("RESULT: ");
+        System.out.println(Arrays.stream(arr).anyMatch(num -> num == search_elem));
+    }
+
+    @Then("check if array {int_array} contains element other than present in {int_array}")
+    public void checksIfArrayContainsElementOtherThan(int[] arr, int[] allowed_values_arr) {
+        IntStream intstream = Arrays.stream(allowed_values_arr);
+        System.out.print("RESULT: ");
+        System.out.println(Arrays.stream(arr).filter(num -> intstream.anyMatch(x -> x != num)).findFirst().isEmpty());
+    }
 }

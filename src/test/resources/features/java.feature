@@ -62,6 +62,19 @@ Feature: Java feature
   Scenario: Day of the week by its ordinal number
     And I print "7" day of week
 
+  @java10:
+  Scenario: Printing and checking arrays
+    Then print all numbers from zero up to positive 5
+    Then print all numbers from zero to -7
+    Then print all integer array {1,345,   567}
+    Then all even numbers from integer array {1,345,   567,  -3,0,-2,18}
+    Then check if array {} is empty
+    Then check if array {3,8,2} contains element 7
+    Then check if array {3,8,2} contains element 8
+    Then check if array {3,8,2} contains element other than present in {4,8}
+
+
+
 
 
 
