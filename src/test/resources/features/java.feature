@@ -79,6 +79,10 @@ Feature: Java feature
   Scenario:Write a function that checks if array is empty
     Given I check if array is empty
 
+  @java9_1
+  Scenario: Check if method gets a null array of primitive type
+    Given We provide null not declared array to method
+
   @java10
   Scenario:Write a function that checks if array contains another element
     Given I check if array with length 10 contains 37 element
@@ -110,6 +114,10 @@ Feature: Java feature
   Scenario: I print list of towns contains only n letters
     Given I print list of towns contains only 4 letters
 
+  @java16
+  Scenario: Print array of random elements from zero to 10000
+    Given Print array with 15 of random elements from zero to 10000
+    Then Print array with 5 of random elements from zero to 100
     #print array in order
 
 

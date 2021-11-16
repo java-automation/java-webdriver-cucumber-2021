@@ -11,7 +11,8 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.Actions;
 
 import java.time.DayOfWeek;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
 
 import static java.lang.Character.toChars;
 import static java.lang.System.out;
@@ -199,13 +200,14 @@ public class JavaStepDefs {
     public int[] iInitializingIntegerArrayWithLength(int length) {
         int[] arr1 = new int[length];
         for (int i = 0; i < length; i++) {
-            arr1[i] = (int) (Math.random() * 20);
+            arr1[i] = (int) (Math.random() * 200);
         }
         return arr1;
     }
 
     @Given("I print integer array")
     public void iPrintIntegerArray(int[] array) {
+        int[] art;
         for (int element : array) {
             out.print(element + " ");
         }
@@ -379,4 +381,40 @@ public class JavaStepDefs {
         out.println("\n After:");
         iPrintIntegerArray(a);
     }
+
+    @Given("We provide null not declared array to method")
+    public void weProvideNullNotDeclaredArrayToMethod() {
+        int[] arr = null;
+        int[] arrEmpty = {};
+        int[] arrNonEmpty = {7};
+        out.println("arrEmpty: " + isEmptyAnotherMethod(arrEmpty));
+        out.println("arrNonEmpty: " + isEmptyAnotherMethod(arrNonEmpty));
+        out.println(("arr : " + isEmptyAnotherMethod(arr)));
+    }
+
+    public boolean isEmptyAnotherMethod(int[] array) throws NullPointerException {
+        try {
+            boolean isEmpty = false;
+            if (array.length == 0) {
+                isEmpty = true;
+            } else out.println("We have nonEmpty array" + array.length);
+            return isEmpty;
+
+        } catch (NullPointerException exception) {
+            out.println("Our array is null");
+            return false;
+        }
+    }
+
+    @Given("Print array with {int} of random elements from zero to {int}")
+    public int[] printArrayOfRandomElementsFromZeroTo(int length, int range) {
+        out.println("\n Array:");
+        int[] arr1 = new int[length];
+        for (int i = 0; i < length; i++) {
+            arr1[i] = (int) (Math.random() * range);
+            System.out.print(arr1[i] + " ");
+        }
+        return arr1;
+    }
+
 }
