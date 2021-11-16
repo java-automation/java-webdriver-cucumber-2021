@@ -83,5 +83,44 @@ Feature: Java feature
   Scenario:Write a function that checks if array contains another element
     Given I check if array with length 10 contains 37 element
 
+  @java10_1
+  Scenario: Write a function that checks if array contains another element
+    Given I check if array with length 10 contains 37
+
+  @java11
+  Scenario: Write a function that prints all numbers from zero up to n
+    Given I print all numbers from zero to 27
+
+  @java12
+  Scenario: Swap n-th and m-th elements in array
+    Given I swap 2 element and 5 in integer array with length 7
+
+  @java13
+  Scenario: Bubble sort integer array
+    Given I bubble sort integer array with length 7
+    Given I bubble sort integer array with length 1
+    Given I bubble sort integer array with length 20
+    Given I bubble sort integer array with length 10
+
+  @java14
+  Scenario: I print list of towns starts from exact letter
+    Given I print list of towns starts from "A" letter
+
+  @java15
+  Scenario: I print list of towns contains only n letters
+    Given I print list of towns contains only 4 letters
+
+    #print array in order
+
+
+
+
+
+
+
+
+
+
+
 
 
