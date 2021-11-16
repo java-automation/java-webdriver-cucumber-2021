@@ -296,4 +296,20 @@ public class JavaStepDefs {
             return fibonacciNumberRecursion(elNum - 1) + fibonacciNumberRecursion(elNum - 2);
         } else return elNum;
     }
+
+    @And("I check if {string} is a palindrome word")
+    public void iCheckIfIsAPalindrome(String wordToCheck) {
+        if (wordToCheck.length() != 0) {
+            char[] chars = wordToCheck.toCharArray();
+            boolean isPalindrome = true;
+            int len = chars.length;
+            for (int i = 0; i < (len / 2); ++i) {
+                if (chars[i] != chars[len - 1 - i]) {
+                    isPalindrome = false;
+                    break;
+                }
+            }
+            System.out.println("Is " + wordToCheck + " a palindrome? " + isPalindrome);
+        } else throw new Error("Empty word - nothing to check!");
+    }
 }

@@ -92,4 +92,8 @@ Feature: Basic Java experiments
 
   @java16
   Scenario: Fibonacci number
-    And I print Fibonacci number for n = 40
+    And I print Fibonacci number for n = 20
+
+  @java17
+  Scenario: Palindrome
+    And I check if "kayak" is a palindrome word
