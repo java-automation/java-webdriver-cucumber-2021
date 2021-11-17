@@ -118,7 +118,16 @@ Feature: Java feature
   Scenario: Print array of random elements from zero to 10000
     Given Print array with 15 of random elements from zero to 10000
     Then Print array with 5 of random elements from zero to 100
-    #print array in order
+
+@java17
+Scenario: Define a HashMap variable called myInfo which will
+have the following keys:
+"firstName"
+"lastName"
+"hometown"
+"favoriteFood"
+  Then Define a HashMap variable called myInfo and print some of those values in the console.
+
 
 
 

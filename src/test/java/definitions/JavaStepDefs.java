@@ -12,6 +12,7 @@ import org.openqa.selenium.interactions.Actions;
 
 import java.time.DayOfWeek;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import static java.lang.Character.toChars;
@@ -417,4 +418,16 @@ public class JavaStepDefs {
         return arr1;
     }
 
+    @Then("Define a HashMap variable called myInfo and print some of those values in the console.")
+    public void defineAHashMapVariableCalledMyInfoAndPrintSomeOfThoseValuesInTheConsole() {
+        HashMap<String, String> myInfo = new HashMap<>();
+        myInfo.put("firstName", "Irina");
+        myInfo.put("lastName", "Gavrilova");
+        myInfo.put("hometown", "Kirov");
+        myInfo.put("favoriteFood", "grapes");
+        out.println(myInfo.get("firstName"));
+        out.println(myInfo);
+        myInfo.replace("favoriteFood", "raisins");
+        out.println(myInfo);
+    }
 }
