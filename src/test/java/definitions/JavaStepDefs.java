@@ -193,6 +193,7 @@ public class JavaStepDefs {
 
     @And("I print all numbers from zero to {int}")
     public void iPrintAllNumbersFromZeroTo(int num) {
+        System.out.println("-n <- 0 -> n as two loops:");
         if (num >= 0) {
             for (int i = 0; i <= num; ++i) {
                 System.out.println(i);
@@ -202,13 +203,34 @@ public class JavaStepDefs {
                 System.out.println(i);
             }
         }
-        /*
+        System.out.println();
+
+        System.out.println("-n <- 0 -> n as a single loop:");
         int sign = 1;
         if (num < 0) sign = -1;
         for (int i = 0; (num - i) * sign >= 0 ; i+=sign) {
             System.out.println(i);
         }
-        */
+        System.out.println();
+
+        System.out.println("-n -> 0 -> n as two loops:");
+        if (num >= 0) {
+            for (int i = 0; i <= num; ++i) {
+                System.out.println(i);
+            }
+        } else {
+            for (int i= num; i <= 0; ++i) {
+                System.out.println(i);
+            }
+        }
+        System.out.println();
+
+        System.out.println("-n -> 0 -> n as a single loop:");
+        int k = 1;
+        if (num < 0) k = 0;
+        for (int i = (1 - k) * num; i <= k * num; ++i) {
+            System.out.println(i);
+        }
     }
 
     @And("I do my integer array exercises with number {int}")
@@ -272,15 +294,28 @@ public class JavaStepDefs {
     @And("I print Fibonacci number for n = {int}")
     public void iPrintFibonacciNumberForN(int elNum) {
         if (elNum >= 0) {
-            System.out.print("Fibonacci using array: ");
+            System.out.print("Fibonacci using regular array: ");
             System.out.println(fibonacciNumberArray(elNum));
+            System.out.print("Fibonacci using array list: ");
+            System.out.println(fibonacciNumberArrayList(elNum));
             System.out.print("Fibonacci using recursion: ");
             System.out.println(fibonacciNumberRecursion(elNum));
         } else throw new Error("Not a whole number: " + elNum);
     }
 
     private long fibonacciNumberArray(int elNum) {
-        List<Long> fibSeq = new ArrayList<>();
+        long[] fibSeq = new long[elNum + 1];
+        fibSeq[1] = 1;
+        if (elNum > 1) {
+            for (int i = 2; i <= elNum; ++i) {
+                fibSeq[i] = fibSeq[i - 1] + fibSeq[i - 2];
+            }
+        }
+        return fibSeq[elNum];
+    }
+
+    private long fibonacciNumberArrayList(int elNum) {
+        List<Long> fibSeq = new ArrayList<>(elNum + 1);
         fibSeq.add((long)0);
         fibSeq.add((long)1);
         if (elNum > 1) {
@@ -299,7 +334,7 @@ public class JavaStepDefs {
 
     @And("I check if {string} is a palindrome word")
     public void iCheckIfIsAPalindrome(String wordToCheck) {
-        if (wordToCheck.length() != 0) {
+        if (wordToCheck.length() > 0) {
             char[] chars = wordToCheck.toCharArray();
             boolean isPalindrome = true;
             int len = chars.length;

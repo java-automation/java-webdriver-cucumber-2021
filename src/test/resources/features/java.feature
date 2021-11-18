@@ -82,7 +82,7 @@ Feature: Basic Java experiments
 
   @java14
   Scenario: Write a function that prints all numbers from 0 to n
-    And I print all numbers from zero to -32
+    And I print all numbers from zero to -5
 
   @java15
   Scenario: Array exercises
