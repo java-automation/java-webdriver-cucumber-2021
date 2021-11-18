@@ -9,6 +9,10 @@
       And I write a function that checks if array is empty
       And Write a function that checks if array contains another element
 
+      @java2
+      Scenario: Hash Map scenario
+        Given We have have hashmap myinfo
+
 
 
 

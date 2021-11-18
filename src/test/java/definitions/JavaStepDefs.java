@@ -7,6 +7,7 @@ import io.cucumber.java.en.When;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
 
 
@@ -71,6 +72,20 @@ public class JavaStepDefs {
         elemcheck.add(1);
         elemcheck.add(3);
         System.out.print(elemcheck.contains(-9));
+    }
+
+    @Given("We have have hashmap myinfo")
+    public void weHaveHaveHashmapMyinfo() {
+        HashMap<String,String> myInfo = new HashMap<String, String>();
+        myInfo.put("firstname","Ivan");
+        myInfo.put("lastName","Romanov");
+        myInfo.put("hometown","Chicago");
+        myInfo.put("favoriteFood","Steak");
+        System.out.println(myInfo);
+        myInfo.get("firstname");
+        System.out.println(myInfo.get("firstname"));
+        myInfo.replace("hometown","Kirov");
+        System.out.println(myInfo);
     }
 }
 
