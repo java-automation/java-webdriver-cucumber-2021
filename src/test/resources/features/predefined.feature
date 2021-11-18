@@ -137,7 +137,7 @@ Feature: Smoke steps
      Then element with xpath "//label[@id='email-error']" should be displayed
      And element with xpath "//label[@id='email-error']" should contain text "enter a valid email"
      When I click on element with xpath "//button[@id='formReset']"
-     And I type "odintsov@outlook.com" into element with xpath "//input[@name='email']"
+     And I type "odi@outlook.com" into element with xpath "//input[@name='email']"
      And I click on element with xpath "//button[@id='formSubmit']"
      Then element with xpath "//label[@id='email-error']" should not be displayed
 
@@ -161,9 +161,9 @@ Feature: Smoke steps
      Then element with xpath "//div[@aria-describedby='nameDialog']" should be displayed
      When I type "Dmitry" into element with xpath "//input[@id='firstName']"
      And I type "P" into element with xpath "//input[@id='middleName']"
-     And I type "Odintsov" into element with xpath "//input[@id='lastName']"
+     And I type "Odi" into element with xpath "//input[@id='lastName']"
      And I click on element with xpath "//button[normalize-space()='Save']"
-     Then element with xpath "//input[@id='name']" should have attribute "value" as "Dmitry P Odintsov"
+     Then element with xpath "//input[@id='name']" should have attribute "value" as "Dmitry P Odi"
 
   @predefined17
   Scenario: Validate Privacy Policy checkbox
@@ -176,7 +176,7 @@ Feature: Smoke steps
   @predefined18
   Scenario: Validate non-required fields in order
     Given I open url "https://skryabin.com/market/quote.html"
-    When I type "89124536665" into element with xpath "//input[@name='phone']"
+    When I type "89124530101" into element with xpath "//input[@name='phone']"
     And I click on element with xpath "//select[@name='countryOfOrigin']"
     And I click on element with xpath "//option[@value='Russia']"
     And I click on element with xpath "//input[@name='gender' and @value='male']"
@@ -194,17 +194,17 @@ Feature: Smoke steps
     Then element with xpath "//div[@aria-describedby='nameDialog']" should be displayed
     When I type "Dmitry" into element with xpath "//input[@id='firstName']"
     And I type "P" into element with xpath "//input[@id='middleName']"
-    And I type "Odintsov" into element with xpath "//input[@id='lastName']"
+    And I type "Odi" into element with xpath "//input[@id='lastName']"
     And I click on element with xpath "//button[normalize-space()='Save']"
     And I type "dodintsov" into element with xpath "//input[@name='username']"
-    And I type "odintsov@outlook.com" into element with xpath "//input[@name='email']"
+    And I type "odi@outlook.com" into element with xpath "//input[@name='email']"
     And I type "12345" into element with xpath "//input[@id='password']"
     And I type "12345" into element with xpath "//input[@id='confirmPassword']"
     And I click on element with xpath "//input[@name='agreedToPrivacyPolicy']"
     And I click on element with xpath "//button[@id='formSubmit']"
-    Then element with xpath "//b[@name='name' and normalize-space()='Dmitry P Odintsov']" should be present
+    Then element with xpath "//b[@name='name' and normalize-space()='Dmitry P Odi']" should be present
     And element with xpath "//b[@name='username' and normalize-space()='dodintsov']" should be present
-    And element with xpath "//b[@name='email' and normalize-space()='odintsov@outlook.com']" should be present
+    And element with xpath "//b[@name='email' and normalize-space()='odi@outlook.com']" should be present
     And element with xpath "//b[@name='agreedToPrivacyPolicy' and normalize-space()='true']" should be present
     And element with xpath "//b[@name='password' and normalize-space()='[entered]']" should be present
     And element with xpath "//*[normalize-space()='12345']" should not be present

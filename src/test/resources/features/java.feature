@@ -84,3 +84,6 @@ Feature: Java feature
 
     Scenario: Check array for containing element
       Given I check array "1,-56,3,4,5,88" for element 6
+
+    Scenario: Working with hashmap
+      Given I work with some hashmap

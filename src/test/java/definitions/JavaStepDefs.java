@@ -9,9 +9,7 @@ import org.openqa.selenium.Dimension;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebElement;
 
-import java.util.Arrays;
-import java.util.List;
-import java.util.Locale;
+import java.util.*;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static support.TestContext.getDriver;
@@ -77,7 +75,7 @@ public class JavaStepDefs {
         int quotient = num1 / num2;
         int product = num1 * num2;
         System.out.println("Sum of " + num1 + " and " + num2 + " is " + sum);
-        System.out.println("Difference of " + num1 + " and " + num2 +  " is " + difference);
+        System.out.println("Difference of " + num1 + " and " + num2 + " is " + difference);
         System.out.println("Quotient of " + num1 + " and " + num2 + " is " + quotient);
         System.out.println("Product of " + num1 + " and " + num2 + " is " + product);
     }
@@ -125,7 +123,7 @@ public class JavaStepDefs {
         }
         if (bNotNumber) {
             System.out.println("Number is not a number (" + sVar1 + ")");
-        } else if ((iVar1 >= 0) & ( !bNotNumber)) {
+        } else if ((iVar1 >= 0) & (!bNotNumber)) {
             System.out.println("Number is positive (" + sVar1 + ")");
         } else {
             System.out.println("Number is negative (" + sVar1 + ")");
@@ -197,10 +195,10 @@ public class JavaStepDefs {
     public void iFillOutRequiredFields() {
         getDriver().findElement(By.xpath("//input[@id='name']")).click();
         getDriver().findElement(By.xpath("//input[@id='firstName']")).sendKeys("Dmitry");
-        getDriver().findElement(By.xpath("//input[@id='lastName']")).sendKeys("Odintsov");
+        getDriver().findElement(By.xpath("//input[@id='lastName']")).sendKeys("Odi");
         getDriver().findElement(By.xpath("//button[normalize-space()='Save']")).click();
         getDriver().findElement(By.xpath("//input[@name='username']")).sendKeys("dodintsov");
-        getDriver().findElement(By.xpath("//input[@name='email']")).sendKeys("odintsov@outlook.com");
+        getDriver().findElement(By.xpath("//input[@name='email']")).sendKeys("odi@outlook.com");
         getDriver().findElement(By.xpath("//input[@id='password']")).sendKeys("12345");
         getDriver().findElement(By.xpath("//input[@id='confirmPassword']")).sendKeys("12345");
         getDriver().findElement(By.xpath("//input[@name='agreedToPrivacyPolicy']")).click();
@@ -221,7 +219,7 @@ public class JavaStepDefs {
             getDriver().findElement(By.xpath("//input[@name='email']")).click();
             getDriver().findElement(By.xpath("//input[@name='email']")).sendKeys(Keys.BACK_SPACE);
             getDriver().findElement(By.xpath("//input[@name='email']")).clear();
-            getDriver().findElement(By.xpath("//input[@name='email']")).sendKeys("odintsov@outlook.com");
+            getDriver().findElement(By.xpath("//input[@name='email']")).sendKeys("odi@outlook.com");
             getDriver().findElement(By.xpath("//input[@name='email']")).submit();
         } else {
             throw new Error("Email field unexpected behavior");
@@ -230,9 +228,9 @@ public class JavaStepDefs {
 
     @Then("I verify that submitted fields saved correctly")
     public void iVerifyThatSubmittedFieldsSavedCorrectly() {
-        assertThat(getDriver().findElement(By.xpath("//b[@name='name']")).getText()).isEqualTo("Dmitry Odintsov");
+        assertThat(getDriver().findElement(By.xpath("//b[@name='name']")).getText()).isEqualTo("Dmitry Odi");
         assertThat(getDriver().findElement(By.xpath("//b[@name='username']")).getText()).isEqualTo("dodintsov");
-        assertThat(getDriver().findElement(By.xpath("//b[@name='email']")).getText()).isEqualTo("odintsov@outlook.com");
+        assertThat(getDriver().findElement(By.xpath("//b[@name='email']")).getText()).isEqualTo("odi@outlook.com");
         assertThat(getDriver().findElement(By.xpath("//b[@name='agreedToPrivacyPolicy']")).getText()).isEqualTo("true");
         assertThat(getDriver().findElement(By.xpath("//b[@name='password']")).getText()).isEqualTo("[entered]");
         List<WebElement> lPassword = getDriver().findElements(By.xpath("//*[normalize-space()='12345']"));
@@ -243,8 +241,8 @@ public class JavaStepDefs {
 
     @When("I fill out optional fields")
     public void iFillOutOptionalFields() {
-        getDriver().findElement(By.xpath("//input[@name='phone']")).sendKeys("89124536665");
-        getDriver().findElement(By.xpath("//input[@name='dateOfBirth']")).sendKeys("01/30/1980");
+        getDriver().findElement(By.xpath("//input[@name='phone']")).sendKeys("89124530101");
+        getDriver().findElement(By.xpath("//input[@name='dateOfBirth']")).sendKeys("01/01/1980");
         getDriver().findElement(By.xpath("//select[@name='countryOfOrigin']")).click();
         getDriver().findElement(By.xpath("//option[@value='Russia']")).click();
         getDriver().findElement(By.xpath("//input[@name='gender' and @value='male']")).click();
@@ -255,26 +253,26 @@ public class JavaStepDefs {
         getDriver().switchTo().alert().accept();
         getDriver().switchTo().frame("additionalInfo");
         getDriver().findElement(By.xpath("//input[@name='contactPersonName']")).sendKeys("Dima");
-        getDriver().findElement(By.xpath("//input[@name='contactPersonPhone']")).sendKeys("89124536665");
+        getDriver().findElement(By.xpath("//input[@name='contactPersonPhone']")).sendKeys("89124530101");
     }
 
     @And("I verify all optional fields saved correctly")
     public void iVerifyAllOptionalFieldsSavedCorrectly() {
         assertThat(getDriver().findElement(By.xpath("//b[@name='countryOfOrigin']")).getText()).isEqualTo("Russia");
-        assertThat(getDriver().findElement(By.xpath("//b[@name='dateOfBirth']")).getText()).isEqualTo("01/30/1980");
+        assertThat(getDriver().findElement(By.xpath("//b[@name='dateOfBirth']")).getText()).isEqualTo("01/01/1980");
         assertThat(getDriver().findElement(By.xpath("//b[@name='gender']")).getText()).isEqualTo("male");
         assertThat(getDriver().findElement(By.xpath("//b[@name='allowedToContact']")).getText()).isEqualTo("true");
         assertThat(getDriver().findElement(By.xpath("//b[@name='address']")).getText()).isEqualTo("Some Address");
         assertThat(getDriver().findElement(By.xpath("//b[@name='carMake']")).getText()).isEqualTo("Toyota");
         assertThat(getDriver().findElement(By.xpath("//b[@name='thirdPartyAgreement']")).getText()).isEqualTo("accepted");
         assertThat(getDriver().findElement(By.xpath("//b[@name='contactPersonName']")).getText()).isEqualTo("Dima");
-        assertThat(getDriver().findElement(By.xpath("//b[@name='contactPersonPhone']")).getText()).isEqualTo("89124536665");
+        assertThat(getDriver().findElement(By.xpath("//b[@name='contactPersonPhone']")).getText()).isEqualTo("89124530101");
     }
 
     @Given("I print numbers from zero to {int}")
     public void iPrintNumbersFromZeroTo(int iVar1) {
         for (int i = 0; i <= Math.abs(iVar1); i++) {
-            System.out.println(((iVar1 < 0 ) & (i != 0)) ? ("-" + i) : i);
+            System.out.println(((iVar1 < 0) & (i != 0)) ? ("-" + i) : i);
         }
     }
 
@@ -290,7 +288,7 @@ public class JavaStepDefs {
     public void iPrintEvenNumbersFromIntegerArray(String sArray1) {
         int[] iArray = convertStringArrayToInteger(sArray1);
         System.out.println("Even numbers form array is:");
-        for (int el: iArray) {
+        for (int el : iArray) {
             if ((el % 2) == 0) {
                 System.out.println(el);
             }
@@ -323,12 +321,23 @@ public class JavaStepDefs {
     public void iCheckArrayForElement(String sArray1, int iEl) {
         int[] iArray = convertStringArrayToInteger(sArray1);
         String sFound = "haven't";
-        for (int el: iArray) {
+        for (int el : iArray) {
             if (el == iEl) {
                 sFound = "have";
                 break;
             }
         }
         System.out.println("We " + sFound + " this element in array.");
+    }
+
+    @Given("I work with some hashmap")
+    public void iWorkWithSomeHashmap() {
+        Map<String, String> myInfo = new HashMap<String, String>();
+        myInfo.put("firstName", "Dima");
+        myInfo.put("secondName", "Odi");
+        myInfo.put("hometown", "Glazov");
+        myInfo.put("favoriteFood", "someFood");
+
+        System.out.println(myInfo.get("hometown"));
     }
 }
