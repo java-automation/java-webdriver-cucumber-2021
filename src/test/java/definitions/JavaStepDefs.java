@@ -350,29 +350,29 @@ public class JavaStepDefs {
 
     @And("I sort {string} numbers in a given array using Bubble Sort")
     public void iSortNumbersInAGivenArrayUsingBubbleSort(String parity, @Transpose List<Integer> intList) {
-        boolean sortOdd;
+        boolean isOdd;
         switch (parity) {
-            case "odd" -> sortOdd = true;
-            case "even" -> sortOdd = false;
+            case "odd" -> isOdd = true;
+            case "even" -> isOdd = false;
             default -> throw new Error("Incorrect number parity reference: " + parity);
         }
-        System.out.println("Given parity: " + parity + ". Is odd? " + sortOdd);
+        System.out.println("Given parity: " + parity + ". Is odd? " + isOdd);
         int[] arr = convertListToPrimitiveArray(intList);
         System.out.print("Given array: ");
         System.out.println(Arrays.toString(arr));
 
         boolean swapped;
-        for (int i = 0; i < arr.length - 1; ++i) { //total runs
-            if (((arr[i] % 2 == 0) && sortOdd) || ((arr[i] % 2 != 0) && !sortOdd)) { continue; } // number with opposite parity reduces the amount of total runs for max value
+        for (int i = 0; i < arr.length - 1; ++i) {
             swapped = false;
-            for (int j = 0; j < arr.length - 1 - i; ++j) { // looking for first number with proper parity to swap
-                if (((arr[j] % 2 != 0) && sortOdd) || ((arr[j] % 2 == 0) && !sortOdd)) {
-                    for (int k = j + 1; k < arr.length - i; ++k) { // looking for next number with proper parity to swap
-                        if (((arr[k] % 2 != 0 && sortOdd) || (arr[k] % 2 == 0 && !sortOdd)) && arr[j] > arr[k]) {
-                            int temp = arr[j];
-                            arr[j] = arr[k];
-                            arr[k] = temp;
-                            swapped = true;
+            for (int j = 0; j < arr.length - 1 - i; ++j) { // looking for first number with proper parity
+                if ((arr[j] % 2 != 0) == isOdd) {
+                    for (int k = j + 1; k < arr.length - i; ++k) { // looking for next number with proper parity
+                        if ((arr[k] % 2 != 0) == isOdd) {
+                            if (arr[j] > arr[k]) {
+                                swapArrayValues(arr, j, k);
+                                swapped = true;
+                            }
+                            j = k - 1;
                             break;
                         }
                     }
@@ -389,63 +389,61 @@ public class JavaStepDefs {
     @And("I sort given array using different methods")
     public void iSortGivenArrayUsingDifferentMethods(@Transpose List<Integer> intList) {
         int[] originalArr = convertListToPrimitiveArray(intList);
-        String originalString = Arrays.toString(originalArr);
         System.out.print("Given array: ");
-        System.out.println(originalString);
+        System.out.println(Arrays.toString(originalArr));
         System.out.println();
 
         int[] arr1 = originalArr.clone();
-        System.out.println("Selection sort: ");
+        System.out.println("Selection sort for: " + Arrays.toString(arr1));
         sortUsingSelectionSort(arr1);
-        System.out.println("Original: " + originalString);
-        System.out.print("Result:   ");
+        System.out.print("Result: ");
         System.out.println(Arrays.toString(arr1));
         System.out.println();
 
         int[] arr2 = originalArr.clone();
-        System.out.println("Bubble sort: ");
+        System.out.println("Bubble sort for: " + Arrays.toString(arr2));
         sortUsingBubbleSort(arr2);
-        System.out.println("Original: " + originalString);
-        System.out.print("Result:   ");
+        System.out.print("Result: ");
         System.out.println(Arrays.toString(arr2));
         System.out.println();
 
         int[] arr3 = originalArr.clone();
-        System.out.println("Insertion sort: ");
+        System.out.println("Insertion sort for: " + Arrays.toString(arr3));
         sortUsingInsertionSort(arr3);
-        System.out.println("Original: " + originalString);
-        System.out.print("Result:   ");
+        System.out.print("Result: ");
         System.out.println(Arrays.toString(arr3));
         System.out.println();
 
         int[] arr4 = originalArr.clone();
-        System.out.println("Quick sort: ");
+        System.out.println("Quick sort for: " + Arrays.toString(arr4));
         sortUsingQuickSort(arr4, 0, arr4.length - 1);
-        System.out.println("Original: " + originalString);
-        System.out.print("Result:   ");
+        System.out.print("Result: ");
         System.out.println(Arrays.toString(arr4));
         System.out.println();
     }
 
-    private void sortUsingQuickSort(int[] arr, int start, int pivot) {
-        // pivot strategy - rightmost element
-        if (start < pivot) {
+    private void swapArrayValues(int[] arr, int ind1, int ind2) {
+        if (ind1 == ind2) return;
+        int temp = arr[ind1];
+        arr[ind1] = arr[ind2];
+        arr[ind2] = temp;
+    }
+
+    private void sortUsingQuickSort(int[] arr, int start, int end) {
+        if (start < end) {
+            int pivot = end; // pivot strategy - rightmost element
             int left;
             int right;
             for (right = start; right < pivot; ++right) {
                 if (arr[right] > arr[pivot]) {
                     for (left = right + 1; left < pivot; ++left) {
                         if (arr[left] < arr[pivot]) {
-                            int temp = arr[left];
-                            arr[left] = arr[right];
-                            arr[right] = temp;
+                            swapArrayValues(arr, left, right);
                             ++right;
                         }
                         System.out.println(Arrays.toString(arr));
                     }
-                    int temp = arr[pivot];
-                    arr[pivot] = arr[right];
-                    arr[right] = temp;
+                    swapArrayValues(arr, pivot, right);
                     System.out.println(Arrays.toString(arr));
                     break;
                 }
@@ -458,11 +456,7 @@ public class JavaStepDefs {
     private void sortUsingInsertionSort(int[] arr) {
         for (int i = 1; i < arr.length; i++) {
             for (int j = i; j > 0; --j) {
-                if (arr[j] < arr[j - 1]) {
-                    int curVal = arr[j];
-                    arr[j] = arr[j-1];
-                    arr[j-1] = curVal;
-                }
+                if (arr[j] < arr[j - 1]) swapArrayValues(arr, j - 1, j);
             }
             System.out.println(Arrays.toString(arr));
         }
@@ -473,10 +467,8 @@ public class JavaStepDefs {
         for (int i = 0; i < arr.length - 1; ++i) {
             swapped = false;
             for (int j = 0; j < arr.length - 1 - i; ++j) {
-                if (arr[j] > arr[j+1]) {
-                    int temp = arr[j];
-                    arr[j] = arr[j+1];
-                    arr[j+1] = temp;
+                if (arr[j] > arr[j + 1]) {
+                    swapArrayValues(arr, j, j + 1);
                     swapped = true;
                 }
             }
@@ -487,17 +479,11 @@ public class JavaStepDefs {
 
     private void sortUsingSelectionSort(int[] arr) {
         for (int j = 0; j < arr.length - 1; j++) {
-            int idxMin = j;
-            int min = arr[idxMin];
+            int minIndex = j;
             for (int i = j + 1; i < arr.length; i++) {
-                if (arr[i] < min) {
-                    min = arr[i];
-                    idxMin = i;
-                }
+                if (arr[i] < arr[j]) minIndex = i;
             }
-            int temp = arr[j];
-            arr[j] = min;
-            arr[idxMin] = temp;
+            if (minIndex > j) swapArrayValues(arr, minIndex, j);
             System.out.println(Arrays.toString(arr));
         }
     }
