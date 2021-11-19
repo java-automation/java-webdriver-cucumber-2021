@@ -389,20 +389,47 @@ public class JavaStepDefs {
     @And("I sort given array using different methods")
     public void iSortGivenArrayUsingDifferentMethods(@Transpose List<Integer> intList) {
         int[] originalArr = convertListToPrimitiveArray(intList);
+        String originalString = Arrays.toString(originalArr);
         System.out.print("Given array: ");
-        System.out.println(Arrays.toString(originalArr));
+        System.out.println(originalString);
+        System.out.println();
 
-        int[] arrOne = originalArr.clone();
-        System.out.println("Selection sort (class): ");
-        sortUsingSelectionSort(arrOne);
-        System.out.print("Result: ");
-        System.out.println(Arrays.toString(arrOne));
+        int[] arr1 = originalArr.clone();
+        System.out.println("Selection sort: ");
+        sortUsingSelectionSort(arr1);
+        System.out.println("Original: " + originalString);
+        System.out.print("Result:   ");
+        System.out.println(Arrays.toString(arr1));
+        System.out.println();
 
-        int[] arrTwo = originalArr.clone();
+        int[] arr2 = originalArr.clone();
         System.out.println("Bubble sort: ");
-        sortUsingBubbleSort(arrTwo);
-        System.out.print("Result: ");
-        System.out.println(Arrays.toString(arrTwo));
+        sortUsingBubbleSort(arr2);
+        System.out.println("Original: " + originalString);
+        System.out.print("Result:   ");
+        System.out.println(Arrays.toString(arr2));
+        System.out.println();
+
+        int[] arr3 = originalArr.clone();
+        System.out.println("Insertion sort: ");
+        sortUsingInsertionSort(arr3);
+        System.out.println("Original: " + originalString);
+        System.out.print("Result:   ");
+        System.out.println(Arrays.toString(arr3));
+        System.out.println();
+    }
+
+    private void sortUsingInsertionSort(int[] arr) {
+        for (int i = 1; i < arr.length; i++) {
+            for (int j = i; j > 0; --j) {
+                if (arr[j] < arr[j - 1]) {
+                    int curVal = arr[j];
+                    arr[j] = arr[j-1];
+                    arr[j-1] = curVal;
+                }
+            }
+            System.out.println(Arrays.toString(arr));
+        }
     }
 
     private void sortUsingBubbleSort(int[] arr) {
