@@ -85,5 +85,10 @@ Feature: Java feature
     Scenario: Check array for containing element
       Given I check array "1,-56,3,4,5,88" for element 6
 
+  @javaDay7HomeWork
     Scenario: Working with hashmap
       Given I work with some hashmap
+
+  @javaDay8HomeWork
+    Scenario: Array sorting (only odd numbers will be sorted)
+      Given I sort an array with even and odd "3,4,7,23,9,10,5,12, 34, 65,2"

@@ -303,8 +303,10 @@ public class JavaStepDefs {
 
     public int[] convertStringArrayToInteger(String sArray1) {
         String[] sTempArr;
+        String sTemp;
         if (sArray1.length() > 0) {
-            sTempArr = sArray1.split(",");
+            sTemp = sArray1.replace(" ", "");
+            sTempArr = sTemp.split(",");
         } else {
             sTempArr = new String[0];
         }
@@ -339,5 +341,26 @@ public class JavaStepDefs {
         myInfo.put("favoriteFood", "someFood");
 
         System.out.println(myInfo.get("hometown"));
+    }
+
+    @Given("I sort an array with even and odd {string}")
+    public void iSortAnArrayWithEvenAndOdd(String sArray1) {
+        int[] iArray = convertStringArrayToInteger(sArray1);
+        System.out.println("Original: " + Arrays.toString(iArray));
+        for (int j = 0; j < iArray.length - 1; j++) {
+            if (iArray[j] % 2 == 0) continue;
+            int iMinIndex = j;
+            int iMinValue = iArray[iMinIndex];
+            for (int i = j + 1; i < iArray.length; i++) {
+                if ((iArray[i] < iMinValue) && ((iArray[i] % 2) != 0)) {
+                    iMinValue = iArray[i];
+                    iMinIndex = i;
+                }
+            }
+            int iTempValue = iArray[j];
+            iArray[j] = iMinValue;
+            iArray[iMinIndex] = iTempValue;
+            System.out.println("Step " + j + " - " + Arrays.toString(iArray));
+        }
     }
 }
