@@ -102,6 +102,7 @@ Feature: Basic Java experiments
   Scenario: Do various array sorts
     And I sort given array using different methods
     | 5 | 3 | 2 | 8 | 4 | 1 | -10 | 1001 | 0 | -523 |
+    #| 1 | 0 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 |
 
   @java19
   Scenario: Sort odd numbers in a given array
@@ -110,3 +111,4 @@ Feature: Basic Java experiments
     | 5 | 3 | 2 | 8 | 4 | 1 | -10 | 1001 | 0 | -523 |
     #| 5 | 3 | 7 | 11 | 13 | 1 | -19 | 1001 | -333 | -587 |
     #| 10 | 6 | 2 | 8 | 4 | 100 | -10 | 1000 | 0 | -500 |
+    #| 0 | 3 | 2 | 1 | 4 | 5 | 6 | 7 | 8 | 9 |

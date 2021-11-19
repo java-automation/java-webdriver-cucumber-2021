@@ -354,21 +354,26 @@ public class JavaStepDefs {
         System.out.print("Given array: ");
         System.out.println(Arrays.toString(arr));
 
+        boolean swapped;
+
         for (int i = 0; i < arr.length - 1; ++i) { //total runs
             if (arr[i] % 2 == 0) { continue; } // each even number reduces the amount of total runs for max value
-            for (int j = 0; j < arr.length - 1 - i; ++j) { // looking for first odd number
+            swapped = false;
+            for (int j = 0; j < arr.length - 1 - i; ++j) { // looking for first odd number to swap
                 if (arr[j] % 2 != 0) {
-                    for (int k = j + 1; k < arr.length - i; ++k) { // looking for next odd number
+                    for (int k = j + 1; k < arr.length - i; ++k) { // looking for next odd number to swap
                         if (arr[k] % 2 != 0 && arr[j] > arr[k]) {
                             int temp = arr[j];
                             arr[j] = arr[k];
                             arr[k] = temp;
+                            swapped = true;
                             break;
                         }
                     }
                 }
             }
             System.out.println(Arrays.toString(arr));
+            if (!swapped) break;
         }
 
         System.out.print("Result:      ");
@@ -382,48 +387,48 @@ public class JavaStepDefs {
         System.out.println(Arrays.toString(originalArr));
 
         int[] arrOne = originalArr.clone();
-        System.out.println("Sort by Online Class method: ");
-        sortUsingOnlineClassMethod(arrOne);
+        System.out.println("Selection sort (class): ");
+        sortUsingSelectionSort(arrOne);
         System.out.print("Result: ");
         System.out.println(Arrays.toString(arrOne));
 
         int[] arrTwo = originalArr.clone();
-        System.out.println("Bubble Sort: ");
+        System.out.println("Bubble sort: ");
         sortUsingBubbleSort(arrTwo);
         System.out.print("Result: ");
         System.out.println(Arrays.toString(arrTwo));
     }
 
     private void sortUsingBubbleSort(int[] arr) {
+        boolean swapped;
         for (int i = 0; i < arr.length - 1; ++i) {
+            swapped = false;
             for (int j = 0; j < arr.length - 1 - i; ++j) {
                 if (arr[j] > arr[j+1]) {
                     int temp = arr[j];
                     arr[j] = arr[j+1];
                     arr[j+1] = temp;
+                    swapped = true;
                 }
             }
             System.out.println(Arrays.toString(arr));
+            if (!swapped) break;
         }
     }
 
-    private void sortUsingOnlineClassMethod(int[] arr) {
+    private void sortUsingSelectionSort(int[] arr) {
         for (int j = 0; j < arr.length - 1; j++) {
-
             int idxMin = j;
             int min = arr[idxMin];
-
             for (int i = j + 1; i < arr.length; i++) {
                 if (arr[i] < min) {
                     min = arr[i];
                     idxMin = i;
                 }
             }
-
             int temp = arr[j];
             arr[j] = min;
             arr[idxMin] = temp;
-
             System.out.println(Arrays.toString(arr));
         }
     }
