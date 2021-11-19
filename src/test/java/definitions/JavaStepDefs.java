@@ -351,8 +351,28 @@ public class JavaStepDefs {
     @And("I sort odd numbers in a given array")
     public void iSortOddNumbersInAGivenArray(@Transpose List<Integer> intList) {
         int[] arr = convertListToPrimitiveArray(intList);
+        System.out.print("Given array: ");
         System.out.println(Arrays.toString(arr));
 
+        for (int i = 0; i < arr.length - 1; ++i) { //total runs
+            if (arr[i] % 2 == 0) { continue; } // each even number reduces the amount of total runs for max value
+            for (int j = 0; j < arr.length - 1 - i; ++j) { // looking for first odd number
+                if (arr[j] % 2 != 0) {
+                    for (int k = j + 1; k < arr.length - i; ++k) { // looking for next odd number
+                        if (arr[k] % 2 != 0 && arr[j] > arr[k]) {
+                            int temp = arr[j];
+                            arr[j] = arr[k];
+                            arr[k] = temp;
+                            break;
+                        }
+                    }
+                }
+            }
+            System.out.println(Arrays.toString(arr));
+        }
+
+        System.out.print("Result:      ");
+        System.out.println(Arrays.toString(arr));
     }
 
     @And("I sort given array using different methods")

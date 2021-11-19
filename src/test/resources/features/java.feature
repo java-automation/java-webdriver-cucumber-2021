@@ -106,4 +106,7 @@ Feature: Basic Java experiments
   @java19
   Scenario: Sort odd numbers in a given array
     And I sort odd numbers in a given array
-    | 5 | 3 | 2 | 8 | 4 | 1 |
+    #| 5 | 3 | 2 | 8 | 4 | 1 |
+    | 5 | 3 | 2 | 8 | 4 | 1 | -10 | 1001 | 0 | -523 |
+    #| 5 | 3 | 7 | 11 | 13 | 1 | -19 | 1001 | -333 | -587 |
+    #| 10 | 6 | 2 | 8 | 4 | 100 | -10 | 1000 | 0 | -500 |
