@@ -97,3 +97,13 @@ Feature: Basic Java experiments
   @java17
   Scenario: Palindrome
     And I check if "kayak" is a palindrome word
+
+  @java18
+  Scenario: Do various array sorts
+    And I sort given array using different methods
+    | 5 | 3 | 2 | 8 | 4 | 1 | -10 | 1001 | 0 | -523 |
+
+  @java19
+  Scenario: Sort odd numbers in a given array
+    And I sort odd numbers in a given array
+    | 5 | 3 | 2 | 8 | 4 | 1 |

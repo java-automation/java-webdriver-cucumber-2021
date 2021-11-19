@@ -172,9 +172,9 @@ public class JavaStepDefs {
         System.out.print("Original array: ");
         System.out.println(Arrays.toString(intArr));
 
-        int temp = intArr[p2-1];
-        intArr[p2-1] = intArr[p1-1];
-        intArr[p1-1] = temp;
+        int temp = intArr[p2 - 1];
+        intArr[p2 - 1] = intArr[p1 - 1];
+        intArr[p1 - 1] = temp;
 
         System.out.print("Result: ");
         System.out.println(Arrays.toString(intArr));
@@ -199,7 +199,7 @@ public class JavaStepDefs {
                 System.out.println(i);
             }
         } else {
-            for (int i= 0; i >= num; --i) {
+            for (int i = 0; i >= num; --i) {
                 System.out.println(i);
             }
         }
@@ -208,7 +208,7 @@ public class JavaStepDefs {
         System.out.println("-n <- 0 -> n as a single loop:");
         int sign = 1;
         if (num < 0) sign = -1;
-        for (int i = 0; (num - i) * sign >= 0 ; i+=sign) {
+        for (int i = 0; (num - i) * sign >= 0; i += sign) {
             System.out.println(i);
         }
         System.out.println();
@@ -219,7 +219,7 @@ public class JavaStepDefs {
                 System.out.println(i);
             }
         } else {
-            for (int i= num; i <= 0; ++i) {
+            for (int i = num; i <= 0; ++i) {
                 System.out.println(i);
             }
         }
@@ -316,8 +316,8 @@ public class JavaStepDefs {
 
     private long fibonacciNumberArrayList(int elNum) {
         List<Long> fibSeq = new ArrayList<>(elNum + 1);
-        fibSeq.add((long)0);
-        fibSeq.add((long)1);
+        fibSeq.add((long) 0);
+        fibSeq.add((long) 1);
         if (elNum > 1) {
             for (int i = 2; i <= elNum; ++i) {
                 fibSeq.add(fibSeq.get(i - 1) + fibSeq.get(i - 2));
@@ -346,5 +346,65 @@ public class JavaStepDefs {
             }
             System.out.println("Is " + wordToCheck + " a palindrome? " + isPalindrome);
         } else throw new Error("Empty word - nothing to check!");
+    }
+
+    @And("I sort odd numbers in a given array")
+    public void iSortOddNumbersInAGivenArray(@Transpose List<Integer> intList) {
+        int[] arr = convertListToPrimitiveArray(intList);
+        System.out.println(Arrays.toString(arr));
+
+    }
+
+    @And("I sort given array using different methods")
+    public void iSortGivenArrayUsingDifferentMethods(@Transpose List<Integer> intList) {
+        int[] originalArr = convertListToPrimitiveArray(intList);
+        System.out.print("Given array: ");
+        System.out.println(Arrays.toString(originalArr));
+
+        int[] arrOne = originalArr.clone();
+        System.out.println("Sort by Online Class method: ");
+        sortUsingOnlineClassMethod(arrOne);
+        System.out.print("Result: ");
+        System.out.println(Arrays.toString(arrOne));
+
+        int[] arrTwo = originalArr.clone();
+        System.out.println("Bubble Sort: ");
+        sortUsingBubbleSort(arrTwo);
+        System.out.print("Result: ");
+        System.out.println(Arrays.toString(arrTwo));
+    }
+
+    private void sortUsingBubbleSort(int[] arr) {
+        for (int i = 0; i < arr.length - 1; ++i) {
+            for (int j = 0; j < arr.length - 1 - i; ++j) {
+                if (arr[j] > arr[j+1]) {
+                    int temp = arr[j];
+                    arr[j] = arr[j+1];
+                    arr[j+1] = temp;
+                }
+            }
+            System.out.println(Arrays.toString(arr));
+        }
+    }
+
+    private void sortUsingOnlineClassMethod(int[] arr) {
+        for (int j = 0; j < arr.length - 1; j++) {
+
+            int idxMin = j;
+            int min = arr[idxMin];
+
+            for (int i = j + 1; i < arr.length; i++) {
+                if (arr[i] < min) {
+                    min = arr[i];
+                    idxMin = i;
+                }
+            }
+
+            int temp = arr[j];
+            arr[j] = min;
+            arr[idxMin] = temp;
+
+            System.out.println(Arrays.toString(arr));
+        }
     }
 }
