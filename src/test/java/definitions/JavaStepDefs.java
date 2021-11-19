@@ -348,21 +348,27 @@ public class JavaStepDefs {
         } else throw new Error("Empty word - nothing to check!");
     }
 
-    @And("I sort odd numbers in a given array")
-    public void iSortOddNumbersInAGivenArray(@Transpose List<Integer> intList) {
+    @And("I sort {string} numbers in a given array using Bubble Sort")
+    public void iSortNumbersInAGivenArrayUsingBubbleSort(String parity, @Transpose List<Integer> intList) {
+        boolean sortOdd;
+        switch (parity) {
+            case "odd" -> sortOdd = true;
+            case "even" -> sortOdd = false;
+            default -> throw new Error("Incorrect number parity reference: " + parity);
+        }
+        System.out.println("Given parity: " + parity + ". Is odd? " + sortOdd);
         int[] arr = convertListToPrimitiveArray(intList);
         System.out.print("Given array: ");
         System.out.println(Arrays.toString(arr));
 
         boolean swapped;
-
         for (int i = 0; i < arr.length - 1; ++i) { //total runs
-            if (arr[i] % 2 == 0) { continue; } // each even number reduces the amount of total runs for max value
+            if (((arr[i] % 2 == 0) && sortOdd) || ((arr[i] % 2 != 0) && !sortOdd)) { continue; } // number with opposite parity reduces the amount of total runs for max value
             swapped = false;
-            for (int j = 0; j < arr.length - 1 - i; ++j) { // looking for first odd number to swap
-                if (arr[j] % 2 != 0) {
-                    for (int k = j + 1; k < arr.length - i; ++k) { // looking for next odd number to swap
-                        if (arr[k] % 2 != 0 && arr[j] > arr[k]) {
+            for (int j = 0; j < arr.length - 1 - i; ++j) { // looking for first number with proper parity to swap
+                if (((arr[j] % 2 != 0) && sortOdd) || ((arr[j] % 2 == 0) && !sortOdd)) {
+                    for (int k = j + 1; k < arr.length - i; ++k) { // looking for next number with proper parity to swap
+                        if (((arr[k] % 2 != 0 && sortOdd) || (arr[k] % 2 == 0 && !sortOdd)) && arr[j] > arr[k]) {
                             int temp = arr[j];
                             arr[j] = arr[k];
                             arr[k] = temp;
