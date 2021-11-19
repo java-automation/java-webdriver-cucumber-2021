@@ -417,6 +417,42 @@ public class JavaStepDefs {
         System.out.print("Result:   ");
         System.out.println(Arrays.toString(arr3));
         System.out.println();
+
+        int[] arr4 = originalArr.clone();
+        System.out.println("Quick sort: ");
+        sortUsingQuickSort(arr4, 0, arr4.length - 1);
+        System.out.println("Original: " + originalString);
+        System.out.print("Result:   ");
+        System.out.println(Arrays.toString(arr4));
+        System.out.println();
+    }
+
+    private void sortUsingQuickSort(int[] arr, int start, int pivot) {
+        // pivot strategy - rightmost element
+        if (start < pivot) {
+            int left;
+            int right;
+            for (right = start; right < pivot; ++right) {
+                if (arr[right] > arr[pivot]) {
+                    for (left = right + 1; left < pivot; ++left) {
+                        if (arr[left] < arr[pivot]) {
+                            int temp = arr[left];
+                            arr[left] = arr[right];
+                            arr[right] = temp;
+                            ++right;
+                        }
+                        System.out.println(Arrays.toString(arr));
+                    }
+                    int temp = arr[pivot];
+                    arr[pivot] = arr[right];
+                    arr[right] = temp;
+                    System.out.println(Arrays.toString(arr));
+                    break;
+                }
+            }
+            sortUsingQuickSort(arr, start, right - 1);
+            sortUsingQuickSort(arr, right + 1, pivot);
+        }
     }
 
     private void sortUsingInsertionSort(int[] arr) {

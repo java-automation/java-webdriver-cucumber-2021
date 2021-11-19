@@ -103,6 +103,7 @@ Feature: Basic Java experiments
     And I sort given array using different methods
     | 5 | 3 | 2 | 8 | 4 | 1 | -10 | 1001 | 0 | -523 |
     #| 1 | 0 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 |
+    #| 8 | 7 | 6 | 1 | 0 | 9 | 2 |
 
   @java19
   Scenario: Sort numbers with a specified parity in a given array
