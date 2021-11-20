@@ -1,6 +1,7 @@
 // Created by Viacheslav (Slava) Skryabin 04/01/2011
 package definitions;
 
+import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
