@@ -430,52 +430,35 @@ public class JavaStepDefs {
     }
 
     private void sortUsingMergeSort(int[] arr, int start, int end) {
-        if (start < end) {
-            int pivot = (start + end) / 2;
-            sortUsingMergeSort(arr, start, pivot);
-            sortUsingMergeSort(arr, pivot + 1, end);
+        if (start >= end) return;
 
-            int leftSize = pivot - start + 1;
-            int rightSize = end - pivot;
+        int div = (start + end) / 2;
+        sortUsingMergeSort(arr, start, div);
+        sortUsingMergeSort(arr, div + 1, end);
 
-            int[] left = new int[leftSize];
-            int[] right = new int[rightSize];
+        int leftSize = div - start + 1;
+        int rightSize = end - div;
 
-            for (int i = 0; i < leftSize; ++i) {
-                left[i] = arr[start + i];
-            }
-            for (int j = 0; j < rightSize; ++j) {
-                right[j] = arr[pivot + 1 + j];
-            }
+        int[] left = new int[leftSize];
+        int[] right = new int[rightSize];
 
-            int i = 0;
-            int j = 0;
-            int k = start;
-
-            while (i < leftSize && j < rightSize) {
-                if (left[i] <= right[j]) {
-                    arr[k] = left[i];
-                    ++i;
-                } else {
-                    arr[k] = right[j];
-                    ++j;
-                }
-                ++k;
-            }
-
-            while (i < leftSize) {
-                arr[k] = left[i];
-                ++k;
-                ++i;
-            }
-            while (j < rightSize) {
-                arr[k] = right[j];
-                ++k;
-                ++j;
-            }
-
-            System.out.println(Arrays.toString(arr));
+        for (int i = 0; i < leftSize; ++i) {
+            left[i] = arr[start + i];
         }
+        for (int j = 0; j < rightSize; ++j) {
+            right[j] = arr[div + 1 + j];
+        }
+
+        int i = 0, j = 0, k = start;
+
+        while (i < leftSize && j < rightSize) {
+            if (left[i] <= right[j]) arr[k++] = left[i++];
+            else arr[k++] = right[j++];
+        }
+        while (i < leftSize) arr[k++] = left[i++];
+        while (j < rightSize) arr[k++] = right[j++];
+
+        System.out.println(Arrays.toString(arr));
     }
 
     private void swapArrayValues(int[] arr, int ind1, int ind2) {
@@ -486,26 +469,21 @@ public class JavaStepDefs {
     }
 
     private void sortUsingQuickSort(int[] arr, int start, int end) {
-        if (start < end) {
-            int pivot = end; // pivot strategy - rightmost element
-            int left;
-            int right;
-            for (right = start; right < pivot; ++right) {
-                if (arr[right] > arr[pivot]) {
-                    for (left = right + 1; left < pivot; ++left) {
-                        if (arr[left] < arr[pivot]) {
-                            swapArrayValues(arr, left, right);
-                            ++right;
-                        }
-                    }
-                    swapArrayValues(arr, pivot, right);
-                    System.out.println(Arrays.toString(arr));
-                    break;
-                }
-            }
-            sortUsingQuickSort(arr, start, right - 1);
-            sortUsingQuickSort(arr, right + 1, pivot);
+        if (start >= end) return;
+
+        int pivot = end; // pivot strategy - rightmost element
+        int left;
+        int right = start;
+        while (arr[right] < arr[pivot]) ++right;
+
+        for (left = right + 1; left < pivot; ++left) {
+            if (arr[left] < arr[pivot]) swapArrayValues(arr, left, right++);
         }
+        if (right < pivot) swapArrayValues(arr, pivot, right);
+        System.out.println(Arrays.toString(arr));
+
+        sortUsingQuickSort(arr, start, right - 1);
+        sortUsingQuickSort(arr, right + 1, pivot);
     }
 
     private void sortUsingInsertionSort(int[] arr) {
