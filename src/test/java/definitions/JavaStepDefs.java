@@ -420,6 +420,62 @@ public class JavaStepDefs {
         System.out.print("Result: ");
         System.out.println(Arrays.toString(arr4));
         System.out.println();
+
+        int[] arr5 = originalArr.clone();
+        System.out.println("Merge sort for: " + Arrays.toString(arr5));
+        sortUsingMergeSort(arr5, 0, arr5.length - 1);
+        System.out.print("Result: ");
+        System.out.println(Arrays.toString(arr5));
+        System.out.println();
+    }
+
+    private void sortUsingMergeSort(int[] arr, int start, int end) {
+        if (start < end) {
+            int pivot = (start + end) / 2;
+            sortUsingMergeSort(arr, start, pivot);
+            sortUsingMergeSort(arr, pivot + 1, end);
+
+            int leftSize = pivot - start + 1;
+            int rightSize = end - pivot;
+
+            int[] left = new int[leftSize];
+            int[] right = new int[rightSize];
+
+            for (int i = 0; i < leftSize; ++i) {
+                left[i] = arr[start + i];
+            }
+            for (int j = 0; j < rightSize; ++j) {
+                right[j] = arr[pivot + 1 + j];
+            }
+
+            int i = 0;
+            int j = 0;
+            int k = start;
+
+            while (i < leftSize && j < rightSize) {
+                if (left[i] <= right[j]) {
+                    arr[k] = left[i];
+                    ++i;
+                } else {
+                    arr[k] = right[j];
+                    ++j;
+                }
+                ++k;
+            }
+
+            while (i < leftSize) {
+                arr[k] = left[i];
+                ++k;
+                ++i;
+            }
+            while (j < rightSize) {
+                arr[k] = right[j];
+                ++k;
+                ++j;
+            }
+
+            System.out.println(Arrays.toString(arr));
+        }
     }
 
     private void swapArrayValues(int[] arr, int ind1, int ind2) {
@@ -441,7 +497,6 @@ public class JavaStepDefs {
                             swapArrayValues(arr, left, right);
                             ++right;
                         }
-                        System.out.println(Arrays.toString(arr));
                     }
                     swapArrayValues(arr, pivot, right);
                     System.out.println(Arrays.toString(arr));
