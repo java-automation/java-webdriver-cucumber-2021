@@ -430,4 +430,50 @@ public class JavaStepDefs {
         myInfo.replace("favoriteFood", "raisins");
         out.println(myInfo);
     }
+
+
+    @Given("I sort array even stayed in place, odd - in ascending order")
+    public void iSortArrayEvenStayedInPlaceOddInAscendingOrder() {
+        int[] arrayBeforeSorting = {5, 3, 2, 8, 4, 1};
+        int[] arrayAfterSorting = new int[arrayBeforeSorting.length];
+        for (int i = 0; i < arrayBeforeSorting.length; i++) {
+            arrayAfterSorting[i] = arrayBeforeSorting[i];
+        }
+        ArrayList<Integer> indexOfOdds = new ArrayList<>();
+        ArrayList<Integer> odds = new ArrayList<>();
+        for (int i = 0; i < arrayBeforeSorting.length; i++) {
+            if (arrayBeforeSorting[i] % 2 == 1) {
+                indexOfOdds.add(i);
+                odds.add(arrayBeforeSorting[i]);
+            }
+        }
+        out.println("\n indexOfOdds: " + indexOfOdds);
+        bubbleSortIntegerArray(odds);
+        for (int i = 0; i < indexOfOdds.size(); i++) {
+            arrayAfterSorting[indexOfOdds.get(i)] = odds.get(i);
+        }
+        out.println("arrayBeforeSorting: ");
+        iPrintIntegerArray(arrayBeforeSorting);
+        out.println("\n arrayAfterSorting: ");
+        iPrintIntegerArray(arrayAfterSorting);
+
+    }
+
+    public void bubbleSortIntegerArray(ArrayList<Integer> array) {
+        out.println("Before:");
+        out.println(array);
+        int k;
+        int i;
+        for (k = 0; k < array.size(); k++) {
+            for (i = 0; i < (array.size() - 1 - k); i++) {
+                if (array.get(i) > array.get(i + 1)) {
+                    int temp = array.get(i);
+                    array.set(i, array.get(i + 1));
+                    array.set((i + 1), temp);
+                }
+            }
+        }
+        out.println("\n After:");
+        out.println(array);
+    }
 }

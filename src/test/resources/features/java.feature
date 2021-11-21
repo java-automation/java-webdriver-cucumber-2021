@@ -128,6 +128,14 @@ Feature: Java feature
   "favoriteFood"
     Then Define a HashMap variable called myInfo and print some of those values in the console.
 
+  @java18
+  Scenario: odd number - ascending order; even number - stayed in their place
+  input: {5,3,2,8,4,1}
+  output: {1,3,2,8,4,5}
+    Given I sort array even stayed in place, odd - in ascending order
+
+
+
 
 
 
