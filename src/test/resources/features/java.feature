@@ -133,6 +133,8 @@ Feature: Java feature
   input: {5,3,2,8,4,1}
   output: {1,3,2,8,4,5}
     Given I sort array even stayed in place, odd - in ascending order
+    Then I sort array with one element in order where even stayed in place, odd - in ascending order
+    Then I sort array with length 10 and range 999 in order where even stayed in place, odd - in ascending order
 
 
 

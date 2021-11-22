@@ -12,6 +12,7 @@ import org.openqa.selenium.interactions.Actions;
 
 import java.time.DayOfWeek;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 
@@ -408,7 +409,7 @@ public class JavaStepDefs {
     }
 
     @Given("Print array with {int} of random elements from zero to {int}")
-    public int[] printArrayOfRandomElementsFromZeroTo(int length, int range) {
+    public int[] createArrayOfRandomElementsFromZeroTo(int length, int range) {
         out.println("\n Array:");
         int[] arr1 = new int[length];
         for (int i = 0; i < length; i++) {
@@ -434,11 +435,11 @@ public class JavaStepDefs {
 
     @Given("I sort array even stayed in place, odd - in ascending order")
     public void iSortArrayEvenStayedInPlaceOddInAscendingOrder() {
-        int[] arrayBeforeSorting = {5, 3, 2, 8, 4, 1};
-        int[] arrayAfterSorting = new int[arrayBeforeSorting.length];
-        for (int i = 0; i < arrayBeforeSorting.length; i++) {
-            arrayAfterSorting[i] = arrayBeforeSorting[i];
-        }
+        iSortArrayEvenStayedInPlaceOddInAscendingOrder(new int[]{5, 3, 2, 8, 4, 1});
+    }
+
+    private void iSortArrayEvenStayedInPlaceOddInAscendingOrder(int[] arrayBeforeSorting) {
+        int[] arrayAfterSorting = Arrays.stream(arrayBeforeSorting).toArray();
         ArrayList<Integer> indexOfOdds = new ArrayList<>();
         ArrayList<Integer> odds = new ArrayList<>();
         for (int i = 0; i < arrayBeforeSorting.length; i++) {
@@ -449,6 +450,7 @@ public class JavaStepDefs {
         }
         out.println("\n indexOfOdds: " + indexOfOdds);
         bubbleSortIntegerArray(odds);
+        out.println("Odds elements in original array:");
         for (int i = 0; i < indexOfOdds.size(); i++) {
             arrayAfterSorting[indexOfOdds.get(i)] = odds.get(i);
         }
@@ -456,7 +458,6 @@ public class JavaStepDefs {
         iPrintIntegerArray(arrayBeforeSorting);
         out.println("\n arrayAfterSorting: ");
         iPrintIntegerArray(arrayAfterSorting);
-
     }
 
     public void bubbleSortIntegerArray(ArrayList<Integer> array) {
@@ -475,5 +476,16 @@ public class JavaStepDefs {
         }
         out.println("\n After:");
         out.println(array);
+    }
+
+    @Then("I sort array with one element in order where even stayed in place, odd - in ascending order")
+    public void iSortArrayWithOneElementInOrderWhereEvenStayedInPlaceOddInAscendingOrder() {
+        iSortArrayEvenStayedInPlaceOddInAscendingOrder(new int[]{0});
+        iSortArrayEvenStayedInPlaceOddInAscendingOrder(new int[]{1});
+    }
+
+    @Then("I sort array with length {int} and range {int} in order where even stayed in place, odd - in ascending order")
+    public void iSortArrayWithLengthAndRangeInOrderWhereEvenStayedInPlaceOddInAscendingOrder(int length, int range) {
+        iSortArrayEvenStayedInPlaceOddInAscendingOrder(createArrayOfRandomElementsFromZeroTo(length, range));
     }
 }
