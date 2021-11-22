@@ -37,3 +37,8 @@ Feature: Java feature
  #   And Write a function that prints all even numbers from integer array
  #   And Write a function that checks if array is empty
     And Write a function that checks if array contains another element
+
+  @java8
+  Scenario: Array sorting
+    Given I sort an array
+    And I sort only odd numbers and even numbers stay at place

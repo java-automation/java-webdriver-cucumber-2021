@@ -135,7 +135,7 @@ public class JavaStepDefs {
             default:
                 throw new Exception("Incorrect number of day :" + num);
         }
-                        //OR
+        //OR
     /*    int dayOfWeek = Integer.parseInt(num);
         int mod = dayOfWeek % 7;
 
@@ -169,7 +169,7 @@ public class JavaStepDefs {
             default:
                 throw new Exception("Incorrect number of day :" + num);
         }*/
-    
+
     }
 
     @And("I print my grocery list")
@@ -255,7 +255,7 @@ public class JavaStepDefs {
     @And("Write a function that prints all integer array")
     public void writeAFunctionThatPrintsAllIntegerArray() {
 
-        int[] numArr = {3,5,7,8,9};
+        int[] numArr = {3, 5, 7, 8, 9};
 
         // To see the result as [3, 5, 7, 8, 9]
         System.out.println(Arrays.toString(numArr));
@@ -268,7 +268,7 @@ public class JavaStepDefs {
         8
         9 */
 
-        for(int i=0; i< numArr.length; i++){
+        for (int i = 0; i < numArr.length; i++) {
             System.out.println(numArr[i]);
         }
         System.out.println();
@@ -277,27 +277,26 @@ public class JavaStepDefs {
             System.out.println(el);
         } */
 
-     // To convert from Array to List by Native method and To see the result as [3, 5, 7, 8, 9]
+        // To convert from Array to List by Native method and To see the result as [3, 5, 7, 8, 9]
         List<Integer> numList = new ArrayList<>();
-        for(int el : numArr){
-           numList.add(el);
-       }
+        for (int el : numArr) {
+            numList.add(el);
+        }
         System.out.println(numList);
 
         //Converting Array to List by Arrays.asList() method and To see the result as [3, 5, 7, 8, 9]
-        List<Integer> numList1 = Arrays.asList(3,5,7,8,9);
+        List<Integer> numList1 = Arrays.asList(3, 5, 7, 8, 9);
         System.out.println("numList1 :" + numList1);
-
 
 
     }
 
     @And("Write a function that prints all even numbers from integer array")
     public void writeAFunctionThatPrintsAllEvenNumbersFromIntegerArray() {
-        int[] arr = {2,3,10,373,4080,5216};
+        int[] arr = {2, 3, 10, 373, 4080, 5216};
         List<Integer> list = new ArrayList<>();// if you want output look like [2, 10, 4080, 5216] then only do this
-        for(int i=0; i< arr.length; i++){
-            if(arr[i] % 2 == 0){
+        for (int i = 0; i < arr.length; i++) {
+            if (arr[i] % 2 == 0) {
                 System.out.println(arr[i]);
                 list.add(arr[i]); // if you want output look like [2, 10, 4080, 5216]
             }
@@ -309,10 +308,9 @@ public class JavaStepDefs {
     public void writeAFunctionThatChecksIfArrayIsEmpty() {
         String[] arr = {"java"};
 
-        if(arr.length == 0){
+        if (arr.length == 0) {
             System.out.println("This is an empty array");
-        }
-        else{
+        } else {
             System.out.println("This is not an empty array");
         }
 
@@ -320,11 +318,11 @@ public class JavaStepDefs {
 
     @And("Write a function that checks if array contains another element")
     public void writeAFunctionThatChecksIfArrayContainsAnotherElement() {
-        int[] arr = {73,84,63,95,0};
+        int[] arr = {73, 84, 63, 95, 0};
         int anotherEle = 63;
         boolean flag = false;
-        for(int i=0; i< arr.length; i++){
-            if(arr[i]==anotherEle){
+        for (int i = 0; i < arr.length; i++) {
+            if (arr[i] == anotherEle) {
                 flag = true;
                 break;
             }
@@ -337,9 +335,56 @@ public class JavaStepDefs {
         String[] days = {"Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"};
         System.out.println(days[dayOfWeek - 1]);
     }
-}
 
 
+    @Given("I sort an array")
+    public void iSortAnArray() {
+        int[] a = {5, 3, 2, 8, 4, 1};
+        int temp;
+        for (int i = 0; i < a.length; i++) {
 
+            for (int j = i + 1; j < a.length; j++) {
+
+                if (a[i] > a[j]) {
+                    temp = a[i];
+                    a[i] = a[j];
+                    a[j] = temp;
+                }
+
+            }
+            System.out.println(a[i]);
+            System.out.println(Arrays.toString(a));
+        }
+
+    }
+
+
+    @And("I sort only odd numbers and even numbers stay at place")
+    public void iSortOnlyOddNumbersAndEvenNumbersStayAtPlace() {
+        int[] a = {5, 3, 2, 8, 4, 1};
+       // int[] a = {5,3,7,1,9,1,-7,1001,11,-523};
+        int temp;
+        for (int i = 0; i < a.length; i++) {
+            if(a[i]%2==0){
+                continue;
+            }
+            int minIdx = i;
+            for (int j = i + 1; j < a.length; j++) {
+
+                if (a[minIdx] > a[j] && a[j]%2!=0) {
+                    minIdx = j;
+                    temp = a[i];
+                    a[i] = a[minIdx];
+                    a[j] = temp;
+                }
+
+            }
+            System.out.println(a[i]);
+
+        }
+        System.out.println(Arrays.toString(a));
+        }
+
+    }
 
 
