@@ -44,4 +44,12 @@
       And Check if array contains another element
 
 
+      @hashmap
+      Scenario: HashMap structure
+        Given Write myInfo table
+        Then Array sort num in ascending order for odd numbers
+
+
+
+
 

@@ -4,9 +4,8 @@ import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
+import java.util.HashMap;
 
 public class JavaStepDefs {
     @Given("I hello world")
@@ -252,12 +251,19 @@ public class JavaStepDefs {
     public void checkIfArrayIsEmpty() {
         int[] num = {1, 5, 7};
 
+//        if (num.length == 0) {
+//            return true;
+//        } esle {
+//            return false;
+//        }
+
         if (num == null) {
             System.out.println("Array is empty");
         } else {
             System.out.println("Array is not empty");
         }
     }
+
 
     // 6
     @And("Check if array contains another element")
@@ -280,7 +286,76 @@ public class JavaStepDefs {
             }
         }
     }
+
+    @Given("Write myInfo table")
+    public void writeMyInfoTable() {
+        HashMap<String, String> myInfo = new HashMap<String, String>();
+        myInfo.put("firstName", "Varvara");
+        myInfo.put("lastName", "VV");
+        myInfo.put("country", "USA");
+        System.out.println(myInfo);
+
+        HashMap<String, Integer> myYear = new HashMap<>();
+        myYear.put("day", 11);
+        myYear.put("month", 12);
+        myYear.put("yearOfBirth", 1966);
+        System.out.println(myYear);
+
+        myYear.replace("day", 11, 30);
+        System.out.println(myYear.replace("day", 11, 30));
+
+    }
+
+
+    @Then("Array sort num in ascending order for odd numbers")
+    public void arraySortNumInAscendingOrderForOddNumbers() {
+        //  You have an array of numbers.
+//  Your task is to sort odd numbers in ascending order
+//  but even numbers must be on their places.
+//  Example:
+//  input:  [5, 3, 2, 8, 4, 1]
+//  output: [1, 3, 2, 8, 4, 5]
+        int[] arr = {5, 3, 2, 8, 4, 1};
+        // sort?
+        sortArr(arr);
+    }
+
+    private void sortArr(int[] arr) {
+        /*  [5, 3, 2, 8, 4, 1]
+            [5, 3, 2, 8, 4, 1] => 1(5) => [1, 3, 2, 8, 4, 5]
+            [1, | 3, 2, 8, 4, 5] => 2(idx) => [1, 2, 3, 8, 4, 5]
+            [1, 2, | 3, 8, 4, 5] => [1, 2, 3, 8, 4, 5]
+            [1, 2, 3, | 8, 4, 5]
+        */
+        System.out.println(Arrays.toString(arr));
+        for (int j = 0; j < arr.length - 1; j++) {
+            int indexMin = j;
+            int min = arr[indexMin];
+            for (int i = j + 1; i < arr.length; i++) {
+                if (arr[i] < min) {
+                    min = arr[i];
+                    indexMin = i;
+                }
+            }
+//            int temp = arr[j];    // counting  in ascending order for all numbers in the module
+//            arr[j] = min;
+//            arr[indexMin] = temp;
+//            System.out.println(Arrays.toString(arr));
+
+
+            if (min % 2 != 0) {
+                int temp = arr[j];
+                arr[j] = min;
+                arr[indexMin] = temp;
+
+                System.out.println(Arrays.toString(arr));
+            }
+        }
+    }
 }
+
+
+
 
 
 
