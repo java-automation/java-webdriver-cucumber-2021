@@ -36,3 +36,13 @@
    Scenario: check if array is empty
      And I check for empty array
 
+   @java7
+   Scenario: I check for another element in array
+     And I check for element in array
+
+    @java8
+    Scenario: I rearrange numbers in ascending order
+      And I rearrange numbers in ascending order
+
+
+

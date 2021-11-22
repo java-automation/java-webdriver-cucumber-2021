@@ -82,29 +82,30 @@ public class JavaStepDefs {
     @And("I print all numbers from {int} to {int}")
     public void iPrintAllNumbersFromTo(int num1, int num2) {
         for (int i = num1; i <= num2; i++) {
-            System.out.print(i+" ");
+            System.out.print(i + " ");
         }
     }
 
     @And("I print all numbers including negative from {int} to {int}")
     public void iPrintAllNumbersIncludingNegativeFromTo(int num1, int num2) {
         for (int i = num1; i >= num2; i--) {
-            System.out.print(i+" ");
+            System.out.print(i + " ");
         }
     }
 
-      @And("I print integer array")
+    @And("I print integer array")
     public void iPrintIntegerArray() {
-    int[] integer = {1, 4, 8, 9, 12, 3, 7, 5, 11};
+        int[] integer = {1, 4, 8, 9, 12, 3, 7, 5, 11};
         System.out.println(Arrays.toString(integer));
     }
 
     @And("I print even numbers")
     public void iPrintEvenNumbers() {
         int[] nums = {3, 6, 8, 7, 5, 2, 11, 45, 20, 100};
-        for (int a = 0; a < nums.length; a++){
+        for (int a = 0; a < nums.length; a++) {
             if (nums[a] % 2 == 0) {
-            System.out.print(nums[a] + " ");}
+                System.out.print(nums[a] + " ");
+            }
 
         }
     }
@@ -113,22 +114,60 @@ public class JavaStepDefs {
     public void iCheckForEmptyArray() {
         int[] array1 = {};
         int[] array2 = {1};
-        if (array1.length > 0)
-        {
+        if (array1.length > 0) {
             System.out.println("array1 is not empty");
         }
-        if (array1.length == 0)
-        {
+        if (array1.length == 0) {
             System.out.println("array1 is empty");
         }
-        if (array2.length > 0)
-        {
+        if (array2.length > 0) {
             System.out.println("array2 is not empty");
-        }
-        else
-        {
+        } else {
             System.out.println("array2 is empty");
         }
     }
+
+    @And("I rearrange numbers in ascending order")
+    public void iRearrangeNumbersInAscendingOrder() {
+        //  You have an array of numbers.
+//  Your task is to sort odd numbers in ascending order
+//  but even numbers must be on their places.
+//  Example:
+//  input:  [5, 3, 2, 8, 4, 1]
+//  output: [1, 3, 2, 8, 4, 5]
+        int[] arr = {5, 3, 2, 8, 4, 1};
+        // sort?
+        sortArr(arr);
+    }
+
+    private void sortArr(int[] arr) {
+        /*  [5, 3, 2, 8, 4, 1]
+            [5, 3, 2, 8, 4, 1] => 1(5) => [1, 3, 2, 8, 4, 5]
+            [1, | 3, 2, 8, 4, 5] => 2(idx) => [1, 2, 3, 8, 4, 5]
+            [1, 2, | 3, 8, 4, 5] => [1, 2, 3, 8, 4, 5]
+            [1, 2, 3, | 8, 4, 5]
+        */
+        System.out.println(Arrays.toString(arr));
+        for (int j = 0; j < arr.length - 1; j++) {
+            int idxMin = j;
+            int min = arr[idxMin];
+            for (int i = j + 1; i < arr.length; i++) {
+                if (arr[i] < min) {
+                    min = arr[i];
+                    idxMin = i;
+                }
+            }
+
+            if (min % 2 != 0) {
+                int temp = arr[j];
+                arr[j] = min;
+                arr[idxMin] = temp;
+            }
+
+
+        }
+        System.out.println(Arrays.toString(arr));
+    }
+
 }
 
