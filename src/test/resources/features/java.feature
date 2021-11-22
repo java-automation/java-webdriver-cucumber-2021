@@ -20,10 +20,10 @@ Feature: Basic Java experiments
     Then I perform exercise on <numberOne> and <numberTwo>
 
     Examples:
-      | numberOne  | numberTwo |
-      | 134        | 67        |
-      | -10        | 3         |
-      | 1001657    | 85462     |
+      | numberOne | numberTwo |
+      | 134       | 67        |
+      | -10       | 3         |
+      | 1001657   | 85462     |
 
   @java4
   Scenario: Boolean exercise
@@ -87,7 +87,7 @@ Feature: Basic Java experiments
   @java15
   Scenario: Array exercises
     And I do my integer array exercises with number 0
-    | 2 | 4 | 43543 | 34 | -2342 | 117799 | 0 | -94 |
+      | 2 | 4 | 43543 | 34 | -2342 | 117799 | 0 | -94 |
     #|
 
   @java16
@@ -101,9 +101,10 @@ Feature: Basic Java experiments
   @java18
   Scenario: Do various array sorts
     And I sort given array using different methods
-    | 5 | 3 | 2 | 8 | 4 | 1 | -10 | 1001 | 0 | -523 |
+    #| 5 | 3 | 2 | 8 | 4 | 1 | -10 | 1001 | 0 | -523 |
     #| 1 | 0 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 |
     #| 8 | 7 | 6 | 1 | 0 | 9 | 2 |
+    | 10 | 6 | 259 | 8 | 4 | 100 | 34 | 435 | 33 | 87 | 101 | 63 | 239 | 218 | 48 | 102 | 345 | 431 | 33 | 867 |
 
   @java19
   Scenario: Sort numbers with a specified parity in a given array

@@ -427,6 +427,50 @@ public class JavaStepDefs {
         System.out.print("Result: ");
         System.out.println(Arrays.toString(arr5));
         System.out.println();
+
+        int[] arr6 = originalArr.clone();
+        System.out.println("Radix sort for: " + Arrays.toString(arr6));
+        arr6 = sortUsingRadixSort(arr6);
+        System.out.print("Result: ");
+        System.out.println(Arrays.toString(arr6));
+        System.out.println();
+    }
+
+    private int[] sortUsingRadixSort(int[] input) {
+        int inputSize = input.length;
+        int[] output = new int[inputSize];
+        int[] counts = new int[10];
+
+        int maxValue = 0;
+        for (int m = 1; m < inputSize; ++m) {
+            if (input[m] > maxValue) maxValue = input[m];
+        }
+
+        for (int digitOrderNumber = 1; maxValue / digitOrderNumber > 0; digitOrderNumber *= 10) {
+            //zero out the counts
+            Arrays.fill(counts, 0);
+            //filling the buckets for appropriate cycle
+            for (int n : input) {
+                int bucket = (n / digitOrderNumber) % 10;
+                counts[bucket]++;
+            }
+            //prefix sum
+            for (int s = 1; s < 10; ++s) {
+                counts[s] += counts[s - 1];
+            }
+            //generating output
+            for (int i = inputSize - 1; i >= 0; --i) {
+                int bucket = ((input[i] / digitOrderNumber) % 10);
+                output[counts[bucket] - 1] = input[i];
+                counts[bucket]--;
+            }
+            System.out.println(Arrays.toString(output));
+
+            int[] tempArr = input;
+            input = output;
+            output = tempArr;
+        }
+        return input;
     }
 
     private void sortUsingMergeSort(int[] arr, int start, int end) {
@@ -514,7 +558,7 @@ public class JavaStepDefs {
         for (int j = 0; j < arr.length - 1; j++) {
             int minIndex = j;
             for (int i = j + 1; i < arr.length; i++) {
-                if (arr[i] < arr[j]) minIndex = i;
+                if (arr[i] < arr[minIndex]) minIndex = i;
             }
             if (minIndex > j) swapArrayValues(arr, minIndex, j);
             System.out.println(Arrays.toString(arr));
