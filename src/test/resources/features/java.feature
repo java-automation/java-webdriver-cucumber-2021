@@ -122,9 +122,15 @@
      @TestCase12
      Scenario: Homework Day6
        Given I print all numbers from zero up to 5
-       And I support also negative numbers like -2
+       And I support also negative numbers like -4
        And I print all integer array
        And I print all integer array [-7, 0, 18, 101]
-       And I print all integer numbers from integer array [1, 14, 28, 9, 11, 6, 50, 77]
+       And I print all even numbers from integer array [1, 14, 28, 9, 11, 6, 50, 77]
        And I check if array is empty
        And I check if array contains another element
+
+     @TestCase13
+     Scenario: Sort odd numbers in ascending order keeping even numbers on their places
+       Given I sort all numbers in ascending order
+       And I sort odd numbers in ASC keeping even ones at their places
+       And I verify that even numbers kept their places

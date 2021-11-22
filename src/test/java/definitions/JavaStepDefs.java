@@ -5,6 +5,8 @@ import io.cucumber.java.en.Given;
 import org.junit.Assert;
 import org.openqa.selenium.By;
 
+import java.util.Arrays;
+
 import static support.TestContext.getDriver;
 
 public class JavaStepDefs {
@@ -292,11 +294,11 @@ public class JavaStepDefs {
         }
     }
 
-    @And("I print all integer numbers from integer array [{int}, {int}, {int}, {int}, {int}, {int}, {int}, {int}]")
-    public void iPrintAllIntegerNumbersFromIntegerArray(int arg0, int arg1, int arg2, int arg3, int arg4, int arg5, int arg6, int arg7) {
+    @And("I print all even numbers from integer array [{int}, {int}, {int}, {int}, {int}, {int}, {int}, {int}]")
+    public void iPrintAllEvenNumbersFromIntegerArray(int arg0, int arg1, int arg2, int arg3, int arg4, int arg5, int arg6, int arg7) {
         int[] intArray = {arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7};
-        for(int i=0; i<intArray.length; i++) {
-            if(intArray[i] % 2 == 0) {
+        for (int i = 0; i < intArray.length; i++) {
+            if (intArray[i] % 2 == 0) {
                 System.out.println(intArray[i]);
             }
         }
@@ -305,23 +307,83 @@ public class JavaStepDefs {
     @And("I check if array is empty")
     public void iCheckIfArrayIsEmpty() {
         String[] anyArray = {};
-        if(anyArray.length > 0) {
+        if (anyArray.length > 0) {
             System.out.println("The array is not empty");
-        } else if(anyArray.length == 0) {
+        } else if (anyArray.length == 0) {
             System.out.println("The array is empty");
         }
     }
 
     @And("I check if array contains another element")
     public void iCheckIfArrayContainsAnotherElement() {
-        String[] someArray ={"abc", "word", "15", "holy-moly", "word"};
+        String[] someArray = {"abc", "word", "15", "holy-moly", "word"};
         String elementFound = "sword";
-        for(String element : someArray) {
-            if(element == elementFound) {
+        for (String element : someArray) {
+            if (element == elementFound) {
                 System.out.println("Element \"" + element + "\" was found in array");
             } else {
                 System.out.println("Element \"" + elementFound + "\" was not found in array");
                 return;
+            }
+        }
+    }
+
+    @Given("I sort all numbers in ascending order")
+    public void iSortAllNumbersInAscendingOrder() {
+        int [] arr = {2, 7, 1, 5, 9, 15, 3};
+        System.out.println(Arrays.toString(arr));
+        for (int i = 0; i < arr.length - 1; i++) {
+            int index = i;
+            int min = arr[index];
+            for (int j = i + 1; j < arr.length; j++) {
+                if (arr[j] < min) {
+                    min = arr[j];
+                    index = j;
+                }
+            }
+            int temp = arr[i];
+            arr[i] = min;
+            arr[index] = temp;
+            System.out.println(Arrays.toString(arr));
+        }
+    }
+
+    @And("I sort odd numbers in ASC keeping even ones at their places")
+    public void iSortOddNumbersInASCKeepingEvenOnesAtTheirPlaces() {
+        int[] arr = {2, 7, 6, 1, 8, 5, 9, 4, 3, 11, 10};
+        System.out.println(Arrays.toString(arr));
+
+        for (int i = 0; i < arr.length - 1; i++) {
+            int index = i;
+            int min = arr[index];
+            if (min % 2 != 0) {
+                for (int j = i + 1; j < arr.length; j++) {
+                    if (arr[j] < min) {
+                        if(arr[j] % 2 != 0) {
+                            min = arr[j];
+                            index = j;
+                        } else {
+                            min = arr[index];
+                        }
+                    }
+                }
+            }
+            int temp = arr[i];
+            arr[i] = min;
+            arr[index] = temp;
+            System.out.println(Arrays.toString(arr));
+            int[] extArray = arr;
+        }
+    }
+
+    @And("I verify that even numbers kept their places")
+    public void iVerifyThatEvenNumbersKeptTheirPlaces() {
+        int [] arrStart = {2, 7, 6, 1, 8, 5, 9, 4, 3, 11, 10};
+        int [] arrEnd = {2, 1, 6, 3, 8, 5, 7, 4, 9, 11, 10};
+        for (int m = 0; m < arrStart.length; m++) {
+            if(arrStart[m] % 2 == 0) {
+                System.out.println(arrStart[m] + " is at position [" + m + "] in arrStart" );
+                Assert.assertEquals(arrEnd[m], arrStart[m]);
             }
         }
     }
