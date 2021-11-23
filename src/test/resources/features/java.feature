@@ -73,6 +73,11 @@ Feature: Java feature
     Then check if array {3,8,2} contains element 8
     Then check if array {3,8,2} contains element other than present in {4,8}
 
+  @java11:
+  Scenario: Checking sorting methods
+    Then array {3,2,1} sorted by method "sortIfOdd4" should match {1,2,3}
+    Then array {0,1,67,-1,3,8,10,38,5,1,0,13} sorted by method "sortIfOdd4" should match {0, -1, 1, 1, 3, 8, 10, 38, 5, 13, 0, 67}
+
 
 
 
