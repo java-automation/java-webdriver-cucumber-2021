@@ -1,6 +1,7 @@
 // Created by Viacheslav (Slava) Skryabin 04/01/2011
 package definitions;
 
+import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
@@ -148,6 +149,9 @@ public class PredefinedStepDefs {
         assertThat(getDriver().findElement(By.xpath(xpath)).getAttribute(attribute)).isNotEqualTo(attributeValue);
     }
 
+//    @Then("I press Enter key")
+//    public void iPressEnter
+
     @Then("I switch to iframe with xpath {string}")
     public void iSwitchToIframeWithXpath(String xpath) {
         getDriver().switchTo().frame(getDriver().findElement(By.xpath(xpath)));
@@ -221,4 +225,12 @@ public class PredefinedStepDefs {
     public void iMouseOverElementWithXpath(String xpath) {
         new Actions(getDriver()).moveToElement(getDriver().findElement(By.xpath(xpath))).perform();
     }
+
+    @And("I press enter key in the element with xpath {string}")
+    public void iPressEnterKeyInTheElementWithXpath(String xpath) {
+        getDriver().findElement(By.xpath(xpath)).sendKeys(Keys.RETURN);
+    }
+
+
+
 }
