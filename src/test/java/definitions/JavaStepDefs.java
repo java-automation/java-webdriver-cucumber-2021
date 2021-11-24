@@ -488,4 +488,47 @@ public class JavaStepDefs {
     public void iSortArrayWithLengthAndRangeInOrderWhereEvenStayedInPlaceOddInAscendingOrder(int length, int range) {
         iSortArrayEvenStayedInPlaceOddInAscendingOrder(createArrayOfRandomElementsFromZeroTo(length, range));
     }
+
+    @And("I rearrange numbers in ascending order")
+    public void iRearrangeNumbersInAscendingOrder() {
+        //  You have an array of numbers.
+        //  Your task is to sort odd numbers in ascending order
+        //  but even numbers must be on their places.
+        //  Example:
+        //  input:  [5, 3, 2, 8, 4, 1]
+        //  output: [1, 3, 2, 8, 4, 5]
+        // int[] arr = {5, 3, 2, 8, 4, 1};
+
+        int[] arr = createArrayOfRandomElementsFromZeroTo(15, 999);
+        sortArr(arr);
+    }
+
+    private void sortArr(int[] arr) {
+        /*  [5, 3, 2, 8, 4, 1]
+            [5, 3, 2, 8, 4, 1] => 1(5) => [1, 3, 2, 8, 4, 5]
+            [1, | 3, 2, 8, 4, 5] => 2(idx) => [1, 2, 3, 8, 4, 5]
+            [1, 2, | 3, 8, 4, 5] => [1, 2, 3, 8, 4, 5]
+            [1, 2, 3, | 8, 4, 5]
+        */
+        out.println("\n Array before sorting:");
+        System.out.println(Arrays.toString(arr));
+        for (int j = 0; j < arr.length - 1; j++) { //here we do the extra redundant iteration for even number in array
+            int idxMin = j;
+            int min = arr[idxMin];
+            for (int i = j + 1; i < arr.length; i++) { //Algorithm mistake: when we are comparing our min with even number that less our min;
+                if ((arr[i] < min) && (arr[i] % 2 != 0)) { //we should only compare oly with odd numbers
+                    min = arr[i];
+                    idxMin = i;
+                }
+            }
+            if (min % 2 != 0) {
+                int temp = arr[j];
+                arr[j] = min;
+                arr[idxMin] = temp;
+            }
+        }
+        out.println("Array after sorting: ");
+        System.out.println(Arrays.toString(arr));
+    }
+
 }

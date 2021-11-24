@@ -137,8 +137,9 @@ Feature: Java feature
     Then I sort array with length 10 and range 999 in order where even stayed in place, odd - in ascending order
 
 
-
-
+  @java19
+  Scenario: I rearrange numbers in ascending order
+    And I rearrange numbers in ascending order
 
 
 
