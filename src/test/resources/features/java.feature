@@ -91,4 +91,8 @@ Feature: Java feature
 
   @javaDay8HomeWork
     Scenario: Array sorting (only odd numbers will be sorted)
-      Given I sort an array with even and odd "3,4,7,23,9,10,5,12, 34, 65,2"
+      Given I sort an array with even and odd "11,4,7,23,9,10,5,12, 34, 65,2"
+
+  @javaDay9HomeWork
+    Scenario: Combining two arrays in one
+      Given I trying to combine array "1,2,a" with array "5,c,7,8"

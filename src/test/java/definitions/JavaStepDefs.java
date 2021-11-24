@@ -4,6 +4,8 @@ import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
+import org.apache.commons.lang3.ArrayUtils;
+import org.eclipse.jetty.util.ArrayUtil;
 import org.openqa.selenium.By;
 import org.openqa.selenium.Dimension;
 import org.openqa.selenium.Keys;
@@ -362,5 +364,45 @@ public class JavaStepDefs {
             iArray[iMinIndex] = iTempValue;
             System.out.println("Step " + j + " - " + Arrays.toString(iArray));
         }
+    }
+
+    public String[] convertStringToStringArray(String sArray1) {
+        String[] sTempArr;
+        String sTemp;
+        if (sArray1.length() > 0) {
+            sTemp = sArray1.replace(" ", "");
+            sTempArr = sTemp.split(",");
+        } else {
+            sTempArr = new String[0];
+        }
+        return sTempArr;
+    }
+
+    @Given("I trying to combine array {string} with array {string}")
+    public void iTryingToCombineArrayWithArray(String sArr1, String sArr2) {
+        String[] aArr1 = convertStringToStringArray(sArr1);
+        String[] aArr2 = convertStringToStringArray(sArr2);
+        int iLen1 = aArr1.length;
+        int iLen2 = aArr2.length;
+        int iTotalLen = iLen1 + iLen2;
+        String[] aRes = new String[iTotalLen];
+        int i = 0;
+        int j1 = 0;
+        int j2 = 0;
+        while (i < iTotalLen) {
+            if ((j1 < aArr1.length)) {
+                aRes[i] = aArr1[j1];
+                i++;
+                j1++;
+            }
+            if ((j2 < aArr2.length)) {
+                aRes[i] = aArr2[j2];
+                i++;
+                j2++;
+            }
+        }
+        System.out.println(Arrays.toString(aArr1));
+        System.out.println(Arrays.toString(aArr2));
+        System.out.println(Arrays.toString(aRes));
     }
 }
