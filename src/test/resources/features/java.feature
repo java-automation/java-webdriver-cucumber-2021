@@ -1,5 +1,5 @@
 @java
-Feature: Basic Java experiments
+Feature: Java experiments
 
   @java1
   Scenario: Name and Color
@@ -114,3 +114,9 @@ Feature: Basic Java experiments
     #| 5 | 3 | 7 | 11 | 13 | 1 | -19 | 1001 | -333 | -587 |
     #| 10 | 6 | 2 | 8 | 4 | 100 | -10 | 1000 | 0 | -500 |
     #| 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 |
+
+  @java20
+  Scenario: Mix two arrays using: a) primitive arrays b) lists
+    And I mix given arrays
+      | array 1 | 1  | 2  | 3  | 4  | 5  | 6  | 7  | 8  | 9  |
+      | array 2 | -1 | -2 | -3 | -4 | -5 |    |    |    |    |

@@ -521,7 +521,8 @@ public class JavaStepDefs {
         while (arr[right] < arr[pivot]) ++right;
 
         for (left = right + 1; left < pivot; ++left) {
-            if (arr[left] < arr[pivot]) swapArrayValues(arr, left, right++);
+            if (arr[left] < arr[pivot]) swapArrayValues(arr, left, right);
+            ++right;
         }
         if (right < pivot) swapArrayValues(arr, pivot, right);
         System.out.println(Arrays.toString(arr));
@@ -563,5 +564,52 @@ public class JavaStepDefs {
             if (minIndex > j) swapArrayValues(arr, minIndex, j);
             System.out.println(Arrays.toString(arr));
         }
+    }
+
+    @And("I mix given arrays")
+    public void iMixGivenArrays(Map<String, List<Integer>> input) {
+        List<Integer> list1 = input.get("array 1");
+        list1.removeAll(Collections.singleton(null));
+        int[] arr1 = convertListToPrimitiveArray(list1);
+        List<Integer> list2 = input.get("array 2");
+        list2.removeAll(Collections.singleton(null));
+        int[] arr2 = convertListToPrimitiveArray(list2);
+
+        int[] resultArray = mixArrays(arr1, arr2);
+        System.out.println(Arrays.toString(resultArray));
+
+        List<Integer> resultList = mixLists(list1, list2);
+        System.out.println(resultList);
+    }
+
+    private List<Integer> mixLists(List<Integer> list1, List<Integer> list2) {
+        ListIterator<Integer> leftItr = list1.listIterator();
+        ListIterator<Integer> rightItr = list2.listIterator();
+        List<Integer> resultList = new ArrayList<>();
+
+        while (leftItr.hasNext() && rightItr.hasNext()) {
+            resultList.add(leftItr.next());
+            resultList.add(rightItr.next());
+        }
+        while (leftItr.hasNext()) resultList.add(leftItr.next());
+        while (rightItr.hasNext()) resultList.add(rightItr.next());
+
+        return resultList;
+    }
+
+    private int[] mixArrays(int[] leftArr, int[] rightArr) {
+        int leftLen = leftArr.length;
+        int rightLen = rightArr.length;
+        int[] resultArr = new int[leftLen + rightLen];
+
+        int i = 0, j = 0, k = 0;
+        while ((i < leftLen) && (j < rightLen)) {
+            resultArr[k++] = leftArr[i++];
+            resultArr[k++] = rightArr[j++];
+        }
+        while (i < leftLen) resultArr[k++] = leftArr[i++];
+        while (j < rightLen) resultArr[k++] = rightArr[j++];
+
+        return resultArr;
     }
 }
