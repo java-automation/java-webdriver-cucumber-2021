@@ -141,7 +141,9 @@ Feature: Java feature
   Scenario: I rearrange numbers in ascending order
     And I rearrange numbers in ascending order
 
-
+  @java20
+  Scenario: Write a function that combines two arrays (lists) by alternating taking elements;
+    Given I create two array and combine them by alternating taking elements;
 
 
 

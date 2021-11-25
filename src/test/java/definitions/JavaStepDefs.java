@@ -531,4 +531,49 @@ public class JavaStepDefs {
         System.out.println(Arrays.toString(arr));
     }
 
+    @Given("I create two array and combine them by alternating taking elements;")
+    public void iCreateTwoArrayAndCombineThemByAlternatingTakingElements() {
+        int[] secondArray = {6, 57};
+        int[] firstArray = {384, 24, 11, 54,};
+        alternatingTakingElements(secondArray, firstArray);
+        alternatingTakingElements(firstArray, secondArray);
+        alternatingTakingElements(
+                createArrayOfRandomElementsFromZeroTo(4, 300),
+                createArrayOfRandomElementsFromZeroTo(4, 100));
+        alternatingTakingElements(new int[]{}, new int[]{346});
+        alternatingTakingElements(new int[]{5}, new int[]{});
+        alternatingTakingElements(new int[]{}, new int[]{});
+    }
+
+    private int[] alternatingTakingElements(int[] secondArray, int[] firstArray) {
+        int length1 = firstArray.length;
+        int length2 = secondArray.length;
+        int lengthFinal = length1 + length2;
+        int[] finalArray = new int[lengthFinal];
+        int j;
+        int i = 0;
+        if (length1 > length2) {
+            j = length2;
+            for (int k = 2 * j; k < lengthFinal; k++) {
+                finalArray[k] = firstArray[k - j];
+            }
+        } else {
+            j = length1;
+            for (int k = 2 * j; k < lengthFinal; k++) {
+                finalArray[k] = secondArray[k - j];
+            }
+        }
+        while (i < j) {
+            finalArray[2 * i] = firstArray[i];
+            finalArray[2 * i + 1] = secondArray[i];
+            i++;
+        }
+        out.println("First Array:");
+        out.println(Arrays.toString(firstArray));
+        out.println("Second Array:");
+        out.println(Arrays.toString(secondArray));
+        out.println("Final Array:");
+        out.println(Arrays.toString(finalArray));
+        return finalArray;
+    }
 }
