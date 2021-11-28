@@ -14,28 +14,14 @@ import static support.TestContext.getDriver;
 
 public class DataTablesStepDefs {
     @When("I type <query> into element with xpath {string}")
-    public void iTypeStringIntoElementWithXpath(DataTable table, String xpath) {
-        List<Map<String, String>> dataForSearchQuery = table.asMaps();
-        System.out.println(dataForSearchQuery);
-        String text = "";
-        for (Map<String, String> element : dataForSearchQuery) {
-            text = element.get("query");
-            System.out.println(text);
-        }
-        getDriver().findElement(By.xpath(xpath)).sendKeys(text);
+    public void iTypeStringIntoElementWithXpath(String searchQuery, String xpath) {
+        getDriver().findElement(By.xpath(xpath)).sendKeys(searchQuery);
     }
 
     @Then("element with xpath {string} should contain text <text>")
-    public void elementWithXpathShouldContainTextString(String xpath, DataTable table) {
-        List<Map<String, String>> dataForSearchQuery = table.asMaps();
-        System.out.println(dataForSearchQuery);
-        String text = "";
-        for (Map<String, String> element : dataForSearchQuery) {
-            text = element.get("text");
-            System.out.println(text);
-        }
+    public void elementWithXpathShouldContainTextString(String xpath, String expectedText) {
         String actualText = getDriver().findElement(By.xpath(xpath)).getText();
-        assertThat(actualText).containsIgnoringCase(text);
+        assertThat(actualText).containsIgnoringCase(expectedText);
     }
 
     @Given("I print data From DataTable")
@@ -46,5 +32,4 @@ public class DataTablesStepDefs {
             System.out.println(element.get("query"));
         }
     }
-
 }
