@@ -5,7 +5,7 @@ import io.cucumber.java.en.Given;
 import org.junit.Assert;
 import org.openqa.selenium.By;
 
-import java.util.Arrays;
+import java.util.*;
 
 import static support.TestContext.getDriver;
 
@@ -386,5 +386,96 @@ public class JavaStepDefs {
                 Assert.assertEquals(arrEnd[m], arrStart[m]);
             }
         }
+    }
+
+    @Given("I print multiplication table up to {int}")
+    public void iPrintMultiplicationTableUpTo(int arg0) {
+        int n = arg0;
+        for (int i = 1; i <= n; i++) {
+            for (int j = 1; j <= n; j++) {
+                System.out.print(i * j + "\t");
+            }
+            System.out.println();
+        }
+    }
+
+    @Given("I combine two int arrays")
+    public void iCombineTwoArrays() {
+        int[] arr1 = {0, 5, 8, 9, 1};
+        int[] arr2 = {1, 2, 3};
+        int min_len;
+        int[] len = new int[arr1.length + arr2.length];
+
+        if (arr1.length < arr2.length) {
+            min_len = arr1.length;
+        } else {
+            min_len = arr2.length;
+        }
+        for (int n = 0; n < min_len * 2; n=n+2) {
+            len[n] = arr1[n / 2];
+            len[n+1] = arr2[n / 2];
+        }
+        for (int m = min_len; m < arr1.length; m++) {
+            len[min_len * 2 + m - min_len] = arr1[m];
+        }
+        for (int m = min_len; m < arr2.length; m++) {
+            len[min_len * 2 + m - min_len] = arr2[m];
+        }
+        System.out.println(Arrays.toString(len));
+    }
+
+    @And("I combine two string arrays")
+    public void iCombineTwoStringArrays() {
+        String[] arr1 = {"Cat", "on", "mat."};
+        String[] arr2 = {"sat", "the"};
+        String[] result = new String[arr1.length+arr2.length];
+        int min_len;
+        if (arr1.length < arr2.length) {
+           min_len = arr1.length;
+        } else {
+            min_len = arr2.length;
+        }
+        for (int n = 0; n < min_len * 2; n=n+2) {
+            result[n] = arr1[n / 2];
+            result[n+1] = arr2[n / 2];
+        }
+        for (int i=min_len; i<arr1.length; i++) {
+            result[min_len * 2 + i - min_len] = arr1[i];
+        }
+        for (int i=min_len; i<arr2.length; i++) {
+            result[min_len * 2 + i - min_len] = arr2[i];
+        }
+        System.out.println(Arrays.toString(result));
+    }
+
+    @And("I combine two lists")
+    public void iCombineTwoLists() {
+        ArrayList<String> arr1 = new ArrayList<>();
+        arr1.add("Book");
+        arr1.add("1527");
+        arr1.add("0123");
+        arr1.add("drawer");
+        ArrayList<String> arr2 = new ArrayList<>();
+        arr2.add("Tomato");
+        arr2.add("15.99");
+        arr2.add("Carb");
+        int min_len;
+        String[] result = new String[arr1.size()+arr2.size()];
+        if (arr1.size() < arr2.size()) {
+            min_len = arr1.size();
+        } else {
+            min_len = arr2.size();
+        }
+        for (int n = 0; n < min_len * 2; n=n+2) {
+            result[n] = arr1.get(n / 2);
+            result[n+1] = arr2.get(n / 2);
+        }
+        for (int i=min_len; i<arr1.size(); i++) {
+            result[min_len * 2 + i - min_len] = arr1.get(i);
+        }
+        for (int i=min_len; i<arr2.size(); i++) {
+            result[min_len * 2 + i - min_len] = arr2.get(i);
+        }
+        System.out.println(Arrays.toString(result));
     }
 }

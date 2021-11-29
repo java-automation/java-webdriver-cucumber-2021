@@ -134,3 +134,13 @@
        Given I sort all numbers in ascending order
        And I sort odd numbers in ASC keeping even ones at their places
        And I verify that even numbers kept their places
+
+     @TestCase14
+     Scenario: Print multiplication table up to n
+       Given I print multiplication table up to 21
+
+    @TestCase15
+    Scenario: Combine two arrays by alternating the elements
+      Given I combine two int arrays
+      And I combine two string arrays
+      And I combine two lists
