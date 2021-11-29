@@ -24,27 +24,103 @@ Feature: TestCases Day3 lab
     And I clear element with xpath "//input[@name='username']"
 
   @testcase3
-  Scenario: Validate “Email” field behavior: validate that email field accepts only valid email
-  addresses.
+  Scenario Outline: Validate “Email” field behavior:
+  validate that email field accepts only valid email
+    Given I open url <url>
+    Then I should see page title as <title>
+    Then I wait for element with xpath <emailTextFieldXPath> to be present
+    When I type <invalidEmail1> into element with xpath <emailTextFieldXPath>
+    And I click on element with xpath <submitButtonXPath>
+    Then element with xpath <labelEmailErrorXPath> should contain text <emailErrorText>
+    Then I clear element with xpath <emailTextFieldXPath>
+    When I type <invalidEmail2> into element with xpath <emailTextFieldXPath>
+    And I click on element with xpath <submitButtonXPath>
+    Then element with xpath <labelEmailErrorXPath> should contain text <emailErrorText>
+    Then I clear element with xpath <emailTextFieldXPath>
+    When I type <invalidEmail3> into element with xpath <emailTextFieldXPath>
+    And I click on element with xpath <submitButtonXPath>
+    Then element with xpath <labelEmailErrorXPath> should contain text <emailErrorText>
+    Then I clear element with xpath <emailTextFieldXPath>
+    When I type <validEmail> into element with xpath <emailTextFieldXPath>
+    And I click on element with xpath <submitButtonXPath>
+    Then element with xpath <labelEmailErrorXPath> should have attribute <attributeOfEmailErrorLabel> as <attributeValueOfEmailErrorLabel>
+    Then I clear element with xpath <emailTextFieldXPath>
+    Examples:
+      | url                                      | title         | emailTextFieldXPath      | invalidEmail1 | submitButtonXPath          | labelEmailErrorXPath         | emailErrorText                        | invalidEmail2 | invalidEmail3 | validEmail | attributeOfEmailErrorLabel | attributeValueOfEmailErrorLabel |
+      | "https://skryabin.com/market/quote.html" | "Get a Quote" | "//input[@name='email']" | "t"           | "//button[@type='submit']" | "//label[@id='email-error']" | "Please enter a valid email address." | "@"           | "t@"          | "t@t"      | "style"                    | "display: none;"                |
+
+  @testcase3_1
+  Scenario Outline: Validate “Email” field behavior:
+  validate that invalid email field didn't accept
     Given I open url "https://skryabin.com/market/quote.html"
     Then I should see page title as "Get a Quote"
     Then I wait for element with xpath "//input[@name='email']" to be present
-    When I type "t" into element with xpath "//input[@name='email']"
-    And I click on element with xpath "//button[@type='submit']"
-    Then element with xpath "//label[@id='email-error']" should contain text "Please enter a valid email address."
     Then I clear element with xpath "//input[@name='email']"
-    When I type "@" into element with xpath "//input[@name='email']"
+    When I type "<invalidEmail>" into element with xpath "//input[@name='email']"
     And I click on element with xpath "//button[@type='submit']"
-    Then element with xpath "//label[@id='email-error']" should contain text "Please enter a valid email address."
+    Then element with xpath "//label[@id='email-error']" should be displayed
+    And element with xpath "//label[@id='email-error']" should contain text "<emailErrorText>"
     Then I clear element with xpath "//input[@name='email']"
-    When I type "t@" into element with xpath "//input[@name='email']"
+    Examples:
+      | invalidEmail | emailErrorText                      |
+      | t            | Please enter a valid email address. |
+      | @            | Please enter a valid email address. |
+      | t@           | Please enter a valid email address. |
+
+  @testcase3_2
+  Scenario Outline: Validate “Email” field behavior:
+  validate a valid email field accepts and element 'email-error' doesn't present when invalid email was never entered and submit button was never clicked before entering valid email.
+    Given I open url "https://skryabin.com/market/quote.html"
+    Then I should see page title as "Get a Quote"
+    Then I wait for element with xpath "//input[@name='email']" to be present
+    Then I clear element with xpath "//input[@name='email']"
+    When I type "<validEmail>" into element with xpath "//input[@name='email']"
     And I click on element with xpath "//button[@type='submit']"
-    Then element with xpath "//label[@id='email-error']" should contain text "Please enter a valid email address."
+    Then element with xpath "//label[@id='email-error']" should not be present
+    Examples:
+      | validEmail |
+      | t@t        |
+
+  @testcase3_3
+  Scenario Outline: Validate “Email” field behavior:
+  validate a valid email field accepts and 'email-error' label present but not displayed if invalid email was entered before valid email
+    Given I open url "https://skryabin.com/market/quote.html"
+    Then I should see page title as "Get a Quote"
+    Then I wait for element with xpath "//input[@name='email']" to be present
     Then I clear element with xpath "//input[@name='email']"
-    When I type "t@t" into element with xpath "//input[@name='email']"
+    When I type '<invalidEmail>' into element with xpath "//input[@name='email']"
+    #Then I click to other part of the page - in our case - Password text field
+    Then I click on element with xpath "//input[@name='password']"
+    Then element with xpath "//label[@id='email-error']" should be displayed
+    And element with xpath "//label[@id='email-error']" should have text as "<emailErrorText>"
+    Then I clear element with xpath "//input[@name='email']"
+    When I type "<validEmail>" into element with xpath "//input[@name='email']"
     And I click on element with xpath "//button[@type='submit']"
-    Then element with xpath "//label[@id='email-error']" should have attribute "style" as "display: none;"
+    Then element with xpath "//label[@id='email-error']" should not be displayed
+    #It's the same as previous step
     Then I clear element with xpath "//input[@name='email']"
+    Examples:
+      | invalidEmail | validEmail | emailErrorText                      |
+      | @            | t@t        | Please enter a valid email address. |
+
+  @testcase3_4
+  Scenario Outline: Validate “Email” field behavior:
+  validate a valid email field accepts and 'email-error' label to be present but not displayed if submit button was clicked before entering valid email;
+    Given I open url "https://skryabin.com/market/quote.html"
+    Then I should see page title as "Get a Quote"
+    Then I wait for element with xpath "//input[@name='email']" to be present
+    And element with xpath "//label[@id='email-error']" should not be present
+    Then I click on element with xpath "//button[@type='submit']"
+    And element with xpath "//label[@id='email-error']" should be displayed
+    And element with xpath "//label[@id='email-error']" should contain text "<emailErrorText>"
+    Then I clear element with xpath "//input[@name='email']"
+    When I type "<validEmail>" into element with xpath "//input[@name='email']"
+    And I click on element with xpath "//button[@type='submit']"
+    And element with xpath "//label[@id='email-error']" should not be displayed
+    Then I clear element with xpath "//input[@name='email']"
+    Examples:
+      | validEmail | emailErrorText          |
+      | t@t        | This field is required. |
 
   @testcase4
   Scenario: Fill out and validate “Password” set of fields
@@ -122,7 +198,7 @@ Feature: TestCases Day3 lab
     Then I click on element with xpath "//select[@class='ui-datepicker-month']/option[contains(text(),'Jan')]"
     Then I click on element with xpath "//select[@class='ui-datepicker-year']/option[@value='2000']"
     Then I click on element with xpath "(//td[@data-handler='selectDay']/a)[25]"
-    #Then I type "01/25/2000" into element with xpath "//input[@id='dateOfBirth']"
+    #Then I type "01/25/2000" into element with emailTextFieldXPath "//input[@id='dateOfBirth']"
     Then element with xpath "//input[@id='dateOfBirth']" should have attribute "value" as "01/25/2000"
     Then I click on element with xpath "//button[@type='submit']"
 
@@ -162,7 +238,7 @@ Feature: TestCases Day3 lab
     And element with xpath "//b[@name='lastName']" should have text as "Gavrilova"
     #verify username
     Then element with xpath "//b[@name='username']" should have text as "gavrilova.irina"
-    #verify email
+    #verify invalidEmail
     Then element with xpath "//b[@name='email']" should have text as "passioninsoftwaretesting@gmail.com"
     #verify password is not displayed
     Then element with xpath "//b[@name='password']" should have text as "[entered]"

@@ -232,4 +232,5 @@ public class PredefinedStepDefs {
   public void iMouseOverElementWithXpath(String xpath) {
     new Actions(getDriver()).moveToElement(getDriver().findElement(By.xpath(xpath))).perform();
   }
+
 }
