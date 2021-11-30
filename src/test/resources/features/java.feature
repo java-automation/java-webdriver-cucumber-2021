@@ -78,6 +78,11 @@ Feature: Java feature
     Then array {3,2,1} sorted by method "sortIfOdd4" should match {1,2,3}
     Then array {0,1,67,-1,3,8,10,38,5,1,0,13} sorted by method "sortIfOdd4" should match {0, -1, 1, 1, 3, 8, 10, 38, 5, 13, 0, 67}
 
+  @java13:
+  Scenario: Joining arrays alternating
+    Then array {1,5,8,3,6} and array {8,3,6} are joined together alternating into {1,8,5,3,8,6,3,6}
+    Then list {5,34,0} and list {0,3,0,-12,-4} are joined together alternating into {5,0,34,3,0,0,-12,-4}
+    Then array {1,2,3,4} and array {"a","b","c"} are joined together alternating into {"1","a","2","b","3","c","4"}
 
 
 

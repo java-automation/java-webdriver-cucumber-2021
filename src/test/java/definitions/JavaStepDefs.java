@@ -11,6 +11,9 @@ import org.openqa.selenium.Dimension;
 import org.openqa.selenium.Keys;
 
 import java.util.Arrays;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -185,10 +188,16 @@ public class JavaStepDefs {
         System.out.println("\b");
     }
 
-    @ParameterType("[\\{]*([^}]*)[\\}]*")
+    @ParameterType("[\\{]*([^\"}]*)[\\}]*")
     public int[] int_array(String str_array) {
         if (str_array.isEmpty()) return new int[0];
         return Arrays.stream(str_array.split(",")).map(String::strip).mapToInt(Integer::parseInt).toArray();
+    }
+
+    @ParameterType("[\\{]*(\"[^}]*\")[\\}]*")
+    public String[] string_array(String str_array) {
+        if (str_array.isEmpty()) return new String[] {};
+        return str_array.replace("\"","").split(",");
     }
 
     @Then("print all integer array {int_array}")
@@ -220,5 +229,57 @@ public class JavaStepDefs {
         IntStream intstream = Arrays.stream(allowed_values_arr);
         System.out.print("RESULT: ");
         System.out.println(Arrays.stream(arr).filter(num -> intstream.anyMatch(x -> x != num)).findFirst().isEmpty());
+    }
+
+    public static int[] joinPrimitiveIntegerArraysAlternating(int[] arr1, int[] arr2) {
+        int[] result_arr = new int[arr1.length+arr2.length];
+        int min_length = Math.min(arr1.length,arr2.length);
+        for (int i=0; i<min_length*2; i=i+2) {
+            result_arr[i] = arr1[i/2];
+            result_arr[i+1]=arr2[i/2];
+        }
+        for (int k=min_length; k<arr1.length; k++) {
+            result_arr[min_length*2+k-min_length] = arr1[k];
+        }
+        for (int n=min_length; n<arr2.length; n++) {
+            result_arr[min_length*2+n-min_length] = arr2[n];
+        }
+        return result_arr;
+    }
+
+    public static List<Integer> joinPrimitiveIntegerArraysToListAlternating(int[] arr1, int[] arr2) {
+        List<Integer> l1 = Arrays.stream(arr1).boxed().collect(Collectors.toList());
+        List<Integer> l2 = Arrays.stream(arr2).boxed().collect(Collectors.toList());
+        return joinListsAlternating(l1,l2);
+    }
+
+    public static <T> List<T> joinListsAlternating(List<T> l1, List<T> l2) {
+        List<T> result_list = new LinkedList<>();
+        int i=0;
+        int l1_size = l1.size();
+        int j=0;
+        int l2_size = l2.size();
+        while ((i<l1_size) || (j<l2_size)) {
+            if (i<l1_size) {result_list.add(l1.get(i)); i++;}
+            if (j<l2_size) {result_list.add(l2.get(j)); j++;}
+        }
+        return result_list;
+    }
+
+    @Then("array {int_array} and array {int_array} are joined together alternating into {int_array}")
+    public void arraysAreJoinedTogether(int[] arr1, int[] arr2, int[] result) {
+        assertThat(joinPrimitiveIntegerArraysAlternating(arr1,arr2)).isEqualTo(result);
+    }
+
+    @Then("list {int_array} and list {int_array} are joined together alternating into {int_array}")
+    public void listsAreJoinedTogether(int[] arr1, int[] arr2, int[] result) {
+        List<Integer> expected_result = Arrays.stream(result).boxed().collect(Collectors.toList());
+        assertThat(joinPrimitiveIntegerArraysToListAlternating(arr1,arr2)).isEqualTo(expected_result);
+    }
+
+    @Then("array {int_array} and array {string_array} are joined together alternating into {string_array}")
+    public void arrayAndArrayAreJoinedTogetherAlternatingInto(int[] arr1, String[] s_arr2, String[] result) {
+        List<String> list_arr1 = Arrays.stream(arr1).mapToObj(i -> String.valueOf(i)).toList();
+        assertThat(joinListsAlternating(list_arr1, Arrays.asList(s_arr2))).isEqualTo(Arrays.asList(result));
     }
 }
