@@ -96,3 +96,23 @@ Feature: Java feature
   @javaDay9HomeWork
     Scenario: Combining two arrays in one
       Given I trying to combine array "1,2,a" with array "5,c,7,8"
+
+  @javaDay11HomeWork
+    Scenario: Some homework
+      Given I check divisibility 100 by two and five
+      And I check divisibility 31 by two and five
+
+      And I swap 3 and 5 elements in array "5,2,9,7,3"
+      And I swap 0 and 5 elements in array "5,2,9,7,3"
+      And I swap 3 and 5 elements in array "5,2,9,7"
+
+      And I print numbers from zero to 8
+      And I print numbers from zero to -6
+
+      And I check array "1,-56,3,4,5,88" for element 6
+      And I check array "1,-56,3,4,5,88" for element 5
+
+      And I print all numbers from 1 to 20 with check multiplying by 3 and 5
+      And I print all numbers from 1 to 20 with check multiplying by 0 and 5
+      And I print all numbers from -1 to 20 with check multiplying by 3 and 5
+      And I print all numbers from 1 to 0 with check multiplying by 3 and 5

@@ -405,4 +405,65 @@ public class JavaStepDefs {
         System.out.println(Arrays.toString(aArr2));
         System.out.println(Arrays.toString(aRes));
     }
+
+    @Given("I check divisibility {int} by two and five")
+    public void iCheckDivisibilityByTwoAndFive(int iNum) {
+        System.out.println("Number: " + iNum + " " + checkDivisibility(iNum));
+    }
+
+    String checkDivisibility(int iNum) {
+        if (iNum % 2 == 0 && iNum % 5 == 0) {
+            return "divisible by 2 and 5";
+        } else if (iNum % 2 == 0) {
+            return "divisible by 2";
+        } else if (iNum % 5 == 0) {
+            return "divisible by 5";
+        } else {
+            return "not divisible by 2 or 5";
+        }
+    }
+
+    @And("I swap {int} and {int} elements in array {string}")
+    public void iSwapAndElementsInArray(int iEl1, int iEl2, String sArr) {
+        int[] iArray = convertStringArrayToInteger(sArr);
+        System.out.println("Original: " + Arrays.toString(iArray));
+        System.out.println(" Swaped : " + Arrays.toString(swapElements(iEl1, iEl2, iArray)));
+    }
+
+    int[] swapElements(int iEl1, int iEl2, int[] iArray) {
+        int iTemp = 0;
+        if (iArray.length >= iEl1 && iArray.length >= iEl2 && iEl1 > 0 && iEl2 > 0) {
+            iTemp = iArray[iEl1-1];
+            iArray[iEl1-1] = iArray[iEl2-1];
+            iArray[iEl2-1] = iTemp;
+            return iArray;
+        } else {
+            System.out.println("Invalid input values.");
+            return iArray;
+        }
+    }
+
+    @And("I print all numbers from {int} to {int} with check multiplying by {int} and {int}")
+    public void iPrintAllNumbersFromToWithCheckMultiplyingByAnd(int iStart, int iEnd, int iFirstMultipl, int iSecondMultipl) {
+        if (iEnd >= iStart && iFirstMultipl != 0 && iSecondMultipl != 0) {
+            for (int i = iStart; i <= iEnd; i++) {
+                System.out.print(checkMultiplying(i, iFirstMultipl, iSecondMultipl) + " ");
+            }
+            System.out.println(); // just making new line at the end to looks good
+        } else {
+            System.out.println("Incorrect input values.");
+        }
+    }
+
+    String checkMultiplying(int iNum, int iFirstMultipl, int iSecondMultipl) {
+        if (iNum % iFirstMultipl == 0 && iNum % iSecondMultipl == 0) {
+            return "FizzBuzz";
+        } else if (iNum % iFirstMultipl == 0) {
+            return "Fizz";
+        } else if (iNum % iSecondMultipl == 0) {
+            return "Buzz";
+        } else {
+            return String.valueOf(iNum);
+        }
+    }
 }
