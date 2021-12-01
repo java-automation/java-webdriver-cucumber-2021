@@ -334,7 +334,7 @@ public class JavaStepDefs {
 
     @And("I check if {string} is a palindrome word")
     public void iCheckIfIsAPalindrome(String wordToCheck) {
-        if (wordToCheck.length() == 0) throw new Error("Empty word - nothing to check!");
+        if ((wordToCheck == null) || (wordToCheck.length() == 0)) throw new Error("Empty word - nothing to check!");
 
         char[] chars = wordToCheck.toCharArray();
         boolean isPalindrome = true;
@@ -673,33 +673,25 @@ public class JavaStepDefs {
 
     @And("I find the longest palindrome in a given sentence {string}")
     public void iFindTheLongestPalindromeInAGivenSentence(String phrase) {
-        if (phrase.length() == 0) throw new Error("Empty phrase - nothing to check!");
+        if ((phrase == null) || (phrase.length() == 0)) throw new Error("Empty phrase - nothing to check!");
 
         System.out.println("Original: " + phrase);
-        String str = phrase.replaceAll("[^a-zA-z]", "").toLowerCase();
+        String str = phrase.replaceAll("[^a-zA-z0-9]", "").toLowerCase();
         System.out.println("Stripped: " + str);
 
-        int maxLen = 0;
-        int maxInd = -1;
-        for (int i = 0; i < str.length() - 1; ++i) {
-            int len = maxPalindromeFromGivenCenter(str, i, i);
-            if (len > maxLen) {
-                maxLen = len;
-                maxInd = i;
-            }
-            len = maxPalindromeFromGivenCenter(str, i, i + 1);
-            if (len > maxLen) {
-                maxLen = len;
-                maxInd = i;
-            }
-        }
+        Map<String, Integer> maxPalindrome = new HashMap<>();
+        maxPalindrome.put("length", 1);
+        maxPalindrome.put("startIndex", 0);
 
-        int startInd = maxInd - (maxLen / 2) + (1 - (maxLen % 2));
-        int endInd = maxInd + maxLen / 2 + 1;
-        System.out.println("Max palindrome: " + str.substring(startInd, endInd));
+        for (int i = 0; i < str.length() - 1; ++i) {
+            checkForMaxPalindromeFromGivenCenter(str, i, i, maxPalindrome);
+            checkForMaxPalindromeFromGivenCenter(str, i, i + 1, maxPalindrome);
+        }
+        int startIndex = maxPalindrome.get("startIndex");
+        System.out.println("Max palindrome: " + str.substring(startIndex, startIndex + maxPalindrome.get("length")));
     }
 
-    private int maxPalindromeFromGivenCenter(String str, int start, int end) {
+    private void checkForMaxPalindromeFromGivenCenter(String str, int start, int end, Map<String, Integer> currentMax) {
         char[] arr = str.toCharArray();
         int palindromeSize = (end > start) ? 0 : -1;
         while ((start >= 0) && (end < str.length()) && (arr[start] == arr[end])) {
@@ -707,6 +699,9 @@ public class JavaStepDefs {
             start--;
             end++;
         }
-        return palindromeSize;
+        if (palindromeSize > currentMax.get("length")) {
+            currentMax.put("length", palindromeSize);
+            currentMax.put("startIndex", start + 1);
+        }
     }
 }

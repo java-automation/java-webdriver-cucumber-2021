@@ -145,4 +145,4 @@ Feature: Java experiments
 
   @java26
   Scenario: Longest palindrome in a phrase
-    And I find the longest palindrome in a given sentence "Madam, how about this one: 'Eva, can I see bees in a cave?'. Wow!"
+    And I find the longest palindrome in a given sentence "Madam, how about number 4343434: 'Eva, can I see bees in a cave?'. - 'Wow!'"
