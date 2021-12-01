@@ -97,7 +97,6 @@ Feature: TestCases Day3 lab
     When I type "<validEmail>" into element with xpath "//input[@name='email']"
     And I click on element with xpath "//button[@type='submit']"
     Then element with xpath "//label[@id='email-error']" should not be displayed
-    #It's the same as previous step
     Then I clear element with xpath "//input[@name='email']"
     Examples:
       | invalidEmail | validEmail | emailErrorText                      |
@@ -166,7 +165,7 @@ Feature: TestCases Day3 lab
     And element with xpath "//input[@name='agreedToPrivacyPolicy']" should not be selected
     Then I click on element with xpath "//button[@type='submit']"
     And I wait for element with xpath "//label[@id='agreedToPrivacyPolicy-error'][contains(text(),'Must check!')]" to be present
-    When I click on element with xpath "//input[@name='agreedToPrivacyPolicy']"
+    When I click on element using JavaScript with xpath "//input[@name='agreedToPrivacyPolicy'][contains(@class,'ng-untouched')]"
     Then element with xpath "//input[@name='agreedToPrivacyPolicy']" should be selected
     Then element with xpath "//label[@id='agreedToPrivacyPolicy-error']" should not be displayed
 
