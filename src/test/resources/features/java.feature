@@ -142,3 +142,7 @@ Feature: Java experiments
   #Value range: 1-7 or error
   Scenario: Print every N day of the week
     And I print every 1 day of the week
+
+  @java26
+  Scenario: Longest palindrome in a phrase
+    And I find the longest palindrome in a given sentence "Madam, how about this one: 'Eva, can I see bees in a cave?'. Wow!"

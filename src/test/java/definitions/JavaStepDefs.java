@@ -334,18 +334,18 @@ public class JavaStepDefs {
 
     @And("I check if {string} is a palindrome word")
     public void iCheckIfIsAPalindrome(String wordToCheck) {
-        if (wordToCheck.length() > 0) {
-            char[] chars = wordToCheck.toCharArray();
-            boolean isPalindrome = true;
-            int len = chars.length;
-            for (int i = 0; i < (len / 2); ++i) {
-                if (chars[i] != chars[len - 1 - i]) {
-                    isPalindrome = false;
-                    break;
-                }
+        if (wordToCheck.length() == 0) throw new Error("Empty word - nothing to check!");
+
+        char[] chars = wordToCheck.toCharArray();
+        boolean isPalindrome = true;
+        int len = chars.length;
+        for (int i = 0; i < (len / 2); ++i) {
+            if (chars[i] != chars[len - 1 - i]) {
+                isPalindrome = false;
+                break;
             }
-            System.out.println("Is " + wordToCheck + " a palindrome? " + isPalindrome);
-        } else throw new Error("Empty word - nothing to check!");
+        }
+        System.out.println("Is " + wordToCheck + " a palindrome? " + isPalindrome);
     }
 
     @And("I sort {string} numbers in a given array using Bubble Sort")
@@ -657,9 +657,8 @@ public class JavaStepDefs {
         String[] words = sentence.split(" ");
         System.out.println(Arrays.toString(words));
 
-        int len = words.length;
         StringBuilder resultSentence = new StringBuilder();
-        for (int i = len - 1; i >= 0; --i) {
+        for (int i = words.length - 1; i >= 0; --i) {
             resultSentence.append(words[i]).append(" ");
         }
         System.out.println("Result: " + resultSentence);
@@ -670,5 +669,44 @@ public class JavaStepDefs {
         if ((num <= 0) || (num > 7)) throw new Error("Week day number expected (1-7). Got: " + num);
         String[] weekDays = {"Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"};
         for (int i = 1; i <= 7 / num; ++i) System.out.println(weekDays[num * i - 1]);
+    }
+
+    @And("I find the longest palindrome in a given sentence {string}")
+    public void iFindTheLongestPalindromeInAGivenSentence(String phrase) {
+        if (phrase.length() == 0) throw new Error("Empty phrase - nothing to check!");
+
+        System.out.println("Original: " + phrase);
+        String str = phrase.replaceAll("[^a-zA-z]", "").toLowerCase();
+        System.out.println("Stripped: " + str);
+
+        int maxLen = 0;
+        int maxInd = -1;
+        for (int i = 0; i < str.length() - 1; ++i) {
+            int len = maxPalindromeFromGivenCenter(str, i, i);
+            if (len > maxLen) {
+                maxLen = len;
+                maxInd = i;
+            }
+            len = maxPalindromeFromGivenCenter(str, i, i + 1);
+            if (len > maxLen) {
+                maxLen = len;
+                maxInd = i;
+            }
+        }
+
+        int startInd = maxInd - (maxLen / 2) + (1 - (maxLen % 2));
+        int endInd = maxInd + maxLen / 2 + 1;
+        System.out.println("Max palindrome: " + str.substring(startInd, endInd));
+    }
+
+    private int maxPalindromeFromGivenCenter(String str, int start, int end) {
+        char[] arr = str.toCharArray();
+        int palindromeSize = (end > start) ? 0 : -1;
+        while ((start >= 0) && (end < str.length()) && (arr[start] == arr[end])) {
+            palindromeSize += 2;
+            start--;
+            end++;
+        }
+        return palindromeSize;
     }
 }
