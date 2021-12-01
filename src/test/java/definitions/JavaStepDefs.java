@@ -633,4 +633,19 @@ public class JavaStepDefs {
             else System.out.println(i);
         }
     }
+
+    @And("I reverse a given string {string}")
+    public void iReverseAGivenString(String str) {
+        System.out.println("Original: " + str);
+        char[] charArr = str.toCharArray();
+        int len = str.length();
+        for (int i = 0; i < len / 2; ++i) {
+            char temp = charArr[i];
+            charArr[i] = charArr[len - 1 - i];
+            charArr[len - 1 - i] = temp;
+        }
+        System.out.println("Result: " + new String(charArr));
+
+        System.out.println("StringBuilder reverse: " + new StringBuilder(str).reverse());
+    }
 }

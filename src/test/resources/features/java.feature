@@ -129,3 +129,7 @@ Feature: Java experiments
   @java22
   Scenario: FizzBuzz problem for a number
     And I provide FizzBuzz output for number 45
+
+  @java23
+  Scenario: Reverse a string
+    And I reverse a given string "Abrakadabra"
