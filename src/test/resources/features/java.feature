@@ -74,11 +74,11 @@ Feature: Java experiments
   @java12
   Scenario: Swap two elements in array
     And I swap elements with positions 3 and 5 in array of integers
-    | 5 | 2 | 9 | 7 | 3 |
+      | 5 | 2 | 9 | 7 | 3 |
 
   @java13
   Scenario: Divisibility exercises
-    And I check if number 5 is divisible by 2 and 5
+    And I check if number 276 is divisible by 3 and 4
 
   @java14
   Scenario: Write a function that prints all numbers from 0 to n
@@ -101,22 +101,31 @@ Feature: Java experiments
   @java18
   Scenario: Do various array sorts
     And I sort given array using different methods
-    #| 5 | 3 | 2 | 8 | 4 | 1 | -10 | 1001 | 0 | -523 |
-    #| 1 | 0 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 |
-    #| 8 | 7 | 6 | 1 | 0 | 9 | 2 |
-    | 10 | 6 | 259 | 8 | 4 | 100 | 34 | 435 | 33 | 87 | 101 | 63 | 239 | 218 | 48 | 102 | 345 | 431 | 33 | 867 |
+      #| 5 | 3 | 2 | 8 | 4 | 1 | -10 | 1001 | 0 | -523 |
+      #| 1 | 0 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 |
+      #| 8 | 7 | 6 | 1 | 0 | 9 | 2 |
+      | 10 | 6 | 259 | 8 | 4 | 100 | 34 | 435 | 33 | 867 | 101 | 63 | 239 | 218 | 48 | 102 | 345 | 431 | 33 | 87 |
 
   @java19
   Scenario: Sort numbers with a specified parity in a given array
     And I sort "odd" numbers in a given array using Bubble Sort
-    #| 5 | 3 | 2 | 8 | 4 | 1 |
-    | 5 | 3 | 2 | 8 | 4 | 1 | -10 | 1001 | 0 | -523 |
-    #| 5 | 3 | 7 | 11 | 13 | 1 | -19 | 1001 | -333 | -587 |
-    #| 10 | 6 | 2 | 8 | 4 | 100 | -10 | 1000 | 0 | -500 |
-    #| 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 |
+      #| 5 | 3 | 2 | 8 | 4 | 1 |
+      | 5 | 3 | 2 | 8 | 4 | 1 | -10 | 1001 | 0 | -523 |
+      #| 5 | 3 | 7 | 11 | 13 | 1 | -19 | 1001 | -333 | -587 |
+      #| 10 | 6 | 2 | 8 | 4 | 100 | -10 | 1000 | 0 | -500 |
+      #| 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 |
 
   @java20
   Scenario: Mix two arrays using: a) primitive arrays b) lists
     And I mix given arrays
       | array 1 | 1  | 2  | 3  | 4  | 5  | 6  | 7  | 8  | 9  |
       | array 2 | -1 | -2 | -3 | -4 | -5 |    |    |    |    |
+
+  @java21
+  Scenario: Find largest element in the array
+    And I find largest element in given array
+      | 10 | 6 | 259 | 8 | 4 | 100 | 34 | 435 | 33 | 867 | 101 | 63 | 239 | 218 | 48 | 102 | 345 | 431 | 33 | 87 |
+
+  @java22
+  Scenario: FizzBuzz problem for a number
+    And I provide FizzBuzz output for number 45
