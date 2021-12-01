@@ -99,30 +99,30 @@ Feature: Java feature
 
   @javaDay11HomeWork
     Scenario: Some homework
-#      Given I check divisibility 100 by two and five
-#      And I check divisibility 31 by two and five
-#
-#      And I check divisibility 67 by 3 and 4
-#      And I check divisibility 68 by 3 and 4
-#      And I check divisibility 69 by 3 and 4
-#
-#      And I swap 3 and 5 elements in array "5,2,9,7,3"
-#      And I swap 0 and 5 elements in array "5,2,9,7,3"
-#      And I swap 3 and 5 elements in array "5,2,9,7"
-#
-#      And I search the largest element in an array "1,2,3,6,9,8,20,0,15"
-#      And I search the largest element in an array "1,2,888,6,9,8,20,0,888"
-#
-#      And I print numbers from zero to 8
-#      And I print numbers from zero to -6
-#
-#      And I check array "1,-56,3,4,5,88" for element 6
-#      And I check array "1,-56,3,4,5,88" for element 5
-#
-#      And I print all numbers from 1 to 20 with check multiplying by 3 and 5
-#      And I print all numbers from 1 to 20 with check multiplying by 0 and 5
-#      And I print all numbers from -1 to 20 with check multiplying by 3 and 5
-#      And I print all numbers from 1 to 0 with check multiplying by 3 and 5
+      Given I check divisibility 100 by two and five
+      And I check divisibility 31 by two and five
+
+      And I check divisibility 67 by 3 and 4
+      And I check divisibility 68 by 3 and 4
+      And I check divisibility 69 by 3 and 4
+
+      And I swap 3 and 5 elements in array "5,2,9,7,3"
+      And I swap 0 and 5 elements in array "5,2,9,7,3"
+      And I swap 3 and 5 elements in array "5,2,9,7"
+
+      And I search the largest element in an array "1,2,3,6,9,8,20,0,15"
+      And I search the largest element in an array "1,2,888,6,9,8,20,0,888"
+
+      And I print numbers from zero to 8
+      And I print numbers from zero to -6
+
+      And I check array "1,-56,3,4,5,88" for element 6
+      And I check array "1,-56,3,4,5,88" for element 5
+
+      And I print all numbers from 1 to 20 with check multiplying by 3 and 5
+      And I print all numbers from 1 to 20 with check multiplying by 0 and 5
+      And I print all numbers from -1 to 20 with check multiplying by 3 and 5
+      And I print all numbers from 1 to 0 with check multiplying by 3 and 5
 
       And I making string "some string" reverse
 
