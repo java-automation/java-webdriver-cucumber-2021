@@ -466,4 +466,76 @@ public class JavaStepDefs {
             return String.valueOf(iNum);
         }
     }
+
+    @And("I search the largest element in an array {string}")
+    public void iSearchTheLargestElementInAnArray(String sArr) {
+        int[] iArray = convertStringArrayToInteger(sArr);
+        System.out.println("Largest element for array " + Arrays.toString(iArray) + " is " + String.valueOf(getLargestElement(iArray)));
+    }
+
+    int getLargestElement(int[] iArray) {
+        int iLargest = iArray[0];
+        for (int i = 1; i < iArray.length; i++) {
+            if (iLargest < iArray[i]) {
+                iLargest = iArray[i];
+            }
+        }
+        return iLargest;
+    }
+
+    @And("I check divisibility {int} by {int} and {int}")
+    public void iCheckDivisibilityByAnd(int iNum, int iDiv1, int iDiv2) {
+        if (iDiv1 != 0 && iDiv2 != 0) {
+            System.out.println("The number: " + iNum + checkDivisibilityCommon(iNum, iDiv1, iDiv2));
+        } else {
+            System.out.println("Incorrect input values.");
+        }
+    }
+
+    String checkDivisibilityCommon(int iNum, int iDiv1, int iDiv2) {
+        if (iNum % iDiv1 == 0 && iNum % iDiv2 == 0) {
+            return " is divisible by " + iDiv1 + " and " + iDiv2;
+        } else if (iNum % iDiv1 == 0) {
+            return " is divisible by " + iDiv1;
+        } else if (iNum % iDiv2 == 0) {
+            return " is divisible by " + iDiv2;
+        } else {
+            return " doesn't divisible by " + iDiv1 + " and " + iDiv2;
+        }
+    }
+
+    @And("I making string {string} reverse")
+    public void iMakingStringReverse(String sStr) {
+        System.out.println("Original: " + sStr);
+        System.out.println("Reversed: " + reversingString(sStr));
+    }
+
+    String reversingString(String sStr) {
+        StringBuilder result = new StringBuilder();
+        for (int i = sStr.length() - 1; i >= 0; i--) {
+            result.append(sStr.charAt(i));
+        }
+        return result.toString();
+    }
+
+    @And("I reverse words in sentence {string}")
+    public void iReverseWordsInSentence(String sStr) {
+        System.out.println("Original: " + sStr);
+        System.out.println("Reversed: " + reversingWordsInString(sStr));
+    }
+
+    String reversingWordsInString(String sStr) {
+        StringBuilder result = new StringBuilder();
+        String[] sTempArr;
+        if (sStr.length() > 0) {
+            sStr = sStr.trim();
+            sTempArr = sStr.split("\\b");
+        } else {
+            sTempArr = new String[0];
+        }
+        for (int i = sTempArr.length - 1; i >= 0; i--) {
+            result.append( (sTempArr[i].hashCode() != 0) ? sTempArr[i].replaceAll("\\s+", " ") : "");
+        }
+        return result.toString().trim();
+    }
 }
