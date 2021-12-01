@@ -56,7 +56,7 @@ Feature: Java experiments
     And I print if number "-5435" is positive
 
   @java8
-  Scenario: Day of the week
+  Scenario: Day of the week after N days
     And I print day of the week that comes 15465 days after today and today is "Monday"
 
   @java9
@@ -137,3 +137,8 @@ Feature: Java experiments
   @java24
   Scenario: Reverse words in a sentence
     And I reverse word order in a given sentence "Hello, I'm doing my java exercise!"
+
+  @java25
+  #Value range: 1-7 or error
+  Scenario: Print every N day of the week
+    And I print every 1 day of the week

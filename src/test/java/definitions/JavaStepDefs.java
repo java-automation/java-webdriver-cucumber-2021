@@ -626,7 +626,7 @@ public class JavaStepDefs {
 
     @And("I provide FizzBuzz output for number {int}")
     public void iProvideFizzBuzzOutputForNumber(int num) {
-        for (int i = 0; i <= num; ++i) {
+        for (int i = 1; i <= num; ++i) {
             if ((i % 3 == 0) && (i % 5 == 0)) System.out.println("FizzBuzz");
             else if (i % 3 == 0) System.out.println("Fizz");
             else if (i % 5 == 0) System.out.println("Buzz");
@@ -637,6 +637,7 @@ public class JavaStepDefs {
     @And("I reverse a given string {string}")
     public void iReverseAGivenString(String str) {
         System.out.println("Original: " + str);
+
         char[] charArr = str.toCharArray();
         int len = str.length();
         for (int i = 0; i < len / 2; ++i) {
@@ -652,8 +653,10 @@ public class JavaStepDefs {
     @And("I reverse word order in a given sentence {string}")
     public void iReverseWordOrderInAGivenSentence(String sentence) {
         System.out.println("Original: " + sentence);
+
         String[] words = sentence.split(" ");
         System.out.println(Arrays.toString(words));
+
         int len = words.length;
         for (int i = 0; i < len / 2; ++i) {
             String temp = words[i];
@@ -661,8 +664,16 @@ public class JavaStepDefs {
             words[len - 1 - i] = temp;
         }
         System.out.println(Arrays.toString(words));
+
         String resultSentence = "";
         for (String el : words) resultSentence = resultSentence.concat(el + " ");
         System.out.println("Result: " + resultSentence);
+    }
+
+    @And("I print every {int} day of the week")
+    public void iPrintEveryDayOfTheWeekForOneCycle(int num) {
+        if ((num <= 0) || (num > 7)) throw new Error("Week day number expected (1-7). Got: " + num);
+        String[] weekDays = {"Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"};
+        for (int i = 1; i <= 7 / num; ++i) System.out.println(weekDays[num * i - 1]);
     }
 }
