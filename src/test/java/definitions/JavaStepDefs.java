@@ -11,10 +11,7 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.Actions;
 
 import java.time.DayOfWeek;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
+import java.util.*;
 
 import static java.lang.Character.toChars;
 import static java.lang.System.out;
@@ -628,5 +625,19 @@ public class JavaStepDefs {
             secondArray[i] = Integer.toString(secondArr[i]);
         }
         return alternatingTakingElements(firstArray, secondArray);
+    }
+
+    @Given("I print all numbers up to the argument {int}")
+    public void iPrintAllNumbersUpToTheArguments(int number) {
+        for (int i = 1; i <= number; i++) {
+            if ((i % 3 == 0) && (i % 5 != 0)) {
+                out.print("Fizz");
+            } else if ((i % 3 != 0) && (i % 5 == 0)) {
+                out.print("Buzz");
+            } else if ((i % 3 == 0) && (i % 5 == 0)) {
+                out.print("FizzBuzz");
+            } else out.print(i);
+            out.print(" ");
+        }
     }
 }

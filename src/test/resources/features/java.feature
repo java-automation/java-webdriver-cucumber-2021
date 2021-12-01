@@ -145,6 +145,18 @@ Feature: Java feature
   Scenario: Write a function that combines two arrays (lists) by alternating taking elements;
     Given I create two array and combine them by alternating taking elements;
 
+  @java21 #Interview coding task 3-8
+  #Write a function, accepts integer argument
+  #It should print all the numbers up to arguments:
+  #if Number %3==0 it should print Fizz instead of number
+  #if Number %5==0 it should print Buzz instead of number
+  #if (Number %3==0) && (Number %5 ==0) print FizzBuzz
+  Scenario: Write a function that accepts integer argument and print Fizz, if number divided by 3,
+  Buzz - if number divided by 5, and FizzBuzz - if number divided for 3 and 5; otherwise - print numbers up to the argument;
+    Given I print all numbers up to the argument 20
+
+
+
 
 
 
