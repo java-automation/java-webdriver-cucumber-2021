@@ -14,6 +14,7 @@ import java.time.DayOfWeek;
 import java.util.*;
 
 import static java.lang.Character.toChars;
+import static java.lang.String.valueOf;
 import static java.lang.System.out;
 import static java.util.Arrays.asList;
 import static support.TestContext.getDriver;
@@ -43,14 +44,14 @@ public class JavaStepDefs {
         PredefinedStepDefs.
                 elementWithXpathShouldBeDisplayed("//div[@id='ui-datepicker-div']");
         PredefinedStepDefs.
-                iClickOnElementWithXpath("//select[@class='ui-datepicker-month']/option[@value='" + String.valueOf(month - 1) + "']");
+                iClickOnElementWithXpath("//select[@class='ui-datepicker-month']/option[@value='" + valueOf(month - 1) + "']");
     }
 
     @Then("I click day {int} in Date Composer")
     public void iClickDayIntInDateComposer(int day) {
         PredefinedStepDefs.
                 elementWithXpathShouldBeDisplayed("//div[@id='ui-datepicker-div']");
-        PredefinedStepDefs.iClickOnElementWithXpath("//a[contains(@class,'ui-state-default')][text()='" + String.valueOf(day) + "']");
+        PredefinedStepDefs.iClickOnElementWithXpath("//a[contains(@class,'ui-state-default')][text()='" + valueOf(day) + "']");
     }
 
     @Then("I click day {string} in Date Composer")
@@ -65,7 +66,7 @@ public class JavaStepDefs {
         PredefinedStepDefs.
                 elementWithXpathShouldBeDisplayed("//div[@id='ui-datepicker-div']");
         PredefinedStepDefs.
-                iClickOnElementWithXpath("//select[@class='ui-datepicker-year']/option[@value='" + String.valueOf(year) + "']");
+                iClickOnElementWithXpath("//select[@class='ui-datepicker-year']/option[@value='" + valueOf(year) + "']");
     }
 
     @Then("I click year {string} in Date Composer")
@@ -206,7 +207,6 @@ public class JavaStepDefs {
 
     @Given("I print integer array")
     public void iPrintIntegerArray(int[] array) {
-        int[] art;
         for (int element : array) {
             out.print(element + " ");
         }
@@ -634,10 +634,44 @@ public class JavaStepDefs {
                 out.print("Fizz");
             } else if ((i % 3 != 0) && (i % 5 == 0)) {
                 out.print("Buzz");
-            } else if ((i % 3 == 0) && (i % 5 == 0)) {
+            } else if (i % 3 == 0) {
                 out.print("FizzBuzz");
             } else out.print(i);
             out.print(" ");
         }
+    }
+
+    @Given("I play to FizzBuzz to {int}")
+    public void FizzBuzz(int number) {
+        for (int i = 1; i <= number; i++) {
+            String textToPrint = "";
+            if (i % 3 == 0) {
+                textToPrint += "Fizz";
+            }
+            if (i % 5 == 0) {
+                textToPrint += "Buzz";
+            }
+            if (textToPrint.equals("")) {
+                textToPrint = valueOf(i);
+            }
+            out.print(textToPrint + " ");
+        }
+    }
+
+    @Given("I swap {int} and {int} elements in array")
+    public int[] iSwapTwoElementInArray(int place1, int place2) {
+        int[] array = new int[]{5, 2, 9, 7, 3};
+        out.println("Before swap: ");
+        iPrintIntegerArray(array);
+        int indexFirstToSwap = place1 - 1;
+        int indexSecondToSwap = place2 - 1;
+        Assert.assertTrue((0 < indexFirstToSwap) && (indexFirstToSwap < array.length));
+        Assert.assertTrue((0 < indexSecondToSwap) && (indexSecondToSwap < array.length));
+        int temp = array[indexFirstToSwap];
+        array[indexFirstToSwap] = array[indexSecondToSwap];
+        array[indexSecondToSwap] = temp;
+        out.println("\n After swap:");
+        iPrintIntegerArray(array);
+        return array;
     }
 }

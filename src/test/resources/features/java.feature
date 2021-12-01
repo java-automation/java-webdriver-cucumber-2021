@@ -153,7 +153,15 @@ Feature: Java feature
   #if (Number %3==0) && (Number %5 ==0) print FizzBuzz
   Scenario: Write a function that accepts integer argument and print Fizz, if number divided by 3,
   Buzz - if number divided by 5, and FizzBuzz - if number divided for 3 and 5; otherwise - print numbers up to the argument;
-    Given I print all numbers up to the argument 20
+    Given I print all numbers up to the argument 30
+
+  @java21_1 #FizzBuzz
+  Scenario: FizzBuzz game
+    Given I play to FizzBuzz to 46
+
+  @java22 #Given array{5,2,9,7,3}. Write a function that swaps two array elements 3rd and 5th.
+  Scenario: I swap two 3rd and 5th elements in array {5,2,9,7,3}
+    Given I swap 3 and 5 elements in array
 
 
 
