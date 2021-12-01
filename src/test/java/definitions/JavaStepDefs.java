@@ -658,15 +658,10 @@ public class JavaStepDefs {
         System.out.println(Arrays.toString(words));
 
         int len = words.length;
-        for (int i = 0; i < len / 2; ++i) {
-            String temp = words[i];
-            words[i] = words[len - 1 - i];
-            words[len - 1 - i] = temp;
+        StringBuilder resultSentence = new StringBuilder();
+        for (int i = len - 1; i >= 0; --i) {
+            resultSentence.append(words[i]).append(" ");
         }
-        System.out.println(Arrays.toString(words));
-
-        String resultSentence = "";
-        for (String el : words) resultSentence = resultSentence.concat(el + " ");
         System.out.println("Result: " + resultSentence);
     }
 
