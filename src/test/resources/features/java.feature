@@ -88,7 +88,7 @@ Feature: Java experiments
   Scenario: Array exercises
     And I do my integer array exercises with number 0
       | 2 | 4 | 43543 | 34 | -2342 | 117799 | 0 | -94 |
-    #|
+     #|
 
   @java16
   Scenario: Fibonacci number
@@ -133,3 +133,7 @@ Feature: Java experiments
   @java23
   Scenario: Reverse a string
     And I reverse a given string "Abrakadabra"
+
+  @java24
+  Scenario: Reverse words in a sentence
+    And I reverse word order in a given sentence "Hello, I'm doing my java exercise!"

@@ -648,4 +648,21 @@ public class JavaStepDefs {
 
         System.out.println("StringBuilder reverse: " + new StringBuilder(str).reverse());
     }
+
+    @And("I reverse word order in a given sentence {string}")
+    public void iReverseWordOrderInAGivenSentence(String sentence) {
+        System.out.println("Original: " + sentence);
+        String[] words = sentence.split(" ");
+        System.out.println(Arrays.toString(words));
+        int len = words.length;
+        for (int i = 0; i < len / 2; ++i) {
+            String temp = words[i];
+            words[i] = words[len - 1 - i];
+            words[len - 1 - i] = temp;
+        }
+        System.out.println(Arrays.toString(words));
+        String resultSentence = "";
+        for (String el : words) resultSentence = resultSentence.concat(el + " ");
+        System.out.println("Result: " + resultSentence);
+    }
 }
