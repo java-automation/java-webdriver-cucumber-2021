@@ -163,6 +163,28 @@ Feature: Java feature
   Scenario: I swap two 3rd and 5th elements in array {5,2,9,7,3}
     Given I swap 3 and 5 elements in array
 
+  @java23
+  Scenario: I reverse String
+    Given I reverse "string"
+
+  @java24
+  Scenario: I reverse words in sentence
+   # Given I reverse words in sentence "NewYork"
+    And I reverse words in sentence "I love NewYork!"
+    And I reverse words in sentence "I love NewYork! "
+    And I reverse words in sentence "I  love NewYork!"
+
+  @java25
+  Scenario: I create array from String with space delimiter 1
+    Given I has "I love NewYork!" and create Array with " " as delimiter
+
+  @java26
+  Scenario: I create array from String with space delimiter
+    Given I has "I love NewYork!" and create Array with " " as delimiter and reverse words in it
+    And I has "I  love NewYork!" and create Array with " " as delimiter and reverse words in it
+
+
+
 
 
 

@@ -11,7 +11,10 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.Actions;
 
 import java.time.DayOfWeek;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
 
 import static java.lang.Character.toChars;
 import static java.lang.String.valueOf;
@@ -665,13 +668,70 @@ public class JavaStepDefs {
         iPrintIntegerArray(array);
         int indexFirstToSwap = place1 - 1;
         int indexSecondToSwap = place2 - 1;
-        Assert.assertTrue((0 < indexFirstToSwap) && (indexFirstToSwap < array.length));
-        Assert.assertTrue((0 < indexSecondToSwap) && (indexSecondToSwap < array.length));
+        Assert.assertTrue((0 <= indexFirstToSwap) && (indexFirstToSwap < array.length));
+        Assert.assertTrue((0 <= indexSecondToSwap) && (indexSecondToSwap < array.length));
         int temp = array[indexFirstToSwap];
         array[indexFirstToSwap] = array[indexSecondToSwap];
         array[indexSecondToSwap] = temp;
         out.println("\n After swap:");
         iPrintIntegerArray(array);
         return array;
+    }
+
+    @Given("I reverse {string}")
+    public String reverse(String string) {
+        String result = "";
+        for (int i = 0; i < string.length(); i++) result += string.charAt(string.length() - i - 1);
+        out.print(result);
+        return result;
+    }
+
+    public void reverseIt(String string) {
+        String result = "";
+        for (int i = 0; i < string.length(); i++) result += string.charAt(string.length() - i - 1);
+        out.print(result);
+    }
+
+    @Given("I reverse words in sentence {string}")
+    public void iReverseWordsInSentence(String sentence) {
+        int i = 0;
+        while (i < sentence.length()) {
+            String word = "";
+            int k = 0;
+            while ((!String.valueOf(sentence.charAt(i + k)).equals(" "))) {
+                word += sentence.charAt(i + k);
+                k++;
+                if ((i + k) >= sentence.length()) {
+                    break;
+                }
+            }
+            reverse(word);
+            out.println(" ");
+            i = i + k + 1;
+        }
+    }
+
+    public void stringToArray(String string) {
+        List<String> listString = Arrays.stream(string.split(" ")).toList();
+        for (String s : listString) {
+            out.println(s);
+        }
+    }
+
+    @Given("I has {string} and create Array with {string} as delimiter")
+    public void iHasAndCreateArrayWithAsDelimiter(String string, String delimiter) {
+        List<String> listString = Arrays.stream(string.split(delimiter)).toList();
+        for (String s : listString) {
+            out.println(s);
+        }
+    }
+
+    @Given("I has {string} and create Array with {string} as delimiter and reverse words in it")
+    public void iHasAndCreateArrayWithAsDelimiterAndReverseWordsInIt(String string, String delimiter) {
+        String[] listString = string.split(delimiter);
+        Arrays.stream(listString).forEach(e -> {
+            reverse(e);
+            out.print(" ");
+        });
     }
 }
