@@ -144,3 +144,42 @@
       Given I combine two int arrays
       And I combine two string arrays
       And I combine two lists
+
+    @TestCase16
+    Scenario: Swap two variables values
+      Given I swap two variables values "age" and "8" using a third variable
+      And I swap two variables values 11 and 36 without a third variable
+
+    @TestCase17
+    Scenario: Swap two array elements – 3rd and 5th
+      Given I swap elements from array [7, 42, 25, 78, 9, 11]
+
+    @TestCase18
+    Scenario: Print specific output on conditions
+    "divisible by 3" if number is divisible by 3
+    "divisible by 4" if element is divisible by 4
+    "divisible by 3 and 4" if divisible by 3 and 4
+      Given I print specific output on conditions having number 59840
+
+    @TestCase19
+    Scenario: Write a function to find the largest element in an array
+      Given I find the larges element in array [34, 7, 12, 29, 41, 7, -2, 80]
+
+    @TestCase20
+    Scenario: Function accepts integer argument and prints all the numbers up to the argument
+    BUT:
+    if number is multiple of 3, it should print Fizz instead of number
+    if number is multiple of 5, it should print Buzz instead of number
+    if it is multiple of both 3 and 5, it should print FizzBuzz instead of number
+    Result for 20:
+    1 2 Fizz 4 Buzz Fizz 7 8 Fizz Buzz 11 Fizz 13 14 FizzBuzz 16 17 Fizz 19 Buzz
+      Given I provide integer 15 and print all the numbers up to it with conditions
+
+    @TestCase21
+    Scenario: Write a function that reverses string
+      //ToDo: while loop with pointers idx, start from 0
+      Given I reverse a string "Hello"
+
+    @TestCase22
+    Scenario: Write a function that reverses words in a sentence
+      Given I reverse words in sentence "Hello World, what's up?"

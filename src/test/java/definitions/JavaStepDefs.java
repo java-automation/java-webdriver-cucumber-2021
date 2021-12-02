@@ -1,13 +1,12 @@
 package definitions;
 
-import io.cucumber.java.en.And;
-import io.cucumber.java.en.Given;
-import org.junit.Assert;
-import org.openqa.selenium.By;
+import io.cucumber.java.en.*;
+import org.junit.*;
+import org.openqa.selenium.*;
 
 import java.util.*;
 
-import static support.TestContext.getDriver;
+import static support.TestContext.*;
 
 public class JavaStepDefs {
 
@@ -477,5 +476,110 @@ public class JavaStepDefs {
             result[min_len * 2 + i - min_len] = arr2.get(i);
         }
         System.out.println(Arrays.toString(result));
+    }
+
+    @Given("I swap two variables values {string} and {string} using a third variable")
+    public void iSwapTwoVariablesValuesAnd(String arg0, String arg1) {
+        //enum unacceptedValues{"", null};
+        String firstValue = arg0;
+        String  secondValue = arg1;
+        if(firstValue == "" || firstValue == null || secondValue == "" || secondValue == null){
+            System.out.println("Value cannot be empty or null");
+            return;
+        }
+        System.out.println("--Before swap-- \nFirst value:" + firstValue + "\nSecond value:" + secondValue);
+        String temp = firstValue;
+        firstValue = secondValue;
+        secondValue = temp;
+        System.out.println("--After swap-- \nFirst value:" + firstValue + "\nSecond value:" + secondValue);
+    }
+
+    @And("I swap two variables values {int} and {int} without a third variable")
+    public void iSwapTwoVariablesValuesAndWithoutAThirdVariable(int arg0, int arg1) {
+        int firstValue = arg0;
+        int secondValue = arg1;
+        System.out.println("--Before swap-- \nFirst value:" + firstValue + "\nSecond value:" + secondValue);
+        firstValue = firstValue + secondValue;
+        secondValue = firstValue - secondValue;
+        firstValue = firstValue - secondValue;
+        System.out.println("--After swap-- \nFirst value:" + firstValue + "\nSecond value:" + secondValue);
+    }
+
+    @Given("I swap elements from array [{int}, {int}, {int}, {int}, {int}, {int}]")
+    public void iSwapElementsFromArray(int arg0, int arg1, int arg2, int arg3, int arg4, int arg5) {
+        int[] array = {arg0, arg1, arg2, arg3, arg4, arg5};
+        System.out.println("--Before swap-- "+ Arrays.toString(array));
+        int temp = array[2];
+        array[2] = array[4];
+        array[4] = temp;
+        System.out.println("--After swap-- " + Arrays.toString(array));
+    }
+
+    @Given("I print specific output on conditions having number {int}")
+    public void iPrintSpecificOutputOnConditionsHavingNumber(int arg0) {
+        int num = arg0;
+        if(num % 3 == 0 && num % 4 == 0) {
+            System.out.println(num + " is divisible by 3 and 4");
+        } else if (num % 4 == 0) {
+            System.out.println(num + " is divisible by 4");
+        } else if (num % 3 == 0) {
+            System.out.println(num + " is divisible by 3");
+        } else {
+            System.out.println(num + " is not divisible by 3 or 4");
+        }
+    }
+
+    @Given("I find the larges element in array [{int}, {int}, {int}, {int}, {int}, {int}, {int}, {int}]")
+    public void iFindTheLargesElementInArray(int arg0, int arg1, int arg2, int arg3, int arg4, int arg5, int arg6, int arg7) {
+        int[] array = {arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7};
+        int max = 0;
+        for(int element : array) {
+            if(max < element) {
+                max = element;
+            }
+        }
+        max = max;
+        System.out.println(max + " is the largest element in " + Arrays.toString(array));
+    }
+
+    @Given("I provide integer {int} and print all the numbers up to it with conditions")
+    public void iProvideIntegerAndPrintAllTheNumbersUpToItWithConditions(int arg0) {
+        int num = arg0;
+        String sentence = "";
+        for (int i=1; i<=num; i++) {
+            if(i % 3 == 0 && i % 5 == 0) {
+                sentence += "FizzBuzz ";
+            } else if (i % 3 == 0) {
+                sentence += "Fizz ";
+            } else if (i % 5 == 0) {
+                sentence += "Buzz ";
+            } else {
+                sentence += "" + i + " ";
+            }
+        }
+        System.out.println(sentence);
+    }
+
+    @Given("I reverse a string {string}")
+    public void iReverseAString(String arg0) {
+        String str = arg0;
+        String res = "";
+        for(int i=str.length()-1; i>=0; i--) {
+            res += str.charAt(i);
+        }
+        System.out.println(res);
+    }
+
+    @Given("I reverse words in sentence {string}")
+    public void iReverseWordsInSentence(String arg0) {
+        String str = arg0;
+        ArrayList arrayList = new ArrayList();
+        String[] array = str.split(" ");
+        for(int i=array.length-1; i>=0; i--) {
+            arrayList.add(array[i]);
+        }
+        for(int i=0; i<arrayList.size(); i++) {
+            System.out.println(arrayList.get(i));
+        }
     }
 }
