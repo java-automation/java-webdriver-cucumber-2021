@@ -162,6 +162,7 @@ Feature: Java feature
   @java22 #Given array{5,2,9,7,3}. Write a function that swaps two array elements 3rd and 5th.
   Scenario: I swap two 3rd and 5th elements in array {5,2,9,7,3}
     Given I swap 3 and 5 elements in array
+    And I swap 6 and 1 elements in array
 
   @java23
   Scenario: I reverse String
@@ -182,6 +183,10 @@ Feature: Java feature
   Scenario: I create array from String with space delimiter
     Given I has "I love NewYork!" and create Array with " " as delimiter and reverse words in it
     And I has "I  love NewYork!" and create Array with " " as delimiter and reverse words in it
+
+  @java27
+  Scenario: Elegant way to reverse words in sentence
+    Given I reverse words in sentence "I love NewYork!" elegantly
 
 
 

@@ -215,6 +215,12 @@ public class JavaStepDefs {
         }
     }
 
+    public void iPrintIntegerArray(String[] array) {
+        for (String element : array) {
+            out.print(element + " ");
+        }
+    }
+
 
     @Given("I print all even numbers from integer array with length {int}")
     public void iPrintAllEvenNumbersFromIntegerArrayWithLength(int length) {
@@ -692,6 +698,14 @@ public class JavaStepDefs {
         out.print(result);
     }
 
+    public String[] iReverseArray(String[] strArray) {
+        String[] result = new String[strArray.length];
+        for (int i = 0; i < strArray.length; i++) {
+            result[i] = strArray[strArray.length - i - 1];
+        }
+        return result;
+    }
+
     @Given("I reverse words in sentence {string}")
     public void iReverseWordsInSentence(String sentence) {
         int i = 0;
@@ -733,5 +747,12 @@ public class JavaStepDefs {
             reverse(e);
             out.print(" ");
         });
+    }
+
+    @Given("I reverse words in sentence {string} elegantly")
+    public void iReverseWordsInSentenceElegantly(String string) {
+        String[] reversed = iReverseArray(reverse(string).split(" "));
+        out.println("\n reversed:");
+        iPrintIntegerArray(reversed);
     }
 }
