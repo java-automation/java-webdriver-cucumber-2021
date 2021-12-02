@@ -652,16 +652,50 @@ public class JavaStepDefs {
 
     @And("I reverse word order in a given sentence {string}")
     public void iReverseWordOrderInAGivenSentence(String sentence) {
+        if ((sentence == null) || (sentence.length() == 0)) throw new Error("Empty sentence - nothing to reverse!");
         System.out.println("Original: " + sentence);
 
-        String[] words = sentence.split(" ");
-        System.out.println(Arrays.toString(words));
+        System.out.println("Result (RegEx & SB): " + reverseWordsWithRegExSB(sentence));
+        System.out.println();
+        System.out.println("Result (2 idx & SB): " + reverseWordsWithTwoPointersSB(sentence));
+    }
+
+    private String reverseWordsWithTwoPointersSB(String sentence) {
+        int start = 0; int end = 0;
+        int len = sentence.length();
+        List<String> wordList = new ArrayList<>();
+
+        while (start < len) {
+            while ((end < len) && isValidChar(sentence.charAt(end))) ++end;
+            if (end > start) wordList.add(sentence.substring(start, end));
+            while ((end < len) && !isValidChar(sentence.charAt(end))) ++end;
+            start = end;
+        }
+        System.out.println("Split: " + wordList);
+
+        StringBuilder sb = new StringBuilder();
+        for (int i = wordList.size() - 1; i >= 0; --i) {
+            sb.append(wordList.get(i)).append(" ");
+        }
+        return sb.toString();
+    }
+
+    private boolean isValidChar(char c) {
+        return ((c >= 'A' && c <= 'Z') || (c >= 'a' && c <= 'z') || (c >= '0' && c <= '9') || c == '\'' || c == '-' || c == '_');
+    }
+
+    private String reverseWordsWithRegExSB(String sentence) {
+        String preparedSentence = sentence.strip().replaceAll("[^a-zA-Z0-9 _'-]", "").replaceAll("[ ]+", " ");
+        System.out.println("RegEx: " + preparedSentence);
+
+        String[] wordArray = preparedSentence.split(" ");
+        System.out.println("Split: " + Arrays.toString(wordArray));
 
         StringBuilder resultSentence = new StringBuilder();
-        for (int i = words.length - 1; i >= 0; --i) {
-            resultSentence.append(words[i]).append(" ");
+        for (int i = wordArray.length - 1; i >= 0; --i) {
+            resultSentence.append(wordArray[i]).append(" ");
         }
-        System.out.println("Result: " + resultSentence);
+        return resultSentence.toString();
     }
 
     @And("I print every {int} day of the week")

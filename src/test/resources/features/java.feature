@@ -136,7 +136,7 @@ Feature: Java experiments
 
   @java24
   Scenario: Reverse words in a sentence
-    And I reverse word order in a given sentence "Hello, I'm doing my java exercise!"
+    And I reverse word order in a given sentence " Hello, )&$%)&$%(#$   I'm do-ing   %$^&^^^   my java_5  exercise for 100500 hours !  "
 
   @java25
   #Value range: 1-7 or error
