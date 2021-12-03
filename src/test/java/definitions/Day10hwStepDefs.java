@@ -70,7 +70,7 @@ public class Day10hwStepDefs {
 
     //#5
     @Given("I reverse string {string}")
-    public void reverseString(String name) {
+    public String reverseString(String name) {
         System.out.println("String before: " + name);
 
         String revName = "";
@@ -78,6 +78,7 @@ public class Day10hwStepDefs {
             revName += name.charAt(i);
         }
         System.out.println("String after: " + revName);
+        return revName;
     }
 
     //#6
@@ -95,6 +96,25 @@ public class Day10hwStepDefs {
         }
         System.out.println("Arrays.toString: " + Arrays.toString(strToArr2));
         System.out.println("Sentence after: " + String.join(" ", strToArr2));
+    }
+
+    @Given("I reverse String array")
+    public String[] reverseArray(String[] strArray) {
+        String[] revArray = new String[strArray.length];
+        for (int i = strArray.length - 1; i >= 0; i--) {
+            revArray[strArray.length - 1 - i] = strArray[i];
+        }
+        return revArray;
+    }
+
+    @Given("I use my methods to reverse words in a sentence {string}")
+    public void reverseSentenceWord2(String sentence) {
+
+        String[] revStr = reverseString(sentence).split(" ");
+
+        String[] revSentence = reverseArray(revStr);
+
+        System.out.println("Sentence after: " + String.join(" ", revSentence));
     }
 }
 

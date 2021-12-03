@@ -3,7 +3,7 @@ Feature: Java feature
 
   @d10_hw_Java1
   Scenario: Function that swaps two array elements // 3rd and 5th
-   Given I swap two array elements 3 and 5
+    Given I swap two array elements 3 and 5
 
   @d10_hw_Java2
   Scenario: Function that prints "divisible by num" if number is divisible
@@ -26,3 +26,10 @@ Feature: Java feature
   Scenario: Function that reverses words in a sentence
     Given I reverse words in a sentence "THE QUICK BROWN FOX JUMPS OVER THE LAZY DOG"
 
+  @d10_hw_Java7
+  Scenario: Function that reverses a String array
+    Given I reverse String array
+
+  @d10_hw_Java8
+  Scenario: Function that reverses words in a sentence using my methods
+    Given I use my methods to reverse words in a sentence "THE QUICK BROWN FOX JUMPS OVER THE LAZY DOG"
