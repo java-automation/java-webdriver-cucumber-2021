@@ -11,10 +11,7 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.Actions;
 
 import java.time.DayOfWeek;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
+import java.util.*;
 
 import static java.lang.Character.toChars;
 import static java.lang.String.valueOf;
@@ -754,5 +751,35 @@ public class JavaStepDefs {
         String[] reversed = iReverseArray(reverse(string).split(" "));
         out.println("\n reversed:");
         iPrintIntegerArray(reversed);
+    }
+
+    @Given("I write function that accepts integer {int} and prints divisibility by {int} and {int}")
+    public void iWriteFunctionThatAcceptsIntegerAndPrintsDivisibilityByAnd(int number, int divider1, int divider2) {
+        out.print(number + " ");
+        if ((number % divider1 == 0) && (number % divider2 != 0)) out.print("divisible by " + divider1);
+        if ((number % divider1 != 0) && (number % divider2 == 0)) out.print("divisible by " + divider2);
+        if ((number % divider1 == 0) && (number % divider2 == 0))
+            out.print("divisible by " + divider1 + " and " + divider2);
+    }
+
+    @Given("I'm finding largest element in array ")
+    public void iMFindingLargestElementInArray(String[] stringArray) {
+
+
+    }
+
+    @Given("I'm finding largest element in array {string}")
+    public void iMFindingLargestElementInArray(String string) {
+        String[] array = string.split(",");
+        Map<String, Integer> lengthArray = new HashMap<>();
+        for (String element : array) {
+            lengthArray.put(element, element.length());
+        }
+        int max = Collections.max(lengthArray.values());
+        for (Map.Entry<String, Integer> el : lengthArray.entrySet()) {
+            if (el.getValue() == max) {
+                out.println(el.getKey());
+            }
+        }
     }
 }

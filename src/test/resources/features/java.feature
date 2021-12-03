@@ -187,6 +187,18 @@ Feature: Java feature
   @java27
   Scenario: Elegant way to reverse words in sentence
     Given I reverse words in sentence "I love NewYork!" elegantly
+    And I reverse words in sentence "I love  NewYork!" elegantly
+
+  @java28
+  Scenario: Write a function to find the largest element in an array
+    Given I'm finding largest element in array "coyote, lion, giraffe, humster, cat, pipistrello, pipistrello, dragon, MightAndMagic golem"
+
+  @java29
+  Scenario: Write a function that accepts integer number and prints
+  "divisible by 3" if number is divisible by 3
+  "divisible by 4" if element is divisible by 4
+  "divisible by 3 and 4" if divisible by 3 and 4
+    Given I write function that accepts integer 59 and prints divisibility by 3 and 4
 
 
 
