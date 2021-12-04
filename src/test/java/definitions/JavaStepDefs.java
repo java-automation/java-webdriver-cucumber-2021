@@ -305,8 +305,9 @@ public class JavaStepDefs {
     public void iCheckIfIsAPalindrome(String wordToCheck) {
         if ((wordToCheck == null) || (wordToCheck.length() == 0)) throw new Error("Empty word - nothing to check!");
 
-        System.out.println("Is " + wordToCheck + " a palindrome (char compare)? " + isPalindromeByComparingChars(wordToCheck));
-        System.out.println("Is " + wordToCheck + " a palindrome (reverse string)? " + wordToCheck.equals(getReversedStringWithStringBuilder(wordToCheck)));
+        System.out.println("Is '" + wordToCheck + "' a palindrome (char compare)? " + isPalindromeByComparingChars(wordToCheck));
+        System.out.println("Is '" + wordToCheck + "' a palindrome (reverse string)? " + wordToCheck.equals(getReversedStringWithStringBuilder(wordToCheck)));
+        System.out.println("Is '" + wordToCheck + "' a palindrome (max palindrome from center)? " + wordToCheck.equals(getLongestPalindromeSubstring(wordToCheck)));
     }
 
     private String getReversedStringWithStringBuilder(String str) {
@@ -724,28 +725,37 @@ public class JavaStepDefs {
         String str = phrase.replaceAll("[^a-zA-z0-9]", "").toLowerCase();
         System.out.println("Stripped: " + str);
 
+        System.out.println("Longest palindrome found: " + getLongestPalindromeSubstring(str));
+    }
+
+    private String getLongestPalindromeSubstring(String str) {
         Map<String, Integer> maxPalindrome = new HashMap<>();
         maxPalindrome.put("length", 1);
         maxPalindrome.put("startIndex", 0);
 
         for (int i = 0; i < str.length() - 1; ++i) {
-            checkForMaxPalindromeFromGivenCenter(str, i, i, maxPalindrome);
-            checkForMaxPalindromeFromGivenCenter(str, i, i + 1, maxPalindrome);
+            updateMaxPalindromeFromGivenCenter(str, i, i, maxPalindrome);
+            updateMaxPalindromeFromGivenCenter(str, i, i + 1, maxPalindrome);
         }
         int startIndex = maxPalindrome.get("startIndex");
-        System.out.println("Max palindrome: " + str.substring(startIndex, startIndex + maxPalindrome.get("length")));
+        return str.substring(startIndex, startIndex + maxPalindrome.get("length"));
     }
 
-    private void checkForMaxPalindromeFromGivenCenter(String str, int start, int end, Map<String, Integer> currentMax) {
+    private void updateMaxPalindromeFromGivenCenter(String str, int start, int end, Map<String, Integer> curMax) {
+        int pSize = getMaxPalindromeFromGivenCenter(str, start, end);
+        if (pSize > curMax.get("length")) {
+            curMax.put("length", pSize);
+            curMax.put("startIndex", end - pSize / 2);
+        }
+    }
+
+    private int getMaxPalindromeFromGivenCenter(String str, int start, int end) {
         int palindromeSize = (end > start) ? 0 : -1;
         while ((start >= 0) && (end < str.length()) && (str.charAt(start) == str.charAt(end))) {
             palindromeSize += 2;
             --start;
             ++end;
         }
-        if (palindromeSize > currentMax.get("length")) {
-            currentMax.put("length", palindromeSize);
-            currentMax.put("startIndex", start + 1);
-        }
+        return palindromeSize;
     }
 }
