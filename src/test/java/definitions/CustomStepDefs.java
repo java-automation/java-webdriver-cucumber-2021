@@ -17,7 +17,7 @@ import static support.TestContext.getDriver;
 
 public class CustomStepDefs {
 
-    private final Map<String, String> profileOne = Map.ofEntries(
+    private static final Map<String, String> profileOne = Map.ofEntries(
             Map.entry("username", "jdoe"),
             Map.entry("email", "john.doe@corp.com"),
             Map.entry("password", "jsecret"),
@@ -35,7 +35,7 @@ public class CustomStepDefs {
             Map.entry("attachment", "downloadedResume.pdf")
     );
 
-    private final Map<String, String> profileTwo = Map.ofEntries(
+    private static final Map<String, String> profileTwo = Map.ofEntries(
             Map.entry("username", "msmith"),
             Map.entry("email", "monica.smith@corp.com"),
             Map.entry("password", "msecret"),
@@ -58,7 +58,11 @@ public class CustomStepDefs {
 
     @Given("I go to {string} page")
     public void iGoToPage(String websiteReference) {
-        String address = switch (websiteReference.toLowerCase()) {
+        getDriver().get(getURLUsingKnownReference(websiteReference));
+    }
+
+    public static String getURLUsingKnownReference(String websiteReference) {
+        return switch (websiteReference.toLowerCase()) {
             case "google" -> "https://google.com";
             case "yahoo" -> "https://yahoo.com";
             case "bing" -> "https://bing.com";
@@ -74,9 +78,8 @@ public class CustomStepDefs {
             case "portnov campus" -> "https://portnov.com";
             case "portnov online" -> "https://portnov.net";
             case "hidden button" -> "http://uitestingplayground.com/scrollbars";
-            default -> throw new Error("No known URL for this reference: " + websiteReference);
+            default -> throw new Error("Unknown URL reference: " + websiteReference);
         };
-        getDriver().get(address);
     }
 
     @And("I print page details")

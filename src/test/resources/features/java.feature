@@ -48,7 +48,7 @@ Feature: Java experiments
       | site             |
       | "Google"         |
       | "quote form"     |
-      | "Portnov School" |
+      | "Portnov Campus" |
       | "unKnOwN"        |
 
   @java7
@@ -64,12 +64,12 @@ Feature: Java experiments
     And I print my grocery list
 
   @java10
-  Scenario: Personal info HashMap
+  Scenario: Personal info
     And I print my personal info
 
   @java11
   Scenario: Swap two variables
-    And I swap two variables in different ways
+    And I swap variables -5 and 0 using different methods
 
   @java12
   Scenario: Swap two elements in array
@@ -77,7 +77,7 @@ Feature: Java experiments
       | 5 | 2 | 9 | 7 | 3 |
 
   @java13
-  Scenario: Divisibility exercises
+  Scenario: Divisibility
     And I check if number 276 is divisible by 3 and 4
 
   @java14
@@ -85,30 +85,33 @@ Feature: Java experiments
     And I print all numbers from zero to -5
 
   @java15
+  #Empty list is ok, but assumes no empty cells (null) values
   Scenario: Array exercises
-    And I do my integer array exercises with number 0
-      | 2 | 4 | 43543 | 34 | -2342 | 117799 | 0 | -94 |
-     #|
+    And For given array I: print, print "even" numbers, check if it's empty, check if it contains number 7
+    | 2 | 4 | 43543 | 34 | -2342 | 117799 | 0 | -94 | 7 | 11 |
+   #|
 
   @java16
   Scenario: Fibonacci number
-    And I print Fibonacci number for n = 20
+    And I print Fibonacci number for n = 5
 
   @java17
-  Scenario: Palindrome
-    And I check if "kayak" is a palindrome word
+  Scenario: Palindrome word
+    And I check if "kayak" is a palindrome
 
   @java18
-  Scenario: Do various array sorts
-    And I sort given array using different methods
+  #valid input: selection/bubble/insertion/quick/merge/radix/all
+  Scenario: Sort array of integers
+    And I sort given array using "quick" sort
       #| 5 | 3 | 2 | 8 | 4 | 1 | -10 | 1001 | 0 | -523 |
       #| 1 | 0 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 |
-      #| 8 | 7 | 6 | 1 | 0 | 9 | 2 |
+      #| 8 | 7 | 6 | 1 | 0 | 9 | 2 | 3 |
       | 10 | 6 | 259 | 8 | 4 | 100 | 34 | 435 | 33 | 867 | 101 | 63 | 239 | 218 | 48 | 102 | 345 | 431 | 33 | 87 |
 
   @java19
+  #valid inputs: even/odd; bubble/selection
   Scenario: Sort numbers with a specified parity in a given array
-    And I sort "odd" numbers in a given array using Bubble Sort
+    And I sort "even" numbers in a given array using "selection" sort
       #| 5 | 3 | 2 | 8 | 4 | 1 |
       | 5 | 3 | 2 | 8 | 4 | 1 | -10 | 1001 | 0 | -523 |
       #| 5 | 3 | 7 | 11 | 13 | 1 | -19 | 1001 | -333 | -587 |
@@ -116,18 +119,18 @@ Feature: Java experiments
       #| 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 |
 
   @java20
-  Scenario: Mix two arrays using: a) primitive arrays b) lists
-    And I mix given arrays
+  Scenario: Mix two arrays
+    And I mix given arrays as lists then as primitive arrays
       | array 1 | 1  | 2  | 3  | 4  | 5  | 6  | 7  | 8  | 9  |
       | array 2 | -1 | -2 | -3 | -4 | -5 |    |    |    |    |
 
   @java21
-  Scenario: Find largest element in the array
+  Scenario: Largest element in the array
     And I find largest element in given array
       | 10 | 6 | 259 | 8 | 4 | 100 | 34 | 435 | 33 | 867 | 101 | 63 | 239 | 218 | 48 | 102 | 345 | 431 | 33 | 87 |
 
   @java22
-  Scenario: FizzBuzz problem for a number
+  Scenario: FizzBuzz
     And I provide FizzBuzz output for number 45
 
   @java23
@@ -137,9 +140,10 @@ Feature: Java experiments
   @java24
   Scenario: Reverse words in a sentence
     And I reverse word order in a given sentence " Hello, )&$%)&$%(#$   I'm do-ing   %$^&^^^   my java_5  exercise for 100500 hours !  "
+    #"I live in Canada"
 
   @java25
-  #Value range: 1-7 or error
+  #valid input: 1-7
   Scenario: Print every N day of the week
     And I print every 1 day of the week
 

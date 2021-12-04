@@ -6,6 +6,8 @@ import io.cucumber.java.en.Then;
 
 import java.util.*;
 
+import static definitions.CustomStepDefs.getURLUsingKnownReference;
+
 public class JavaStepDefs {
 
     @Then("Show the greeting when I'm {string} {string} and my favorite color is {string}")
@@ -30,16 +32,12 @@ public class JavaStepDefs {
     public void iPerformExerciseOnNumberOneAndNumberTwo(int numberOne, int numberTwo) {
         System.out.println("Number one: " + numberOne);
         System.out.println("Number two: " + numberTwo);
-        System.out.println("Number one devided by number two (int): " + numberOne / numberTwo);
-        System.out.println("Number one devided by 1.5: " + numberOne / 1.5);
-        int sum = numberOne + numberTwo;
-        int difference = numberOne - numberTwo;
-        float quotient = (float) numberOne / numberTwo;
-        int product = numberOne * numberTwo;
-        System.out.println("Sum: " + sum);
-        System.out.println("Difference: " + difference);
-        System.out.println("Quotient: " + quotient);
-        System.out.println("Product: " + product);
+        System.out.println("Number one devided by number two (int): " + (numberOne / numberTwo));
+        System.out.println("Number one devided by 1.5: " + (numberOne / 1.5));
+        System.out.println("Sum: " + (numberOne + numberTwo));
+        System.out.println("Difference: " + (numberOne - numberTwo));
+        System.out.println("Quotient: " + ((float) numberOne / numberTwo));
+        System.out.println("Product: " + (numberOne * numberTwo));
     }
 
     @Then("Show the message when my favorite color is {string}, but not {string}")
@@ -59,12 +57,7 @@ public class JavaStepDefs {
 
     @Then("I print URL for {string} page")
     public void iPrintURLForSitePage(String websiteReference) {
-        String address = switch (websiteReference.toLowerCase()) {
-            case "google" -> "https://google.com";
-            case "quote form" -> "https://skryabin.com/market/quote.html";
-            case "portnov school" -> "https://portnov.com";
-            default -> throw new Error("No URL for this reference in our database: " + websiteReference);
-        };
+        String address = getURLUsingKnownReference(websiteReference);
         System.out.println(address);
     }
 
@@ -81,22 +74,24 @@ public class JavaStepDefs {
     }
 
     @And("I print day of the week that comes {int} days after today and today is {string}")
-    public void iPrintDayOfTheWeekThatComesDaysAfterTodayAndTodayIs(int dayNumber, String startDayStr) {
+    public void iPrintDayOfTheWeekThatComesDaysAfterTodayAndTodayIs(int numOfDays, String today) {
+        System.out.println(getDayOfTheWeekAfterNDaysConsideringToday(numOfDays, today));
+    }
+
+    private String getDayOfTheWeekAfterNDaysConsideringToday(int numOfDays, String today) {
         String[] daysOfWeek = {"Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"};
         int dayShift = 0;
         for (int i = 0; i < daysOfWeek.length; ++i) {
-            if (daysOfWeek[i].equals(startDayStr)) {
-                dayShift = i;
-            }
+            if (daysOfWeek[i].equals(today)) dayShift = i;
         }
-        System.out.println(daysOfWeek[(dayNumber % 7) + dayShift]);
+        return daysOfWeek[(numOfDays % 7) + dayShift];
     }
 
     @And("I print my grocery list")
     public void iPrintMyGroceryList() {
         System.out.println("Basic array:");
         String[] groceryArray = {"apple", "banana", "milk", "potato", "icecream", "rice"};
-        System.out.println(groceryArray);
+        System.out.println(groceryArray); //intended, to see the difference with next line
         System.out.println(Arrays.toString(groceryArray));
         System.out.println(groceryArray[0]);
         System.out.println(groceryArray[2]);
@@ -110,8 +105,6 @@ public class JavaStepDefs {
         System.out.println(groceryList.contains("apple"));
         System.out.println(groceryList.get(0));
         System.out.println(groceryList.get(2));
-        //groceryList.set(2, "mango");
-        //groceryList.add("melon");
         System.out.println(groceryArray[2]);
         System.out.println();
     }
@@ -128,40 +121,41 @@ public class JavaStepDefs {
         System.out.println(me.get("hometownR"));
     }
 
-    @And("I swap two variables in different ways")
-    public void iSwapTwoVariablesInDifferentWays() {
-        int x = 10;
-        int y = 20;
-        System.out.println("Initial x: " + x);
-        System.out.println("Initial y: " + y);
+    @And("I swap variables {int} and {int} using different methods")
+    public void iSwapVariablesAndUsingDifferentMethods(int x, int y) {
+        System.out.println("Initial values: ");
+        System.out.println("x = " + x + ", y = " + y);
         System.out.println();
 
+        System.out.println("3rd variable: ");
         int temp = x;
         x = y;
         y = temp;
-        System.out.println("Final x: " + x);
-        System.out.println("Final y: " + y);
+        System.out.println("x = " + x + ", y = " + y);
         System.out.println();
 
-        x = x * y;
-        y = x / y;
-        x = x / y;
-        System.out.println("Final x: " + x);
-        System.out.println("Final y: " + y);
+        System.out.println("Using product: ");
+        if ((x == 0) || (y == 0)) System.out.println("zero value - can't use swap by product/division");
+        else {
+            x = x * y;
+            y = x / y;
+            x = x / y;
+        }
+        System.out.println("x = " + x + ", y = " + y);
         System.out.println();
 
+        System.out.println("Using sum: ");
         x = x + y;
         y = x - y;
         x = x - y;
-        System.out.println("Final x: " + x);
-        System.out.println("Final y: " + y);
+        System.out.println("x = " + x + ", y = " + y);
         System.out.println();
 
+        System.out.println("Using XOR: ");
         x = x ^ y;
         y = x ^ y;
         x = x ^ y;
-        System.out.println("Final x: " + x);
-        System.out.println("Final y: " + y);
+        System.out.println("x = " + x + ", y = " + y);
         System.out.println();
     }
 
@@ -172,9 +166,7 @@ public class JavaStepDefs {
         System.out.print("Original array: ");
         System.out.println(Arrays.toString(intArr));
 
-        int temp = intArr[p2 - 1];
-        intArr[p2 - 1] = intArr[p1 - 1];
-        intArr[p1 - 1] = temp;
+        swapIntegerArrayValues(intArr, p2 - 1, p1 - 1);
 
         System.out.print("Result: ");
         System.out.println(Arrays.toString(intArr));
@@ -188,99 +180,77 @@ public class JavaStepDefs {
             System.out.println("Divisible by " + div1 + " only");
         } else if (num % div2 == 0) {
             System.out.println("Divisible by " + div2 + " only");
-        } else System.out.println("Not divisible by " + div1 + " and " + div2);
+        } else System.out.println("Not divisible by " + div1 + " or " + div2);
     }
 
     @And("I print all numbers from zero to {int}")
     public void iPrintAllNumbersFromZeroTo(int num) {
-        System.out.println("-n <- 0 -> n as two loops:");
-        if (num >= 0) {
-            for (int i = 0; i <= num; ++i) {
-                System.out.println(i);
-            }
-        } else {
-            for (int i = 0; i >= num; --i) {
-                System.out.println(i);
-            }
-        }
-        System.out.println();
-
         System.out.println("-n <- 0 -> n as a single loop:");
-        int sign = 1;
-        if (num < 0) sign = -1;
-        for (int i = 0; (num - i) * sign >= 0; i += sign) {
-            System.out.println(i);
-        }
-        System.out.println();
-
-        System.out.println("-n -> 0 -> n as two loops:");
-        if (num >= 0) {
-            for (int i = 0; i <= num; ++i) {
-                System.out.println(i);
-            }
-        } else {
-            for (int i = num; i <= 0; ++i) {
-                System.out.println(i);
-            }
-        }
+        printNumbersFromZeroToN(num);
         System.out.println();
 
         System.out.println("-n -> 0 -> n as a single loop:");
-        int k = 1;
-        if (num < 0) k = 0;
-        for (int i = (1 - k) * num; i <= k * num; ++i) {
-            System.out.println(i);
-        }
+        printNumbersBetweenZeroAndNInAscendingOrder(num);
+        System.out.println();
     }
 
-    @And("I do my integer array exercises with number {int}")
-    public void iDoMyIntegerArrayExercises(int numToCheck, @Transpose List<Integer> intList) {
-        System.out.println("Printing the List as is: " + intList);
-        System.out.print("Printing the List with enhanced for: ");
-        for (int el : intList) {
-            System.out.print(el + " ");
-        }
-        System.out.println();
-        System.out.print("Printing the List with regular for: ");
-        for (int i = 0; i < intList.size(); ++i) {
-            System.out.print(intList.get(i) + " ");
-        }
+    private void printNumbersBetweenZeroAndNInAscendingOrder(int num) {
+        int k = (num < 0) ? 0 : 1;
+        for (int i = (1 - k) * num; i <= k * num; ++i) System.out.print(i + " ");
+    }
+
+    private void printNumbersFromZeroToN(int num) {
+        int sign = (num < 0) ? -1 : 1;
+        for (int i = 0; (num - i) * sign >= 0; i += sign) System.out.print(i + " ");
+    }
+
+    @And("For given array I: print, print {string} numbers, check if it's empty, check if it contains number {int}")
+    public void iDoMyArrayExercisesWithNumberAndParity(String parityStr, int numToCheck, @Transpose List<Integer> intList) {
+        System.out.println("Printing list as is: " + intList);
+        System.out.print("Printing list with enhanced for: ");
+        for (int el : intList) System.out.print(el + " ");
         System.out.println();
 
         int[] intArr = convertListToPrimitiveArray(intList);
-        System.out.println("Printing after conversion with Array.toString(int[]): " + Arrays.toString(intArr));
-        System.out.print("Printing after conversion with enhanced for: ");
-        for (int el : intArr) {
-            System.out.print(el + " ");
-        }
-        System.out.println();
-        System.out.print("Printing after conversion with regular for: ");
-        for (int i = 0; i < intArr.length; ++i) {
-            System.out.print(intArr[i] + " ");
-        }
+
+        System.out.println("Printing after conversion to primitive array: " + Arrays.toString(intArr));
+        System.out.print("Printing array with enhanced for: ");
+        for (int el : intArr) System.out.print(el + " ");
         System.out.println();
 
-        System.out.print("Printing all even numbers from the array: ");
-        for (int el : intArr) {
-            if (el % 2 == 0) {
-                System.out.print(el + " ");
-            }
-        }
+        System.out.print("Printing all '" + parityStr + "' numbers from the array: ");
+        printArrayNumbersWithGivenParity(intArr, parityStr);
         System.out.println();
 
         System.out.print("Is array empty? ");
         System.out.println((intArr.length == 0));
 
+        System.out.print("Does this array contain '" + numToCheck + "'? ");
+        System.out.println(isIntegerArrayContainsGivenValue(intArr, numToCheck));
+    }
 
-        System.out.print("Does this array contain " + numToCheck + "? ");
-        boolean flag = false;
+    private boolean isIntegerArrayContainsGivenValue(int[] intArr, int numToCheck) {
         for (int el : intArr) {
-            if (el == numToCheck) {
-                flag = true;
-                break;
-            }
+            if (el == numToCheck) return true;
         }
-        System.out.println(flag);
+        return false;
+    }
+
+    private boolean isOddParse(String parityStr) {
+        boolean isOdd;
+        switch (parityStr) {
+            case "odd" -> isOdd = true;
+            case "even" -> isOdd = false;
+            default -> throw new Error("Incorrect parity reference (even/odd): " + parityStr);
+        }
+        return isOdd;
+    }
+
+    private void printArrayNumbersWithGivenParity(int[] intArr, String parityStr) {
+        boolean printEven = !isOddParse(parityStr);
+        for (int el : intArr) {
+            if ((el % 2 == 0) == printEven) System.out.print(el + " ");
+        }
     }
 
     private int[] convertListToPrimitiveArray(List<Integer> intList) {
@@ -297,7 +267,7 @@ public class JavaStepDefs {
             System.out.print("Fibonacci using regular array: ");
             System.out.println(fibonacciNumberArray(elNum));
             System.out.print("Fibonacci using array list: ");
-            System.out.println(fibonacciNumberArrayList(elNum));
+            System.out.println(fibonacciNumberList(elNum));
             System.out.print("Fibonacci using recursion: ");
             System.out.println(fibonacciNumberRecursion(elNum));
         } else throw new Error("Not a whole number: " + elNum);
@@ -314,7 +284,7 @@ public class JavaStepDefs {
         return fibSeq[elNum];
     }
 
-    private long fibonacciNumberArrayList(int elNum) {
+    private long fibonacciNumberList(int elNum) {
         List<Long> fibSeq = new ArrayList<>(elNum + 1);
         fibSeq.add((long) 0);
         fibSeq.add((long) 1);
@@ -327,40 +297,62 @@ public class JavaStepDefs {
     }
 
     private long fibonacciNumberRecursion(int elNum) {
-        if (elNum > 1) {
-            return fibonacciNumberRecursion(elNum - 1) + fibonacciNumberRecursion(elNum - 2);
-        } else return elNum;
+        if (elNum <= 1) return elNum;
+        return fibonacciNumberRecursion(elNum - 1) + fibonacciNumberRecursion(elNum - 2);
     }
 
-    @And("I check if {string} is a palindrome word")
+    @And("I check if {string} is a palindrome")
     public void iCheckIfIsAPalindrome(String wordToCheck) {
         if ((wordToCheck == null) || (wordToCheck.length() == 0)) throw new Error("Empty word - nothing to check!");
 
-        char[] chars = wordToCheck.toCharArray();
-        boolean isPalindrome = true;
-        int len = chars.length;
-        for (int i = 0; i < (len / 2); ++i) {
-            if (chars[i] != chars[len - 1 - i]) {
-                isPalindrome = false;
-                break;
-            }
-        }
-        System.out.println("Is " + wordToCheck + " a palindrome? " + isPalindrome);
+        System.out.println("Is " + wordToCheck + " a palindrome (char compare)? " + isPalindromeByComparingChars(wordToCheck));
+        System.out.println("Is " + wordToCheck + " a palindrome (reverse string)? " + wordToCheck.equals(getReversedStringWithStringBuilder(wordToCheck)));
     }
 
-    @And("I sort {string} numbers in a given array using Bubble Sort")
-    public void iSortNumbersInAGivenArrayUsingBubbleSort(String parity, @Transpose List<Integer> intList) {
-        boolean isOdd;
-        switch (parity) {
-            case "odd" -> isOdd = true;
-            case "even" -> isOdd = false;
-            default -> throw new Error("Incorrect number parity reference: " + parity);
+    private String getReversedStringWithStringBuilder(String str) {
+        return new String(new StringBuilder(str).reverse());
+    }
+
+    private boolean isPalindromeByComparingChars(String wordToCheck) {
+        int len = wordToCheck.length();
+        for (int i = 0; i < (len / 2); ++i) {
+            if (wordToCheck.charAt(i) != wordToCheck.charAt(len - 1 - i)) return false;
         }
-        System.out.println("Given parity: " + parity + ". Is odd? " + isOdd);
+        return true;
+    }
+
+    @And("I sort {string} numbers in a given array using {string} sort")
+    public void iSortNumbersInAGivenArrayUsingSort(String parityStr, String sortType, @Transpose List<Integer> intList) {
+        System.out.println("Given parity: " + parityStr);
         int[] arr = convertListToPrimitiveArray(intList);
         System.out.print("Given array: ");
         System.out.println(Arrays.toString(arr));
 
+        switch (sortType) {
+            case "bubble" -> sortNumbersInArrayWithParityUsingBubbleSort(arr, parityStr);
+            case "selection" -> sortNumbersInArrayWithParityUsingSelectionSort(arr, parityStr);
+            default -> throw new Error("Unknown sorting algorithm: " + sortType);
+        }
+
+        System.out.print("Result: ");
+        System.out.println(Arrays.toString(arr));
+    }
+
+    private void sortNumbersInArrayWithParityUsingSelectionSort(int[] arr, String parityStr) {
+        boolean isOdd = isOddParse(parityStr);
+        for (int i = 0; i < arr.length - 1; i++) {
+            if ((arr[i] % 2 == 0) == isOdd) continue;
+            int minIndex = i;
+            for (int j = i + 1; j < arr.length; j++) {
+                if (((arr[j] % 2 == 0) == !isOdd) && (arr[j] < arr[minIndex])) minIndex = j;
+            }
+            if (minIndex > i) swapIntegerArrayValues(arr, minIndex, i);
+            System.out.println(Arrays.toString(arr));
+        }
+    }
+
+    private void sortNumbersInArrayWithParityUsingBubbleSort(int[] arr, String parityStr) {
+        boolean isOdd = isOddParse(parityStr);
         boolean swapped;
         for (int i = 0; i < arr.length - 1; ++i) {
             swapped = false;
@@ -369,7 +361,7 @@ public class JavaStepDefs {
                     for (int k = j + 1; k < arr.length - i; ++k) { // looking for next number with proper parity
                         if ((arr[k] % 2 != 0) == isOdd) {
                             if (arr[j] > arr[k]) {
-                                swapArrayValues(arr, j, k);
+                                swapIntegerArrayValues(arr, j, k);
                                 swapped = true;
                             }
                             j = k - 1;
@@ -381,59 +373,78 @@ public class JavaStepDefs {
             System.out.println(Arrays.toString(arr));
             if (!swapped) break;
         }
-
-        System.out.print("Result:      ");
-        System.out.println(Arrays.toString(arr));
     }
 
-    @And("I sort given array using different methods")
-    public void iSortGivenArrayUsingDifferentMethods(@Transpose List<Integer> intList) {
+    @And("I sort given array using {string} sort")
+    public void iSortGivenArrayUsingSort(String sortType, @Transpose List<Integer> intList) {
+        boolean isSorted = false;
+
         int[] originalArr = convertListToPrimitiveArray(intList);
         System.out.print("Given array: ");
         System.out.println(Arrays.toString(originalArr));
         System.out.println();
 
-        int[] arr1 = originalArr.clone();
-        System.out.println("Selection sort for: " + Arrays.toString(arr1));
-        sortUsingSelectionSort(arr1);
-        System.out.print("Result: ");
-        System.out.println(Arrays.toString(arr1));
-        System.out.println();
+        if (sortType.equals("selection") || (sortType.equals("all"))) {
+            int[] arr1 = originalArr.clone();
+            System.out.println("Selection sort for: " + Arrays.toString(arr1));
+            sortUsingSelectionSort(arr1);
+            System.out.print("Result: ");
+            System.out.println(Arrays.toString(arr1));
+            System.out.println();
+            isSorted = true;
+        }
 
-        int[] arr2 = originalArr.clone();
-        System.out.println("Bubble sort for: " + Arrays.toString(arr2));
-        sortUsingBubbleSort(arr2);
-        System.out.print("Result: ");
-        System.out.println(Arrays.toString(arr2));
-        System.out.println();
+        if (sortType.equals("bubble") || (sortType.equals("all"))) {
+            int[] arr2 = originalArr.clone();
+            System.out.println("Bubble sort for: " + Arrays.toString(arr2));
+            sortUsingBubbleSort(arr2);
+            System.out.print("Result: ");
+            System.out.println(Arrays.toString(arr2));
+            System.out.println();
+            isSorted = true;
+        }
 
-        int[] arr3 = originalArr.clone();
-        System.out.println("Insertion sort for: " + Arrays.toString(arr3));
-        sortUsingInsertionSort(arr3);
-        System.out.print("Result: ");
-        System.out.println(Arrays.toString(arr3));
-        System.out.println();
+        if (sortType.equals("insertion") || (sortType.equals("all"))) {
+            int[] arr3 = originalArr.clone();
+            System.out.println("Insertion sort for: " + Arrays.toString(arr3));
+            sortUsingInsertionSort(arr3);
+            System.out.print("Result: ");
+            System.out.println(Arrays.toString(arr3));
+            System.out.println();
+            isSorted = true;
+        }
 
-        int[] arr4 = originalArr.clone();
-        System.out.println("Quick sort for: " + Arrays.toString(arr4));
-        sortUsingQuickSort(arr4, 0, arr4.length - 1);
-        System.out.print("Result: ");
-        System.out.println(Arrays.toString(arr4));
-        System.out.println();
+        if (sortType.equals("quick") || (sortType.equals("all"))) {
+            int[] arr4 = originalArr.clone();
+            System.out.println("Quick sort for: " + Arrays.toString(arr4));
+            sortUsingQuickSort(arr4, 0, arr4.length - 1);
+            System.out.print("Result: ");
+            System.out.println(Arrays.toString(arr4));
+            System.out.println();
+            isSorted = true;
+        }
 
-        int[] arr5 = originalArr.clone();
-        System.out.println("Merge sort for: " + Arrays.toString(arr5));
-        sortUsingMergeSort(arr5, 0, arr5.length - 1);
-        System.out.print("Result: ");
-        System.out.println(Arrays.toString(arr5));
-        System.out.println();
+        if (sortType.equals("merge") || (sortType.equals("all"))) {
+            int[] arr5 = originalArr.clone();
+            System.out.println("Merge sort for: " + Arrays.toString(arr5));
+            sortUsingMergeSort(arr5, 0, arr5.length - 1);
+            System.out.print("Result: ");
+            System.out.println(Arrays.toString(arr5));
+            System.out.println();
+            isSorted = true;
+        }
 
-        int[] arr6 = originalArr.clone();
-        System.out.println("Radix sort for: " + Arrays.toString(arr6));
-        arr6 = sortUsingRadixSort(arr6);
-        System.out.print("Result: ");
-        System.out.println(Arrays.toString(arr6));
-        System.out.println();
+        if (sortType.equals("radix") || (sortType.equals("all"))) {
+            int[] arr6 = originalArr.clone();
+            System.out.println("Radix sort for: " + Arrays.toString(arr6));
+            arr6 = sortUsingRadixSort(arr6);
+            System.out.print("Result: ");
+            System.out.println(Arrays.toString(arr6));
+            System.out.println();
+            isSorted = true;
+        }
+
+        if (!isSorted) throw new Error("Unknown sorting algorithm: " + sortType);
     }
 
     private int[] sortUsingRadixSort(int[] input) {
@@ -486,15 +497,10 @@ public class JavaStepDefs {
         int[] left = new int[leftSize];
         int[] right = new int[rightSize];
 
-        for (int i = 0; i < leftSize; ++i) {
-            left[i] = arr[start + i];
-        }
-        for (int j = 0; j < rightSize; ++j) {
-            right[j] = arr[div + 1 + j];
-        }
+        for (int i = 0; i < leftSize; ++i) left[i] = arr[start + i];
+        for (int j = 0; j < rightSize; ++j) right[j] = arr[div + 1 + j];
 
         int i = 0, j = 0, k = start;
-
         while (i < leftSize && j < rightSize) {
             if (left[i] <= right[j]) arr[k++] = left[i++];
             else arr[k++] = right[j++];
@@ -505,7 +511,7 @@ public class JavaStepDefs {
         System.out.println(Arrays.toString(arr));
     }
 
-    private void swapArrayValues(int[] arr, int ind1, int ind2) {
+    private void swapIntegerArrayValues(int[] arr, int ind1, int ind2) {
         if (ind1 == ind2) return;
         int temp = arr[ind1];
         arr[ind1] = arr[ind2];
@@ -521,10 +527,10 @@ public class JavaStepDefs {
         while (arr[right] < arr[pivot]) ++right;
 
         for (left = right + 1; left < pivot; ++left) {
-            if (arr[left] < arr[pivot]) swapArrayValues(arr, left, right);
+            if (arr[left] < arr[pivot]) swapIntegerArrayValues(arr, left, right);
             ++right;
         }
-        if (right < pivot) swapArrayValues(arr, pivot, right);
+        if (right < pivot) swapIntegerArrayValues(arr, pivot, right);
         System.out.println(Arrays.toString(arr));
 
         sortUsingQuickSort(arr, start, right - 1);
@@ -534,7 +540,7 @@ public class JavaStepDefs {
     private void sortUsingInsertionSort(int[] arr) {
         for (int i = 1; i < arr.length; i++) {
             for (int j = i; j > 0; --j) {
-                if (arr[j] < arr[j - 1]) swapArrayValues(arr, j - 1, j);
+                if (arr[j] < arr[j - 1]) swapIntegerArrayValues(arr, j - 1, j);
             }
             System.out.println(Arrays.toString(arr));
         }
@@ -546,7 +552,7 @@ public class JavaStepDefs {
             swapped = false;
             for (int j = 0; j < arr.length - 1 - i; ++j) {
                 if (arr[j] > arr[j + 1]) {
-                    swapArrayValues(arr, j, j + 1);
+                    swapIntegerArrayValues(arr, j, j + 1);
                     swapped = true;
                 }
             }
@@ -561,28 +567,24 @@ public class JavaStepDefs {
             for (int i = j + 1; i < arr.length; i++) {
                 if (arr[i] < arr[minIndex]) minIndex = i;
             }
-            if (minIndex > j) swapArrayValues(arr, minIndex, j);
+            if (minIndex > j) swapIntegerArrayValues(arr, minIndex, j);
             System.out.println(Arrays.toString(arr));
         }
     }
 
-    @And("I mix given arrays")
-    public void iMixGivenArrays(Map<String, List<Integer>> input) {
+    @And("I mix given arrays as lists then as primitive arrays")
+    public void iMixGivenArraysAsListsThenAsPrimitiveArrays(Map<String, List<Integer>> input) {
         List<Integer> list1 = input.get("array 1");
         list1.removeAll(Collections.singleton(null));
-        int[] arr1 = convertListToPrimitiveArray(list1);
         List<Integer> list2 = input.get("array 2");
         list2.removeAll(Collections.singleton(null));
-        int[] arr2 = convertListToPrimitiveArray(list2);
 
-        int[] resultArray = mixArrays(arr1, arr2);
-        System.out.println(Arrays.toString(resultArray));
+        System.out.println(Arrays.toString(getMixedArray(convertListToPrimitiveArray(list1), convertListToPrimitiveArray(list2))));
 
-        List<Integer> resultList = mixLists(list1, list2);
-        System.out.println(resultList);
+        System.out.println(getMixedList(list1, list2));
     }
 
-    private List<Integer> mixLists(List<Integer> list1, List<Integer> list2) {
+    private List<Integer> getMixedList(List<Integer> list1, List<Integer> list2) {
         ListIterator<Integer> leftItr = list1.listIterator();
         ListIterator<Integer> rightItr = list2.listIterator();
         List<Integer> resultList = new ArrayList<>();
@@ -597,7 +599,7 @@ public class JavaStepDefs {
         return resultList;
     }
 
-    private int[] mixArrays(int[] leftArr, int[] rightArr) {
+    private int[] getMixedArray(int[] leftArr, int[] rightArr) {
         int leftLen = leftArr.length;
         int rightLen = rightArr.length;
         int[] resultArr = new int[leftLen + rightLen];
@@ -616,28 +618,41 @@ public class JavaStepDefs {
     @And("I find largest element in given array")
     public void iFindLargestElementInGivenArray(@Transpose List<Integer> list) {
         int[] arr = convertListToPrimitiveArray(list);
+        System.out.println("Given array: " + Arrays.toString(arr));
+        System.out.println("Max element: " + getMaxValueInArrayOfIntegers(arr));
+    }
 
+    private int getMaxValueInArrayOfIntegers(int[] arr) {
         int maxInd = 0;
         for (int i = 1; i < arr.length; ++i) {
             if (arr[i] > arr[maxInd]) maxInd = i;
         }
-        System.out.println("Max element: " + arr[maxInd]);
+        return arr[maxInd];
     }
 
     @And("I provide FizzBuzz output for number {int}")
     public void iProvideFizzBuzzOutputForNumber(int num) {
+        printFizzBuzzOutputForN(num);
+    }
+
+    private void printFizzBuzzOutputForN(int num) {
         for (int i = 1; i <= num; ++i) {
-            if ((i % 3 == 0) && (i % 5 == 0)) System.out.println("FizzBuzz");
-            else if (i % 3 == 0) System.out.println("Fizz");
-            else if (i % 5 == 0) System.out.println("Buzz");
-            else System.out.println(i);
+            if (i % 15 == 0) System.out.print("FizzBuzz ");
+            else if (i % 3 == 0) System.out.print("Fizz ");
+            else if (i % 5 == 0) System.out.print("Buzz ");
+            else System.out.print(i + " ");
         }
+        System.out.println();
     }
 
     @And("I reverse a given string {string}")
     public void iReverseAGivenString(String str) {
         System.out.println("Original: " + str);
+        System.out.println("Result (char swap): " + getReversedStringBySwappingChars(str));
+        System.out.println("Result (StringBuilder reverse): " + getReversedStringWithStringBuilder(str));
+    }
 
+    private String getReversedStringBySwappingChars(String str) {
         char[] charArr = str.toCharArray();
         int len = str.length();
         for (int i = 0; i < len / 2; ++i) {
@@ -645,64 +660,60 @@ public class JavaStepDefs {
             charArr[i] = charArr[len - 1 - i];
             charArr[len - 1 - i] = temp;
         }
-        System.out.println("Result: " + new String(charArr));
-
-        System.out.println("StringBuilder reverse: " + new StringBuilder(str).reverse());
+        return new String(charArr);
     }
 
     @And("I reverse word order in a given sentence {string}")
     public void iReverseWordOrderInAGivenSentence(String sentence) {
         if ((sentence == null) || (sentence.length() == 0)) throw new Error("Empty sentence - nothing to reverse!");
         System.out.println("Original: " + sentence);
-
-        System.out.println("Result (RegEx & SB): " + reverseWordsWithRegExSB(sentence));
         System.out.println();
-        System.out.println("Result (2 idx & SB): " + reverseWordsWithTwoPointersSB(sentence));
+
+        System.out.println("Result (RegEx cleanup & split): " + getReversedSentenceCleanedAndSplitWithRegEx(sentence));
+        System.out.println();
+        System.out.println("Result (2idx extraction & reverse): " + getReversedSentenceAsIsByReversingSubstringsWithTwoIdx(sentence));
     }
 
-    private String reverseWordsWithTwoPointersSB(String sentence) {
-        int start = 0; int end = 0;
+    private String getReversedSentenceAsIsByReversingSubstringsWithTwoIdx(String sentence) {
+        int start = 0;
+        int end = 0;
         int len = sentence.length();
-        List<String> wordList = new ArrayList<>();
+        String result = "";
 
         while (start < len) {
             while ((end < len) && isValidChar(sentence.charAt(end))) ++end;
-            if (end > start) wordList.add(sentence.substring(start, end));
+            result = result.concat(getReversedStringBySwappingChars(sentence.substring(start, end)));
+            start = end;
             while ((end < len) && !isValidChar(sentence.charAt(end))) ++end;
+            result = result.concat(sentence.substring(start, end));
             start = end;
         }
-        System.out.println("Split: " + wordList);
-
-        StringBuilder sb = new StringBuilder();
-        for (int i = wordList.size() - 1; i >= 0; --i) {
-            sb.append(wordList.get(i)).append(" ");
-        }
-        return sb.toString();
+        return getReversedStringBySwappingChars(result);
     }
 
     private boolean isValidChar(char c) {
-        return ((c >= 'A' && c <= 'Z') || (c >= 'a' && c <= 'z') || (c >= '0' && c <= '9') || c == '\'' || c == '-' || c == '_');
+        return ((c >= 'A' && c <= 'Z') || (c >= 'a' && c <= 'z') || (c >= '0' && c <= '9'));
     }
 
-    private String reverseWordsWithRegExSB(String sentence) {
-        String preparedSentence = sentence.strip().replaceAll("[^a-zA-Z0-9 _'-]", "").replaceAll("[ ]+", " ");
-        System.out.println("RegEx: " + preparedSentence);
-
-        String[] wordArray = preparedSentence.split(" ");
+    private String getReversedSentenceCleanedAndSplitWithRegEx(String sentence) {
+        String[] wordArray = sentence.strip().replaceAll("[^a-zA-Z0-9 ]", " ").split("[ ]+");
         System.out.println("Split: " + Arrays.toString(wordArray));
 
         StringBuilder resultSentence = new StringBuilder();
-        for (int i = wordArray.length - 1; i >= 0; --i) {
-            resultSentence.append(wordArray[i]).append(" ");
-        }
+        for (int i = wordArray.length - 1; i >= 0; --i) resultSentence.append(wordArray[i]).append(" ");
         return resultSentence.toString();
     }
 
     @And("I print every {int} day of the week")
     public void iPrintEveryDayOfTheWeekForOneCycle(int num) {
         if ((num <= 0) || (num > 7)) throw new Error("Week day number expected (1-7). Got: " + num);
+        printEveryNDayOfTheWeek(num);
+    }
+
+    private void printEveryNDayOfTheWeek(int num) {
         String[] weekDays = {"Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"};
-        for (int i = 1; i <= 7 / num; ++i) System.out.println(weekDays[num * i - 1]);
+        for (int i = 1; i <= 7 / num; ++i) System.out.print(weekDays[num * i - 1] + " ");
+        System.out.println();
     }
 
     @And("I find the longest palindrome in a given sentence {string}")
@@ -726,12 +737,11 @@ public class JavaStepDefs {
     }
 
     private void checkForMaxPalindromeFromGivenCenter(String str, int start, int end, Map<String, Integer> currentMax) {
-        char[] arr = str.toCharArray();
         int palindromeSize = (end > start) ? 0 : -1;
-        while ((start >= 0) && (end < str.length()) && (arr[start] == arr[end])) {
+        while ((start >= 0) && (end < str.length()) && (str.charAt(start) == str.charAt(end))) {
             palindromeSize += 2;
-            start--;
-            end++;
+            --start;
+            ++end;
         }
         if (palindromeSize > currentMax.get("length")) {
             currentMax.put("length", palindromeSize);
