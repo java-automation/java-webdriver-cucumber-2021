@@ -12,7 +12,7 @@ public class JavaStepDefs {
 
     @Then("Show the greeting when I'm {string} {string} and my favorite color is {string}")
     public void showTheGreetingWhenIMAndMyFavoriteColorIs(String firstName, String lastName, String favoriteColor) {
-        System.out.println("Hi, my name is " + firstName + " " + lastName + " and my favorite color is " + favoriteColor + "!");
+        System.out.println("Hi, my name is '" + firstName + "' '" + lastName + "' and my favorite color is '" + favoriteColor + "'!");
     }
 
     @Then("I perform exercise on {string} and {string}")
@@ -42,32 +42,32 @@ public class JavaStepDefs {
 
     @Then("Show the message when my favorite color is {string}, but not {string}")
     public void showTheMessageWhenMyFavoriteColorIsButNot(String favoriteColor, String notFavoriteColor) {
-        System.out.println("Is my favorite color (" + favoriteColor + ") equal to " + notFavoriteColor + "? " +
+        System.out.println("Is my favorite color '" + favoriteColor + "' equal to '" + notFavoriteColor + "'? " +
                 favoriteColor.equals(notFavoriteColor));
     }
 
     @Then("Compare {string} and {string}")
     public void compareStringOneAndStringTwo(String stringOne, String stringTwo) {
         if (stringOne.equals(stringTwo)) {
-            System.out.println(stringOne + " is equal to " + stringTwo);
+            System.out.println("'" + stringOne + "' is equal to '" + stringTwo + "'");
         } else {
-            System.out.println(stringOne + " is not equal to " + stringTwo);
+            System.out.println("'" + stringOne + "' is not equal to '" + stringTwo + "'");
         }
     }
 
     @Then("I print URL for {string} page")
     public void iPrintURLForSitePage(String websiteReference) {
         String address = getURLUsingKnownReference(websiteReference);
-        System.out.println(address);
+        System.out.println("URL for '" + websiteReference + "' reference: " + address);
     }
 
     @And("I print if number {string} is positive")
     public void iPrintIfNumberIsPositive(String numStr) {
         int num = Integer.parseInt(numStr);
         if (num > 0) {
-            System.out.println("Number is positive");
+            System.out.println("Number '" + numStr + "' is positive");
         } else if (num < 0) {
-            System.out.println("Number is negative");
+            System.out.println("Number '" + numStr + "' is negative");
         } else {
             System.out.println("Number is zero");
         }
@@ -75,7 +75,7 @@ public class JavaStepDefs {
 
     @And("I print day of the week that comes {int} days after today and today is {string}")
     public void iPrintDayOfTheWeekThatComesDaysAfterTodayAndTodayIs(int numOfDays, String today) {
-        System.out.println(getDayOfTheWeekAfterNDaysConsideringToday(numOfDays, today));
+        System.out.println("Today is '" + today + "'. After '" + numOfDays + "' days comes '" + getDayOfTheWeekAfterNDaysConsideringToday(numOfDays, today) + "'");
     }
 
     private String getDayOfTheWeekAfterNDaysConsideringToday(int numOfDays, String today) {
@@ -91,21 +91,20 @@ public class JavaStepDefs {
     public void iPrintMyGroceryList() {
         System.out.println("Basic array:");
         String[] groceryArray = {"apple", "banana", "milk", "potato", "icecream", "rice"};
-        System.out.println(groceryArray); //intended, to see the difference with next line
-        System.out.println(Arrays.toString(groceryArray));
-        System.out.println(groceryArray[0]);
-        System.out.println(groceryArray[2]);
+        System.out.println("Print reference: " + groceryArray); //intended, to see the difference with next line
+        System.out.println("To string: " + Arrays.toString(groceryArray));
+        System.out.println("Element 0: " + groceryArray[0]);
+        System.out.println("Element 2: " + groceryArray[2]);
         groceryArray[2] = "mango";
-        System.out.println(groceryArray[2]);
+        System.out.println("Element 2 again: " + groceryArray[2]);
         System.out.println();
 
         System.out.println("List:");
         List<String> groceryList = List.of("apple", "banana", "milk", "potato", "icecream", "rice");
-        System.out.println(groceryList);
-        System.out.println(groceryList.contains("apple"));
-        System.out.println(groceryList.get(0));
-        System.out.println(groceryList.get(2));
-        System.out.println(groceryArray[2]);
+        System.out.println("Print reference: " + groceryList);
+        System.out.println("Contains 'apple'? " + groceryList.contains("apple"));
+        System.out.println("Element 0: " + groceryList.get(0));
+        System.out.println("Element 2: " + groceryList.get(2));
         System.out.println();
     }
 
@@ -117,8 +116,13 @@ public class JavaStepDefs {
         me.put("hometownR", "Novosibirsk");
         me.put("hometownC", "Edmonton");
         me.put("favoriteFood", "seafood");
-        System.out.println(me.get("firstName"));
-        System.out.println(me.get("hometownR"));
+        String key = "firstname";
+        System.out.println("Key: " + key + ". Value: " + me.get("firstName"));
+        key = "hometownR";
+        System.out.println("Key: " + key + ". Value: " + me.get("hometownR"));
+        System.out.println("entrySet(): " + me.entrySet());
+        System.out.println("keySet(): " + me.keySet());
+        System.out.println("values(): " + me.values());
     }
 
     @And("I swap variables {int} and {int} using different methods")
