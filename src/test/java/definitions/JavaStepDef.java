@@ -5,18 +5,18 @@ import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 import io.cucumber.java.sl.In;
+import org.apache.commons.compress.archivers.ar.ArArchiveEntry;
 import org.apache.commons.lang3.ArrayUtils;
 import org.openqa.selenium.By;
 import org.openqa.selenium.Dimension;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.remote.server.handler.DeleteSession;
+
 import static org.assertj.core.api.Assertions.*;
+
 import java.security.Key;
 import java.sql.SQLOutput;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Locale;
+import java.util.*;
 
 import static support.TestContext.getDriver;
 
@@ -396,43 +396,40 @@ public class JavaStepDef {
 
 
     @And("Check if array contains another element example")
-    public void checkIfArrayContainsAnotherElementExaple() {
+    public void checkIfArrayContainsAnotherElementExample() {
         int[] arr = {1, 2, 3, 4, 5, 6, 7, 8, 9, 0};
         // System.out.println("Array contains " + n +" is "+ ArrayUtils.contains((arr),n));
         // 2nd solution
-        int target = 2;
-        for (int i = 0; i< arr.length; i++){
-            if (int[i] == target){
-                System.out.println("Array contains "+ target + " is true");
-            }
-            else {
-                System.out.println(false);
+        int target = 7;
+        for (int i = 0; i < arr.length; i++) {
+            if (arr[i] == target) {
+                System.out.println(true);
+                return;
             }
         }
-
+        System.out.println(false);
     }
-
 
 
     @Given("Program that prints the sum of the numbers {int} to {int}")
     public void programThatPrintsTheSumOfTheNumbersToN(int arg0, int n1) {
         int n = 5;
         int sum = 0;
-        for (int i = 1; i<= n; i++ ){
-            sum = sum+ i;
+        for (int i = 1; i <= n; i++) {
+            sum = sum + i;
         }
-        System.out.println("sum = "+ sum);
+        System.out.println("sum = " + sum);
     }
 
     @And("Modify the program such that only multiplies of three or five are considered in the sum")
     public void modifyTheProgramSuchThatOnlyMultipliesOfThreeOrFiveAreConsideredInTheSum() {
         int n = 17;
         int sum = 0;
-        for (int j = 1; j<= n; j++ ){
-            if (j%3 == 0  || j%5==0)
-            sum = sum+ j;
+        for (int j = 1; j <= n; j++) {
+            if (j % 3 == 0 || j % 5 == 0)
+                sum = sum + j;
         }
-        System.out.println("sum = "+ sum);
+        System.out.println("sum = " + sum);
 
     }
 
@@ -459,23 +456,416 @@ public class JavaStepDef {
 
     @And("Sort odd numbers in asc order but even numbers must be on their places")
     public void sortOddNumbersInAscOrderButEvenNumbersMustBeOnTheirPlaces() {
-        int[] arr = { 5,3,3,8,4,1};
-        sortArr(arr);
+//        int[] arr = { 5,3,3,8,4,1};
+//        sortArr(arr);
+//    }
+//
+//    private void sortArr(int[] arr) {
+//        int idxMin = 0;
+//        int min = arr[idxMin];
+//        for (int i = 1; i< arr.length; i++){
+//            if (arr[i]< min) {
+//               min = arr[i];
+//               idxMin = i;
+//            }
+//        }
+//        System.out.println("Min = "+ min);
+//        System.out.println("ixdMin = "+ idxMin);
+//        int temp = arr[0];
+//    }
+
+        int[] arr = {5, 3, 2, 8, 4, 1, -10, 9, 0, -7};
+        System.out.println(Arrays.toString(arr));
+
+//sort odd numbers only
+        for (int j = 0; j < arr.length - 1; j++) { // continue
+            if (arr[j] % 2 == 0) {
+                continue;
+            }
+            int idxMin = j;
+            for (int i = j + 1; i < arr.length; i++) {
+                if ((arr[i] < arr[idxMin]) && (arr[i] % 2 != 0)) {
+                    idxMin = i;
+                }
+            }
+            int temp = arr[j];
+            arr[j] = arr[idxMin];
+            arr[idxMin] = temp;
+
+            System.out.println(Arrays.toString(arr));
+        }
+// break
     }
 
-    private void sortArr(int[] arr) {
-        int idxMin = 0;
-        int min = arr[idxMin];
-        for (int i = 1; i< arr.length; i++){
-            if (arr[i]< min) {
-               min = arr[i];
-               idxMin = i;
+    @And("prints multiplication table of numbers")
+    public void printsMultiplicationTableOfNumbers() {
+        int n = 12;
+        for (int y = 1; y <= n; y++) {
+            for (int x = 1; x <= n; x++) {
+                System.out.print(x * y + "\t");
+            }
+            System.out.println();
+        }
+    }
+
+    @And("combines two array by alternating taking elements")
+    public void combinesTwoArrayByAlternatingTakingElements() {
+        int[] arr1 = {0, 5, 8, 9, 1};
+        int[] arr2 = {1, 2, 3};
+
+        int len = arr1.length + arr2.length;
+        int[] res = new int[len];
+        int minLen = arr1.length < arr2.length ? arr1.length : arr2.length;
+
+
+        for (int k = 0; k < minLen * 2; k = k + 2) {
+            res[k] = arr1[k / 2];
+            res[k + 1] = arr2[k / 2]; // k = 2; 2/2 -> 1
+        }
+        // res = [0, 1, 5, 2, 8, 3, _, _]
+        // rest of arr1: [9,1]
+        // min_len = 3
+        // [0,5,8,   9,1]
+        for (int idx = minLen; idx < arr1.length; idx++) {
+            // idx = 3
+            // idx 3 -> idx - min_len => 0
+            int res_idx = minLen * 2 + idx - minLen;
+            res[res_idx] = arr1[idx];
+        }
+        for (int idx = minLen; idx < arr2.length; idx++) {
+            // idx = 3
+            // idx 3 -> idx - min_len => 0
+            int res_idx = minLen * 2 + idx - minLen;
+            res[res_idx] = arr2[idx];
+        }
+
+        System.out.println(Arrays.toString(res));
+    }
+
+    @Given("print array")
+    public void printArray() {
+//        int[] arr = { 1,2,3,4,5,6,7};
+//        for (int j : arr) {
+//            System.out.println(j);
+//        }
+//        String[] s = new String[3];
+//        s[0] = "Hi";
+//        s[1] = "Bye";
+//        s[2] = "Java";
+////        for (int i = 0; i< s.length; i++ ){
+////            System.out.println(s[i]);
+////        }
+//        for (String string : s){
+//            System.out.println(string);
+//        }
+//        int[] num2 = {1,2,3};
+//        int sum = 0;
+//        for (int x : num2){
+//            sum = sum +x;
+//        }
+//        System.out.println(sum);
+
+        for (int i = 0; i <= 15; i++) {
+            if (i % 2 == 0) {
+                int j = i * 10;
+                System.out.println("this is even number " + i);
+                continue;
+
+            }
+            System.out.println("this is odd number " + i);
+        }
+    }
+
+    @And("sorting asc using while")
+    public void sorting() {
+        int[] arr = {43, 2, 1};
+        System.out.println(Arrays.toString(arr));
+
+        boolean isSorted = false;
+        while (!isSorted) {
+            isSorted = true;
+
+            for (int i = 1; i < arr.length; i++) {
+                if (arr[i] < arr[i - 1]) {
+                    int temp = arr[i];
+                    arr[i] = arr[i - 1];
+                    arr[i - 1] = temp;
+                    isSorted = false;
+                }
+            }
+            System.out.println(Arrays.toString(arr));
+        }
+    }
+
+
+    @And("sorting desc using while")
+    public void sortingAsc() {
+        int[] arr = {-1, 44, 2, 1, 54, 23, 45, 56, 67, 53, 32, 44, 87, 49, 61, 37};
+        System.out.println(Arrays.toString(arr));
+        boolean isSorted = false;
+        while (!isSorted) {
+            isSorted = true;
+            for (int i = 0; i < arr.length-1; i++) {
+                if (arr[i] < arr[i +1 ]) {
+                    int temp = arr[i];
+                    arr[i] = arr[i + 1];
+                    arr[i + 1] = temp;
+                    isSorted = false;
+                }
+            }
+            System.out.println(Arrays.toString(arr));
+        }
+
+    }
+
+    @And("sorting desc")
+    public void sortingDesc() {
+        int[] arr = {43, 2, 1, 54, 23, 45, 56, 67, 53, 32, 44, 87, 49, 61, 37};
+        System.out.println(Arrays.toString(arr));
+        for (int i = 0; i < arr.length - 1; i++) {
+            for (int j = 1; j < arr.length - i; j++) {
+                if (arr[j - 1] < arr[j]) {
+                    int temp = arr[j - 1];
+                    arr[j - 1] = arr[j];
+                    arr[j] = temp;
+                }
+            }
+            System.out.println(Arrays.toString(arr));
+        }
+    }
+
+    @And("sorting desc odd numbers")
+    public void sortingDescOddNumbers() {
+        int[] arr = {43, 34, 33, 54, 23, 45, 56, 67, 53, 32, 44, 87, 49, 61, 37};
+        System.out.println(Arrays.toString(arr));
+
+//        sort odd numbers only
+        for (int j = 0; j < arr.length - 1; j++) { // continue
+            if (arr[j] % 2 == 0) {
+                continue;
+            }
+            int idxMin = j;
+            for (int i = j + 1; i < arr.length; i++) {
+                if ((arr[i] < arr[idxMin]) && (arr[i] % 2 != 0)) {
+                    idxMin = i;
+                }
+            }
+            int temp = arr[j];
+            arr[j] = arr[idxMin];
+            arr[idxMin] = temp;
+
+            System.out.println(Arrays.toString(arr));
+        }
+    }
+
+    @And("sorting desc odd numbers mk")
+    public void sortingDescOddNumbersMk() {
+
+    }
+
+    @And("prints multiplication table of numbers practice")
+    public void printsMultiplicationTableOfNumbersPractice() {
+        int n = 12;
+        for (int y = 1; y<= n; y++){
+            for (int x = 1; x<= n;x++ ){
+                System.out.print(x * y +"\t");
+            }
+                System.out.println();
+        }
+    }
+
+    @And("combines two array by alternating taking elements practice")
+    public void combinesTwoArrayByAlternatingTakingElementsPractice() {
+    int[] arr1 = {0,5,8};
+    int[] arr2 = {1,2,3};
+
+    int len = arr1.length + arr2.length;
+    int[] res = new int[len];
+
+    int i= 0;
+    int j = 0;
+
+    for (int k= 0; k<len; k= k+2){
+        res[k] = arr1[i++];
+        res[k+1] = arr2[j++];
+
+    }
+       System.out.println(Arrays.toString(res));
+    }
+
+    @And("combines two array by alternating taking elements practice Diff length arr")
+    public void combinesTwoArrayByAlternatingTakingElementsPracticeDiffLengthArr() {
+        int [] arr1 = {0,5,8,};
+        int [] arr2 = {1,2,3,4,1};
+
+        int len = arr1.length + arr2.length;
+        int[] res = new int[len];
+        int min_len = arr1.length < arr2.length ? arr1.length : arr2.length;
+//        same a
+//        if(arr1.length < arr2.length ){
+//            min_len = arr1.length;
+//        } else {
+//            min_len = arr2.length;
+//        }
+
+        for (int k= 0; k<min_len * 2; k= k+2){
+            res[k] = arr1[k/2];
+            res[k+1] = arr2[k/2];
+        }
+        for (int idx = min_len; idx<arr1.length; idx++) {
+            int res_idx = min_len * 2 + idx - min_len;
+            res[res_idx] = arr1[idx];
+        }
+        for (int idx = min_len; idx<arr2.length; idx++) {
+            int res_idx = min_len * 2 + idx - min_len;
+            res[res_idx] = arr2[idx];
+        }
+        System.out.println(Arrays.toString(res));
+    }
+
+    @Given("work with lists")
+    public void workWithLists() {
+        List<Integer> numList = new ArrayList<>();
+        numList.add(1);
+        numList.add(2);
+        numList.add(3);
+        numList.add(4);
+        numList.add(5);
+//        System.out.println(numList);
+
+        List<String> user = new ArrayList<>();
+        user.add("admin");
+        user.add("editor");
+        user.add("writer");
+        String admin = user.get(0);
+        System.out.println(admin);
+
+    }
+
+
+
+    @And("work with sets")
+    public void workWithSets() {
+        List<String>  sList = new ArrayList<>();
+        sList.add("a");
+        sList.add("b");
+        sList.add("b");
+        sList.add("c");
+        sList.add("c");
+        sList.add("d");
+        System.out.println(sList);
+
+
+        Set<String> set = new HashSet<>(sList);
+        System.out.println(set);
+
+    }
+
+    @And("work with Map")
+    public void workWithMap() {
+        Map<String, String> user = new HashMap<>();
+        user.put("user", "milad");
+        user.put("email", "test@test.com");
+        String milad = user.get("user");
+        System.out.println(milad);
+    }
+
+    @Given("a function that swaps two array elements")
+    public void aFunctionThatSwapsTwoArrayElements() {
+        int[] arr = {5,2,9,7,3};
+        System.out.println("Array before the swap " + Arrays.toString(arr));
+        for (int k = 0; k < arr.length; k++) {
+            toSwap(arr, arr[2], arr[4]);
+            System.out.println("Array After the swap " + Arrays.toString(arr));
+        }
+//        int temp = arr[2];
+//        arr[2] = arr[4];
+//        arr[4] = temp;
+        System.out.println("Array After the swap " + Arrays.toString(arr));
+    }
+     public void toSwap(int[] arr, int i, int j){
+//        int temp = arr[i];
+//        arr[i] = arr[j];
+//        arr[j] = temp;
+         int temp = i;
+         i = j;
+         j = temp;
+    }
+    @And("is the number divisible by {int} and {int}")
+    public void isTheNumberDivisibleByAnd(int arg0, int arg1) {
+        int num = 444;
+        if (num%3 == 0 && num%4 ==0){
+            System.out.println("Number "+ num + " is divisible by 3 and 4 ");
+        } else if (num%3 == 0){
+            System.out.println("Number "+ num + " is divisible by 3");
+        }else if (num%4 == 0) {
+            System.out.println("Number "+ num + " is divisible by 4");
+        } else {
+            System.out.println("Number "+ num + " is not divisible by 3 or 4 ");
+        }
+
+    }
+
+    @And("a function to find the largest element in an array")
+    public void aFunctionToFindTheLargestElementInAnArray() {
+        int[] arr = {11,2,3,1,5,10,4,6};
+
+        for (int i = 1; i < arr.length; i++){
+            if (arr[i] < arr[i-1]){
+               int temp = arr[i];
+               arr[i] = arr[i-1];
+               arr[i-1] = temp;
             }
         }
-        System.out.println("Min = "+ min);
-        System.out.println("ixdMin = "+ idxMin);
-        int temp = arr[0];
-    }
-}
+        int largest = arr[arr.length-1];
+        System.out.println(largest);
 
+    }
+
+    @And("a function that reverses words in a sentence")
+    public void aFunctionThatReversesWordsInASentence() {
+
+        printReversed("Hello");
+    }
+
+    void printReversed(String str){
+        System.out.println("Print Reversed " + str);
+        for (int i = str.length() - 1; i >= 0 ; i--){
+            System.out.print(str.charAt(i));
+        }
+    }
+
+
+    String getReversed(String str) {
+        System.out.println("Return Reversed " + str);
+        String reversed = "";
+        for (int i = str.length() - 1; i >= 0; i--) {
+            reversed = reversed + str.charAt(i);
+        }
+                return reversed;
+    }
+
+
+
+    @And("FizzBuzz challenge")
+    public void fizzbuzzChallenge() {
+    fizzBuzzTwo(20);
+    }
+
+
+    void fizzBuzzTwo(int num){
+    for (int i = 1; i <= num; i++){
+        if (i % 15 == 0){
+            System.out.print("FizzBuzz ");
+        }else if (i % 3 ==0){
+            System.out.print("Fizz ");
+        }else if (i % 5 ==0){
+            System.out.print("Buzz ");
+        } else {
+            System.out.print( i + " ");
+        }
+    }
+    }
+
+}
 
