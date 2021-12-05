@@ -5,10 +5,7 @@ import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
+import java.util.*;
 
 
 public class JavaStepDefs {
@@ -76,17 +73,128 @@ public class JavaStepDefs {
 
     @Given("We have have hashmap myinfo")
     public void weHaveHaveHashmapMyinfo() {
-        HashMap<String,String> myInfo = new HashMap<String, String>();
-        myInfo.put("firstname","Ivan");
-        myInfo.put("lastName","Romanov");
-        myInfo.put("hometown","Chicago");
-        myInfo.put("favoriteFood","Steak");
+        HashMap<String, String> myInfo = new HashMap<String, String>();
+        myInfo.put("firstname", "Ivan");
+        myInfo.put("lastName", "Romanov");
+        myInfo.put("hometown", "Chicago");
+        myInfo.put("favoriteFood", "Steak");
         System.out.println(myInfo);
         myInfo.get("firstname");
         System.out.println(myInfo.get("firstname"));
-        myInfo.replace("hometown","Kirov");
+        myInfo.replace("hometown", "Kirov");
         System.out.println(myInfo);
     }
+
+    @Given("I solve java task")
+    public void iSolveJavaTask() {
+//        Write a function that combines two arrays (lists) by alternating taking elements,
+//        e.g. [0,5,8], [1,2,3] → [0, 1, 5, 2, 8, 3].
+//        e.g. [0,5,8,  9,1], [1,2,3] → [0, 1, 5, 2, 8, 3, 9, 1].
+        int[] arr1 = {0, 5, 8};
+        int[] arr2 = {1, 2, 3, 9, 1};
+        solveIt(arr1, arr2);
+    }
+
+    private void solveIt(int[] arr1, int[] arr2) {
+        int len = arr1.length + arr2.length;
+        int[] res = new int[len];
+//        int min_len = Math.min(arr1.length, arr2.length);
+        int min_len = arr1.length < arr2.length ? arr1.length : arr2.length;
+        // 3
+        for (int k = 0; k < min_len * 2; k = k + 2) {
+            res[k] = arr1[k / 2];
+            res[k + 1] = arr2[k / 2]; // k = 2; 2/2 -> 1
+        }
+        // res = [0, 1, 5, 2, 8, 3, _, _]
+        // rest of arr1: [9,1]
+        // min_len = 3
+        // [0,5,8,   9,1]
+        for (int idx = min_len; idx < arr1.length; idx++) {
+            // idx = 3
+            // idx 3 -> idx - min_len => 0
+            int res_idx = min_len * 2 + idx - min_len;
+            res[res_idx] = arr1[idx];
+        }
+        for (int idx = min_len; idx < arr2.length; idx++) {
+            // idx = 3
+            // idx 3 -> idx - min_len => 0
+            int res_idx = min_len * 2 + idx - min_len;
+            res[res_idx] = arr2[idx];
+        }
+        System.out.println(Arrays.toString(res));
+    }
+
+    @Given("I solve codding challenges")
+    public void iSolveCoddingChallenges() {
+        toSwap(3, 5);
+    }
+
+    void toSwap(int num1, int num2) {
+        System.out.println("Swap method begin - num1:" + num1 + "num2: " + num2);
+        num1 = num1 + num2; //8
+        num2 = num1 - num2; //3
+        num1 = num1 - num2; //5
+        System.out.println("Swap method end - num1:" + num1 + "num2: " + num2);
+    }
+
+    @Given("I write a function that accepts integer number and prints")
+    public void iWriteAFunctionThatAcceptsIntegerNumberAndPrints() {
+        toSwap(3, 5);
+        printDivBy3and4(12);
+        printDivBy3and4(9);
+        printDivBy3and4(8);
+        printDivBy3and4(7);
+    }
+
+    //I write a function that accepts integer number and prints
+    //"divisible by 3" if number is divisible by 3
+    //"divisible by 4" if number is divisible by 4
+    //"divisible by 3 and 4" if number is divisible by 3 and 4
+    void printDivBy3and4(int num) {
+        System.out.println("Is " + num + " divisible by 3 and 4?");
+        if (num % 3 == 0 && num % 4 == 0) {
+            System.out.println("divisible by 3 and 4");
+        } else if (num % 3 == 0) {
+            System.out.println("divisible by 3");
+        } else if (num % 4 == 0) {
+            System.out.println("divisible by 4");
+        } else {
+            System.out.println("Not divisible by 3 and 4");
+        }
+    }
+
+    @Given("I write function that swap that swap two array elements")
+    public void iWriteFunctionThatSwapThatSwapTwoArrayElements() {
+        List<Integer> list = Arrays.asList(5, 2, 9, 7, 3);
+        System.out.println("Array before swap: " + list);
+        Collections.swap(list, 0, 4);
+        System.out.println("Array after swap: " + list);
+
+    }
+
+    @Then("I Write a function to find the largest element in an array")
+    public void iWriteAFunctionToFindTheLargestElementInAnArray() {
+        int[] myArr1 = {5, 2, 9, 7, 3};
+        int max = myArr1[0];
+        for (int i = 0; i < myArr1.length; i++) {
+            if (myArr1[i] > max)
+                max = myArr1[i];
+        }
+        System.out.println("The biggest number in array: " + max);
+    }
 }
+
+
+    //        Write a function, accepts integer argument
+//        It should print all the numbers up to the argument
+//        BUT:
+//        if number is multiple of 3, it should print Fizz instead of number
+//        if number is multiple of 5, it should print Buzz instead of number
+//        if it is multiple of both 3 and 5, it should print FizzBuzz instead of number
+//        Result for 20:
+//        1 2 Fizz 4 Buzz Fizz 7 8 Fizz Buzz 11 Fizz 13 14 FizzBuzz 16 17 Fizz 19 Buzz
+
+
+
 
 
