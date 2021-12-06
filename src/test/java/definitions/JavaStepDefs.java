@@ -169,5 +169,42 @@ public class JavaStepDefs {
         System.out.println(Arrays.toString(arr));
     }
 
+    @And("I combine two arrays")
+    public void iCombineTwoArrays() {
+        //        Write a function that combines two arrays (lists) by alternating taking elements,
+//        e.g. [0,5,8], [1,2,3] → [0, 1, 5, 2, 8, 3].
+//        e.g. [0,5,8,  9,1], [1,2,3] → [0, 1, 5, 2, 8, 3, 9, 1].
+        int[] arr1 = {0,5,8};
+        int[] arr2 = {1,2,3,9,1};
+        solveIt(arr1, arr2);
+    }
+    private void solveIt(int[] arr1, int[] arr2) {
+        int len = arr1.length + arr2.length;
+        int[] res = new int[len];
+//        int min_len = Math.min(arr1.length, arr2.length);
+        int min_len = arr1.length < arr2.length ? arr1.length : arr2.length;
+        // 3
+        for (int k = 0; k < min_len * 2; k = k + 2) {
+            res[k] = arr1[k / 2];
+            res[k + 1] = arr2[k / 2]; // k = 2; 2/2 -> 1
+        }
+        // res = [0, 1, 5, 2, 8, 3, _, _]
+        // rest of arr1: [9,1]
+        // min_len = 3
+        // [0,5,8,   9,1]
+        for (int idx = min_len; idx < arr1.length; idx++) {
+            // idx = 3
+            // idx 3 -> idx - min_len => 0
+            int res_idx = min_len * 2 + idx - min_len;
+            res[res_idx] = arr1[idx];
+        }
+        for (int idx = min_len; idx < arr2.length; idx++) {
+            // idx = 3
+            // idx 3 -> idx - min_len => 0
+            int res_idx = min_len * 2 + idx - min_len;
+            res[res_idx] = arr2[idx];
+        }
+        System.out.println(Arrays.toString(res));
+    }
 }
 

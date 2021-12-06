@@ -44,5 +44,9 @@
     Scenario: I rearrange numbers in ascending order
       And I rearrange numbers in ascending order
 
+   @java9
+   Scenario: I combine two arrays by alternating their elements
+     And I combine two arrays
+
 
 
