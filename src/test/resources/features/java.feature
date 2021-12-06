@@ -125,6 +125,7 @@ Feature: Java feature
       And I print all numbers from 1 to 0 with check multiplying by 3 and 5
 
       And I making string "some string" reverse
+      And I making string "Some string" reverse without extra variable
 
       And I reverse words in sentence "This is some sentence"
       And I reverse words in sentence "This is some,sentence."

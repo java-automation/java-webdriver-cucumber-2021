@@ -514,6 +514,7 @@ public class JavaStepDefs {
         StringBuilder result = new StringBuilder();
         for (int i = sStr.length() - 1; i >= 0; i--) {
             result.append(sStr.charAt(i));
+
         }
         return result.toString();
     }
@@ -537,5 +538,18 @@ public class JavaStepDefs {
             result.append( (sTempArr[i].hashCode() != 0) ? sTempArr[i].replaceAll("\\s+", " ") : "");
         }
         return result.toString().trim();
+    }
+
+    @And("I making string {string} reverse without extra variable")
+    public void iMakingStringReverseWithoutExtraVariable(String sStr) {
+        System.out.println("Original: " + sStr);
+        System.out.println("Reversed: " + reversingStringWithoutExtraVariable(sStr));
+    }
+
+    private String reversingStringWithoutExtraVariable(String sStr) {
+        for (int i = sStr.length() - 2; i >= 0; i--) {
+            sStr += sStr.charAt(i);
+        }
+        return sStr.substring(sStr.length() / 2);
     }
 }
