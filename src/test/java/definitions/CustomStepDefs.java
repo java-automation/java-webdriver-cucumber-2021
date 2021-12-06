@@ -21,7 +21,9 @@ public class CustomStepDefs {
             Map.entry("username", "jdoe"),
             Map.entry("email", "john.doe@corp.com"),
             Map.entry("password", "jsecret"),
-            Map.entry("name", "John Vitaljevich Doe"),
+            Map.entry("firstName", "John"),
+            Map.entry("middleName", "Vitaljevich"),
+            Map.entry("lastName", "Doe"),
             Map.entry("phone", "2223456789"),
             Map.entry("dateofbirth", "11/01/1990"),
             Map.entry("countryoforigin", "Canada"),
@@ -39,7 +41,9 @@ public class CustomStepDefs {
             Map.entry("username", "msmith"),
             Map.entry("email", "monica.smith@corp.com"),
             Map.entry("password", "msecret"),
-            Map.entry("name", "Monica Ivanovich Smith"),
+            Map.entry("firstName", "Monica"),
+            Map.entry("middleName", "Ivanovich"),
+            Map.entry("lastName", "Smith"),
             Map.entry("phone", "3333456789"),
             Map.entry("dateofbirth", "01/25/1995"),
             Map.entry("countryoforigin", "USA"),
@@ -135,7 +139,15 @@ public class CustomStepDefs {
         verifySummaryElementIsDisplayedAndHasValue("//*[@id='quotePageResult']//*[@name='username']", workingProfile.get("username"));
         verifySummaryElementIsDisplayedAndHasValue("//*[@id='quotePageResult']//*[@name='email']", workingProfile.get("email"));
         verifySummaryElementIsDisplayedAndHasValue("//*[@id='quotePageResult']//*[@name='password']", "[entered]");
-        verifySummaryElementIsDisplayedAndHasValue("//*[@id='quotePageResult']//*[@name='name']", workingProfile.get("name"));
+
+        String firstName = workingProfile.get("firstName");
+        String middleName = workingProfile.get("middleName");
+        String lastName = workingProfile.get("lastName");
+        verifySummaryElementIsDisplayedAndHasValue("//*[@id='quotePageResult']//*[@name='name']", firstName + " " + middleName + " " + lastName);
+        verifySummaryElementIsDisplayedAndHasValue("//*[@id='quotePageResult']//*[@name='firstName']", firstName);
+        verifySummaryElementIsDisplayedAndHasValue("//*[@id='quotePageResult']//*[@name='middleName']", middleName);
+        verifySummaryElementIsDisplayedAndHasValue("//*[@id='quotePageResult']//*[@name='lastName']", lastName);
+
         verifySummaryElementIsDisplayedAndHasValue("//*[@id='quotePageResult']//*[@name='agreedToPrivacyPolicy']", "true");
         if (fullForm) {
             verifySummaryElementIsDisplayedAndHasValue("//*[@id='quotePageResult']//*[@name='phone']", workingProfile.get("phone"));
@@ -177,8 +189,15 @@ public class CustomStepDefs {
         getDriver().findElement(By.xpath("//input[@name='email']")).sendKeys(workingProfile.get("email"));
         getDriver().findElement(By.xpath("//input[@name='password']")).sendKeys(workingProfile.get("password"));
         getDriver().findElement(By.xpath("//input[@name='confirmPassword']")).sendKeys(workingProfile.get("password"));
-        getDriver().findElement(By.xpath("//input[@name='name']")).sendKeys(workingProfile.get("name"));
+
+        getDriver().findElement(By.xpath("//input[@name='name']")).click();
+        getDriver().findElement(By.xpath("//input[@id='firstName']")).sendKeys(workingProfile.get("firstName"));
+        getDriver().findElement(By.xpath("//input[@id='middleName']")).sendKeys(workingProfile.get("middleName"));
+        getDriver().findElement(By.xpath("//input[@id='lastName']")).sendKeys(workingProfile.get("lastName"));
+        getDriver().findElement(By.xpath("//*[@id='nameDialog']/..//*[text()='Save']")).click();
+
         getDriver().findElement(By.xpath("//input[@name='agreedToPrivacyPolicy']")).click();
+
         if (fullForm) {
             getDriver().findElement(By.xpath("//input[@name='phone']")).sendKeys(workingProfile.get("phone"));
             getDriver().findElement(By.xpath("//input[@name='dateOfBirth']")).sendKeys(workingProfile.get("dateofbirth"));
