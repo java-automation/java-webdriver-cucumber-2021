@@ -45,23 +45,23 @@
 
     @java5
     Scenario: HW for day 6
-    Given  Prints all numbers from 0 up to 5
+#    Given  Prints all numbers from 0 up to 5
 #      And Prints also negative numbers from -5
 #      And Print all integer array
 #      And Print all even numbers from integer array
 #      And Check if array is empty
-      And Check if array contains another element example
+#      And Check if array contains another element example
 
 
     @javaTasks6
     Scenario: Java challenge
-      Given Program that prints the sum of the numbers 0 to 5
-      And Modify the program such that only multiplies of three or five are considered in the sum
+#      Given Program that prints the sum of the numbers 0 to 5
+#      And Modify the program such that only multiplies of three or five are considered in the sum
 
 #  Program that takes num n and gives the possibility to choose between computing the sum and computing the product of 1,..,n
-      And Computing sum and computing product
-      And Sort odd numbers in asc order but even numbers must be on their places
-      And prints multiplication table of numbers
+#      And Computing sum and computing product
+#      And Sort odd numbers in asc order but even numbers must be on their places
+#      And prints multiplication table of numbers
 #      write a func that combines two arrays (lists) by alternating taking elements
       And combines two array by alternating taking elements
 
@@ -69,7 +69,7 @@
     @JavaSelfPractice1
     Scenario: MK Java Challenges
 #      Given print array
-      And sorting asc using while
+#      And sorting asc using while
 #      And sorting desc using while
 #      And sorting desc
 #      And sorting desc odd numbers
@@ -77,7 +77,7 @@
 #      And prints multiplication table of numbers practice
 #      And combines two array by alternating taking elements practice
 #      And combines two array by alternating taking elements practice Diff length arr
-#
+    And combines two array by alternating taking elements Lists
 #      Given work with lists
 #      And work with sets
 #      And work with Map
@@ -85,8 +85,8 @@
 
     @HWDay7
     Scenario: Home Work for day 7
-      Given a function that swaps two array elements
+#      Given a function that swaps two array elements
 #      And is the number divisible by 3 and 4
 #      And a function to find the largest element in an array
-#      And a function that reverses words in a sentence
+      And a function that reverses words in a sentence
 #      And FizzBuzz challenge

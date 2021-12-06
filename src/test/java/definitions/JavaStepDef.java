@@ -378,7 +378,7 @@ public class JavaStepDef {
         int[] arr = {1, 2, 3, 4, 5, 6, 7, 76, 77, 75, 90};
         for (int i = 0; i < arr.length; i++) {
             if (arr[i] % 2 == 0) {
-                System.out.println(arr[i]);
+                System.out.print(arr[i]+ " ");
             }
         }
     }
@@ -695,32 +695,23 @@ public class JavaStepDef {
 
     @And("combines two array by alternating taking elements practice Diff length arr")
     public void combinesTwoArrayByAlternatingTakingElementsPracticeDiffLengthArr() {
-        int [] arr1 = {0,5,8,};
+        int [] arr1 = {0,5,8,2,1,4,5};
         int [] arr2 = {1,2,3,4,1};
 
-        int len = arr1.length + arr2.length;
-        int[] res = new int[len];
-        int min_len = arr1.length < arr2.length ? arr1.length : arr2.length;
-//        same a
-//        if(arr1.length < arr2.length ){
-//            min_len = arr1.length;
-//        } else {
-//            min_len = arr2.length;
-//        }
+        int len1 = arr1.length;
+        int len2 = arr2.length;
+        int[] result = new int[len1+len2];
+        int i = 0;
+        int j = 0;
+        int k = 0;
 
-        for (int k= 0; k<min_len * 2; k= k+2){
-            res[k] = arr1[k/2];
-            res[k+1] = arr2[k/2];
+        while((i<len1) && (j<len2)) {
+            result[k++]= arr1[i++];
+            result[k++]= arr2[j++];
         }
-        for (int idx = min_len; idx<arr1.length; idx++) {
-            int res_idx = min_len * 2 + idx - min_len;
-            res[res_idx] = arr1[idx];
-        }
-        for (int idx = min_len; idx<arr2.length; idx++) {
-            int res_idx = min_len * 2 + idx - min_len;
-            res[res_idx] = arr2[idx];
-        }
-        System.out.println(Arrays.toString(res));
+        while (i<len1) result[k++] = arr1[i++];
+        while (j<len2) result[k++] = arr2[j++];
+        System.out.println(Arrays.toString(result));
     }
 
     @Given("work with lists")
@@ -775,8 +766,7 @@ public class JavaStepDef {
         int[] arr = {5,2,9,7,3};
         System.out.println("Array before the swap " + Arrays.toString(arr));
         for (int k = 0; k < arr.length; k++) {
-            toSwap(arr, arr[2], arr[4]);
-            System.out.println("Array After the swap " + Arrays.toString(arr));
+            toSwap(arr, 2, 4);
         }
 //        int temp = arr[2];
 //        arr[2] = arr[4];
@@ -784,12 +774,12 @@ public class JavaStepDef {
         System.out.println("Array After the swap " + Arrays.toString(arr));
     }
      public void toSwap(int[] arr, int i, int j){
-//        int temp = arr[i];
-//        arr[i] = arr[j];
-//        arr[j] = temp;
-         int temp = i;
-         i = j;
-         j = temp;
+        int temp = arr[i];
+        arr[i] = arr[j];
+        arr[j] = temp;
+//         int temp = i;
+//         i = j;
+//         j = temp;
     }
     @And("is the number divisible by {int} and {int}")
     public void isTheNumberDivisibleByAnd(int arg0, int arg1) {
@@ -824,9 +814,15 @@ public class JavaStepDef {
 
     @And("a function that reverses words in a sentence")
     public void aFunctionThatReversesWordsInASentence() {
-
-        printReversed("Hello");
+        String s[] = "you shall not pass".split(" ");
+        String ans = "";
+        for (int i = s.length - 1; i >= 0; i--) {
+            ans += s[i] + " ";
+        }
+        System.out.println("Reversed String: " + ans);
     }
+
+
 
     void printReversed(String str){
         System.out.println("Print Reversed " + str);
@@ -837,7 +833,6 @@ public class JavaStepDef {
 
 
     String getReversed(String str) {
-        System.out.println("Return Reversed " + str);
         String reversed = "";
         for (int i = str.length() - 1; i >= 0; i--) {
             reversed = reversed + str.charAt(i);
@@ -865,6 +860,32 @@ public class JavaStepDef {
             System.out.print( i + " ");
         }
     }
+    }
+
+    @And("combines two array by alternating taking elements Lists")
+    public void combinesTwoArrayByAlternatingTakingElementsLists() {
+        List<Integer> list1 = List.of(1,3,5,2,2,4,4,5);
+        List<Integer> list2 = List.of(2,4,6,7,8);
+        List<Integer> result = new ArrayList<>();
+
+        ListIterator<Integer> itr1 = list1.listIterator();
+        ListIterator<Integer> itr2 = list2.listIterator();
+
+        while (itr1.hasNext() && itr2.hasNext()){
+            result.add(itr1.next());
+            result.add(itr2.next());
+        }
+        while (itr1.hasNext()) result.add(itr1.next());
+        while (itr2.hasNext()) result.add(itr2.next());
+        System.out.println(result);
+
+
+    }
+
+    void revString (String str){
+        for (int i = str.length() - 1; i>= 0; i--){
+            System.out.print(str.charAt(i));
+        }
     }
 
 }
