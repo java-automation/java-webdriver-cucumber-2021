@@ -34,4 +34,14 @@ Feature: New Java tests
     And I implement method that checks if array is empty
     And I implement method that checks if array contains another element
 
+  @newjava5
+  Scenario: Homework #7 coding challenges
+    Given I type "My homework #7"
+    When I implement function to swap two elements in array
+    And I implement a function to verify if the 00 is divisible by three or four
+    And I implement a function that finds the largest element in array
+    And I solving the FizzBuzz challenge with arg 20
+    And I implement the function to reverse string
+    And I implement a function to reverse words in sentence
+
 
