@@ -40,7 +40,7 @@ public class GenericStepDefs {
     }
 
     @And("I print page details")
-    public void iPrintPageDetails() throws InterruptedException {
+    public void iPrintPageDetails() {
         System.out.println("Page URL: " + getDriver().getCurrentUrl());
         System.out.println("Page title: " + getDriver().getTitle());
         System.out.println("Window handle: " + getDriver().getWindowHandle());
@@ -59,7 +59,7 @@ public class GenericStepDefs {
     }
 
     @And("I change resolution to {string}")
-    public void iChangeResolutionTo(String desiredResolutionReference) throws InterruptedException {
+    public void iChangeResolutionTo(String desiredResolutionReference) {
         int width;
         int height;
         switch (desiredResolutionReference.toLowerCase()) {

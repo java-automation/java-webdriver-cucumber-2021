@@ -8,6 +8,8 @@ import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.Select;
 
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.Map;
 
 import static org.assertj.core.api.Assertions.*;
@@ -74,7 +76,7 @@ public class QuoteStepDefs {
         fullForm need to be true for full verification
     */
     @Then("I verify that submitted fields got saved correctly")
-    public void iVerifyThatSubmittedFieldsGotSavedCorrectly() throws InterruptedException {
+    public void iVerifyThatSubmittedFieldsGotSavedCorrectly() {
         verifySummaryElementIsDisplayedAndHasValue("//*[@id='quotePageResult']//*[@name='username']", workingProfile.get("username"));
         verifySummaryElementIsDisplayedAndHasValue("//*[@id='quotePageResult']//*[@name='email']", workingProfile.get("email"));
         verifySummaryElementIsDisplayedAndHasValue("//*[@id='quotePageResult']//*[@name='password']", "[entered]");
@@ -105,7 +107,6 @@ public class QuoteStepDefs {
             verifySummaryElementIsDisplayedAndHasValue("//*[@id='quotePageResult']//*[@name='thirdPartyAgreement']", workingProfile.get("3rdpartyagreement"));
             verifySummaryElementIsDisplayedAndHasValue("//*[@id='quotePageResult']//*[@name='attachmentName']", workingProfile.get("attachment"));
         }
-        Thread.sleep(5000);
     }
 
     private void setFormFillingContext(String scenarioContext, String profileReference) {
@@ -139,7 +140,19 @@ public class QuoteStepDefs {
 
         if (fullForm) {
             getDriver().findElement(By.xpath("//input[@name='phone']")).sendKeys(workingProfile.get("phone"));
-            getDriver().findElement(By.xpath("//input[@name='dateOfBirth']")).sendKeys(workingProfile.get("dateofbirth"));
+
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MM/dd/yyyy"); //01/25/1995
+            LocalDate parsedDate = LocalDate.parse(workingProfile.get("dateofbirth"), formatter);
+            String year = String.valueOf(parsedDate.getYear());
+            String month = String.valueOf(parsedDate.getMonthValue() - 1);
+            String day = String.valueOf(parsedDate.getDayOfMonth());
+            getDriver().findElement(By.xpath("//input[@name='dateOfBirth']")).click();
+            Select yearSelect = new Select(getDriver().findElement(By.xpath("//*[@id='ui-datepicker-div']//select[@data-handler='selectYear']")));
+            yearSelect.selectByValue(year);
+            Select monthSelect = new Select(getDriver().findElement(By.xpath("//*[@id='ui-datepicker-div']//select[@data-handler='selectMonth']")));
+            monthSelect.selectByValue(month);
+            Thread.sleep(1000);
+            getDriver().findElement(By.xpath("//*[@id='ui-datepicker-div']//td[@data-handler='selectDay']/a[contains(text(),'" + day + "')]")).click();
 
             Select countryOfOriginSelect = new Select(getDriver().findElement(By.xpath("//select[@name='countryOfOrigin']")));
             countryOfOriginSelect.selectByValue(workingProfile.get("countryoforigin"));
@@ -172,7 +185,6 @@ public class QuoteStepDefs {
             String pathToFile = String.join(fileSeparator, currentDirectory, "src", "test", "resources", "data", workingProfile.get("attachment"));
             getDriver().findElement(By.xpath("//input[@name='attachment']")).sendKeys(pathToFile);
         }
-        Thread.sleep(3000);
     }
 
     @When("I verify email field behavior")

@@ -27,5 +27,7 @@ Feature: Selenium WebDriver API exercises using quote form
   Scenario: Submit the form with specified field set and one of the preset profiles
     Given I go to "quote form" page
     When  I fill out "all" fields with "Monica Smith" profile
+    *     I wait for 3 sec
     *     Submit the form
     Then  I verify that submitted fields got saved correctly
+    *     I wait for 5 sec
