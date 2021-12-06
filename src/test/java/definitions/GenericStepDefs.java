@@ -2,7 +2,13 @@ package definitions;
 
 import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
+import io.cucumber.java.en.Then;
 import org.openqa.selenium.Dimension;
+import org.openqa.selenium.logging.LogEntries;
+import org.openqa.selenium.logging.LogEntry;
+import org.openqa.selenium.logging.LogType;
+
+import java.util.logging.Level;
 
 import static support.TestContext.getDriver;
 
@@ -39,8 +45,7 @@ public class GenericStepDefs {
         System.out.println("Page title: " + getDriver().getTitle());
         System.out.println("Window handle: " + getDriver().getWindowHandle());
         System.out.println("All handles: " + getDriver().getWindowHandles());
-        System.out.println("Page source: " + getDriver().getPageSource());
-        Thread.sleep(1000);
+        //System.out.println("Page source: " + getDriver().getPageSource());
     }
 
     @And("I go back and forward, then refresh the page")
@@ -63,6 +68,14 @@ public class GenericStepDefs {
             default -> throw new Error("Unknown resolution reference: " + desiredResolutionReference);
         }
         getDriver().manage().window().setSize(new Dimension(width, height));
-        Thread.sleep(1000);
+    }
+
+    @Then("I print logs to the console")
+    public void iPrintLogsToTheConsole() {
+        LogEntries logs = getDriver().manage().logs().get(LogType.BROWSER);
+        for (LogEntry entry : logs) {
+            if (entry.getLevel().equals(Level.SEVERE)) throw new Error("Severe error: " + entry);
+            else System.out.println(entry);
+        }
     }
 }

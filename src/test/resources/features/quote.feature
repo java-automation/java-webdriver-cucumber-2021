@@ -3,22 +3,29 @@ Feature: Selenium WebDriver API exercises using quote form
 
   @quote1
   Scenario: Page details, navigation, resolution
-    Given I go to "google" page
-    And I print page details
+    Given I go to "yahoo" page
+    Then  I print page details
+    *     I wait for 1 sec
+    *     I print logs to the console
     Given I go to "quote form" page
-    And I print page details
-    And I go back and forward, then refresh the page
-    And I change resolution to "phone"
-    And I change resolution to "desktop"
+    Then  I print page details
+    *     I wait for 1 sec
+    *     I print logs to the console
+    *     I go back and forward, then refresh the page
+    *     I change resolution to "phone"
+    *     I wait for 1 sec
+    *     I change resolution to "desktop"
+    *     I wait for 1 sec
 
   @quote2
   Scenario: Very basic "Email" field verification
     Given I go to "quote form" page
-    When I verify email field behavior
+    Then  I verify email field behavior
 
   @quote3
+  #valid entries: "quote form"; "all"/"required"; "Monica Smith"/"John Doe"
   Scenario: Submit the form with specified field set and one of the preset profiles
     Given I go to "quote form" page
-    When I fill out "all" fields with "Monica Smith" profile
-    And Submit the form
-    Then I verify that submitted fields got saved correctly
+    When  I fill out "all" fields with "Monica Smith" profile
+    *     Submit the form
+    Then  I verify that submitted fields got saved correctly
