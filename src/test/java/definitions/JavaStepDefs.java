@@ -6,8 +6,6 @@ import io.cucumber.java.en.Then;
 
 import java.util.*;
 
-import static definitions.CustomStepDefs.getURLUsingKnownReference;
-
 public class JavaStepDefs {
 
     @Then("Show the greeting when I'm {string} {string} and my favorite color is {string}")
@@ -57,7 +55,7 @@ public class JavaStepDefs {
 
     @Then("I print URL for {string} page")
     public void iPrintURLForSitePage(String websiteReference) {
-        String address = getURLUsingKnownReference(websiteReference);
+        String address = GenericStepDefs.getURLUsingKnownReference(websiteReference);
         System.out.println("URL for '" + websiteReference + "' reference: " + address);
     }
 
