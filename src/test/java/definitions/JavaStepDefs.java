@@ -3,6 +3,7 @@ package definitions;
 import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
 
+import java.sql.SQLOutput;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -232,6 +233,117 @@ public class JavaStepDefs {
         }
         if(!numContains)
                 System.out.println("The array doesn't contain " + num);
+    }
+
+    @And("I work with java")
+    public void iWorkWithJava() {
+        int i = 3;
+        int[] array = {2, 3, 7, 81, 11, 22, 24};
+        Arrays.stream(array).sorted();
+
+    }
+
+    @Given("I swap two variables")
+    public void iSwapTwoVariables() {
+        int[] array = {2, 4, 7, 9, 22};
+        int a = array[0];
+        int b = array[4];
+        array[0] = b;
+        array[4] = a;
+        System.out.println(Arrays.toString(array));
+
+        int num1 = 1;
+        int num2 = 2;
+        int temp = num1;
+        num1 = num2;
+        num2 = temp;
+        System.out.println("Swap method: num1: " + num1 + ", num2: " + num2);
+
+        int[] array1 = {5, 2, 9, 7, 3};
+        //swap 3rd and 5th
+        int temp1 = array1[2]; //3rd element = 9
+        array1[2] = array1[4]; //put 3 from 5th element into 3rd element
+        array1[4] = temp1; //put temp 9 into 5th element
+        System.out.println(Arrays.toString(array1));
+    }
+
+    @And("I convert a string {string} into int")
+    public void iConvertAStringIntoInt(String arg) {
+        int result = Integer.parseInt(arg);
+        System.out.println(result);
+    }
+
+    @And("I solve coding challenges")
+    public void iSolveCodingChallenges() {
+        int num = 15;
+        if (num%3==0 && num%5==0)
+            System.out.println(num + " is div by both 3 and 5");
+        else if (num%3==0)
+            System.out.println(num + " is div by 3");
+        else if (num%5==0)
+            System.out.println(num + " is div by 5");
+        else
+            System.out.println(num + " is not div neither by 3 nor 5");
+    }
+
+    @And("I check the division")
+    public void iCheckTheDivision() {
+        int n = 11;
+        if (n%3==0 && n%4==0)
+            System.out.println(n + " is divisible by both 3 and 4");
+        else if (n%3==0)
+            System.out.println(n + " is divisible by 3");
+        else if (n%4==0)
+            System.out.println(n + " is divisible by 4");
+        else
+            System.out.println(n + "is not divisible by 3 nor 4");
+    }
+
+    @And("I am looking for the largest element in an array")
+    public void iAmLookingForTheLargestElementInAnArray() {
+        int[] array = {3, 12, 6, 21, 1, 4, 5};
+        int theLargest = 0;
+        for (int i = 0; i < array.length; i++) {
+            if (array[i]>theLargest){
+                theLargest = array[i];
+            }
+        }
+        System.out.println(theLargest);
+    }
+
+    @And("I am playing a FizzBuzz game")
+    public void iAmPlayingAFizzBuzzGame() {
+        int n = 20;
+        for (int i = 1; i<= n; i++) {
+            if (i%3==0 && i%5==0)
+                System.out.print("FizzBuzz" + " ");
+            else if (i%3==0)
+                System.out.print("Fizz" + " ");
+            else if (i%5==0)
+                System.out.print("Buzz" + " ");
+            else
+                System.out.print(i + " ");
+        }
+    }
+
+    @And("I reverse a string")
+    public void iReverseAString() {
+        String original = "WebDriver";
+        System.out.println("Reverse a word: " + original);
+
+        System.out.print("Reversed result: ");
+        for (int i = original.length()-1; i >= 0; i--)
+            System.out.print(original.charAt(i));
+    }
+
+    @And("I reverse words in a sentence")
+    public void iReverseWordsInASentence() {
+        String sentence[] = "now I know it".split(" ");
+        String result = "";
+        for (int i = sentence.length-1; i >= 0; i--)
+            result += sentence[i] + " ";
+
+        System.out.println("The result: " + result);
     }
 }
 

@@ -18,13 +18,28 @@
 #      And I print 7 day of week
 #      And I work with arrays
 
-      And I print all numbers from 0 up to 12
-      And I print all numbers from -12 up to 0
-      And I print all integer array
-      And I print all even numbers from integer array
-      And I check if array is empty
-      And I check if array contains 12
-      And I check if array contains 10
+#      And I print all numbers from 0 up to 12
+#      And I print all numbers from -12 up to 0
+#      And I print all integer array
+#      And I print all even numbers from integer array
+#      And I check if array is empty
+#      And I check if array contains 12
+#      And I check if array contains 10
+
+#      And I work with java
+#      Given I swap two variables
+#      And I convert a string "200" into int
+#      And I solve coding challenges
+#      And I check the division
+      And I am looking for the largest element in an array
+      And I am playing a FizzBuzz game
+      And I reverse a string
+      And I reverse words in a sentence
+
+
+
+
+
 
 
 
