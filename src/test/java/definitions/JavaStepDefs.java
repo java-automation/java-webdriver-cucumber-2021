@@ -4,8 +4,6 @@ import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
-import org.apache.commons.lang3.ArrayUtils;
-import org.eclipse.jetty.util.ArrayUtil;
 import org.openqa.selenium.By;
 import org.openqa.selenium.Dimension;
 import org.openqa.selenium.Keys;
@@ -157,6 +155,9 @@ public class JavaStepDefs {
                 break;
             case "quote":
                 getDriver().navigate().to("https://skryabin.com/webdriver/html/quote.html");
+                break;
+            case "usps":
+                getDriver().navigate().to("https://www.usps.com");
                 break;
             default:
                 System.out.println("Unsupported page: " + sPage);
@@ -551,5 +552,64 @@ public class JavaStepDefs {
             sStr += sStr.charAt(i);
         }
         return sStr.substring(sStr.length() / 2);
+    }
+
+    @Given("I search two highest element in array {string}")
+    public void iSearchTwoHighestElementInArray(String sArray) {
+        int[] aArray = convertStringArrayToInteger(sArray);
+        if (aArray.length > 2) {
+            int iFirstMax = aArray[0];
+            int iSecondMax = aArray[1];
+            for (int i = 2; i < aArray.length; i++) {
+                if (aArray[i] > iFirstMax) {
+                    iSecondMax = iFirstMax;
+                    iFirstMax = aArray[i];
+                } else if (aArray[i] > iSecondMax) {
+                    iSecondMax = aArray[i];
+                }
+            }
+            System.out.println("First highest element is - " + iFirstMax);
+            System.out.println("Second highest element is - " + iSecondMax);
+        } else if (aArray.length == 2) {
+            System.out.println("First highest element is - " + aArray[0]);
+            System.out.println("Second highest element is - " + aArray[1]);
+        } else {
+            throw new Error("Array looks too small.");
+        }
+    }
+
+    @Given("I search duplicates within an array {string}")
+    public void iSearchDuplicatesWithinAnArray(String sArray) {
+        int[] aArray = convertStringArrayToInteger(sArray);
+        int count = 0;
+        String positions = "";
+        HashMap<Integer, Integer> mapCount = new HashMap<>();
+        HashMap<Integer, String> mapPositions = new HashMap<>();
+        for (int i = 0; i < aArray.length; i++) {
+            if (!mapCount.containsKey(aArray[i])) {
+                mapCount.put(aArray[i], 1);
+                mapPositions.put(aArray[i], String.valueOf(i) + ",");
+            } else {
+                continue;
+            }
+            for (int j = i + 1; j < aArray.length; j++) {
+                if (aArray[j] == aArray[i]) {
+                    count = mapCount.get(aArray[i]);
+                    positions = mapPositions.get(aArray[i]);
+                    mapCount.put(aArray[i], count + 1);
+                    mapPositions.put(aArray[i], positions + j + ",");
+                }
+            }
+        }
+        Set<Integer> keys = mapCount.keySet();
+        if (mapCount.containsValue(2)) {
+            for (int el : keys) {
+                if (mapCount.get(el) > 1) {
+                    System.out.println("Value: " + String.valueOf(el) + " repeats by " + mapCount.get(el) + " times at " + mapPositions.get(el) + " positions");
+                }
+            }
+        } else {
+            throw new Error("There is no duplicates within an array.");
+        }
     }
 }

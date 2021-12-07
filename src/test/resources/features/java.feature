@@ -131,3 +131,26 @@ Feature: Java feature
       And I reverse words in sentence "This is some,sentence."
       And I reverse words in sentence "This is  some   sentence"
       And I reverse words in sentence "This"
+
+  @javaDecember06
+    Scenario: Looking for two highest elements of array
+      Given I search two highest element in array "1,2,3,4,5,6,7,8,9"
+      And I search two highest element in array "5,6,8,1,36,94,28,74,5"
+      And I search two highest element in array "5,6,8,1,36,94,28,74,500"
+      And I search two highest element in array "5,6,8,1,36,94,28,74,500,501"
+      And I search two highest element in array "5,6,8,1,36,94,28,74,501,500"
+      And I search two highest element in array "5,6"
+      And I search two highest element in array "5"
+
+    Scenario: Looking for duplicates within an array
+      Given I search duplicates within an array "1,5,6,9,4,2,3,1,8,9"
+      Given I search duplicates within an array "1,5,3,9,1,2,3,1,2,9,3"
+      Given I search duplicates within an array "1,2,3,4,5,6,7,8,9"
+
+    Scenario: Covering all fields on Quote page (copy)
+      Given I go to "quote" page
+      When I fill out required fields
+      When I fill out optional fields
+      And I submit the form
+      Then I verify that submitted fields saved correctly
+      And I verify all optional fields saved correctly
