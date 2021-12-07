@@ -14,7 +14,7 @@
 #      And I print 5 day of the week
     @java2
       Scenario: Java
-      And I work with Arrays
+#      And I work with Arrays
 
 #      @JavaTasks
 #      Scenario: Java challenge
@@ -23,9 +23,9 @@
     Scenario: Homework of Day 7
 #      And Task one
 #      And Task two
-      And Task three
-      And Task Four
-      And Task Five
-      And Task Six
+#      And Task three
+#      And Task Four
+#      And Task Six
+#      And Task Five
 
 
