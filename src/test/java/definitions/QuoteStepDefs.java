@@ -5,7 +5,6 @@ import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 import org.openqa.selenium.By;
 import org.openqa.selenium.Keys;
-import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.Select;
 
 import java.time.LocalDate;
@@ -65,10 +64,8 @@ public class QuoteStepDefs {
         getDriver().findElement(By.xpath("//*[@id='formSubmit']")).click();
     }
 
-    private void verifySummaryElementIsDisplayedAndHasValue(String summaryXPath, String value) {
-        WebElement summaryElement = getDriver().findElement(By.xpath(summaryXPath));
-        assertThat(summaryElement.isDisplayed()).isTrue();
-        assertThat(summaryElement.getText()).isEqualTo(value);
+    private void verifyElementValueInSummary(String relSummaryXPath, String value) {
+        assertThat(getDriver().findElement(By.xpath("//*[@id='quotePageResult']" + relSummaryXPath)).getText()).isEqualTo(value);
     }
 
     /*
@@ -77,35 +74,36 @@ public class QuoteStepDefs {
     */
     @Then("I verify that submitted fields got saved correctly")
     public void iVerifyThatSubmittedFieldsGotSavedCorrectly() {
-        verifySummaryElementIsDisplayedAndHasValue("//*[@id='quotePageResult']//*[@name='username']", workingProfile.get("username"));
-        verifySummaryElementIsDisplayedAndHasValue("//*[@id='quotePageResult']//*[@name='email']", workingProfile.get("email"));
-        verifySummaryElementIsDisplayedAndHasValue("//*[@id='quotePageResult']//*[@name='password']", "[entered]");
+        verifyElementValueInSummary("//*[@name='username']", workingProfile.get("username"));
+        verifyElementValueInSummary("//*[@name='email']", workingProfile.get("email"));
+        verifyElementValueInSummary("//*[@name='password']", "[entered]");
 
         String firstName = workingProfile.get("firstName");
         String middleName = workingProfile.get("middleName");
         String lastName = workingProfile.get("lastName");
-        verifySummaryElementIsDisplayedAndHasValue("//*[@id='quotePageResult']//*[@name='name']", firstName + " " + middleName + " " + lastName);
-        verifySummaryElementIsDisplayedAndHasValue("//*[@id='quotePageResult']//*[@name='firstName']", firstName);
-        verifySummaryElementIsDisplayedAndHasValue("//*[@id='quotePageResult']//*[@name='middleName']", middleName);
-        verifySummaryElementIsDisplayedAndHasValue("//*[@id='quotePageResult']//*[@name='lastName']", lastName);
+        verifyElementValueInSummary("//*[@name='name']", firstName + " " + middleName + " " + lastName);
+        verifyElementValueInSummary("//*[@name='firstName']", firstName);
+        verifyElementValueInSummary("//*[@name='middleName']", middleName);
+        verifyElementValueInSummary("//*[@name='lastName']", lastName);
 
-        verifySummaryElementIsDisplayedAndHasValue("//*[@id='quotePageResult']//*[@name='agreedToPrivacyPolicy']", "true");
+        verifyElementValueInSummary("//*[@name='agreedToPrivacyPolicy']", "true");
+
         if (fullForm) {
-            verifySummaryElementIsDisplayedAndHasValue("//*[@id='quotePageResult']//*[@name='phone']", workingProfile.get("phone"));
-            verifySummaryElementIsDisplayedAndHasValue("//*[@id='quotePageResult']//*[@name='dateOfBirth']", workingProfile.get("dateofbirth"));
-            verifySummaryElementIsDisplayedAndHasValue("//*[@id='quotePageResult']//*[@name='countryOfOrigin']", workingProfile.get("countryoforigin"));
-            verifySummaryElementIsDisplayedAndHasValue("//*[@id='quotePageResult']//*[@name='gender']", workingProfile.get("gender"));
+            verifyElementValueInSummary("//*[@name='phone']", workingProfile.get("phone"));
+            verifyElementValueInSummary("//*[@name='dateOfBirth']", workingProfile.get("dateofbirth"));
+            verifyElementValueInSummary("//*[@name='countryOfOrigin']", workingProfile.get("countryoforigin"));
+            verifyElementValueInSummary("//*[@name='gender']", workingProfile.get("gender"));
 
             //ignoring the case when checkbox was checked, but then unchecked again - in that case we would have a label saying "Allowed to Contact false"
             if (workingProfile.get("allowedtocontact").equalsIgnoreCase("true")) {
-                verifySummaryElementIsDisplayedAndHasValue("//*[@id='quotePageResult']//*[@name='allowedToContact']", workingProfile.get("allowedtocontact"));
+                verifyElementValueInSummary("//*[@name='allowedToContact']", workingProfile.get("allowedtocontact"));
             }
-            verifySummaryElementIsDisplayedAndHasValue("//*[@id='quotePageResult']//*[@name='address']", workingProfile.get("address"));
-            verifySummaryElementIsDisplayedAndHasValue("//*[@id='quotePageResult']//*[@name='carMake']", workingProfile.get("carmake"));
-            verifySummaryElementIsDisplayedAndHasValue("//*[@id='quotePageResult']//*[@name='contactPersonName']", workingProfile.get("contactname"));
-            verifySummaryElementIsDisplayedAndHasValue("//*[@id='quotePageResult']//*[@name='contactPersonPhone']", workingProfile.get("contactphone"));
-            verifySummaryElementIsDisplayedAndHasValue("//*[@id='quotePageResult']//*[@name='thirdPartyAgreement']", workingProfile.get("3rdpartyagreement"));
-            verifySummaryElementIsDisplayedAndHasValue("//*[@id='quotePageResult']//*[@name='attachmentName']", workingProfile.get("attachment"));
+            verifyElementValueInSummary("//*[@name='address']", workingProfile.get("address"));
+            verifyElementValueInSummary("//*[@name='carMake']", workingProfile.get("carmake"));
+            verifyElementValueInSummary("//*[@name='contactPersonName']", workingProfile.get("contactname"));
+            verifyElementValueInSummary("//*[@name='contactPersonPhone']", workingProfile.get("contactphone"));
+            verifyElementValueInSummary("//*[@name='thirdPartyAgreement']", workingProfile.get("3rdpartyagreement"));
+            verifyElementValueInSummary("//*[@name='attachmentName']", workingProfile.get("attachment"));
         }
     }
 
