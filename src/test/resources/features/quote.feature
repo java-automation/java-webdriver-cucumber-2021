@@ -84,8 +84,11 @@ Feature: Fill out all Quote fields and verify that submitted fields saved correc
   #verify Third Party Agreement
     Then element with xpath "//b[@name='thirdPartyAgreement']" should have text as "accepted"
 
-
-
-
-
-
+  @quote2
+  Scenario: I go to "quote" page and fill out required fields
+    Given I go to "quote" page
+    And I print logs to the console
+    When I fill out required fields
+    And I wait for 2 sec
+    And I submit the page
+    Then I verify the required fields
