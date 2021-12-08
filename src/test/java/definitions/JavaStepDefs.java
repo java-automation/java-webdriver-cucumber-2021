@@ -3,14 +3,12 @@ package definitions;
 import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
+import org.apache.logging.log4j.core.util.JsonUtils;
 
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Locale;
+import java.util.*;
 
-public class JavaStepDefs {
+public class JavaStepDefs<now> {
     @Given("I hello world")
     public void iHelloWorld() {
         String message = "Hello world";
@@ -83,7 +81,7 @@ public class JavaStepDefs {
 
         if (num1 > num2) {
             System.out.println("Num1 is bigger than Num2!");
-        } else if (num1 == num2){
+        } else if (num1 == num2) {
             System.out.println("Num1 is equal than Num2!");
         } else {
             System.out.println("Num1 is less than Num2!");
@@ -95,7 +93,7 @@ public class JavaStepDefs {
 
         if (page.toLowerCase().equals("google")) {
             System.out.println("https://www.google.com");
-        }  else if (page.toLowerCase().equals("yahoo")) {
+        } else if (page.toLowerCase().equals("yahoo")) {
             System.out.println("https://www.yahoo.com");
         } else {
             throw new Error(" Unknown url for page: " + page);
@@ -148,7 +146,7 @@ public class JavaStepDefs {
     public void iParseIfNumberDoubleIsPositive(String textNum) {
         double num = Double.parseDouble(textNum);
 
-        if (num > 0){
+        if (num > 0) {
             System.out.println("Positive");
         } else {
             System.out.println(" Zero or negative");
@@ -158,11 +156,11 @@ public class JavaStepDefs {
     @Given("I print all numbers from zero to {int}")
     public void iPrintAllNumbersFromZeroTo(int num) {
         if (num >= 0) {
-            for (int i = 0; i <= num; i=i+1) {
+            for (int i = 0; i <= num; i = i + 1) {
                 System.out.println(i);
             }
         } else {
-            for (int i = 0; i >= num; i=i-1) {
+            for (int i = 0; i >= num; i = i - 1) {
                 System.out.println(i);
             }
         }
@@ -172,12 +170,13 @@ public class JavaStepDefs {
     public void iPrintIntegerArray() {
         int num1 = 34;
 
-        int [] numArr = {2,3,4,5,6,5,4,5,6,5,8};
+        int[] numArr = {2, 3, 4, 5, 6, 5, 4, 5, 6, 5, 8};
+        System.out.println(numArr[0]);
 
         boolean flag = false;
 
         for (int i : numArr) {
-            if (i == num1){
+            if (i == num1) {
                 flag = true;
             }
         }
@@ -187,6 +186,16 @@ public class JavaStepDefs {
 
         System.out.println(Arrays.toString(numArr));
 
+        int i = 5;
+        double d = 5.5;
+
+        Integer j = 5;
+        Double e = 5.5;
+
+        System.out.println(i);
+        System.out.println(d);
+        System.out.println(j);
+        System.out.println(e);
 
 
 //        List<Integer> = Array.asList(2,3,4,5,6,5,4,5,6,5,8);
@@ -194,7 +203,7 @@ public class JavaStepDefs {
 
     @Given("I print the link for website {string}")
     public void iPrintTheLinkForWebsite(String page) {
-        switch (page){
+        switch (page) {
             case "google":
                 System.out.println("https://www.google.com");
                 break;
@@ -270,28 +279,45 @@ public class JavaStepDefs {
     }
 
 
-
-
     @Given("I solve Java task")
     public void iSolveJavaTask() {
-//        Coding challenges
-//       *1) Write a function that prints all numbers from 0 up to n: 0, 1, 2, 3
-//        2) Write a function that supports also negative numbers: a) 3; b) -2
-//        3) Write a function that prints all integer array
-//        4) Write a function that prints all even numbers from integer array
-//        5) Write a function that checks if array is empty
-//        6) Write a function that checks if array contains another element
 
-        int i = 3;
-        solve(i);
+      //  int i = 3;
+        //    solve(i);
     }
 
-    private void solve(int i) {
-        for (int j = 0; j <= i; j++) {
-            //j=0
-            System.out.println(j);
-        }
-    }
+//    void fizzBuzz(int num) {
+//        System.out.println("FizzBuzz for " + num);
+//    }
+
+
+
+
+//    void fizzBuzz(int num) {
+//        System.out.println("FizzBuzz for" + num);
+//
+//        for (int i = 1; i <= num; i++) {            // because it says start from i =1
+//            System.out.println(i + " ");
+//            if (i % 15 == 0) {
+//                System.out.println("FizzBuzz");
+//            } else if (i % 3 == 0){
+//                System.out.println("Fizz ");
+//            } else if (i % 5 == 0) {
+//                System.out.println("Buzz ");
+//            } else {
+//                System.out.println(i + " ");
+//            }
+//        }
+//        System.out.println();
+//    }
+//
+//
+//    private void solve(int i) {
+//        for (int j = 0; j <= i; j++) {
+//            //j=0
+//            System.out.println(j);
+//        }
+//    }
 
     @And("I print with array {int} day of the week")
     public void iPrintWithArrayDayOfTheWeek(int dayOfWeek) {
@@ -322,9 +348,9 @@ public class JavaStepDefs {
         for (int i = 0; i < names.length; i++) {
             System.out.println(names[i] + " ");
         }
-        for (String el: days) {
-            System.out.println(el + " "); // to print all days
-        }
+//        for (String el : days) {
+//            System.out.println(el + " "); // to print all days
+//        }
 
         List<String> daysList = new ArrayList<>();
         daysList.add("Sunday");
@@ -345,6 +371,40 @@ public class JavaStepDefs {
         nameList.add("Harout");
         System.out.println(nameList);
 
+        List<String> list = new ArrayList<>();
+        list.add("a");
+        list.add("b");
+        list.add("a");
+        System.out.println("\n" + list);
+
+       Set<String> set = new HashSet<>();
+       set.add("a");
+       set.add("b");
+       set.add("a");
+       System.out.println("\n" + set);
+
+       ///
+
+       Map <String, String> user = new HashMap<>();
+        user.put("username", "hrag");
+        user.put("email", "hragbanian@gmail.com");
+        user.put("password", "welcome");
+        System.out.println("\n" + user);
+
+        Map<String, String> admin = new HashMap<>();
+        admin.put("username", "Sarkis");
+        admin.put("email", "sarkissian@gmail.com");
+        admin.put("password", "thanks");
+        System.out.println("\n" + admin);
+
+        String username = user.get("username");
+        String email = user.get("email");
+        String password = user.get("password");
+
+        System.out.println(username);
+        System.out.println(email);
+        System.out.println(password);
+
 
 
 
@@ -352,7 +412,7 @@ public class JavaStepDefs {
 
     @Given("I print random number {int}")
     public void iPrintRandomNumber(int number) {
-       int mod = number % 10;
+        int mod = number % 10;
         switch (mod) {
             case 1:
                 System.out.println("1st");
@@ -389,22 +449,261 @@ public class JavaStepDefs {
 
     @Then("I print number {int} using arrays")
     public void iPrintNumberUsingArrays(int number) {
-        String [] tiver = {"1","2","3","4","5","6","7","8"};
+        String[] tiver = {"1", "2", "3", "4", "5", "6", "7", "8"};
         int length = tiver.length;
+
+
 //        System.out.println(Arrays.toString(tiver));
+
+
         System.out.println(tiver[1]);
-        System.out.println(tiver [tiver.length - 2]);
+        System.out.println(tiver[tiver.length - 2]);
+
+        byte age = 30;
+        Date now = new Date();
+
+        System.out.println(now);
+
+        int[][] numbers = {{1, 2, 3}, {4, 5, 6}};
+        System.out.println(Arrays.deepToString(numbers));
 
     }
 
-    @Given("I solve java task")
-    public void iSolveJavaTask() {
-        //Write a program that prints the sum of the numbers 1 to n
+    @Given("I practice sorting")
+    public void iPracticeSorting() {
+//            int[] arr = {5, 3, 2, 6, 4, 1};
+        int[] arr = {9,1,8,2,7,4,6,5,3};
 
-        int n = 5;
-        solveIt
+        for (int i = 0; i < arr.length; i++) {
+            for (int j = 1; j < arr.length; j++) {
+                if (arr[j] < arr[j - 1]) {
+                    int temp = arr[j];
+                    arr[j] = arr[j - 1];
+                    arr[j - 1] = temp;
+                    System.out.println(Arrays.toString(arr));
+                }
+            }
+        }
     }
+
+    @Then("I practice comparison")
+    public void iPracticeComparison() {
+        int x = 1;
+        int y = 1;
+        System.out.println(x == y);
+
+
+    }
+
+    @Then("I practice logical operators")
+    public void iPracticeLogicalOperators() {
+//        int temperature = 19;
+//        boolean isWarm = temperature > 20 && temperature < 30;
+//        System.out.println(isWarm);
+
+        boolean hasHighIncome = true;
+        boolean hasGoodCredit = true;
+        boolean hasCriminalRecord = false;
+        boolean isEligible = (hasHighIncome || hasGoodCredit) && hasCriminalRecord; // high income of good credit
+        System.out.println(isEligible);
+
+
+    }
+
+    @Then("I practice if operators")
+    public void iPracticeIfOperators() {
+        int temp = 32;
+        if (temp > 30) {
+            System.out.println("It's a hot day, Drink plenty of water");
+        } else if (temp > 20 && temp < 30 ) {
+            System.out.println("It's a nice day");
+        } else {
+            System.out.println("It's cold");
+        }
+    }
+
+    @Then("I practice switch statement")
+    public void iPracticeSwitchStatement() {
+        String role = "admin";
+        switch (role) {
+            case "admin":
+                System.out.println("You're an admin");
+                break;
+            case "moderator":
+                System.out.println("You're a moderator");
+                break;
+            default:
+                System.out.println("You're a guest");
+        }
+    }
+
+    @Then("I practice insertion sort")
+    public void iPracticeInsertionSort() {
+        int[] arr = {9,1,8,2,7,4,6,5,3};
+
+        for (int i=1; i < arr.length; i++) {
+            var current = arr[i];
+            var j = i -1;
+            while (j >= 0 && arr[j] > current) {
+                j--;
+            }
+            arr[j + 1] = current;
+            System.out.println(Arrays.toString(arr));
+        }
+    }
+
+
+    @Given("I solve coding challenges")
+    public void iSolveCodingChallenges() {
+        toSwap(3, 5);
+        printDivBy3and4(12);
+
+        int [] arr = {3, 4, 1, 5, 8, 4};
+        int i = 1;
+        System.out.println(isArrayContains(arr, i));
+
+    }
+
+    boolean isArrayContains(int [] array, int el) {
+        for (int arrayEl : array) {
+            if( arrayEl == el) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+
+
+    // Write a function that accepts integer number and prints
+    // "divisible by 3" if number is divisible by 3
+    // "divisible by 4" if element is divisible by 4
+    // "divisible by 3 and 4" if divisible by 3 and 4 
+
+
+
+    void printDivBy3and4 (int num) {
+        System.out.println("Is " + num + " div by 3 and 5?");
+        if (num % 3 == 0 && num % 4 == 0) {
+            System.out.println("Div by 3");
+        } else if (num % 4 == 0) {
+            System.out.println("Div by 4");
+        } else if (num % 3 == 0) {
+            System.out.println("Div by 3 and 4");
+        } else {
+            System.out.println("Not divisible by 3 and 4");
+        }
+    }
+
+    // do slide number 40 in Day 7 similar to previous code
+
+
+
+
+    void toSwap(int num1, int num2) {
+        System.out.println("Swap method begin - num1: " + num1 + " num2: " + num2);
+        int temp = num1;
+        num1 = num2;
+        num2 = temp;
+        System.out.println("Swap method end - num1: " + num1 + " ,num2: " + num2);
+    }
+
+    @Then("I solve FizzBuzz")
+    public void iSolveFizzBuzz() {
+        //        Coding challenges
+//       *1) Write a function that prints all numbers from 0 up to n: 0, 1, 2, 3
+//        2) Write a function that supports also negative numbers: a) 3; b) -2
+//        3) Write a function that prints all integer array
+//        4) Write a function that prints all even numbers from integer array
+//        5) Write a function that checks if array is empty
+//        6) Write a function that checks if array contains another element
+
+//      Write a function, accepts integer argument
+//      It should print all the numbers up to the argument
+//      BUT:
+//      if number is multiple of 3, it should print Fizz instead of number
+//      if number is multiple of 5, it should print Buzz instead of number
+//      if it is multiple of both 3 and 5, it should print FizzBuzz instead of number
+//      Result for 20:
+//      1 2 Fizz 4 Buzz Fizz 7 8 Fizz Buzz 11 Fizz 13 14 FizzBuzz 16 17 Fizz 19 Buzz
+
+      fizzBuzz(20);
+
+    }
+
+    void fizzBuzz(int num) {
+        System.out.println("FizzBuzz for " + num);
+
+        for (int i = 1; i <= num; i++) {
+            if (i % 15 == 0 ) {
+                System.out.print("FizzBuzz ");
+            } else if (i % 3 == 0) {
+                System.out.print("Fizz ");
+            } else if (i % 5 == 0) {
+                System.out.print("Buzz ");
+            } else {
+                System.out.print(i + " ");
+            }
+        }
+        System.out.println();
+    }
+
+    @And("I solve reverse")
+    public void iSolveReverse() {
+//        getReversed("WebDriver");
+//        System.out.println(getReversed("WebDriver"));
+//        System.out.println(getReversedNoVar("WebDriver"));
+
+        int[] unsortedArr = {4, 3, 1, 5, 8, 4};
+        int [] sorted = sort(unsortedArr);
+        System.out.println(Arrays.toString(sorted));
+    }
+
+    int[] sort(int [] arr) {
+        for (int i = 0; i < arr.length; i++) { // if we put arr.length -1 it will skip the last number
+           for (int j = i + 1; j < arr.length; j++) {
+               if (arr[i] > arr[j]) {
+                   int temp = arr[i];
+                   arr[i] = arr[j];
+                   arr[j] = temp;
+               }
+            }
+        }
+        return arr;
+    }
+
+
+
+
+    String getReversedNoVar(String str) {
+        System.out.println("Return reversed without extra var " + str);
+        for (int i = str.length() - 1; i >= 0; i--) {
+            str += str.charAt(i);
+        }
+
+        return str;
+    }
+
+
+    void printReversed(String str) {
+        System.out.println("Print reversed " + str);
+        for (int i = str.length() -1; i >= 0; i--) {
+            System.out.print(str.charAt(i));
+        }
+        System.out.println();
+    }
+
+    String getReversed(String str) {
+        System.out.println("Return reversed " + str);
+        String reversed = "";
+        for (int i = str.length() - 1; i >= 0; i--) {
+            reversed += str.charAt(i);
+        }
+        return reversed;
+    }
+
 }
 
 
 
+  

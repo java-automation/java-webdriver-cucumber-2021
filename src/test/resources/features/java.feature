@@ -52,4 +52,22 @@ Feature: Java feature
     Scenario: Vladimir
       Given I solve java task
 
+    @java9
+    Scenario: Mosh
+      Given I practice sorting
+      Then I practice comparison
+      Then I practice logical operators
+      Then I practice if operators
+      Then I practice switch statement
+      Then I practice insertion sort
+
+    @java10
+    Scenario: Coding challenges
+      Given I solve coding challenges
+      Then I solve FizzBuzz
+      And I solve reverse
+
+
+
+
 
