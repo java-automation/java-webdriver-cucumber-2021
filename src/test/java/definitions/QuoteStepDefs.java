@@ -3,6 +3,7 @@ package definitions;
 import io.cucumber.java.en.And;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
+import org.assertj.core.api.Assertions;
 import org.openqa.selenium.By;
 
 import static support.TestContext.getDriver;
@@ -20,7 +21,23 @@ public class QuoteStepDefs {
         getDriver().findElement(By.xpath("//input[@id='confirmPassword']")).sendKeys("12345");
         getDriver().findElement(By.xpath("//input[@name='agreedToPrivacyPolicy']")).click();
     }
+    @And("I fill optional fields")
+    public void iFillOptionalFields() {
+        getDriver().findElement(By.xpath("//input[@name='phone']")).sendKeys("15553467701");
+        getDriver().findElement(By.xpath("//input[@id='dateOfBirth']")).sendKeys("01/01/2000");
+        getDriver().findElement(By.xpath("//select[@name='countryOfOrigin']/option[@value='Italy']")).click();
+        getDriver().findElement(By.xpath("//input[@value='male']")).click();
+        getDriver().findElement(By.xpath("//input[@name='allowedToContact']")).click();
+        getDriver().findElement(By.xpath("//textarea[@id='address']")).sendKeys("11 Main St., Mountain View, CA, 94256");
+        getDriver().findElement(By.xpath("//select[@name='carMake']/option[@value='Toyota']")).click();
+        getDriver().switchTo().frame("additionalInfo");
+        getDriver().findElement(By.xpath("//input[@id='contactPersonName']")).sendKeys("Penelopa Cruz");
+        getDriver().findElement(By.xpath("//input[@id='contactPersonPhone']")).sendKeys("15550308912");
+        getDriver().switchTo().defaultContent();
+        getDriver().findElement(By.xpath("//button[@id='thirdPartyButton']")).click();
+        getDriver().switchTo().alert().accept();
 
+    }
     @And("I submit the page")
     public void iSubmitThePage() {
         getDriver().findElement(By.xpath("//button[@id='formSubmit']")).click();
@@ -69,6 +86,28 @@ public class QuoteStepDefs {
             System.out.println("Agreed to Privacy Policy");
         } else {
             throw new Error("Not agreed to Privacy Policy");
+
         }
+        String countryResult = getDriver().findElement(By.xpath("//b[@name='countryOfOrigin']")).getText();
+        Assertions.assertThat(countryResult).isEqualTo("Italy");
+        String carMakeResult = getDriver().findElement(By.xpath("//b[@name='carMake']")).getText();
+        Assertions.assertThat(carMakeResult).isEqualTo("Toyota");
+        String genderResult = getDriver().findElement(By.xpath("//b[@name='gender']")).getText();
+        Assertions.assertThat(genderResult).isEqualTo("male");
+        String phoneResult = getDriver().findElement(By.xpath("//b[@name='phone']")).getText();
+        Assertions.assertThat(phoneResult).isEqualTo("15553467701");
+        String allowedToContactResult = getDriver().findElement(By.xpath("//b[@name='allowedToContact']")).getText();
+        Assertions.assertThat(allowedToContactResult).isEqualTo("true");
+        String contactNameResult = getDriver().findElement(By.xpath("//b[@name='contactPersonName']")).getText();
+        Assertions.assertThat(contactNameResult).isEqualTo("Penelopa Cruz");
+        String contactPhoneResult = getDriver().findElement(By.xpath("//b[@name='contactPersonPhone']")).getText();
+        Assertions.assertThat(contactPhoneResult).isEqualTo("15550308912");
+        String dateOfBirthResult = getDriver().findElement(By.xpath("//b[@name='dateOfBirth']")).getText();
+        Assertions.assertThat(dateOfBirthResult).isEqualTo("01/01/2000");
+        String addressResult = getDriver().findElement(By.xpath("//b[@name='address']")).getText();
+        Assertions.assertThat(addressResult).isEqualTo("11 Main St., Mountain View, CA, 94256");
+        String thirdPartyResult = getDriver().findElement(By.xpath("//b[@name='thirdPartyAgreement']")).getText();
+        Assertions.assertThat(thirdPartyResult).isEqualTo("accepted");
+
     }
 }

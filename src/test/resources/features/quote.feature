@@ -5,6 +5,7 @@
     Scenario: Quote end to end
       Given I go to "quote" page
       When I fill out required fields
+      And I fill optional fields
       And I wait for 5 sec
       And I submit the page
       Then I verify the required fields
