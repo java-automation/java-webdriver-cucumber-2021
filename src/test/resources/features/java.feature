@@ -21,11 +21,11 @@
 #        Given I solve Java task
     @homeworks
     Scenario: Homework of Day 7
-#      And Task one
-#      And Task two
-#      And Task three
-#      And Task Four
-#      And Task Six
-#      And Task Five
+      And Task one
+      And Task two
+      And Task three
+      And Task Four
+      And Task Six
+      And Task Five
 
 
