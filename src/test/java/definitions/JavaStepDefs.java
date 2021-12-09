@@ -12,11 +12,10 @@ public class JavaStepDefs {
 
     public String firstVar = "my var";
     public String secondVar = "my VAR";
-    public String notFavoriteColor = "yellow";
 
 
     public void compareVars(String var1, String var2) {
-        if (var1 == var2) {
+        if (var1.equals(var2)) {
             System.out.println("Variable " + var1 + " is identical with variable " + var2);
         } else {
             System.out.println("Variables " + var1 + " and " + var2 + " are not exact the same.");
@@ -318,7 +317,7 @@ public class JavaStepDefs {
         String[] someArray = {"abc", "word", "15", "holy-moly", "word"};
         String elementFound = "sword";
         for (String element : someArray) {
-            if (element == elementFound) {
+            if (element.equals(elementFound)) {
                 System.out.println("Element \"" + element + "\" was found in array");
             } else {
                 System.out.println("Element \"" + elementFound + "\" was not found in array");
@@ -371,7 +370,7 @@ public class JavaStepDefs {
             arr[i] = min;
             arr[index] = temp;
             System.out.println(Arrays.toString(arr));
-            int[] extArray = arr;
+
         }
     }
 
@@ -483,7 +482,7 @@ public class JavaStepDefs {
         //enum unacceptedValues{"", null};
         String firstValue = arg0;
         String  secondValue = arg1;
-        if(firstValue == "" || firstValue == null || secondValue == "" || secondValue == null){
+        if(firstValue.equals("") || firstValue.equals(null) || secondValue.equals("") || secondValue.equals(null)){
             System.out.println("Value cannot be empty or null");
             return;
         }

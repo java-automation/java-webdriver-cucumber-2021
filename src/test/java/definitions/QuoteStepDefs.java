@@ -3,8 +3,6 @@ package definitions;
 import io.cucumber.java.en.*;
 import org.junit.*;
 import org.openqa.selenium.*;
-
-import static org.assertj.core.api.Assertions.assertThat;
 import static support.TestContext.*;
 
 

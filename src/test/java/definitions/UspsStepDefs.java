@@ -1,16 +1,14 @@
 package definitions;
 
 import io.cucumber.java.en.*;
-import io.cucumber.java8.*;
 import org.assertj.core.api.*;
-import org.junit.*;
 import org.openqa.selenium.*;
 
 import static support.TestContext.getDriver;
 
 public class UspsStepDefs {
     @When("I go to Lookup ZIP page by address")
-    public void iGoToLookupZIPPageByAddress() throws InterruptedException {
+    public void iGoToLookupZIPPageByAddress() {
         getDriver().findElement(By.xpath("//*[@id='navquicktools']/..")).click();
         getDriver().findElement(By.xpath("//p[contains(text(),'Look Up')]")).click();
         Assertions.assertThat(getDriver().getTitle().toLowerCase()).contains("zip code");
