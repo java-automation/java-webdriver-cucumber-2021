@@ -8,9 +8,15 @@ public class PersonData {
     private String email;
     private String password;
     private String confirmPassword;
+    private String phone;
+    private String countryOfOrigin;
+    private String gender;
+    private String address;
+    private String carMake;
+    private String dateOfBirth;
 
     public PersonData(String firstName, String middleName, String lastName,
-                      String username, String email, String password, String confirmPassword) {
+                      String username, String email, String password, String confirmPassword, String phone, String countryOfOrigin, String gender, String address, String carMake, String dateOfBirth) {
         this.firstName = firstName;
         this.middleName = middleName;
         this.lastName = lastName;
@@ -18,6 +24,12 @@ public class PersonData {
         this.email = email;
         this.password = password;
         this.confirmPassword = confirmPassword;
+        this.phone = phone;
+        this.countryOfOrigin = countryOfOrigin;
+        this.gender = gender;
+        this.address = address;
+        this.carMake = carMake;
+        this.dateOfBirth = dateOfBirth;
     }
 
     public String getFirstName() {
@@ -74,5 +86,53 @@ public class PersonData {
 
     public void withConfirmPassword(String confirmPassword) {
         this.confirmPassword = confirmPassword;
+    }
+
+    public String getPhone() {
+        return phone;
+    }
+
+    public void withPhone(String middleName) {
+        this.phone = phone;
+    }
+
+    public String getCountryOfOrigin() {
+        return countryOfOrigin;
+    }
+
+    public void withCountryOfOrigin(String countryOfOrigin) {
+        this.countryOfOrigin = countryOfOrigin;
+    }
+
+    public String getGender() {
+        return gender;
+    }
+
+    public void withGender(String gender) {
+        this.gender = gender;
+    }
+
+    public String getAddress() {
+        return address;
+    }
+
+    public void withAddress(String address) {
+        this.address = address;
+    }
+
+    public String getCarMake() {
+        return carMake;
+    }
+
+    public void withCarMake(String carMake) {
+        this.carMake = carMake;
+    }
+
+    public String getDateOfBirth() {
+        return dateOfBirth;
+    }
+
+    public void withDateOfBirth(String dateOfBirth) {
+        this.dateOfBirth = dateOfBirth;
     }
 }

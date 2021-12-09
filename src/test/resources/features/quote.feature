@@ -92,3 +92,19 @@ Feature: Fill out all Quote fields and verify that submitted fields saved correc
     And I wait for 2 sec
     And I submit the page
     Then I verify the required fields
+
+  @quote3
+  Scenario: I go to "quote" page and fill out required and optional fields
+    Given I go to "quote" page
+    And I print logs to the console
+    When I fill out required fields
+    And I fill out optional fields
+    And I wait for 2 sec
+    And I submit the page
+    Then I verify the required fields
+    And I verify the optional fields
+
+
+
+
+
