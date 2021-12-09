@@ -572,7 +572,7 @@ public class JavaStepDefs {
     @Given("I reverse words in sentence {string}")
     public void iReverseWordsInSentence(String arg0) {
         String str = arg0;
-        ArrayList arrayList = new ArrayList();
+        ArrayList<String> arrayList = new ArrayList<>();
         String[] array = str.split(" ");
         for(int i=array.length-1; i>=0; i--) {
             arrayList.add(array[i]);
