@@ -13,12 +13,15 @@ public class GenericStepDefs {
 
     @Given("I go to {string} page and print details")
     public void iGoToPage(String page) {
-        switch (page) {
+        switch (page.toLowerCase()) {
             case "quote":
                 getDriver().navigate().to("https://skryabin.com/market/quote.html");
                 break;
             case "google":
                 getDriver().navigate().to("https://www.google.com/");
+                break;
+            case "usps":
+                getDriver().navigate().to("https://www.usps.com/");
                 break;
             default:
                 throw new Error("Unsupported page: " + page);
