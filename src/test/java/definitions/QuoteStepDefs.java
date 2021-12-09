@@ -59,7 +59,6 @@ public class QuoteStepDefs {
     public static final String SUBMITTED_APPLICATION_PAGE_THIRD_PARTY_AGREEMENT_XPATH = "//b[@name='thirdPartyAgreement']";
     public static final String SUBMITTED_APPLICATION_PAGE_ALLOWED_TO_CONTACT_XPATH = "//b[@name='allowedToContact']";
 
-
     public static final String SUBMITTED_APPLICATION_PASSWORD_ENTERED_TEXT = "[entered]";
     public static final String SUBMITTED_APPLICATION_AGREEMENT_PRIVACY_POLICY_TEXT = "true";
     public static final String SUBMITTED_APPLICATION_PAGE_ALLOWED_TO_CONTACT_TEXT = "true";
@@ -108,11 +107,9 @@ public class QuoteStepDefs {
         if (!getWebElement(ALLOWED_TO_CONTACT_CHECKBOX_XPATH).isSelected()) {
             click(ALLOWED_TO_CONTACT_CHECKBOX_XPATH);
         }
-
-
     }
 
-    private void getListOfValue(String xpath, String value) {
+    public static void getListOfValue(String xpath, String value) {
         Select list = new Select(getDriver().findElement(By.xpath(xpath)));
         List<String> valueList = new ArrayList<>();
         List<WebElement> listOptions = list.getOptions();
@@ -129,15 +126,19 @@ public class QuoteStepDefs {
         return person.getFirstName() + " " + person.getMiddleName() + " " + person.getLastName();
     }
 
-    private WebElement getWebElement(String xpath) {
+    public static WebElement getWebElement(String xpath) {
         return getDriver().findElement(By.xpath(xpath));
     }
 
-    public void click(String xpath) {
+    public static String getText(String xpath) {
+        return getWebElement(xpath).getText();
+    }
+
+    public static void click(String xpath) {
         getDriver().findElement(By.xpath(xpath)).click();
     }
 
-    public void type(String xpath, String text) {
+    public static void type(String xpath, String text) {
         click(xpath);
         getDriver().findElement(By.xpath(xpath)).clear();
         getDriver().findElement(By.xpath(xpath)).sendKeys(text);
@@ -151,32 +152,31 @@ public class QuoteStepDefs {
 
     @Then("I verify the required fields")
     public void iVerifyTheRequiredFields() {
-        String resultText = getWebElement(SUBMITTED_APPLICATION_PAGE_RESULT_XPATH).getText();
+        String resultText = getText(SUBMITTED_APPLICATION_PAGE_RESULT_XPATH);
         System.out.println(resultText);
         assertThat(resultText).contains(person.getUsername(),
                 getFullName(),
                 person.getEmail());
         assertThat(resultText).doesNotContain(TITLE_GET_A_QUOTE_TEXT);
-        assertThat(getWebElement(SUBMITTED_APPLICATION_AGREED_TO_PRIVACY_POLICY_XPATH).getText()).isEqualTo(SUBMITTED_APPLICATION_AGREEMENT_PRIVACY_POLICY_TEXT);
-        assertThat(getWebElement(SUBMITTED_APPLICATION_PASSWORD_XPATH).getText()).isEqualTo(SUBMITTED_APPLICATION_PASSWORD_ENTERED_TEXT);
-        assertEquals(getWebElement(SUBMITTED_APPLICATION_USERNAME_XPATH).getText(), person.getUsername());
-        assertEquals(getWebElement(SUBMITTED_APPLICATION_NAME_XPATH).getText(), getFullName());
-        assertEquals(getWebElement(SUBMITTED_APPLICATION_FIRSTNAME_XPATH).getText(), person.getFirstName());
-        assertEquals(getWebElement(SUBMITTED_APPLICATION_MIDDLE_NAME_XPATH).getText(), person.getMiddleName());
-        assertEquals(getWebElement(SUBMITTED_APPLICATION_LASTNAME_XPATH).getText(), person.getLastName());
-        assertEquals(getWebElement(SUBMITTED_APPLICATION_EMAIL_XPATH).getText(), person.getEmail());
+        assertThat(getText(SUBMITTED_APPLICATION_AGREED_TO_PRIVACY_POLICY_XPATH)).isEqualTo(SUBMITTED_APPLICATION_AGREEMENT_PRIVACY_POLICY_TEXT);
+        assertThat(getText(SUBMITTED_APPLICATION_PASSWORD_XPATH)).isEqualTo(SUBMITTED_APPLICATION_PASSWORD_ENTERED_TEXT);
+        assertEquals(getText(SUBMITTED_APPLICATION_USERNAME_XPATH), person.getUsername());
+        assertEquals(getText(SUBMITTED_APPLICATION_NAME_XPATH), getFullName());
+        assertEquals(getText(SUBMITTED_APPLICATION_FIRSTNAME_XPATH), person.getFirstName());
+        assertEquals(getText(SUBMITTED_APPLICATION_MIDDLE_NAME_XPATH), person.getMiddleName());
+        assertEquals(getText(SUBMITTED_APPLICATION_LASTNAME_XPATH), person.getLastName());
+        assertEquals(getText(SUBMITTED_APPLICATION_EMAIL_XPATH), person.getEmail());
     }
 
     @And("I verify the optional fields")
     public void iVerifyTheOptionalFields() {
-        assertTrue(getWebElement(SUBMITTED_APPLICATION_PAGE_CAR_MAKE_XPATH).getText().contains(person.getCarMake()));
-        assertEquals(getWebElement(SUBMITTED_APPLICATION_PAGE_PHONE_XPATH).getText(), person.getPhone());
-        assertEquals(getWebElement(SUBMITTED_APPLICATION_PAGE_COUNTRY_OF_ORIGIN_XPATH).getText(), person.getCountryOfOrigin());
-        assertEquals(getWebElement(SUBMITTED_APPLICATION_PAGE_GENDER_XPATH).getText(), person.getGender().toLowerCase());
-        assertEquals(getWebElement(SUBMITTED_APPLICATION_PAGE_ADDRESS_XPATH).getText(), person.getAddress());
-        assertEquals(getWebElement(SUBMITTED_APPLICATION_PAGE_DATE_OF_BIRTH).getText(), person.getDateOfBirth());
-        assertEquals(getWebElement(SUBMITTED_APPLICATION_PAGE_THIRD_PARTY_AGREEMENT_XPATH).getText(), SUBMITTED_APPLICATION_THIRD_PARTY_AGREEMENT_TEXT);
-        assertEquals(getWebElement(SUBMITTED_APPLICATION_PAGE_ALLOWED_TO_CONTACT_XPATH).getText(), SUBMITTED_APPLICATION_PAGE_ALLOWED_TO_CONTACT_TEXT);
-
+        assertTrue(getText(SUBMITTED_APPLICATION_PAGE_CAR_MAKE_XPATH).contains(person.getCarMake()));
+        assertEquals(getText(SUBMITTED_APPLICATION_PAGE_PHONE_XPATH), person.getPhone());
+        assertEquals(getText(SUBMITTED_APPLICATION_PAGE_COUNTRY_OF_ORIGIN_XPATH), person.getCountryOfOrigin());
+        assertEquals(getText(SUBMITTED_APPLICATION_PAGE_GENDER_XPATH), person.getGender().toLowerCase());
+        assertEquals(getText(SUBMITTED_APPLICATION_PAGE_ADDRESS_XPATH), person.getAddress());
+        assertEquals(getText(SUBMITTED_APPLICATION_PAGE_DATE_OF_BIRTH), person.getDateOfBirth());
+        assertEquals(getText(SUBMITTED_APPLICATION_PAGE_THIRD_PARTY_AGREEMENT_XPATH), SUBMITTED_APPLICATION_THIRD_PARTY_AGREEMENT_TEXT);
+        assertEquals(getText(SUBMITTED_APPLICATION_PAGE_ALLOWED_TO_CONTACT_XPATH), SUBMITTED_APPLICATION_PAGE_ALLOWED_TO_CONTACT_TEXT);
     }
 }

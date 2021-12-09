@@ -23,6 +23,9 @@ public class GenericStepDefs {
             case "yahoo":
                 getDriver().get("https://yahoo.com");
                 break;
+            case "usps":
+                getDriver().get("https://www.usps.com/");
+                break;
             default:
                 throw new Error("Unsupported page: " + page);
         }

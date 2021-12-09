@@ -104,6 +104,13 @@ Feature: Fill out all Quote fields and verify that submitted fields saved correc
     Then I verify the required fields
     And I verify the optional fields
 
+  @quote4
+  Scenario: Validate ZIP code for Portnov Computer School
+    Given I go to "usps" page
+    When I go to Lookup ZIP page by address
+    And I fill out "4970 El Camino Real" street, "Los Altos" city, "CA" state
+    Then I validate "94022" zip code exists in the result
+
 
 
 

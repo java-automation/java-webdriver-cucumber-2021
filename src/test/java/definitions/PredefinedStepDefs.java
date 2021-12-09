@@ -24,7 +24,7 @@ public class PredefinedStepDefs {
   }
 
   @Then("I resize window to {int} and {int}")
-  public void iResizeWindowToAnd(int width, int height) {
+  public static void iResizeWindowToAnd(int width, int height) {
     Dimension dimension = new Dimension(width, height);
     getDriver().manage().window().setSize(dimension);
   }
@@ -35,7 +35,7 @@ public class PredefinedStepDefs {
   }
 
   @When("I maximize window")
-  public void iMaximizeWindow() {
+  public static void iMaximizeWindow() {
     java.awt.Dimension screenSize = java.awt.Toolkit.getDefaultToolkit().getScreenSize();
     Dimension maxWindowSize = new Dimension((int) screenSize.getWidth(), (int) screenSize.getHeight());
     getDriver().manage().window().setPosition(new Point(0, 0));
@@ -53,13 +53,13 @@ public class PredefinedStepDefs {
   }
 
   @Then("I wait for element with xpath {string} to be present")
-  public void iWaitForElementWithXpathToBePresent(String xpath) {
+  public static void iWaitForElementWithXpathToBePresent(String xpath) {
     new WebDriverWait(getDriver(), 10, 200).until(ExpectedConditions.presenceOfElementLocated(By.xpath(xpath)));
   }
 
 
   @Then("I wait for element with xpath {string} to not be present")
-  public void iWaitForElementWithXpathToNotBePresent(String xpath) {
+  public static void iWaitForElementWithXpathToNotBePresent(String xpath) {
     new WebDriverWait(getDriver(), 10, 200).until(ExpectedConditions.not(ExpectedConditions.presenceOfElementLocated(By.xpath(xpath))));
   }
 
