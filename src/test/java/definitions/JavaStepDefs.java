@@ -3,11 +3,9 @@ package definitions;
 import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
 
-import java.sql.SQLOutput;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Locale;
 
 public class JavaStepDefs {
 
@@ -235,6 +233,22 @@ public class JavaStepDefs {
                 System.out.println("The array doesn't contain " + num);
     }
 
+    @And("I check if array contains {string}")
+    public void iCheckIfArrayContains(String arg) {
+        String[] strArray = {"yes", "no", "idk"};
+        Boolean argContains = false;
+
+        for (int i = 0; i < strArray.length; i++) {
+            if (strArray[i].equals(arg)) {
+                System.out.println("The array contains " + arg);
+                argContains = true;
+                break;
+            }
+        }
+        if(!argContains)
+            System.out.println("The array doesn't contain " + arg);
+    }
+
     @And("I work with java")
     public void iWorkWithJava() {
         int i = 3;
@@ -334,6 +348,19 @@ public class JavaStepDefs {
         System.out.print("Reversed result: ");
         for (int i = original.length()-1; i >= 0; i--)
             System.out.print(original.charAt(i));
+
+        //or variant 2
+        System.out.println(); //чтобы не сливались строки между двумя вариантами
+
+        String orig = "WebDriver";
+        System.out.println("Reverse a word: " + orig);
+
+        String res = "";
+
+        for (int j = orig.length()-1; j>=0; j--) {
+            res +=  orig.charAt(j);
+        }
+        System.out.println("Reversed result: " + res);
     }
 
     @And("I reverse words in a sentence")
@@ -344,6 +371,38 @@ public class JavaStepDefs {
             result += sentence[i] + " ";
 
         System.out.println("The result: " + result);
+    }
+
+    @And("I sort an array")
+    public void iSortAnArray() {
+        int[] arr = {4, 3, 1 ,5, 8, 4};
+        int temp;
+        System.out.println(Arrays.toString(arr));
+
+        for (int i = 0; i < arr.length - 1; i++) { //the pointer (что мы сравниваем)
+            for (int j = i + 1; j < arr.length; j++){    //for each move to compare (с чем мы сравниваем)
+                if (arr[i] > arr[j]) {  //если предыдущий элемент больше следующего
+                    temp = arr[i]; //делаем замену с помощью временной переменной
+                    arr[i] = arr[j];
+                    arr[j] = temp;
+                }
+            }
+        }
+        System.out.print(Arrays.toString(arr));
+    }
+
+    @And("I check if there are duplicates in an array")
+    public void iCheckIfThereAreDuplicatesInAnArray() {
+        int[] arr = {4, 3, 1 ,5, 8, 4};
+        System.out.println("The original array: " + Arrays.toString(arr));
+
+        for (int i = 0; i < arr.length - 1; i++) {
+            for (int j = i + 1; j < arr.length; j++){
+                if (arr[i]==arr[j]) {
+                    System.out.println("Found a double: " + arr[i]);
+                }
+            }
+        }
     }
 }
 
