@@ -22,12 +22,15 @@ public class GenericStepDefs {
             case "yahoo":
                 getDriver().get("https://yahoo.com");
                 break;
+            case "usps":
+                getDriver().get("https://usps.com");
+                break;
             default:
                 throw new Error("Unsupported page: " +page);
         }
-        System.out.println(getDriver().getTitle());
-        System.out.println(getDriver().getCurrentUrl());
-        System.out.println(getDriver().getWindowHandles());
+//        System.out.println(getDriver().getTitle());
+//        System.out.println(getDriver().getCurrentUrl());
+//        System.out.println(getDriver().getWindowHandles());
     }
 
     @And("I print logs to the Console")
