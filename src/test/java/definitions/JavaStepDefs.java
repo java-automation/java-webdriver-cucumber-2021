@@ -554,7 +554,7 @@ public class JavaStepDefs {
             } else if (i % 5 == 0) {
                 sentence += "Buzz ";
             } else {
-                sentence += "" + i + " ";
+                sentence += i + " ";
             }
         }
         System.out.println(sentence);

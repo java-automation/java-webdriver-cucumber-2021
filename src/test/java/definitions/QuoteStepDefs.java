@@ -15,11 +15,11 @@ public class QuoteStepDefs {
 
     @When("I fill out required fields")
     public void iFillOutRequiredFields() {
-        getDriver().findElement(By.xpath("//input[@name='username']")).sendKeys(testdata.username);
-        getDriver().findElement(By.xpath("//input[@name='email']")).sendKeys(testdata.email);
-        getDriver().findElement(By.xpath("//input[@id='password']")).sendKeys(testdata.pass);
-        getDriver().findElement(By.xpath("//input[@id='confirmPassword']")).sendKeys(testdata.confpass);
-        getDriver().findElement(By.xpath("//input[@id='name']")).sendKeys(testdata.name);
+        getDriver().findElement(By.xpath("//input[@name='username']")).sendKeys(testdata.username1);
+        getDriver().findElement(By.xpath("//input[@name='email']")).sendKeys(testdata.email1);
+        getDriver().findElement(By.xpath("//input[@id='password']")).sendKeys(testdata.pass1);
+        getDriver().findElement(By.xpath("//input[@id='confirmPassword']")).sendKeys(testdata.pass1);
+        getDriver().findElement(By.xpath("//input[@id='name']")).sendKeys(testdata.name1);
         getDriver().findElement(By.xpath("//input[@name='agreedToPrivacyPolicy']")).click();
     }
 
@@ -30,11 +30,11 @@ public class QuoteStepDefs {
 
     @Then("I verify the required fields")
     public void iVerifyTheRequiredFields() {
-        Assert.assertEquals(getDriver().findElement(By.xpath("//b[@name='username']")).getText(), testdata.username);
-        Assert.assertEquals(getDriver().findElement(By.xpath("//b[@name='email']")).getText(), testdata.email);
-        Assert.assertEquals(getDriver().findElement(By.xpath("//b[@name='password']")).getText(), testdata.pass);
-        Assert.assertEquals(getDriver().findElement(By.xpath("//b[@name='name']")).getText(), testdata.name);
-        Assert.assertEquals(getDriver().findElement(By.xpath("//b[@name='agreedToPrivacyPolicy']")).getText(), testdata.policy);
+        Assert.assertEquals(getDriver().findElement(By.xpath("//b[@name='username']")).getText(), testdata.username1);
+        Assert.assertEquals(getDriver().findElement(By.xpath("//b[@name='email']")).getText(), testdata.email1);
+        Assert.assertEquals(getDriver().findElement(By.xpath("//b[@name='password']")).getText(), testdata.pass1);
+        Assert.assertEquals(getDriver().findElement(By.xpath("//b[@name='name']")).getText(), testdata.name1);
+        Assert.assertEquals(getDriver().findElement(By.xpath("//b[@name='agreedToPrivacyPolicy']")).getText(), testdata.policy1);
     }
 
     @And("I go back and forward, then refresh the page")

@@ -1,11 +1,10 @@
 package definitions;
 
 public class TestData {
-
-    String username = "eckimsey";
-    String email = "casianolga@gmail.com";
-    String pass = "testPass2021-11-10";
-    String confpass = "testPass2021-11-10";
-    String name = "Eric";
-    String policy = "true";
+    //user1
+    String username1 = "eckimsey";
+    String email1 = "casianolga@gmail.com";
+    String pass1 = "testPass2021-11-10";
+    String name1 = "Eric";
+    String policy1 = "true";
 }
