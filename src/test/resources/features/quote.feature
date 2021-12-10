@@ -111,6 +111,29 @@ Feature: Fill out all Quote fields and verify that submitted fields saved correc
     And I fill out "4970 El Camino Real" street, "Los Altos" city, "CA" state
     Then I validate "94022" zip code exists in the result
 
+  @quote4.1
+  Scenario: Validate ZIP code for Portnov Computer School with resizing initial window and Quick Tool Tracking options;
+    Given I go to "usps" page
+    When I go to Lookup ZIP page by address with resizing initial window and Quick Tool Tracking options panel
+    And I fill out "4970 El Camino Real" street, "Los Altos" city, "CA" state
+    Then I validate "94022" zip code exists in the result
+
+  @quote4_2
+  Scenario: Validate ZIP code for Portnov Computer School through navigation panel
+    Given I go to "usps" page
+    When I go to Lookup ZIP page by address through navigation panel
+    And I fill out "4970 El Camino Real" street, "Los Altos" city, "CA" state
+    Then I validate "94022" zip code exists in the result
+
+  @quote4_3
+  Scenario: Validate ZIP code for Portnov Computer School through hamburger menu bar
+    Given I go to "usps" page
+    When I go to Lookup ZIP page by address through hamburger menu bar
+    And I fill out "4970 El Camino Real" street, "Los Altos" city, "CA" state
+    Then I validate "94022" zip code exists in the result
+
+
+
 
 
 
