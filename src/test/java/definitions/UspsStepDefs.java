@@ -5,7 +5,9 @@ import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.Select;
+import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.util.List;
 
@@ -23,7 +25,8 @@ public class UspsStepDefs {
             getDriver().findElement(By.xpath("//a[@id='mail-ship-width']")).click();
             getDriver().findElement(By.xpath("//a[contains(@href,'ZipLookupAction')]")).click();
         } else throw new Error("Unknown strategy: " + strategy);
-        getDriver().findElement(By.xpath("//a[contains(@class,'btn-primary zip-code-home')][@data-location='byaddress']")).click();
+        WebElement findByAddress = getDriver().findElement(By.xpath("//a[@class='btn-primary zip-code-home'][@data-location='byaddress']"));
+        new WebDriverWait(getDriver(), 3).until(ExpectedConditions.visibilityOf(findByAddress)).click();
     }
 
     @And("I fill out {string} street, {string} city, {string} state")
@@ -36,7 +39,9 @@ public class UspsStepDefs {
 
     @Then("I validate {string} zip code exists in all results")
     public void iValidateZipCodeExistsInTheResult(String zip) {
-        List<WebElement> results = getDriver().findElements(By.xpath("//div[@id='zipByAddressDiv']//li[contains(@class,'list-group-item')]"));
+        String containerXPath = "//div[@id='zipByAddressDiv']";
+        new WebDriverWait(getDriver(), 3).until(ExpectedConditions.visibilityOf(getDriver().findElement(By.xpath(containerXPath))));
+        List<WebElement> results = getDriver().findElements(By.xpath(containerXPath + "//li[contains(@class,'list-group-item')]"));
         for (WebElement el : results) assertThat(el.getText()).contains(zip);
     }
 }
