@@ -5,6 +5,7 @@ import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.Select;
 import org.openqa.selenium.support.ui.WebDriverWait;
@@ -18,13 +19,22 @@ public class UspsStepDefs {
 
     @When("I go to Lookup ZIP page by address through {string}")
     public void iGoToLookupZIPPageByAddress(String strategy) {
-        if (strategy.equals("quick tools")) {
-            getDriver().findElement(By.xpath("//ul[@class='nav-list']//a[contains(@class,'nav-first-element')]")).click();
-            getDriver().findElement(By.xpath("//a[@role='menuitem']/img[contains(@alt,'Zip Code')]")).click();
-        } else if (strategy.equals("send")) {
-            getDriver().findElement(By.xpath("//a[@id='mail-ship-width']")).click();
-            getDriver().findElement(By.xpath("//a[contains(@href,'ZipLookupAction')]")).click();
-        } else throw new Error("Unknown strategy: " + strategy);
+        WebElement sendButton = getDriver().findElement(By.xpath("//a[@id='mail-ship-width']"));
+        switch (strategy) {
+            case "quick tools" -> {
+                getDriver().findElement(By.xpath("//ul[@class='nav-list']//a[contains(@class,'nav-first-element')]")).click();
+                getDriver().findElement(By.xpath("//a[@role='menuitem']/img[contains(@alt,'Zip Code')]")).click();
+            }
+            case "send" -> {
+                sendButton.click();
+                getDriver().findElement(By.xpath("//a[contains(@href,'ZipLookupAction')]")).click();
+            }
+            case "mouseover" -> {
+                new Actions(getDriver()).moveToElement(sendButton).perform();
+                getDriver().findElement(By.xpath("//li[@class='tool-zip']/a[contains(@href,'zip-code-lookup')]")).click();
+            }
+            default -> throw new Error("Unknown strategy: " + strategy);
+        }
         WebElement findByAddress = getDriver().findElement(By.xpath("//a[@class='btn-primary zip-code-home'][@data-location='byaddress']"));
         new WebDriverWait(getDriver(), 3).until(ExpectedConditions.visibilityOf(findByAddress)).click();
     }
