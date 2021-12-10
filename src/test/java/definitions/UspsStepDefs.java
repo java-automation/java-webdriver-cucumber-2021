@@ -21,9 +21,9 @@ public class UspsStepDefs {
             getDriver().findElement(By.xpath("//a[@role='menuitem']/img[contains(@alt,'Zip Code')]")).click();
         } else if (strategy.equals("send")) {
             getDriver().findElement(By.xpath("//a[@id='mail-ship-width']")).click();
-            getDriver().findElement(By.xpath("//h2/a[contains(normalize-space(text()),'Look Up a ZIP Code')]")).click();
+            getDriver().findElement(By.xpath("//a[contains(@href,'ZipLookupAction')]")).click();
         } else throw new Error("Unknown strategy: " + strategy);
-        getDriver().findElement(By.xpath("(//a[contains(@class,'btn-primary')][@data-location='byaddress'])[1]")).click();
+        getDriver().findElement(By.xpath("//a[contains(@class,'btn-primary zip-code-home')][@data-location='byaddress']")).click();
     }
 
     @And("I fill out {string} street, {string} city, {string} state")
