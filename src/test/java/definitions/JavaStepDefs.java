@@ -620,17 +620,18 @@ public class JavaStepDefs {
 
     @And("I find largest element in given array")
     public void iFindLargestElementInGivenArray(@Transpose List<Integer> list) {
+        if (list.size() == 0) throw new Error("No elements in the array!");
         int[] arr = convertListToPrimitiveArray(list);
         System.out.println("Given array: " + Arrays.toString(arr));
         System.out.println("Max element: " + getMaxValueInArrayOfIntegers(arr));
     }
 
     private int getMaxValueInArrayOfIntegers(int[] arr) {
-        int maxInd = 0;
+        int max = arr[0];
         for (int i = 1; i < arr.length; ++i) {
-            if (arr[i] > arr[maxInd]) maxInd = i;
+            if (arr[i] > max) max = arr[i];
         }
-        return arr[maxInd];
+        return max;
     }
 
     @And("I provide FizzBuzz output for number {int}")
@@ -699,11 +700,15 @@ public class JavaStepDefs {
     }
 
     private String getReversedSentenceCleanedAndSplitWithRegEx(String sentence) {
-        String[] wordArray = sentence.strip().replaceAll("[^a-zA-Z0-9 ]", " ").split("[ ]+");
+        String[] wordArray = sentence
+                .strip()
+                .replaceAll("[^a-zA-Z0-9 ]", " ")
+                .split("[ ]+");
         System.out.println("Split: " + Arrays.toString(wordArray));
 
         StringBuilder resultSentence = new StringBuilder();
-        for (int i = wordArray.length - 1; i >= 0; --i) resultSentence.append(wordArray[i]).append(" ");
+        for (int i = wordArray.length - 2; i >= 0; --i) resultSentence.append(wordArray[i]).append(" ");
+        resultSentence.append(wordArray[0]); //to avoid space at the end cut 1 loop iteration
         return resultSentence.toString();
     }
 
