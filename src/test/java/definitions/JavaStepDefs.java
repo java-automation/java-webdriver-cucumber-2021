@@ -760,4 +760,35 @@ public class JavaStepDefs {
         }
         return palindromeSize;
     }
+
+    @And("I find 2nd largest element in a given array")
+    public void iFindNdLargestElementInAGivenArray(@Transpose List<Integer> list) {
+        if (list.size() < 2) throw new Error("Provided array has less than 2 elements!");
+        int[] arr = convertListToPrimitiveArray(list);
+        System.out.println("2nd largest: " + getSecondLargestElement(arr));
+    }
+
+    private int getSecondLargestElement(int[] arr) {
+        int max1 = arr[0];
+        int max2 = arr[1];
+
+        if (max1 < max2) {
+            max1 ^= max2;
+            max2 ^= max1;
+            max1 ^= max2;
+        }
+
+        for (int i = 2; i < arr.length; ++i) {
+            int itr = arr[i];
+            if (itr > max2) {
+                if (itr < max1) {
+                    max2 = itr;
+                } else {
+                    max2 = max1;
+                    max1 = itr;
+                }
+            }
+        }
+        return max2;
+    }
 }

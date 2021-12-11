@@ -88,8 +88,8 @@ Feature: Java experiments
   #Empty list is ok, but assumes no empty cells (null) values
   Scenario: Array exercises
     And For given array I: print, print "even" numbers, check if it's empty, check if it contains number 7
-    | 2 | 4 | 43543 | 34 | -2342 | 117799 | 0 | -94 | 7 | 11 |
-   #|
+      | 2 | 4 | 43543 | 34 | -2342 | 117799 | 0 | -94 | 7 | 11 |
+      #|
 
   @java16
   Scenario: Fibonacci number
@@ -150,3 +150,9 @@ Feature: Java experiments
   @java26
   Scenario: Longest palindrome in a phrase
     And I find the longest palindrome in a given sentence "Madam, how about number 4343434: 'Eva, can I see bees in a cave?'. - 'Wow!'"
+
+  @java27
+  #duplicate max - return max
+  Scenario: 2nd largest element
+    And I find 2nd largest element in a given array
+      | 5 | 3 | 2 | 8 | 4 | 1 |
