@@ -14,15 +14,15 @@ import static support.TestContext.*;
 public class GenericStepDefs {
     @Given("I go to {string} page")
     public void iGoToPage(String page) {
-        switch (page) {
+        switch (page.toLowerCase()) {
             case "quote":
                 getDriver().get("https://skryabin.com/market/quote.html");
                 break;
             case "google":
                 getDriver().get("https://www.google.com/");
                 break;
-            case "yahoo":
-                getDriver().get("https://www.yahoo.com/");
+            case "usps":
+                getDriver().get("https://www.usps.com/");
                 break;
             default:
                 throw new Error("Unsupported Page: " + page);

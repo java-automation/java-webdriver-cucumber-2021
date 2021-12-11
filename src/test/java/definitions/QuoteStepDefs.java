@@ -9,7 +9,9 @@ import org.openqa.selenium.By;
 import org.testng.asserts.Assertion;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertThat;
 import static support.TestContext.getDriver;
+import static org.assertj.core.api.Assertions.assertThat;
 
 public class QuoteStepDefs {
     @When("I fill out required fields")
@@ -38,6 +40,19 @@ public class QuoteStepDefs {
 
     @Then("I verify the required fields")
     public void iVerifyTheRequiredFields() {
+
+        String resultText = getDriver().findElement(By.xpath("//div[@id='quotePageResult']")).getText();
+        System.out.println(resultText);
+        assertThat(resultText).contains("jdoe");
+        assertThat(resultText).doesNotContain("welcome");
+
+        String agreed = getDriver().findElement(By.xpath("//b[@name='agreedToPrivacyPolicy']")).getText();
+        assertThat(agreed).isEqualTo("true");
+
+        String password = getDriver().findElement(By.xpath("//b[@name='password']")).getText();
+        assertThat(password).isEqualTo("[entered]");
+
+
         String usernameResult = getDriver().findElement(By.xpath("//b[@name='username']")).getText();
 //        if (!usernameResult.equals("jdoe")) {
 //            throw new Error("Incorrect username: " + usernameResult);
