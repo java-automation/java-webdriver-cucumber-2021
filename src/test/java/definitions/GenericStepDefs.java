@@ -49,9 +49,10 @@ public class GenericStepDefs {
 
     @Given("I go to {string} page")
     public void iGoToPage(String page) {
-        switch (page) {
+        switch (page.toLowerCase()) {
             case "google" -> getDriver().get("https://www.google.com/");
             case "quote" -> getDriver().get("https://skryabin.com/market/quote.html");
+            case "usps" -> getDriver().get("https://usps.com");
             default -> System.out.println("Unsupported page: " + page);
         }
     }

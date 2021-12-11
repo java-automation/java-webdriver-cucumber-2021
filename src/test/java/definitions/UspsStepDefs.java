@@ -31,44 +31,58 @@ public class UspsStepDefs {
         );
     }
 
-    public void waitTillVisible(String xpath) {
+    public void waitTillVisible(By locator) {
         new WebDriverWait(getDriver(),10,200)
-                                              .until(ExpectedConditions.visibilityOfElementLocated(By.xpath(xpath)));
+                                              .until(ExpectedConditions.visibilityOfElementLocated(locator));
+    }
+
+    private void throughToolsMenuToZIPlookupChoicesPage() {
+        WebElement quickToolsMenu = getDriver().findElement(By.xpath("//li[contains(@class,'qt-nav')]"));
+        quickToolsMenu.click();
+        By lookupZipMenuLocator = By.xpath("//li[contains(@class,'qt-nav')]//a[contains(@href,'zip-code-lookup')]");
+        waitTillVisible(lookupZipMenuLocator);
+        getDriver().findElement(lookupZipMenuLocator).click();
     }
 
     @When("I go to Lookup ZIP page by address")
-    public void iGoToLookupZIPPageByAddress() {
-        // Consideration: contains in "//a[contains(text(),'Quick Tools')]" finds two (nested) elements
-        WebElement quickToolsMenuItem = getDriver().findElement(By.xpath("//a[text()='Quick Tools']"));
-        quickToolsMenuItem.click();
-        WebElement zipCodeLookup =
-                getDriver().findElement(By.xpath("//p[contains(normalize-space(),'Look Up a ZIP Code')]/parent::a"));
-        zipCodeLookup.click();
-        assertThat(getDriver().getTitle()).contains("ZIP Code™ Lookup");
-        // Consideration: xpath "//a[@data-location='byaddress']" locates 7 elements, 5 of those are hidden
-        // Consideration: Following element is visible even when viewport is small
-        WebElement byAddressLink = getDriver().findElement(By.xpath("//a[text()='By Address']"));
-        byAddressLink.click();
+    public void iGoToLookupZIPPageByAddress(){
+        throughToolsMenuToZIPlookupChoicesPage();
+        getDriver().findElement(By.xpath("//div[@id='zip-lookup-welcome']" +
+                                           "//a[contains(@href,'byaddress')][contains(@class,'btn-primary')]")).click();
     }
 
-    @When("I go to Lookup ZIP page by address using different path")
+    @When("I go to Lookup ZIP page by address via Send menu mouseover")
     public void iGoToLookupZIPPageByAddressDiffPath() {
-        WebElement sendMenuItem = getDriver().findElement(By.id("mail-ship-width"));
-        Actions actions = new Actions(getDriver());
-        actions.moveToElement(sendMenuItem).perform();
-        waitTillVisible("//li[@class='tool-zip']");
-        // DevTools' Source tab > Set 'Event listener Breakpoint' mouse > mouseover to keep menu on hover open for inspection
-        getDriver().findElement(By.xpath("//a[text()='Look Up a ZIP Code']")).click(); // //li[@class='tool-zip']
-        assertThat(getDriver().getTitle()).contains("ZIP Code™ Lookup");
-        getDriver().findElement(By.xpath("//a[text()='By Address']")).click();
+        WebElement sendMenu = getDriver().findElement(By.id("mail-ship-width"));
+        new Actions(getDriver()).moveToElement(sendMenu).perform();
+        getDriver().findElement(By.xpath("//li[contains(@class,'tool-zip')]//a[contains(@href,'zip-code-lookup')]")).click();
+        // alternative xpath with all predicates related to the same tag
+        getDriver().findElement(By.xpath("//a[contains(@href,'byaddress')]" +
+                                         "[contains(@class,'btn-primary')][contains(@class,'zip-code-home')]")).click();
     }
 
     @When("I go to Lookup ZIP page by address on small screen")
     public void iGoToLookupZIPPageByAddressOnSmallScreen() {
         getDriver().findElement(By.xpath("//a[@data-gtm-label='zip-code-link']")).click();
-        waitTillVisible("//h1[text()='Look Up a ZIP Code']");
-        assertThat(getDriver().getTitle()).contains("ZIP Code™ Lookup");
-        getDriver().findElement(By.xpath("//a[text()='By Address']")).click();
+        getDriver().findElement(By.xpath("//div[@id='zip-lookup-welcome']" +
+                                           "//a[contains(@href,'byaddress')][contains(@class,'btn-primary')]")).click();
+    }
+
+    @When("I go to Lookup ZIP page by address on small screen via hamburger menu and Quick Tools")
+    public void toZipByAddressOnSmallScreenViaHamMenuQuickTools() {
+        getDriver().findElement(By.xpath("//a[contains(@class,'mobile-hamburger')]")).click();
+        throughToolsMenuToZIPlookupChoicesPage();
+        getDriver().findElement(By.xpath("//div[@id='zip-lookup-welcome']//a[contains(@href,'byaddress')]")).click();
+    }
+
+    @When("I go to Lookup ZIP page by address on small screen via hamburger menu and Send")
+    public void toZipByAddressOnSmallScreenViaHamMenuSend() {
+        getDriver().findElement(By.xpath("//a[contains(@class,'mobile-hamburger')]")).click();
+        getDriver().findElement(By.id("mail-ship-width")).click();
+        By lookupZipMenuLocator = By.xpath("//li[contains(@class,'tool-zip')]//a[contains(@href,'zip-code-lookup')]");
+        waitTillVisible(lookupZipMenuLocator);
+        getDriver().findElement(lookupZipMenuLocator).click();
+        getDriver().findElement(By.xpath("//div[@id='zip-lookup-welcome']//a[contains(@href,'byaddress')]")).click();
     }
 
     @And("I fill out random street, city, state")
@@ -100,9 +114,10 @@ public class UspsStepDefs {
             zipCode = testAddress.getZip();
             System.out.println("Checking " + zipCode + " zip code");
         }
-        waitTillVisible("//div[contains(@class,'result-address-wrapper')]");
+        waitTillVisible(By.xpath("//div[contains(@class,'result-address-wrapper')]"));
         List<WebElement> resultElements = getDriver()
                                             .findElements(By.xpath("//div[contains(@class,'zipcode-result-address')]"));
+        resultElements.removeIf(el -> !el.isDisplayed());
         assertThat(resultElements.size()).isGreaterThan(0);
         for (WebElement elem : resultElements) {
             assertThat(elem.getText()).contains(zipCode);
