@@ -156,3 +156,8 @@ Feature: Java experiments
   Scenario: 2nd largest element
     And I find 2nd largest element in a given array
       | 5 | 3 | 2 | 8 | 4 | 1 |
+
+  @java28
+  Scenario: Check array for duplicates
+    And I check if given array has duplicates, print if found.
+      | 4 | 3 | 1 | 8 | 7 | 3 | 9 | 4 | 7 | 3 | 0 | 3 | 2 |

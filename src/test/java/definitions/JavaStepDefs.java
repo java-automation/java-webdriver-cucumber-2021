@@ -791,4 +791,29 @@ public class JavaStepDefs {
         }
         return max2;
     }
+
+    @And("I check if given array has duplicates, print if found.")
+    public void iCheckIfGivenArrayHasDuplicatesPrintIfFound(@Transpose List<Integer> list) {
+        int[] arr = convertListToPrimitiveArray(list);
+        boolean duplicates = hasDuplicates(arr);
+        System.out.println("Do we have duplicates? " + duplicates);
+        if (duplicates) printDuplicates(arr);
+    }
+
+    private boolean hasDuplicates(int[] arr) {
+        Set<Integer> set = new HashSet<>();
+        for (int el : arr) set.add(el);
+        return !(set.size() == arr.length);
+    }
+
+    private void printDuplicates(int[] arr) {
+        Map<Integer, Integer> dupes = new HashMap<>();
+        for (int el : arr) {
+            if (dupes.containsKey(el)) dupes.put(el, dupes.get(el) + 1);
+            else dupes.put(el, 1);
+        }
+        for (int el : dupes.keySet()) {
+            if (dupes.get(el) > 1) System.out.println("Count for " + el + ": " + dupes.get(el));
+        }
+    }
 }
