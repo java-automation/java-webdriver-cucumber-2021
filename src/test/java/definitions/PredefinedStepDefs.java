@@ -56,6 +56,7 @@ public class PredefinedStepDefs {
     public static void iWaitForElementWithXpathToBePresent(String xpath) {
         new WebDriverWait(getDriver(), 10, 200).until(ExpectedConditions.presenceOfElementLocated(By.xpath(xpath)));
     }
+
     @Then("I wait for element with xpath {string} to be displayed")
     public static void iWaitForElementWithXpathToBeDisplayed(String xpath) {
         new WebDriverWait(getDriver(), 10, 200).until(ExpectedConditions.visibilityOfElementLocated(By.xpath(xpath)));

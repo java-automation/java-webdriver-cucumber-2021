@@ -17,6 +17,7 @@ import org.openqa.selenium.remote.DesiredCapabilities;
 import org.openqa.selenium.remote.LocalFileDetector;
 import org.openqa.selenium.remote.RemoteWebDriver;
 import org.openqa.selenium.safari.SafariDriver;
+
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
@@ -56,7 +57,9 @@ public class TestContext {
                     chromePreferences.put("safebrowsing.enabled", false);
                     chromePreferences.put("profile.block_third_party_cookies", true);
                     chromePreferences.put("plugins.always_open_pdf_externally", true);
-                    chromePreferences.put("plugins.plugins_disabled", new ArrayList<String>(){{ add("Chrome PDF Viewer"); }});
+                    chromePreferences.put("plugins.plugins_disabled", new ArrayList<String>() {{
+                        add("Chrome PDF Viewer");
+                    }});
                     chromePreferences.put("credentials_enable_service", false);
                     chromePreferences.put("password_manager_enabled", false);
                     ChromeOptions chromeOptions = new ChromeOptions();
@@ -96,7 +99,7 @@ public class TestContext {
                 default:
                     throw new RuntimeException("Driver is not implemented for: " + browser);
             }
-        } else if (testEnv.equals("grid")){
+        } else if (testEnv.equals("grid")) {
             DesiredCapabilities capabilities = new DesiredCapabilities();
             capabilities.setBrowserName(browser);
             capabilities.setPlatform(Platform.ANY);
@@ -111,4 +114,5 @@ public class TestContext {
             throw new RuntimeException("Unsupported test environment: " + testEnv);
         }
     }
+
 }

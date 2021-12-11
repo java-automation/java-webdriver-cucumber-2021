@@ -6,7 +6,6 @@ import io.cucumber.java.en.When;
 import models.PersonData;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
-import org.openqa.selenium.support.ui.Select;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -16,7 +15,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 import static support.TestContext.getDriver;
 
-public class QuoteStepDefs {
+public class QuoteStepDefs extends HelperStepDefs {
     public static final String TITLE_GET_A_QUOTE_TEXT = "Get a Quote";
     public static final String PRIVACY_POLICY_XPATH = "//input[@name='agreedToPrivacyPolicy']";
     public static final String USERNAME_XPATH = "//input[@name='username']";
@@ -93,8 +92,8 @@ public class QuoteStepDefs {
         type(ADDRESS_XPATH, person.getAddress());
 
         click(COUNTRY_OF_ORIGIN_XPATH);
-        getListOfValue(COUNTRY_OF_ORIGIN_XPATH, person.getCountryOfOrigin());
-        getListOfValue(CAR_MAKE_XPATH, person.getCarMake());
+        selectByValue(COUNTRY_OF_ORIGIN_XPATH, person.getCountryOfOrigin());
+        selectByValue(CAR_MAKE_XPATH, person.getCarMake());
 
         List<WebElement> genderList = getDriver().findElements(By.xpath(GENDER_XPATH));
         List<String> genderValue = new ArrayList<>();
@@ -109,39 +108,8 @@ public class QuoteStepDefs {
         }
     }
 
-    public static void getListOfValue(String xpath, String value) {
-        Select list = new Select(getDriver().findElement(By.xpath(xpath)));
-        List<String> valueList = new ArrayList<>();
-        List<WebElement> listOptions = list.getOptions();
-        listOptions.forEach(el -> {
-            valueList.add(el.getAttribute("value"));
-        });
-        click(xpath);
-        if (valueList.contains(value)) {
-            listOptions.get(valueList.indexOf(value)).click();
-        } else throw new Error("There is no value " + value + " in the list");
-    }
-
     private String getFullName() {
         return person.getFirstName() + " " + person.getMiddleName() + " " + person.getLastName();
-    }
-
-    public static WebElement getWebElement(String xpath) {
-        return getDriver().findElement(By.xpath(xpath));
-    }
-
-    public static String getText(String xpath) {
-        return getWebElement(xpath).getText();
-    }
-
-    public static void click(String xpath) {
-        getDriver().findElement(By.xpath(xpath)).click();
-    }
-
-    public static void type(String xpath, String text) {
-        click(xpath);
-        getDriver().findElement(By.xpath(xpath)).clear();
-        getDriver().findElement(By.xpath(xpath)).sendKeys(text);
     }
 
     @And("I submit the page")
