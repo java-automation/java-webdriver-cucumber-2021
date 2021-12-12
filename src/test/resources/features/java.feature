@@ -154,3 +154,25 @@ Feature: Java feature
       And I submit the form
       Then I verify that submitted fields saved correctly
       And I verify all optional fields saved correctly
+
+  @javaDecember09
+    Scenario: Looking for duplicates within an array 2
+      Given I search duplicates within an array "1,5,6,9,4,2,3,1,8,9"
+    And I search duplicates within an array "1,5,6,9,4,2,3,8"
+
+   Scenario: Checking word for being palindrome
+     Given I check is word "civic" palindrome
+     Given I check is word "civic2" palindrome
+     Given I check is word "ded" palindrome
+     Given I check is word "civic" palindrome with other method
+     Given I check is word "civic2" palindrome with other method
+     Given I check is word "ded" palindrome with other method
+
+  Scenario: Looking for two highest elements of array 2
+    Given I search two highest element in array "1,2,3,4,5,6,7,8,9"
+    And I search two highest element in array "5,6,8,1,36,94,28,74,5"
+    And I search two highest element in array "5,6,8,1,36,94,28,74,500"
+    And I search two highest element in array "5,6,8,1,36,94,28,74,500,501"
+    And I search two highest element in array "5,6,8,1,36,94,28,74,501,500"
+    And I search two highest element in array "5,6"
+    And I search two highest element in array "5"

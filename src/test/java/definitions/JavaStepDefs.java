@@ -4,6 +4,7 @@ import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
+import org.apache.commons.text.io.StringSubstitutorReader;
 import org.openqa.selenium.By;
 import org.openqa.selenium.Dimension;
 import org.openqa.selenium.Keys;
@@ -568,11 +569,11 @@ public class JavaStepDefs {
                     iSecondMax = aArray[i];
                 }
             }
-            System.out.println("First highest element is - " + iFirstMax);
+            System.out.println("First highest element is - " +  iFirstMax);
             System.out.println("Second highest element is - " + iSecondMax);
         } else if (aArray.length == 2) {
-            System.out.println("First highest element is - " + aArray[0]);
-            System.out.println("Second highest element is - " + aArray[1]);
+            System.out.println("First highest element is - " + Math.max(aArray[0], aArray[1]));
+            System.out.println("Second highest element is - " + Math.min(aArray[0], aArray[1]));
         } else {
             throw new Error("Array looks too small.");
         }
@@ -611,5 +612,32 @@ public class JavaStepDefs {
         } else {
             throw new Error("There is no duplicates within an array.");
         }
+    }
+
+    @Given("I check is word {string} palindrome")
+    public void iCheckIsWordPalindrome(String sWord) {
+        System.out.println("Word: " + sWord + checkWordIsPalindrome(sWord));
+    }
+
+    public String checkWordIsPalindrome(String sWord) {
+        String result = "";
+        for (int i = sWord.length() - 1; i >= 0; i--) {
+            result += sWord.charAt(i);
+        }
+        return (sWord.equals(result)) ? " is palindrome" : " isn't palindrome";
+    }
+
+    public String checkWordIsPalindromeMethod2(String sWord) {
+        for (int i = 0; i < (sWord.length() / 2); i++) {
+            if (sWord.charAt(i) != sWord.charAt((sWord.length()-1) - i) ) {
+                return " isn't palindrome";
+            }
+        }
+        return " is palindrome";
+    }
+
+    @Given("I check is word {string} palindrome with other method")
+    public void iCheckIsWordPalindromeWithOtherMethod(String sWord) {
+        System.out.println("Word: " + sWord + checkWordIsPalindromeMethod2(sWord));
     }
 }
