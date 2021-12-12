@@ -7,6 +7,7 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.Select;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 import static org.junit.Assert.assertEquals;
@@ -33,11 +34,17 @@ public class USPSStepDefs extends HelperStepDefs {
     public static final String ZIPCODE_LOOK_IN_NAVQUICKTOOLS_MENU_XPATH = "//a[@name='navquicktools']//..//a[@class='nav-first-element menuitem']//..//li/a/img";
     public static final String ZIPCODE_LOOK_UP_ICON_NAVIGATION_QUICKTOOLS_TEXT = "Zip Code™ Lookup Icon";
     public static final String QUICK_TOOL_TRACK_OPTION_XPATH = "//div[@class='quicktools track-opt']";
+    public static final String QUICK_TOOL_TRACK_OPTION_BUTTON_LINK_XPATH = "//div[@class='quicktools track-opt']//a[@class='button--link']";
+    public static final String CALCULATOR_DESTINATION_SELECT_XPATH = "//select[@id='CountryID']";
+    public static final String CALCULATOR_SUBMIT_PANEL_XPATH = "//input[@type='submit']";
+    public static final String CALCULATOR_POSTCARD_QUANTITY_XPATH = "//input[@id='quantity-0']";
+    public static final String CALCULATOR_POSTCARD_BUTTON_CALCULATE_XPATH = "//input[@type='button'][@value='Calculate']";
+    public static final String CALCULATOR_POSTCARD_TOTAL_PRICE_XPATH = "//div[@id='total']";
     private final WebDriverWait wait = new WebDriverWait(getDriver(), 5, 200);
 
 
     @When("I go to Lookup ZIP page by address")
-    public void iGoToLookupZIPPageByAddress() throws Exception {
+    public void iGoToLookupZIPPageByAddress() throws Error {
         if ((getWebElement(NAV_LIST_XPATH).isDisplayed())) {
             System.out.println("I run from Navigation list menu");
             iGoToLookupZIPPageByAddressThroughNavigationPanel();
@@ -121,5 +128,52 @@ public class USPSStepDefs extends HelperStepDefs {
             getWebElementFromListByAttributeValue(NAVQICKTOOLS_MENU_ITEM_XPATH, "alt", ZIPCODE_LOOK_UP_ICON_NAVIGATION_QUICKTOOLS_TEXT).click();
             iClickByAddress();
         } else throw new Error("Hamburger panel is not displayed in USPS page");
+    }
+
+    @When("I go to Calculate Price Page")
+    public void iGoToCalculatePricePage() {
+        System.out.println("I run from resizing initial window and Quick Tool Option panel ");
+        wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath(QUICK_TOOL_TRACK_OPTION_BUTTON_LINK_XPATH)));
+        setSize(700, 700);
+        getWebElementFromListByAttributeValue(QUICK_TOOL_TRACK_OPTION_BUTTON_LINK_XPATH, "data-gtm-label", "calculate-price-link").click();
+    }
+
+    @And("I select {string} with {string} shape")
+    public void iSelectWithShape(String destination, String shape) {
+        wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath(CALCULATOR_DESTINATION_SELECT_XPATH)));
+        Select list = new Select(getDriver().findElement(By.xpath(CALCULATOR_DESTINATION_SELECT_XPATH)));
+        click(CALCULATOR_DESTINATION_SELECT_XPATH);
+        list.selectByVisibleText(destination);
+        getWebElementFromListByAttributeValue(CALCULATOR_SUBMIT_PANEL_XPATH, "value", shape).click();
+    }
+
+    @And("I define {string} quantity")
+    public void iDefineQuantity(String quantity) {
+        wait.until(ExpectedConditions.elementToBeClickable(By.xpath(CALCULATOR_POSTCARD_QUANTITY_XPATH)));
+        type(CALCULATOR_POSTCARD_QUANTITY_XPATH, quantity);
+        assertEquals(0, getTotalPrice(), 0.0);
+        click(CALCULATOR_POSTCARD_BUTTON_CALCULATE_XPATH);
+    }
+
+    private double getTotalPrice() {
+        return parseDouble(getWebElement(CALCULATOR_POSTCARD_TOTAL_PRICE_XPATH).getText());
+    }
+
+    private double getPrice(String xpath) {
+        return parseDouble(getWebElement(xpath).getText());
+    }
+
+    private double parseDouble(String price) throws NumberFormatException {
+        return Double.parseDouble(price.replaceAll("[$,]", ""));
+    }
+
+    @Then("I calculate the price and validate cost is {string}")
+    public void iCalculateThePriceAndValidateCostIs(String price) throws NumberFormatException {
+        Double price_0 = getPrice("//div[@id='price-0']");
+        Double quantity = Double.parseDouble(getWebElement("//input[@id='quantity-0']").getAttribute("value"));
+        System.out.println("Quantity = " + quantity + "price = " + price_0);
+        System.out.println("Total price =  " + getTotalPrice());
+        assertEquals(price_0 * quantity, parseDouble(price), 0.0);
+        assertEquals(getTotalPrice(), parseDouble(price), 0.0);
     }
 }
