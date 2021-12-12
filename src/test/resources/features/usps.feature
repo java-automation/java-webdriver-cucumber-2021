@@ -11,3 +11,8 @@
     Scenario: Calculate price
       Given I go to "usps" page
       When I go to Calculate Price Page
+      And I wait for 5 sec
+      And I select "Canada" with "Postcard" shape
+      And I define "2" as quantity
+      Then I calculate price and validate cost is "2.60"
+
