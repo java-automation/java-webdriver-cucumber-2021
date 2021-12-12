@@ -9,15 +9,18 @@ import static support.TestContext.getDriver;
 public class GenericStepDefs {
     @Given("I go to {string} page")
     public void iNavigateToPage(String page) {
-        switch (page) {
+        switch (page.toLowerCase()) {
             case "quote":
                 getDriver().get("https://skryabin.com/market/quote.html");
                 break;
             case "google":
                 getDriver().get("https://google.com");
                 break;
+            case "usps":
+                getDriver().get("https://www.usps.com/");
+                break;
             default:
-                throw new Error("Sorry, this page " + page + " is not supported" );
+                throw new Error("Sorry, the page > " + page + " is not supported" );
         }
         System.out.println(getDriver().getTitle());
         System.out.println(getDriver().getCurrentUrl());

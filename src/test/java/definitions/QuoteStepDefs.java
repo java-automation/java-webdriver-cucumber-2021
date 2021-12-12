@@ -4,9 +4,9 @@ import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
-import org.junit.Assert;
 import org.openqa.selenium.By;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static support.TestContext.getDriver;
 
 public class QuoteStepDefs {
@@ -33,14 +33,14 @@ public class QuoteStepDefs {
      String nameResult = getDriver().findElement(By.name("name")).getText();
      String agreedToPrivacyPolicyResult = getDriver().findElement(By.name("agreedToPrivacyPolicy")).getText();
 
-
-        Assert.assertEquals("Julia", usernameResult);
-        Assert.assertEquals("yulia@example.com", emailResult);
-        Assert.assertEquals("[entered]", passwordResult);
-        Assert.assertEquals("Julia K", nameResult);
-        Assert.assertEquals("true", agreedToPrivacyPolicyResult);
-
-
+        assertThat(usernameResult).isEqualTo("Julia");
+        assertThat(emailResult).isEqualTo("yulia@example.com");
+        assertThat(passwordResult).isEqualTo("[entered]");
+        assertThat(passwordResult).doesNotContain("12345");
+        assertThat(nameResult).isEqualTo("Julia K");
+        assertThat(agreedToPrivacyPolicyResult).isEqualTo("true");
 
     }
+
+
 }
