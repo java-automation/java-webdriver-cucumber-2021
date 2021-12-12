@@ -657,7 +657,28 @@ public class JavaStepDefs<now> {
         int[] unsortedArr = {4, 3, 1, 5, 8, 4};
         int [] sorted = sort(unsortedArr);
         System.out.println(Arrays.toString(sorted));
+
+        String sentence = "I love WebDriver";
+        printReversedWords(sentence);
     }
+
+    void printReversedWords (String sentence) {
+        System.out.println("Print reversed sentence" + sentence);
+        String [] stringArray = sentence.split(" "); // in this case you will have three elements
+        for (int i = stringArray.length - 1; i >= 0; i --) {
+            System.out.print(stringArray[i] + " ");
+        }
+        System.out.println();
+
+    }
+
+//    void printReversed(String str) {
+//        System.out.println("Print reversed " + str);
+//        for (int i = str.length() -1; i >= 0; i--) {
+//            System.out.print(str.charAt(i));
+//        }
+//        System.out.println();
+//    }
 
     int[] sort(int [] arr) {
         for (int i = 0; i < arr.length; i++) { // if we put arr.length -1 it will skip the last number
@@ -685,13 +706,6 @@ public class JavaStepDefs<now> {
     }
 
 
-    void printReversed(String str) {
-        System.out.println("Print reversed " + str);
-        for (int i = str.length() -1; i >= 0; i--) {
-            System.out.print(str.charAt(i));
-        }
-        System.out.println();
-    }
 
     String getReversed(String str) {
         System.out.println("Return reversed " + str);
