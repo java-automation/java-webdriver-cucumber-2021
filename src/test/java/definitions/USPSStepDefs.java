@@ -48,6 +48,7 @@ public class USPSStepDefs extends HelperStepDefs {
     public static final String NAVIGATION_SEARCH_ICON_MENU_ACTIVE_XPATH = "//li[@class='nav-search menuheader']//a[@class='menuitem active']";
     public static final String MOBILE_SEARCH_ICON_XPATH = "//a[@class='mobile-search active']/img[@alt='Search Icon']";
     public static final String CLASS_REQUIRED_XPATH = "//div[@id='sign-in-wrap']//span[@class='required']";
+    public static final String LOGIN_REGISTER_HEADER_XPATH = "//a[@id='login-register-header']";
     private final WebDriverWait wait = new WebDriverWait(getDriver(), 5, 200);
 
 
@@ -187,6 +188,7 @@ public class USPSStepDefs extends HelperStepDefs {
 
     @When("I perform {string} search")
     public void iPerformSearch(String searchText) throws InterruptedException {
+        assertTrue(getWebElement(LOGIN_REGISTER_HEADER_XPATH).getText().contains("Sign In"));
         if ((getWebElement(NAVIGATION_SEARCH_ICON_XPATH).isDisplayed())) {
             System.out.println("I run from Navigation panel menu");
             new Actions(getDriver())
