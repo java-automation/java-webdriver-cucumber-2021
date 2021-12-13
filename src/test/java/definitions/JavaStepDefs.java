@@ -766,14 +766,17 @@ public class JavaStepDefs {
         return palindromeSize;
     }
 
-    @And("I find 2nd largest element in a given array")
-    public void iFindNdLargestElementInAGivenArray(@Transpose List<Integer> list) {
+    @And("I find two largest elements in a given array")
+    public void iFindTwoLargestElementsInAGivenArray(@Transpose List<Integer> list) {
         if (list.size() < 2) throw new Error("Provided array has less than 2 elements!");
         int[] arr = convertListToPrimitiveArray(list);
-        System.out.println("2nd largest: " + getSecondLargestElement(arr));
+
+        System.out.println("Two largest elements with one loop: " + Arrays.toString(getTwoLargestElementsWithOneLoop(arr)));
+        sortUsingInsertionSort(arr);
+        System.out.println("Two largest elements after sorting: " + arr[arr.length - 1] + ", " + arr[arr.length - 2]);
     }
 
-    private int getSecondLargestElement(int[] arr) {
+    private int[] getTwoLargestElementsWithOneLoop(int[] arr) {
         int max1 = arr[0];
         int max2 = arr[1];
 
@@ -794,7 +797,7 @@ public class JavaStepDefs {
                 }
             }
         }
-        return max2;
+        return new int[] {max1, max2};
     }
 
     @And("I check if given array has duplicates, print if found.")

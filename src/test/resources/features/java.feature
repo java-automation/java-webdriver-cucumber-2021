@@ -152,9 +152,8 @@ Feature: Java experiments
     And I find the longest palindrome in a given sentence "Madam, how about number 4343434: 'Eva, can I see bees in a cave?'. - 'Wow!'"
 
   @java27
-  #duplicate max - return max
   Scenario: 2nd largest element
-    And I find 2nd largest element in a given array
+    And I find two largest elements in a given array
       | 5 | 3 | 2 | 8 | 4 | 1 |
 
   @java28
