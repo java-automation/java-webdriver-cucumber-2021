@@ -44,4 +44,27 @@ public class UspsStepDefs {
         assertThat(resultString).contains(zip);
 
     }
+
+    @When("I go to Calculate Price Page")
+    public void iGoToCalculatePricePage() {
+        WebElement sendMenu = getDriver().findElement(By.xpath("//a[@id='mail-ship-width']"));
+        Actions actions = new Actions(getDriver());
+        actions.moveToElement(sendMenu).perform();
+        getDriver().findElement(By.xpath("//li[@class='tool-calc']/a[text()='Calculate a Price']")).click();
+
+    }
+
+    @And("I select {string} with {string} shape")
+    public void iSelectWithShape(String country, String shape) throws InterruptedException {
+
+
+       getDriver().findElement(By.xpath("//select[@id='CountryID']/option[text()='" + country + "']")).click();
+
+       getDriver().findElement(By.xpath("//div[@class='col-xs-6 col-sm-3 col-md-2']//input[@id='option_1']")).click();
+
+
+
+
+
+    }
 }
