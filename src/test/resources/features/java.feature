@@ -188,6 +188,7 @@ Feature: Java feature
   Scenario: Elegant way to reverse words in sentence
     Given I reverse words in sentence "I love NewYork!" elegantly
     And I reverse words in sentence "I love  NewYork!" elegantly
+    And I reverse words in sentence "  I love  NewYork!" elegantly
 
   @java28
   Scenario: Write a function to find the largest element in an array
@@ -200,12 +201,30 @@ Feature: Java feature
   "divisible by 3 and 4" if divisible by 3 and 4
     Given I write function that accepts integer 59 and prints divisibility by 3 and 4
 
+#2) Day10: Coding challenges
+#     a) Write a function that finds if array contains duplicates
+#     b) Write a function that determines palindrome (worlds like mom, civic, anna)
+#     c) Write a function that finds 2 max numbers in the array
 
 
+  @java30
+  Scenario: Duplicates
+    Given I find if array contains duplicates
 
+  @java31
+  Scenario Outline: Palindrome
+    Given I determine if the word "<word>" is palindrome
+    Examples:
+      | word  |
+      | mom   |
+      | civic |
+      | anna  |
+      | cat   |
+      | USSR  |
 
-
-
+  @java32
+  Scenario: Largest element in array int
+    Given I find two largest element in int array
 
 
 

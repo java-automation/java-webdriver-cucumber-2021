@@ -181,7 +181,7 @@ public class JavaStepDefs {
     }
 
     @Given("I print integer array with length {int}")
-    public void iPrintIntegerArray(int length) {
+    public void iPrintArray(int length) {
         //initialization with for loop and print array of primitives
         int[] arr1 = iInitializingIntegerArrayWithLength(length);
         out.println("\n Printing with forEach loop:");
@@ -206,13 +206,13 @@ public class JavaStepDefs {
     }
 
     @Given("I print integer array")
-    public void iPrintIntegerArray(int[] array) {
+    public void iPrintArray(int[] array) {
         for (int element : array) {
             out.print(element + " ");
         }
     }
 
-    public void iPrintIntegerArray(String[] array) {
+    public void iPrintArray(String[] array) {
         for (String element : array) {
             out.print(element + " ");
         }
@@ -289,7 +289,7 @@ public class JavaStepDefs {
     @Given("I check if array with length {int} contains {int} element")
     public void iCheckIfArrayWithLengthContainsElement(int length, int anotherElement) {
         int[] array = iInitializingIntegerArrayWithLength(length);
-        iPrintIntegerArray(array);
+        iPrintArray(array);
         boolean isContain = false;
         for (int el : array) {
             if (el == anotherElement) {
@@ -307,7 +307,7 @@ public class JavaStepDefs {
     @Given("I check if array with length {int} contains {int}")
     public void iCheckIfArrayWithLengthContains(int length, int element) {
         int[] arr = iInitializingIntegerArrayWithLength(length);
-        iPrintIntegerArray(arr);
+        iPrintArray(arr);
         out.println("\n element  = " + element);
         out.println(Ints.contains(arr, element));
     }
@@ -321,7 +321,7 @@ public class JavaStepDefs {
             arrayPrimitiveOne[i] = i;
         }
         out.println("arrayPrimitiveOne");
-        iPrintIntegerArray(arrayPrimitiveOne);
+        iPrintArray(arrayPrimitiveOne);
         List<Integer> arrayDynamic = new ArrayList<>();
         for (i = 0; i <= num; i++) {
             arrayDynamic.add(i);
@@ -337,14 +337,14 @@ public class JavaStepDefs {
         } else {
             int[] arr = iInitializingIntegerArrayWithLength(length);
             out.println("\n Before:");
-            iPrintIntegerArray(arr);
+            iPrintArray(arr);
             out.println("\n" + index1 + " element in array = " + arr[index1 - 1]);
             out.println(index2 + " element in array = " + arr[index2 - 1]);
             int k = arr[index1 - 1];
             arr[index1 - 1] = arr[index2 - 1];
             arr[index2 - 1] = k;
             out.println("\n After swapping");
-            iPrintIntegerArray(arr);
+            iPrintArray(arr);
             return arr;
         }
     }
@@ -371,7 +371,7 @@ public class JavaStepDefs {
     public void iBubbleSortIntegerArrayWithLength(int length) {
         int[] a = iInitializingIntegerArrayWithLength(length);
         out.println("Before:");
-        iPrintIntegerArray(a);
+        iPrintArray(a);
         int k;
         int i;
         for (k = 0; k < length; k++) {
@@ -384,7 +384,7 @@ public class JavaStepDefs {
             }
         }
         out.println("\n After:");
-        iPrintIntegerArray(a);
+        iPrintArray(a);
     }
 
     @Given("We provide null not declared array to method")
@@ -458,9 +458,9 @@ public class JavaStepDefs {
             arrayAfterSorting[indexOfOdds.get(i)] = odds.get(i);
         }
         out.println("arrayBeforeSorting: ");
-        iPrintIntegerArray(arrayBeforeSorting);
+        iPrintArray(arrayBeforeSorting);
         out.println("\n arrayAfterSorting: ");
-        iPrintIntegerArray(arrayAfterSorting);
+        iPrintArray(arrayAfterSorting);
     }
 
     public void bubbleSortIntegerArray(ArrayList<Integer> array) {
@@ -668,7 +668,7 @@ public class JavaStepDefs {
     public int[] iSwapTwoElementInArray(int place1, int place2) {
         int[] array = new int[]{5, 2, 9, 7, 3};
         out.println("Before swap: ");
-        iPrintIntegerArray(array);
+        iPrintArray(array);
         int indexFirstToSwap = place1 - 1;
         int indexSecondToSwap = place2 - 1;
         Assert.assertTrue((0 <= indexFirstToSwap) && (indexFirstToSwap < array.length));
@@ -677,7 +677,7 @@ public class JavaStepDefs {
         array[indexFirstToSwap] = array[indexSecondToSwap];
         array[indexSecondToSwap] = temp;
         out.println("\n After swap:");
-        iPrintIntegerArray(array);
+        iPrintArray(array);
         return array;
     }
 
@@ -750,7 +750,7 @@ public class JavaStepDefs {
     public void iReverseWordsInSentenceElegantly(String string) {
         String[] reversed = iReverseArray(reverse(string).split(" "));
         out.println("\n reversed:");
-        iPrintIntegerArray(reversed);
+        iPrintArray(reversed);
     }
 
     @Given("I write function that accepts integer {int} and prints divisibility by {int} and {int}")
@@ -760,12 +760,6 @@ public class JavaStepDefs {
         if ((number % divider1 != 0) && (number % divider2 == 0)) out.print("divisible by " + divider2);
         if ((number % divider1 == 0) && (number % divider2 == 0))
             out.print("divisible by " + divider1 + " and " + divider2);
-    }
-
-    @Given("I'm finding largest element in array ")
-    public void iMFindingLargestElementInArray(String[] stringArray) {
-
-
     }
 
     @Given("I'm finding largest element in array {string}")
@@ -782,4 +776,69 @@ public class JavaStepDefs {
             }
         }
     }
+
+    @Given("Reverse without variable")
+    public String reverseWithoutVariable(String str) {
+        for (int i = 0; i < str.length(); i++) {
+            out.println(str.charAt(i));
+        }
+        return str;
+    }
+
+    @Given("I find if array contains duplicates")
+    public void iFindIfArrayContainsDuplicates() {
+        int[] array = new int[]{3, 3, 6, 4, 8, 8, 9, 24, 42, 33, 5, 6, 8};
+        //int[] array = new int[]{3, 33, 5, 6, 8};
+        Assert.assertTrue("Array has no duplicates", iFindDuplicatesInIntArray(array));
+    }
+
+    @Given("I find duplicates in int array")
+    public boolean iFindDuplicatesInIntArray(int[] array) {
+        out.println(Arrays.toString(array));
+        Map<Integer, Integer> duplicates = new HashMap<>();
+        out.println("Duplicates:");
+        for (int k = 0; k < array.length - 1; k++) {
+            for (int i = k + 1; i < array.length; i++) {
+                if (array[k] == array[i]) {
+                    duplicates.put(i, array[i]);
+                    duplicates.put(k, array[k]);
+                    out.println("array[" + k + "] = " + array[k] + ", array[" + i + "] = " + array[i]);
+                }
+            }
+        }
+        return !duplicates.isEmpty();
+    }
+
+    @Given("I determine if the word {string} is palindrome")
+    public void iDetermineIfTheWordIsPalindrome(String word) {
+        out.println(word + " " + isPalindrome(word));
+        Assert.assertTrue(word + " is not a palindrome.", isPalindrome(word));
+
+    }
+
+    public boolean isPalindrome(String word) {
+        for (int i = 0; i < word.length(); i++) {
+            if (word.charAt(i) != word.charAt(word.length() - i - 1)) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    @Given("I find two largest element in int array")
+    public void iFindTwoLargestElementInIntArray() {
+        int[] array = new int[]{2, 9, 4, 25, 9, 2234, 8, 2, 34, -7, 3, 0, 4, -100};
+        out.println(Arrays.toString(array));
+        for (int k = 0; k < array.length - 1; k++) {
+            for (int i = k + 1; i < array.length; i++) {
+                if (array[k] > array[i]) {
+                    int temp = array[i];
+                    array[i] = array[k];
+                    array[k] = temp;
+                }
+            }
+        }
+        out.println("Two largest element in array: " + array[array.length - 1] + " and " + array[array.length - 2]);
+    }
+
 }
