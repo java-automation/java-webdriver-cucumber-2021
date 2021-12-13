@@ -10,6 +10,10 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.Select;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
+import java.util.List;
+import java.util.Locale;
+import java.util.stream.Collectors;
+
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 import static support.TestContext.getDriver;
@@ -40,6 +44,10 @@ public class USPSStepDefs extends HelperStepDefs {
     public static final String CALCULATOR_POSTCARD_QUANTITY_XPATH = "//input[@id='quantity-0']";
     public static final String CALCULATOR_POSTCARD_BUTTON_CALCULATE_XPATH = "//input[@type='button'][@value='Calculate']";
     public static final String CALCULATOR_POSTCARD_TOTAL_PRICE_XPATH = "//div[@id='total']";
+    public static final String NAVIGATION_SEARCH_ICON_XPATH = "//li[@class='nav-search menuheader']//a[@class='menuitem']";
+    public static final String NAVIGATION_SEARCH_ICON_MENU_ACTIVE_XPATH = "//li[@class='nav-search menuheader']//a[@class='menuitem active']";
+    public static final String MOBILE_SEARCH_ICON_XPATH = "//a[@class='mobile-search active']/img[@alt='Search Icon']";
+    public static final String CLASS_REQUIRED_XPATH = "//div[@id='sign-in-wrap']//span[@class='required']";
     private final WebDriverWait wait = new WebDriverWait(getDriver(), 5, 200);
 
 
@@ -141,10 +149,10 @@ public class USPSStepDefs extends HelperStepDefs {
     @And("I select {string} with {string} shape")
     public void iSelectWithShape(String destination, String shape) {
         wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath(CALCULATOR_DESTINATION_SELECT_XPATH)));
-        Select list = new Select(getDriver().findElement(By.xpath(CALCULATOR_DESTINATION_SELECT_XPATH)));
-        click(CALCULATOR_DESTINATION_SELECT_XPATH);
-        list.selectByVisibleText(destination);
+        new Select(getDriver().findElement(By.xpath(CALCULATOR_DESTINATION_SELECT_XPATH)))
+                .selectByVisibleText(destination);
         getWebElementFromListByAttributeValue(CALCULATOR_SUBMIT_PANEL_XPATH, "value", shape).click();
+        //getDriver().findElement(By.xpath("//input[@value='" + shape + "']")).click(); //Example of generic XPATH from String + parameter shape
     }
 
     @And("I define {string} quantity")
@@ -175,5 +183,70 @@ public class USPSStepDefs extends HelperStepDefs {
         System.out.println("Total price =  " + getTotalPrice());
         assertEquals(price_0 * quantity, parseDouble(price), 0.0);
         assertEquals(getTotalPrice(), parseDouble(price), 0.0);
+    }
+
+    @When("I perform {string} search")
+    public void iPerformSearch(String searchText) throws InterruptedException {
+        if ((getWebElement(NAVIGATION_SEARCH_ICON_XPATH).isDisplayed())) {
+            System.out.println("I run from Navigation panel menu");
+            new Actions(getDriver())
+                    .moveToElement(getWebElement(NAVIGATION_SEARCH_ICON_XPATH))
+                    .click()
+                    .perform();
+            wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath(NAVIGATION_SEARCH_ICON_MENU_ACTIVE_XPATH)));
+
+            WebElement webElement = getWebElementFromListByPartOfAttributeValue("//div[@class='repos']//div[@class='empty-search']//ul/li/a[@role='menuitem']", "href", searchText);
+
+            new Actions(getDriver()).moveToElement(webElement)
+                    .click()
+                    .perform();
+        } else throw new Error("Navigation panel doesn't display in start USPS page");
+    }
+
+    @And("I set {string} in filters")
+    public void iSetInFilters(String checkboxTitle) throws InterruptedException {
+        wait.until(ExpectedConditions.elementToBeClickable(getWebElementFromListByAttributeValue("//p[@class='checkbox-container dn-attr-a']", "title", checkboxTitle)));
+        getDriver()
+                .findElements(By.xpath("//p[@class='checkbox-container dn-attr-a']"))
+                .stream()
+                .filter(el -> el.getAttribute("title").contains(checkboxTitle))
+                .collect(Collectors.toList())
+                .get(0).click();
+        wait.until(ExpectedConditions.refreshed(ExpectedConditions.presenceOfElementLocated(By.xpath("//span[@id='searchResultsHeading']"))));
+    }
+
+    @Then("I verify that {string} results found")
+    public void iVerifyThatResultsFound(String searchResults) {
+        System.out.println("search Results: " + getText("//span[@id='searchResultsHeading']"));
+        assertTrue(getText("//span[@id='searchResultsHeading']").contains(searchResults));
+
+    }
+
+    @When("I select {string} in results")
+    public void iSelectInResults(String linkText) {
+        getDriver().findElements(By.xpath("//ul[@id='records']//span/span"))
+                .stream()
+                .filter(el -> el.getText().contains(linkText))
+                .collect(Collectors.toList())
+                .get(0).click();
+    }
+
+    @And("I click {string} button")
+    public void iClickButton(String button) {
+        wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//a[@class='button--primary']")));
+        List<String> windowHandle = getDriver().getWindowHandles().stream().toList();
+        int openedWindowsBefore = windowHandle.size();
+        getWebElement("//a[@class='button--primary']").click();
+        assertEquals(openedWindowsBefore + 1, getDriver().getWindowHandles().size());
+    }
+
+    @Then("I validate that Sign In is required")
+    public void iValidateThatSignInIsRequired() {
+        if (!getDriver().getTitle().contains("Sign In".toLowerCase(Locale.ROOT))) {
+            for (String handle : getDriver().getWindowHandles()) {
+                getDriver().switchTo().window(handle);
+            }
+            assertTrue(getWebElement(CLASS_REQUIRED_XPATH).isDisplayed());
+        }
     }
 }

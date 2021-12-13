@@ -9,6 +9,7 @@ import org.openqa.selenium.support.ui.Select;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import static support.TestContext.getDriver;
 
@@ -36,6 +37,17 @@ public class HelperStepDefs {
         List<WebElement> menuItemList = getDriver().findElements(By.xpath(xpath));
         List<String> menuItemAttributes = new ArrayList<>();
         menuItemList.forEach(el -> menuItemAttributes.add(el.getAttribute(attributeName)));
+        return menuItemList.get(menuItemAttributes.indexOf(attributeValue));
+    }
+    static WebElement getWebElementFromListByPartOfAttributeValue(String xpath, String attributeName, String partOfAttributeValue) {
+        List<WebElement> menuItemList = getDriver().findElements(By.xpath(xpath));
+        List<String> menuItemAttributes = new ArrayList<>();
+        menuItemList.forEach(el -> {
+            menuItemAttributes.add(el.getAttribute(attributeName));
+            System.out.println(el.getAttribute(attributeName));
+        });
+        String attributeValue = menuItemAttributes.stream().filter(el->el.contains(partOfAttributeValue)).collect(Collectors.toList()).get(0);
+        System.out.println("attributeValue = " + attributeValue);
         return menuItemList.get(menuItemAttributes.indexOf(attributeValue));
     }
 
