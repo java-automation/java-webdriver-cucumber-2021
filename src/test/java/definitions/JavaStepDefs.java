@@ -772,8 +772,28 @@ public class JavaStepDefs {
         int[] arr = convertListToPrimitiveArray(list);
 
         System.out.println("Two largest elements with one loop: " + Arrays.toString(getTwoLargestElementsWithOneLoop(arr)));
+        System.out.println("Two largest elements with two max element runs: " + Arrays.toString(getTwoLargestElementsWithTwoMaxRuns(arr)));
+        System.out.println("Two largest elements after sorting: " + Arrays.toString(getTwoLargestElementsWithSort(arr)));
+    }
+
+    private int[] getTwoLargestElementsWithTwoMaxRuns(int[] arr) {
+        int max1Ind = 0;
+        for (int i = 1; i < arr.length; ++i) {
+            if (arr[i] > arr[max1Ind]) max1Ind = i;
+        }
+
+        int max2Ind = (max1Ind == 0) ? 1 : 0;
+        for (int j = 1 - max2Ind; j < arr.length; ++j) {
+            if (j == max1Ind) continue;
+            if (arr[j] > arr[max2Ind]) max2Ind = j;
+        }
+
+        return new int[] {arr[max1Ind], arr[max2Ind]};
+    }
+
+    private int[] getTwoLargestElementsWithSort(int[] arr) {
         sortUsingInsertionSort(arr);
-        System.out.println("Two largest elements after sorting: " + arr[arr.length - 1] + ", " + arr[arr.length - 2]);
+        return new int[] {arr[arr.length - 1] , arr[arr.length - 2]};
     }
 
     private int[] getTwoLargestElementsWithOneLoop(int[] arr) {
