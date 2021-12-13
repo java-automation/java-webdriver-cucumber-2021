@@ -10,6 +10,7 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.Select;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.Locale;
 import java.util.stream.Collectors;
@@ -208,20 +209,22 @@ public class USPSStepDefs extends HelperStepDefs {
     @And("I set {string} in filters")
     public void iSetInFilters(String checkboxTitle) throws InterruptedException {
         wait.until(ExpectedConditions.elementToBeClickable(getWebElementFromListByAttributeValue("//p[@class='checkbox-container dn-attr-a']", "title", checkboxTitle)));
-        getDriver()
-                .findElements(By.xpath("//p[@class='checkbox-container dn-attr-a']"))
-                .stream()
-                .filter(el -> el.getAttribute("title").contains(checkboxTitle))
-                .collect(Collectors.toList())
-                .get(0).click();
+        if (getDriver().findElements(By.xpath("//p[@class='checkbox-container dn-attr-a'][@title='" + checkboxTitle + "']//input[@checked]")).size() == 0) {
+            getDriver()
+                    .findElements(By.xpath("//p[@class='checkbox-container dn-attr-a']"))
+                    .stream()
+                    .filter(el -> el.getAttribute("title").contains(checkboxTitle))
+                    .collect(Collectors.toList())
+                    .get(0).click();
+        }
         wait.until(ExpectedConditions.refreshed(ExpectedConditions.presenceOfElementLocated(By.xpath("//span[@id='searchResultsHeading']"))));
     }
 
     @Then("I verify that {string} results found")
     public void iVerifyThatResultsFound(String searchResults) {
         System.out.println("search Results: " + getText("//span[@id='searchResultsHeading']"));
-        assertTrue(getText("//span[@id='searchResultsHeading']").contains(searchResults));
-
+        assertTrue(getDriver().findElements(By.xpath("//div[@class='search-results']/ul/li")).size() <= Integer.parseInt(searchResults)); //because of pagination as generate with filter search results quantity
+        assertEquals(Arrays.stream(getText("//span[@id='searchResultsHeading']").split(" ")).toList().get(0), searchResults);
     }
 
     @When("I select {string} in results")
