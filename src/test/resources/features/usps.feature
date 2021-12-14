@@ -48,3 +48,23 @@ Feature: Usps scenarios
       And I go to Lookup ZIP page by address on small screen via hamburger menu and Quick Tools
       And I fill out "Mac" street, "Minneapolis" city, "MN" state
       Then I validate "55450" zip code exists in the result
+
+  Rule:
+
+    @usps5
+    Scenario: Calculate price
+      Given I go to "usps" page
+      When I go to Calculate Price Page
+      And I select "Canada" with "Postcard" shape
+      And I define "2" quantity
+      Then I calculate the price and validate cost is "$2.60"
+
+    @usps6
+    Scenario: Verify location
+      Given I go to "usps" page
+      When I perform "Free Boxes" search
+      And I set "Send" in filters
+      Then I verify that "7" results found
+      When I select "Priority Mail | USPS" in results
+      And I click "Ship Now" button
+      Then I validate that Sign In is required
