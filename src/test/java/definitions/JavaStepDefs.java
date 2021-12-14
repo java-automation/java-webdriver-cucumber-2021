@@ -348,4 +348,35 @@ public class JavaStepDefs {
         }
         System.out.println("Max value: " + max);
     }
+
+    public static boolean isWordPalindrome(String str) {
+        if ((str == null) || (!str.matches("\\p{IsAlphabetic}+"))) return false;
+        String s = str.toLowerCase();
+        int len = s.length();
+        for (int i=0; i<len/2; i++) {
+            if (s.charAt(i) != s.charAt(len-i-1)) return false;
+        }
+        return true;
+    }
+
+    @Then("run test cases for isWordPalindrome method")
+    public void runTestCasesForIsWordPalindrome() {
+        assertThat(isWordPalindrome("mom")).isTrue();
+        assertThat(isWordPalindrome("civic")).isTrue();
+        assertThat(isWordPalindrome("anna")).isTrue();
+        assertThat(isWordPalindrome("Anna")).isTrue();
+        assertThat(isWordPalindrome("Civic")).isTrue();
+        assertThat(isWordPalindrome("CIVIC")).isTrue();
+        assertThat(isWordPalindrome("ä")).isTrue();
+        assertThat(isWordPalindrome("ÄÄÄ")).isTrue();
+        assertThat(isWordPalindrome("äste")).isFalse();
+        assertThat(isWordPalindrome("a_a")).isFalse();
+        assertThat(isWordPalindrome("!@#$$#@!")).isFalse();
+        assertThat(isWordPalindrome("select")).isFalse();
+        assertThat(isWordPalindrome("top")).isFalse();
+        assertThat(isWordPalindrome("telescope")).isFalse();
+        assertThat(isWordPalindrome("   ")).isFalse();
+        assertThat(isWordPalindrome("")).isFalse();
+        assertThat(isWordPalindrome(null)).isFalse();
+    }
 }

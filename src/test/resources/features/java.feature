@@ -124,3 +124,16 @@ Feature: Java feature
     Then largest element in an array {344, 1, 85}
     Then largest element in an array {-284, -4}
     Then largest element in an array {}
+
+  @java12
+  Scenario: Find if array contains duplicates and find them
+    Then run test cases for all implementations of containsDuplicates method
+    Then run test cases for all implementations of findDuplicates method
+
+  @java13
+  Scenario: Determine if word is a palindrome
+    Then run test cases for isWordPalindrome method
+
+  @java14
+  Scenario: Finds 2 max numbers in array
+    Then run test cases for all implementations of twoLargest method
