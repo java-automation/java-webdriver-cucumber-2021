@@ -12,6 +12,10 @@
 #      And I work with loops
 #      And I print if number "0" is positive
 #      And I print 5 day of the week
+#       And I solve coding challenges
+#      And I write a function that finds if array contains duplicates
+      And I write a function that determines palindrome
+#      And I write a function that finds 2 max numbers in the array
     @java2
       Scenario: Java
 #      And I work with Arrays

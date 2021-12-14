@@ -269,4 +269,68 @@ Result for 20:
             }
         }
     }
+
+    /* 2) Coding challenges
+     a) Write a function that finds if array contains duplicates
+     b) Write a function that determines palindrome (worlds like mom, civic, anna)
+     c) Write a function that finds 2 max numbers in the array
+     */
+
+    @And("I write a function that finds if array contains duplicates")
+    public void iWriteAFunctionThatFindsIfArrayContainsDuplicates() {
+
+
+    }
+
+
+    @And("I write a function that determines palindrome")
+    public void iWriteAFunctionThatDeterminesPalindrome() {
+        String[] words = {"mom", "racecar", "tree", "cup"};
+        for(int i = 0; i < words.length; i++) {
+            if (isPalindrome(words[i])) {
+                System.out.println(words[i] + " - is a palindrome.");
+            } else {
+                System.out.println(words[i] + " - is not a palindrome.");
+            }
+            System.out.println();
+        }
+    }
+
+    private boolean isPalindrome(String str){
+        if(reverseWord(str).equals(str)){
+            return true;
+        }
+        return false;
+    }
+
+    @And("I write a function that finds {int} max numbers in the array")
+    public void iWriteAFunctionThatFindsMaxNumbersInTheArray(int arg0) {
+        int[] intArray = {3,7,9,24,65,21,-76,-35,98};
+        int maxVal = maxArr(intArray);
+        System.out.println(maxVal);
+    }
+    private int maxArr(int[] arr){
+        int max = -Integer.MIN_VALUE;
+        for (int i = 0; i < arr.length; i++){
+            if(max < arr[i]){
+                max = arr[i];
+            }
+        }
+        return max;
+    }
+
+    @And("I solve coding challenges")
+    public void iSolveCodingChallenges() {
+
+    }
+
+    void printReversedWords(String sentence){
+        System.out.println("Print reverse sentence " + sentence);
+        String[] stringArray = sentence.split(" ");
+        for(int i = stringArray.length-1; i >= 0; i--){
+            System.out.println(stringArray[i]+" ");
+        }
+        System.out.println();
+    }
 }
+
