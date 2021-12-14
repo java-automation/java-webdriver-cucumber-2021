@@ -35,7 +35,7 @@
 
 
     @java7
-    Scenario: Numbers amd array exercises
+   Scenario: Numbers amd array exercises
       Given Write a function that prints all numbers from 0 up to 13
       Then Write a function that prints negative -13 to positive 13
       And Write a function that prints all integer array
@@ -44,10 +44,37 @@
       And Check if array contains another element
 
 
-      @hashmap
-      Scenario: HashMap structure
-        Given Write myInfo table
-        Then Array sort num in ascending order for odd numbers
+    # @hashmap
+      # Scenario: HashMap structure
+      # Given Write myInfo table
+      # Then Array sort num in ascending order for odd numbers
+     #  And Function that combine two arrays
+      # Then  Function that combine arrays with digits letters
+
+      @hashmapHome
+      Scenario: Hashmap practice
+        Given State mapping
+        Then Function that accept integer N and P
+        Then Swap Arrays
+        And Function the largest element in an array
+
+        @FizzBuzz
+        Scenario: Write function
+          Given Write function for FizzBuzz
+
+
+      #  @java8
+       # Scenario Continue coding
+         # Given Reverse String
+         # Then Reverse words in a given string
+
+    @codingChallenges
+    Scenario: Coding challenges
+      Given function that finds if array contains duplicates
+      Then Write a function that finds two max numbers in the array
+      And Write a function that determines palindrome
+
+
 
 
 

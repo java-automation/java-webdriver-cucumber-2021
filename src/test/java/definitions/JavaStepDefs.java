@@ -4,8 +4,8 @@ import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 
-import java.util.Arrays;
 import java.util.HashMap;
+import java.util.Map;
 
 public class JavaStepDefs {
     @Given("I hello world")
@@ -155,28 +155,14 @@ public class JavaStepDefs {
     public void iPrintDayOfWeek(int weekday) {
 
         switch (weekday) {
-            case 1:
-                System.out.println("Monday");
-                break;
+            case 1 -> System.out.println("Monday");
+            case 2 -> System.out.println("Tuesday ");
+            case 3 -> System.out.println("Wednesday");
+            case 4 -> System.out.println("Thursday");
+            case 5 -> System.out.println("Friday");
+            case 6 -> System.out.println("Saturday");
+            case 7 -> System.out.println("Sunday");
 
-            case 2:
-                System.out.println("Tuesday ");
-                break;
-            case 3:
-                System.out.println("Wednesday");
-                break;
-            case 4:
-                System.out.println("Thursday");
-                break;
-            case 5:
-                System.out.println("Friday");
-                break;
-            case 6:
-                System.out.println("Saturday");
-                break;
-            case 7:
-                System.out.println("Sunday");
-                break;
 
             // or 'enhanced switch statement':
 //            switch (weekday) {
@@ -273,86 +259,476 @@ public class JavaStepDefs {
 
         for (int el : num) {
             if (7 == el) {
-                System.out.println("Element found in the num list.");
+                System.out.println("Element found in the num list." + el);
+            } else {
+                System.out.println("Element is not found");
+
             }
 
-        }
 
-
-        String[] weatherList = {"Sunny", "Cloudy", "Snowy", "Rainy", "High humidity"};
-        for (String s : weatherList) {
-            if ("Sunny".equals(s)) {
-                System.out.println("Element found in the weather list.");
-            }
-        }
-    }
-
-    @Given("Write myInfo table")
-    public void writeMyInfoTable() {
-        HashMap<String, String> myInfo = new HashMap<String, String>();
-        myInfo.put("firstName", "Varvara");
-        myInfo.put("lastName", "VV");
-        myInfo.put("country", "USA");
-        System.out.println(myInfo);
-
-        HashMap<String, Integer> myYear = new HashMap<>();
-        myYear.put("day", 11);
-        myYear.put("month", 12);
-        myYear.put("yearOfBirth", 1966);
-        System.out.println(myYear);
-
-        myYear.replace("day", 11, 30);
-        System.out.println(myYear.replace("day", 11, 30));
-
-    }
-
-
-    @Then("Array sort num in ascending order for odd numbers")
-    public void arraySortNumInAscendingOrderForOddNumbers() {
-        //  You have an array of numbers.
-//  Your task is to sort odd numbers in ascending order
-//  but even numbers must be on their places.
-//  Example:
-//  input:  [5, 3, 2, 8, 4, 1]
-//  output: [1, 3, 2, 8, 4, 5]
-        int[] arr = {5, 3, 2, 8, 4, 1};
-        // sort?
-        sortArr(arr);
-    }
-
-    private void sortArr(int[] arr) {
-        /*  [5, 3, 2, 8, 4, 1]
-            [5, 3, 2, 8, 4, 1] => 1(5) => [1, 3, 2, 8, 4, 5]
-            [1, | 3, 2, 8, 4, 5] => 2(idx) => [1, 2, 3, 8, 4, 5]
-            [1, 2, | 3, 8, 4, 5] => [1, 2, 3, 8, 4, 5]
-            [1, 2, 3, | 8, 4, 5]
-        */
-        System.out.println(Arrays.toString(arr));
-        for (int j = 0; j < arr.length - 1; j++) {
-            int indexMin = j;
-            int min = arr[indexMin];
-            for (int i = j + 1; i < arr.length; i++) {
-                if (arr[i] < min) {
-                    min = arr[i];
-                    indexMin = i;
+            String[] weatherList = {"Sunny", "Cloudy", "Snowy", "Rainy", "High humidity"};
+            for (String s : weatherList) {
+                if ("Sunny".equals(s)) {
+                    System.out.println("Element found in the weather list.");
+                } else {
+                    System.out.println("Element is not found");
                 }
             }
-//            int temp = arr[j];    // counting  in ascending order for all numbers in the module
-//            arr[j] = min;
-//            arr[indexMin] = temp;
-//            System.out.println(Arrays.toString(arr));
+        }
+    }
 
 
-            if (min % 2 != 0) {
-                int temp = arr[j];
-                arr[j] = min;
-                arr[indexMin] = temp;
+//    @Given("Write myInfo table")
+//    public void writeMyInfoTable() {
+//        HashMap<String, String> myInfo = new HashMap<String, String>();
+//        myInfo.put("firstName", "Varvara");
+//        myInfo.put("lastName", "VV");
+//        myInfo.put("country", "USA");
+//        System.out.println(myInfo);
+//
+//        HashMap<String, Integer> myYear = new HashMap<>();
+//        myYear.put("day", 11);
+//        myYear.put("month", 12);
+//        myYear.put("yearOfBirth", 1966);
+//        System.out.println(myYear);
+//
+//        myYear.replace("day", 11, 30);
+//        System.out.println(myYear.replace("day", 11, 30));
+//
+//    }
 
-                System.out.println(Arrays.toString(arr));
+//
+//    @Then("Array sort num in ascending order for odd numbers")
+//    public void arraySortNumInAscendingOrderForOddNumbers() {
+//        //  You have an array of numbers.
+////  Your task is to sort odd numbers in ascending order
+////  but even numbers must be on their places.
+////  Example:
+////  input:  [5, 3, 2, 8, 4, 1]
+////  output: [1, 3, 2, 8, 4, 5]
+//        int[] arr = {5, 3, 2, 8, 4, 1};
+//        // sort?
+//        sortArr(arr);
+//    }
+//
+//    private void sortArr(int[] arr) {
+//        /*  [5, 3, 2, 8, 4, 1]
+//            [5, 3, 2, 8, 4, 1] => 1(5) => [1, 3, 2, 8, 4, 5]
+//            [1, | 3, 2, 8, 4, 5] => 2(idx) => [1, 2, 3, 8, 4, 5]
+//            [1, 2, | 3, 8, 4, 5] => [1, 2, 3, 8, 4, 5]
+//            [1, 2, 3, | 8, 4, 5]
+//        */
+//        System.out.println(Arrays.toString(arr));
+//        for (int j = 0; j < arr.length - 1; j++) {
+//            int indexMin = j;
+//            int min = arr[indexMin];
+//            for (int i = j + 1; i < arr.length; i++) {
+//                if (arr[i] < min) {
+//                    min = arr[i];
+//                    indexMin = i;
+//                }
+//            }
+////            int temp = arr[j];    // counting  in ascending order for all numbers in the module
+////            arr[j] = min;
+////            arr[indexMin] = temp;
+////            System.out.println(Arrays.toString(arr));
+//
+//
+//            if (min % 2 != 0) {
+//                int temp = arr[j];
+//                arr[j] = min;
+//                arr[indexMin] = temp;
+//
+//                System.out.println(Arrays.toString(arr));
+//            }
+//        }
+//    }
+//
+//    @And("Function that combine two arrays")
+//    public void iSolveJavaTask() {
+////        Write a function that combines two arrays (lists) by alternating taking elements,
+////        e.g. [0,5,8], [1,2,3] → [0, 1, 5, 2, 8, 3].
+////        e.g. [0,5,8,  9,1], [1,2,3] → [0, 1, 5, 2, 8, 3, 9, 1].
+//        int[] arr2 = {0,5,8};
+//        int[] arr1 = {1,2,3,9,1};
+//        solveIt(arr1, arr2);
+//    }
+//    private void solveIt(int[] arr1, int[] arr2) {
+//        int len = arr1.length + arr2.length;
+//        int[] res = new int[len];
+//      int min_len = Math.min(arr1.length, arr2.length);
+//        int min_len = arr1.length < arr2.length ? arr1.length : arr2.length;
+//        // 3
+//        for (int k = 0; k < min_len * 2; k = k + 2) {
+//            res[k] = arr1[k / 2];
+//            res[k + 1] = arr2[k / 2]; // k = 2; 2/2 -> 1
+//        }
+//        // res = [0, 1, 5, 2, 8, 3, _, _]
+//        // rest of arr1: [9,1]
+//        // min_len = 3
+//        // [0,5,8,   9,1]
+//        for (int idx = min_len; idx < arr1.length; idx++) {
+//            // idx = 3
+//            // idx 3 -> idx - min_len => 0
+//            int res_idx = min_len * 2 + idx - min_len;
+//            res[res_idx] = arr1[idx];
+//        }
+//        for (int idx = min_len; idx < arr2.length; idx++) {
+//            // idx = 3
+//            // idx 3 -> idx - min_len => 0
+//            int res_idx = min_len * 2 + idx - min_len;
+//            res[res_idx] = arr2[idx];
+//        }
+//        System.out.println(Arrays.toString(res));
+//    }
+
+//
+//    @Then("Function that combine arrays with digits letters")
+//    public void functionThatCombineArraysWithDigitsLetters() {
+//
+//        int[] arr1 = {1, 2, 3};
+//        int[] arr2 = { 4, 5, 6};
+//
+//        trainBrain(arr1, arr2);
+//    }
+//    private void trainBrain(int[] arr1, int [] arr2) {
+
+//
+//        // collect 2 arrays together
+//        int [] length1_2 = new int [arr1.length + arr2.length];
+//        int currentPosition = 0;
+//
+//        for (int i = 0; i < arr1.length; i++){
+//            length1_2[currentPosition] = arr1[i];
+//            currentPosition++;
+//        }
+//
+//        for (int j = 0; j< arr2.length; j++) {
+//            length1_2[currentPosition] = arr2[j];
+//            currentPosition++;
+//
+//        }
+//        System.out.println(Arrays.toString(length1_2));
+
+
+    //int length = arr1.length + arr2.length;
+//
+//        int[] result = new int [arr1.length + arr2.length];
+//
+//        int min_len = Math.min(arr1.length, arr2.length);
+//
+//
+//        for  (int idx = min_len; idx < arr1.length; idx++){
+//            int result_idx = min_len * 2 + idx - min_len;
+//            result[result_idx] = arr1[idx];
+//        }
+//
+//        for (int idx = min_len; idx < arr2.length; idx++) {
+//            int result_idx = min_len * 2 + idx - min_len;
+//            result[result_idx] = arr1[idx];
+//        }
+//
+//        System.out.println(Arrays.toString(result));
+//
+//
+//    }
+//}
+
+    @Given("State mapping")
+    public void stateMapping() {
+
+
+        Map<String, String> states = new HashMap<>();
+        states.put("IL", "Illinois");
+        states.put("FL", "florida");
+        states.put("CA", "California");
+        System.out.println("\n" + states);
+    }
+
+    //Homework 1
+
+    @Then("Function that accept integer N and P")
+    public void functionThatAcceptIntegerNAndP() {  // Function that accept integer Number  and Prints "divisible by 2" and "divisible by 5"
+
+        printDivBy2and5(30);
+
+    }
+
+    void printDivBy2and5(int num) {
+        if (num % 2 == 0 && num % 5 == 0) {
+            System.out.println(num + " Divisible by 2 and 5 ");
+        } else if (num % 2 == 0) {
+            System.out.println(num + " Divisible by 2");
+        } else if (num % 5 == 0) {
+            System.out.println(num + " Divisible by 5");
+        } else {
+            System.out.println(num + " Not divisible by 2 or 5");
+        }
+
+    }
+
+
+    //Homework 2
+
+    @Then("Swap Arrays")
+    public void swapArrays() { //Write a function that swaps two array elements 3rd and 5th
+
+        swapEl(new int[]{5, 2, 9, 7, 3}, 2, 4);
+    }
+
+    void swapEl(int[] arr, int a, int b) {
+
+
+        int[] array = {5, 2, 9, 7, 3};
+        int temp = arr[a];
+        arr[a] = arr[b];
+        arr[b] = temp;
+
+        for (int i = 0; i < array.length; i++) {
+            System.out.print(" " + arr[i]);
+        }
+
+    }
+
+    // Homework 3
+    @And("Function the largest element in an array")
+    public int functionTheLargestElementInAnArray() {
+
+
+        int[] array = new int[]{2, 6, 7, 20, 90, 100};
+        int max = array[0];
+
+        for (int i = 0; i < array.length; i++) {
+            if (array[i] > max) {
+                max = array[i];
             }
+        }
+        System.out.println("The largest Array " + max);
+        return max;
+
+
+    }
+
+
+    // Homework 4
+    @Given("Write function for FizzBuzz")
+    public void writeFunctionForFizzBuzz() {
+
+        int num = 35;
+        fizzBuzz(num);
+
+    }
+
+    static void fizzBuzz(int num) {
+        // Write a function, accepts integer argument if number is multiple of 3, it should print Fizz instead of number
+
+        for (int i = 1; i <= num; i++) {
+                /*
+            3 - Fizz
+            5 - Buzz
+            3 & 5 - basics.FizzBuzz
+            i */
+
+            if (i % 3 == 0 && i % 5 == 0)
+                System.out.println("FizzBuzz");
+            else if (i % 3 == 0)
+                System.out.println("Fizz");
+            else if (i % 5 == 0)
+                System.out.println("Buzz");
+            else System.out.println(i + " ");
+
+        }
+    }
+
+    @Given("function that finds if array contains duplicates")
+    public void functionThatFindsIfArrayContainsDuplicates() {
+        int[] arr = {1, 2, 6, 7, 9, 9, 2, 22, 13, 13};
+
+
+        for (int i = 0; i < arr.length; i++) {
+            for (int j = i + 1; j < arr.length; j++) {
+
+                if (arr[i] == arr[j])
+                    System.out.println(arr[j]);
+            }
+        }
+
+
+    }
+
+    @Then("Write a function that finds two max numbers in the array")
+    public void writeAFunctionThatFindsTwoMaxNumbersInTheArray() {
+
+        int[] num = {1, 2, 3, 7, 9, 2, 22, 45, 33};
+
+        int maxOne = 0;
+        int maxTwo = 0;
+        for (int n : num) {
+            if (maxOne < n) {
+                maxTwo = maxOne;
+                maxOne = n;
+            } else if (maxTwo < n) {
+                maxTwo = n;
+            }
+            System.out.println("First Max Number: " + maxOne);
+            System.out.println("Second Max Number: " + maxTwo);
+
+        }
+
+    }
+
+    @And("Write a function that determines palindrome")
+    public void writeAFunctionThatDeterminesPalindrome() {
+
+        isPalindrome("comoc");
+    }
+
+    public static void isPalindrome( String str) {
+        String strReverse = new StringBuffer(str).reverse().toString();
+
+        if (str.equals(strReverse)){
+            System.out.println( str +" is palindrome word");
+        } else {
+            System.out.println(str + " is not palindrome word");
         }
     }
 }
+
+
+//  // Homework5  ----- BEtter do not touch because cucumber will not run
+//    @Given("Reverse String")
+//    public void reverseString() {
+//
+//
+//        String str = "Today";
+//        String newstr = "";
+//        char changing;
+//
+//        System.out.println("Original word " + str);
+//
+//        for (int i = 0; i < str.length(); i++) {
+//
+//            changing = str.charAt(i);
+//            newstr = changing + newstr;
+//        }
+//        System.out.println("New Word " + newstr);
+//    }
+//
+//
+//
+//    @Then("Reverse words in a given string")
+//    public void reverseWordsInAGivenString() {
+//        String str = " I love java!";
+//        String newStr = "";
+//        for ( int i = str.length()- 1; i >=0; i--){
+//
+//           // newStr += str[i] + " ";
+//        }
+//        System.out.println("Reversed String: " );
+//
+//
+//
+//    }
+//}
+
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//    @Given("I solve coding challenges")
+//    public void iSolveCodingChallenges() {
+
+        //toSwap(3, 5);
+//        printDivBy3and4(12);
+//        printDivBy3and4(9);
+//        printDivBy3and4(8);
+//        printDivBy3and4(7);
+//        fizzBuzz(20);
+//        printReversed("WebDriver");
+//        System.out.println(getReversed("WebDriver"));
+//        System.out.println(getReversedNoVar("WebDriver"));
+
+//        Integer[] arr = {4, 3, 1, 5, 8, 4};
+//        Integer num = 8;
+//
+//        String[] strArray = {"ab", "xy", "z"};
+//        String str = "z";
+//
+//        System.out.println(isArrayContains(strArray, str));
+//        System.out.println(isArrayContains(arr, num));
+
+//        int[] unsortedArr = {4, 3, 1, 5, 8, 4};
+//        int[] sorted = sort(unsortedArr);
+//        System.out.println(Arrays.toString(sorted));
+//        String sentence = "I love WebDriver";
+//        printReversedWords(sentence);
+//    }
+//
+//    void printReversedWords(String sentence) {
+//        System.out.println("Print reverse sentence: " + sentence);
+//        String[] stringArray = sentence.split(" ");
+//        for (int i = stringArray.length - 1; i >= 0; i--) {
+//            System.out.print(stringArray[i] + " ");
+//        }
+//        System.out.println();
+//    }
+
+
+
+//    void printReversed(String str) {
+//        for (int i = str.length() - 1; i >= 0; i--) {
+//            System.out.print(str.charAt(i));
+//        }
+//        System.out.println();
+//    }
+//
+//                int[] sort(int[] arr) {
+//                for (int i = 0; i < arr.length - 1; i++) {
+//        for (int j = i + 1; j < arr.length; j++) {
+//        if (arr[i] > arr[j]) {
+//        int temp = arr[i];
+//        arr[i] = arr[j];
+//        arr[j] = temp;
+//        }
+//        }
+//        }
+//        return arr;
+//        }
+//
+//        boolean isArrayContains(Object[] array, Object toFind) {
+//        for (Object arrayEl : array) {
+//        if (arrayEl.equals(toFind)) {
+//        return true;
+//        }
+//        }
+//        return false;
+//        }
+//
+//        String getReversedNoVar(String str) {
+//        System.out.println("Return reversed without extra var " + str);
+//        for (int i = str.length() - 1; i >= 0; i--) {
+//        str += str.charAt(i);
+//        }
+//        return str.substring(str.length() / 2);
+//        }
+//
+//        String getReversed(String str) {
+//        System.out.println("Return reversed " + str);
+//        String reversed = "";
+//        for (int i = str.length() - 1; i >= 0; i--) {
+//        reversed += str.charAt(i);
+//        }
+//        return reversed;
+//        }
+//
+//        void printReversed(String str) {
+//        System.out.println("Print reversed " + str);
+//        for (int i = str.length() - 1; i >= 0; i--) {
+//        System.out.print(str.charAt(i));
+//        }
+//        System.out.println();
+//        }
+//        }
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
 
 
 
