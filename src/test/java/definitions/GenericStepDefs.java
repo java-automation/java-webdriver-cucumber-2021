@@ -3,6 +3,8 @@ package definitions;
 import io.cucumber.java.en.*;
 import org.openqa.selenium.*;
 import org.openqa.selenium.logging.*;
+
+import java.util.*;
 import java.util.logging.*;
 import static support.TestContext.*;
 
@@ -64,5 +66,14 @@ public class GenericStepDefs {
             default:
                 throw new Error("Unsupported mode: " + mode);
         }
+    }
+    @And("I switch to a new window")
+    public static void iSwitchToANewWindow() {
+        Iterator<String> iterator = getDriver().getWindowHandles().iterator();
+        String newWindow = iterator.next();
+        while(iterator.hasNext()) {
+            newWindow = iterator.next();
+        }
+        getDriver().switchTo().window(newWindow);
     }
 }

@@ -1,13 +1,12 @@
 package definitions;
 
 import io.cucumber.java.en.*;
-import org.assertj.core.api.*;
+import org.junit.*;
 import org.openqa.selenium.*;
 import org.openqa.selenium.interactions.*;
 import org.openqa.selenium.support.ui.*;
-
 import java.util.*;
-
+import static java.lang.Integer.parseInt;
 import static org.assertj.core.api.Assertions.assertThat;
 import static support.TestContext.getDriver;
 
@@ -54,7 +53,7 @@ public class UspsStepDefs {
     }
 
     @And("I define {string} quantity")
-    public void iDefineQuantity(String quantity) throws InterruptedException {
+    public void iDefineQuantity(String quantity) {
         getDriver().findElement(By.xpath("//input[@id='quantity-0']")).sendKeys(quantity);
     }
 
@@ -80,9 +79,28 @@ public class UspsStepDefs {
     @Then("I verify that {string} results found")
     public void iVerifyThatResultsFound(String numResults) {
         wait.until(ExpectedConditions.invisibilityOf(getDriver().findElement(By.xpath("//*[contains(@class,'spinner-content')]//h5"))));
-        assertThat(getDriver().findElement(By.xpath("//ul[@class='pagination']//li[@class='next disabled']")).isDisplayed());
-//        ArrayList<String> arrayList = new ArrayList<>();
-//        arrayList.add(getDriver().findElement(By.xpath("//ul[@id='records']//li")).getText());
-//        System.out.println(arrayList.size());
+        Assert.assertTrue(getDriver().findElement(By.xpath("//ul[@class='pagination']//li[@class='next disabled']")).isDisplayed());
+        List<WebElement> elements = getDriver().findElements(By.xpath("//ul[@id='records']//li"));
+        Assert.assertEquals(elements.size(), parseInt(numResults));
+    }
+
+    @When("I select {string} in results")
+    public void iSelectInResults(String title) {
+        getDriver().findElement(By.xpath("//ul[@id='records']//span[contains(text(),'" + title + "')]")).click();
+    }
+
+    @And("I click {string} button")
+    public void iClickButton(String button) {
+        getDriver().findElement(By.xpath("//a[contains(text(),'" + button + " ')]")).click();
+    }
+
+    @Then("I validate that Sign In is required")
+    public void iValidateThatSignInIsRequired() {
+        GenericStepDefs.iSwitchToANewWindow();
+        wait.until(ExpectedConditions.visibilityOf(getDriver().findElement(By.xpath("//h1[contains(@id,'sign-in')]"))));
+        Assert.assertTrue(getDriver().getTitle().toLowerCase().contains("sign in"));
+        assertThat(getDriver().findElement(By.xpath("//h1[contains(@id,'sign-in')]")).getText()).isEqualTo("Sign In To Your Account");
+        Assert.assertTrue(getDriver().findElement(By.xpath("//button[@id='btn-submit']")).isDisplayed());
+
     }
 }

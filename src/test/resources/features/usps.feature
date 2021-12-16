@@ -22,6 +22,6 @@
       When I perform "Free Boxes" search
       And I set "Send" in filters
       Then I verify that "7" results found
-#      When I select "Priority Mail | USPS" in results
-#      And I click "Ship Now" button
-#      Then I validate that Sign In is required
+      When I select "Priority Mail | USPS" in results
+      And I click "Ship Now" button
+      Then I validate that Sign In is required
