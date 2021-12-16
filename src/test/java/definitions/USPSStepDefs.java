@@ -198,7 +198,7 @@ public class USPSStepDefs extends HelperStepDefs {
                     .perform();
             wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath(NAVIGATION_SEARCH_ICON_MENU_ACTIVE_XPATH)));
 
-            WebElement webElement = getWebElementFromListByPartOfAttributeValue("//div[@class='repos']//div[@class='empty-search']//ul/li/a[@role='menuitem']", "href", searchText);
+            WebElement webElement = getWebElementFromListByPartOfAttributeValue("//div[@class='repos']//div[@class='empty-search']//ul/li/a[@role='menuitem']", "href", searchText.replace(" ", "%20"));
 
             new Actions(getDriver()).moveToElement(webElement)
                     .click()
@@ -223,8 +223,11 @@ public class USPSStepDefs extends HelperStepDefs {
     @Then("I verify that {string} results found")
     public void iVerifyThatResultsFound(String searchResults) {
         System.out.println("search Results: " + getText("//span[@id='searchResultsHeading']"));
-        assertTrue(getDriver().findElements(By.xpath("//div[@class='search-results']/ul/li")).size() <= Integer.parseInt(searchResults)); //because of pagination as generate with filter search results quantity
         assertEquals(Arrays.stream(getText("//span[@id='searchResultsHeading']").split(" ")).toList().get(0), searchResults);
+        if (getDriver().findElements(By.xpath("//ul[@class='pagination']/li[@class='page-item']")).size() == 0) {
+            assertEquals(getDriver().findElements(By.xpath("//div[@class='search-results']/ul/li")).size(), Integer.parseInt(searchResults));
+        } else
+            assertTrue(getDriver().findElements(By.xpath("//div[@class='search-results']/ul/li")).size() <= Integer.parseInt(searchResults));
     }
 
     @When("I select {string} in results")
