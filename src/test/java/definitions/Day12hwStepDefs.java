@@ -22,7 +22,8 @@ public class Day12hwStepDefs {
         switch (arg0.toLowerCase()) {
             case "google" -> getDriver().get("https://www.google.com/");
             case "quote" -> getDriver().get("https://skryabin.com/market/quote.html");
-            case "usps" -> getDriver().get("https://www.ups.com/us/en/global.page");
+            //case "usps" -> getDriver().get("https://www.ups.com/us/en/global.page");
+            case "usps" -> getDriver().get("https://www.usps.com/");
             default -> throw new Error("Unsupported page: " + arg0);
         }
         //System.out.println("Unsupported url_s1: " + arg0);
@@ -52,6 +53,10 @@ public class Day12hwStepDefs {
         getDriver().findElement(By.xpath("//input[@id='confirmPassword']")).sendKeys("12345");
         getDriver().findElement(By.xpath("//input[@id='name']")).sendKeys("VVZ");
         getDriver().findElement(By.xpath("//input[@name='agreedToPrivacyPolicy']")).click();
+
+        //Debug & Watches
+        //String nameValue=getDriver().findElement(By.xpath("//input[@id='name']")).getAttribute("value");
+        //System.out.println(nameValue);
     }
 
     @And("I wait & check for {int} sec")
