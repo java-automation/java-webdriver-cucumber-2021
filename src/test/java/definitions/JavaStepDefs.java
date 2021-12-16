@@ -844,4 +844,69 @@ public class JavaStepDefs {
             if (dupes.get(el) > 1) System.out.println("Count for " + el + ": " + dupes.get(el));
         }
     }
+
+    @And("I reverse digits in a number {int}")
+    public void iReverseDigitsInANumber(int num) {
+        System.out.println("Original: " + num);
+        System.out.println("Reversed by string: " + getReversedNumberUsingStrings(num));
+        System.out.println("Reversed by math: " + getReversedNumberUsingMath(num));
+    }
+
+    private int getReversedNumberUsingMath(int num) {
+        int sign = (num < 0) ? -1 : 1;
+        num *= sign;
+        int result = 0;
+        for (int i = 1; num / i > 0; i *= 10) {
+            result = result * 10 + (num / i) % 10;
+        }
+        return sign * result;
+    }
+
+    private int getReversedNumberUsingStrings(int num) {
+        String negativeSign = "";
+        if (num < 0) {
+             negativeSign = "-";
+             num = -num;
+        }
+        return Integer.parseInt(negativeSign + getReversedStringWithStringBuilder(String.valueOf(num)));
+    }
+
+    @And("I print the list of digits for {int}")
+    public void iPrintTheListOfDigitsFor(int num) {
+        System.out.println("Original: " + num);
+        System.out.println("List of digits: " + Arrays.toString(getArrayOfDigitsForGivenNumber(num)));
+    }
+
+    private int[] getArrayOfDigitsForGivenNumber(int num) {
+        int sign = (num < 0) ? -1 : 1;
+        num *= sign;
+        int amountOfDigits = 1;
+        for (int i = 10; num / i > 0; i *= 10) ++amountOfDigits; //need this for array size/iteration
+        int[] arr = new int[amountOfDigits];
+
+        int digitOrder = 1;
+        for (int j = amountOfDigits; j > 0; --j) {
+            arr[j - 1] = (num / digitOrder) % 10;
+            digitOrder *= 10;
+        }
+        arr[0] *= sign;
+        return arr;
+    }
+
+    @And("I print indexes of two numbers in array that add up to {int}")
+    public void iPrintIndexesOfTwoNumbersInArrayThatAddUpTo(int target, @Transpose List<Integer> list) {
+        if (list.size() < 2) throw new Error("Provided array has less than 2 elements!");
+        int[] arr = convertListToPrimitiveArray(list);
+        System.out.println(Arrays.toString(getIndexesForTwoSum(arr, target)));
+    }
+
+    private int[] getIndexesForTwoSum(int[] arr, int target) {
+        Map<Integer, Integer> map = new HashMap<>();
+        for (int i = 0; i < arr.length; ++i) {
+            int element = arr[i];
+            if (map.containsKey(element)) return new int[] {map.get(element), i};
+            else map.put(target - element, i);
+        }
+        throw new Error("No solution for this target: " + target);
+    }
 }

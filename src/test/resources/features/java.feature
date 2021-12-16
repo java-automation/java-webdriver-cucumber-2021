@@ -161,3 +161,17 @@ Feature: Java experiments
   Scenario: Check array for duplicates
     And I check if given array has duplicates, print if found.
       | 4 | 3 | 1 | 8 | 7 | 3 | 9 | 4 | 7 | 3 | 0 | 3 | 2 |
+
+  @java29
+  Scenario: Reverse digits in a number
+    And I reverse digits in a number -54789
+
+  @java30
+  Scenario: List of digits
+    And I print the list of digits for -73268
+
+  @java31
+  #throws error if less than two elements in array or no solution
+  Scenario: Two sum
+    And I print indexes of two numbers in array that add up to 7
+      | 5 | 3 | -2 | 8 | 4 | 1 |
