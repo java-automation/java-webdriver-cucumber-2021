@@ -183,3 +183,13 @@
     @TestCase22
     Scenario: Write a function that reverses words in a sentence
       Given I reverse words in sentence "Hello World, what's up?"
+
+    @TestCase23
+    Scenario: Write a function that finds if array contains duplicates
+      Given I find duplicates in array [34, 6, 14, 29, 41, 8, -7, 12]
+
+    @TestCase24
+    Scenario: Write a function that determines palindrome (worlds like mom, civic, anna)
+
+    @TestCase25
+    Scenario: Write a function that finds 2 max numbers in the array
