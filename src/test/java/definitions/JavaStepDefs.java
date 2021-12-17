@@ -276,14 +276,15 @@ public class JavaStepDefs {
     }
 
     private long fibonacciNumberArray(int elNum) {
-        long[] fibSeq = new long[elNum + 1];
-        fibSeq[1] = 1;
-        if (elNum > 1) {
-            for (int i = 2; i <= elNum; ++i) {
-                fibSeq[i] = fibSeq[i - 1] + fibSeq[i - 2];
-            }
+        if (elNum <= 1) return elNum;
+
+        long[] fibSeq = new long[] {0, 1};
+        for (int i = 2; i <= elNum; ++i) {
+            long newFibNum = fibSeq[0] + fibSeq[1];
+            fibSeq[0] = fibSeq[1];
+            fibSeq[1] = newFibNum;
         }
-        return fibSeq[elNum];
+        return fibSeq[1];
     }
 
     private long fibonacciNumberList(int elNum) {
