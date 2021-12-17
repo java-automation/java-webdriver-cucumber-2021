@@ -175,3 +175,7 @@ Feature: Java experiments
   Scenario: Two sum
     And I print indexes of two numbers in array that add up to 7
       | 5 | 3 | -2 | 8 | 4 | 1 |
+
+  @java32
+  Scenario: Hello World in a frame
+    And I print phrase "Hello World in a frame" in a frame

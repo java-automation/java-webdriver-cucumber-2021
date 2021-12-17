@@ -909,4 +909,25 @@ public class JavaStepDefs {
         }
         throw new Error("No solution for this target: " + target);
     }
+
+    @And("I print phrase {string} in a frame")
+    public void iPrintPhraseInAFrame(String phrase) {
+        String[] words = phrase.trim().split(" ");
+        printWordsInAFrame(words);
+    }
+
+    private void printWordsInAFrame(String[] words) {
+        int maxLen = 0;
+        for (String el : words) {
+            if (el.length() > maxLen) maxLen = el.length();
+        }
+
+        System.out.println("*".repeat(maxLen + 4));
+
+        for (String word : words) {
+            System.out.println("* " + word + " ".repeat(maxLen - word.length()) + " *");
+        }
+
+        System.out.println("*".repeat(maxLen + 4));
+    }
 }
