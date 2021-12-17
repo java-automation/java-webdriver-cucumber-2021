@@ -10,11 +10,10 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.Select;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
-import java.util.Arrays;
-import java.util.List;
-import java.util.Locale;
+import java.util.*;
 import java.util.stream.Collectors;
 
+import static java.lang.Thread.sleep;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 import static support.TestContext.getDriver;
@@ -257,4 +256,44 @@ public class USPSStepDefs extends HelperStepDefs {
             assertTrue(getWebElement(CLASS_REQUIRED_XPATH).isDisplayed());
         }
     }
+
+    @Then("I verify that {string} results found1")
+    public void iVerifyThatResultsFound1(String searchResults) throws InterruptedException {
+        System.out.println("search Results: " + getText("//span[@id='searchResultsHeading']"));
+        assertEquals(Arrays.stream(getText("//span[@id='searchResultsHeading']").split(" ")).toList().get(0), searchResults);
+        if (getDriver().findElements(By.xpath("//ul[@class='pagination']/li[@class='page-item']")).size() == 0) {
+            assertEquals(getDriver().findElements(By.xpath("//div[@class='search-results']/ul/li")).size(), Integer.parseInt(searchResults));
+        } else
+            assertTrue(getDriver().findElements(By.xpath("//div[@class='search-results']/ul/li")).size() <= Integer.parseInt(searchResults));
+        iAmCountingSearchResults();
+    }
+
+    private int iAmCountingSearchResults() throws InterruptedException {
+        int counts = resultsInThePage();
+        String nextToClick = "//ul[@class='pagination']/li[@class='page-item active']/a/following::li[@class='page-item']/a[1]";
+        while ((getDriver().findElements(By.xpath(nextToClick)).size() > 0) &&
+                (getDriver().findElements(By.xpath("//ul[@class='pagination']/li[@class='next disabled']/a")).size() == 0)) {
+            System.out.println("I click to the page: " + getDriver().findElement(By.xpath(nextToClick)).getText()
+                    + "\n with link: " + getDriver().findElement(By.xpath(nextToClick)).getAttribute("href"));
+            getDriver()
+                    .findElement(By.xpath(nextToClick))
+                    .click();
+            wait.until(ExpectedConditions.refreshed(ExpectedConditions.presenceOfElementLocated(By.xpath("//ul[@id='records']"))));
+            if (getDriver().findElements(By.xpath(nextToClick)).size() > 0) {
+                sleep(3000); //because of Rate limiting of USPS site :((
+                wait.until(ExpectedConditions.elementToBeClickable(By.xpath(nextToClick)));
+            }
+            counts += resultsInThePage();
+            System.out.println(counts);
+        }
+        System.out.println("Found results: " + counts);
+        return counts;
+    }
+
+    private int resultsInThePage() {
+        return getDriver().findElements(By.xpath("//div[@class='search-results']/ul/li"))
+                .size();
+    }
 }
+
+
