@@ -52,18 +52,18 @@ Feature: USPS scenarios
     Given I go to "usps" page
     When I perform "Free Boxes" search
     And I set "Business" in filters
-    Then I verify that "20" results found1
+    Then I verify that "20" results found
 
   @usps5
   Scenario: group study 320 results
     Given I go to "usps" page
     When I perform "Free Boxes" search
     And I set "Postal Explorer" in filters
-    Then I verify that "320" results found1
+    Then I verify that "320" results found
 
   @usps6
   Scenario: group study 314 results
     Given I go to "usps" page
     When I perform "Free Boxes" search
     And I set "USPS Corporate" in filters
-    Then I verify that "314" results found1
+    Then I verify that "314" results found

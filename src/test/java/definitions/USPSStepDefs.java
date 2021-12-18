@@ -10,7 +10,9 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.Select;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
-import java.util.*;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Locale;
 import java.util.stream.Collectors;
 
 import static java.lang.Thread.sleep;
@@ -49,6 +51,10 @@ public class USPSStepDefs extends HelperStepDefs {
     public static final String MOBILE_SEARCH_ICON_XPATH = "//a[@class='mobile-search active']/img[@alt='Search Icon']";
     public static final String CLASS_REQUIRED_XPATH = "//div[@id='sign-in-wrap']//span[@class='required']";
     public static final String LOGIN_REGISTER_HEADER_XPATH = "//a[@id='login-register-header']";
+    public static final String NEXT_TO_CLICK_XPATH = "//ul[@class='pagination']/li[@class='page-item active']/a/following::li[@class='page-item']/a[1]";
+    public static final String RECORD_URL_XPATH = "//div[@class='search-results']/ul/li/p/a[contains(@class,'record-url')]";
+    public static final String NEXT_DISABLE_PAGINATION_XPATH = "//ul[@class='pagination']/li[@class='next disabled']/a";
+    public static final String ID_RECORDS_XPATH = "//ul[@id='records']";
     private final WebDriverWait wait = new WebDriverWait(getDriver(), 5, 200);
 
 
@@ -219,16 +225,6 @@ public class USPSStepDefs extends HelperStepDefs {
         wait.until(ExpectedConditions.refreshed(ExpectedConditions.presenceOfElementLocated(By.xpath("//span[@id='searchResultsHeading']"))));
     }
 
-    @Then("I verify that {string} results found")
-    public void iVerifyThatResultsFound(String searchResults) {
-        System.out.println("search Results: " + getText("//span[@id='searchResultsHeading']"));
-        assertEquals(Arrays.stream(getText("//span[@id='searchResultsHeading']").split(" ")).toList().get(0), searchResults);
-        if (getDriver().findElements(By.xpath("//ul[@class='pagination']/li[@class='page-item']")).size() == 0) {
-            assertEquals(getDriver().findElements(By.xpath("//div[@class='search-results']/ul/li")).size(), Integer.parseInt(searchResults));
-        } else
-            assertTrue(getDriver().findElements(By.xpath("//div[@class='search-results']/ul/li")).size() <= Integer.parseInt(searchResults));
-    }
-
     @When("I select {string} in results")
     public void iSelectInResults(String linkText) {
         getDriver().findElements(By.xpath("//ul[@id='records']//span/span"))
@@ -257,8 +253,8 @@ public class USPSStepDefs extends HelperStepDefs {
         }
     }
 
-    @Then("I verify that {string} results found1")
-    public void iVerifyThatResultsFound1(String searchResults) throws InterruptedException {
+    @Then("I verify that {string} results found")
+    public void iVerifyThatResultsFound(String searchResults) throws InterruptedException {
         System.out.println("search Results: " + getText("//span[@id='searchResultsHeading']"));
         assertEquals(Arrays.stream(getText("//span[@id='searchResultsHeading']").split(" ")).toList().get(0), searchResults);
         if (getDriver().findElements(By.xpath("//ul[@class='pagination']/li[@class='page-item']")).size() == 0) {
@@ -270,29 +266,22 @@ public class USPSStepDefs extends HelperStepDefs {
 
     private int iAmCountingSearchResults() throws InterruptedException {
         int counts = resultsInThePage();
-        String nextToClick = "//ul[@class='pagination']/li[@class='page-item active']/a/following::li[@class='page-item']/a[1]";
-        while ((getDriver().findElements(By.xpath(nextToClick)).size() > 0) &&
-                (getDriver().findElements(By.xpath("//ul[@class='pagination']/li[@class='next disabled']/a")).size() == 0)) {
-            System.out.println("I click to the page: " + getDriver().findElement(By.xpath(nextToClick)).getText()
-                    + "\n with link: " + getDriver().findElement(By.xpath(nextToClick)).getAttribute("href"));
-            getDriver()
-                    .findElement(By.xpath(nextToClick))
-                    .click();
-            wait.until(ExpectedConditions.refreshed(ExpectedConditions.presenceOfElementLocated(By.xpath("//ul[@id='records']"))));
-            if (getDriver().findElements(By.xpath(nextToClick)).size() > 0) {
-                sleep(3000); //because of Rate limiting of USPS site :((
-                wait.until(ExpectedConditions.elementToBeClickable(By.xpath(nextToClick)));
+        while ((getDriver().findElements(By.xpath(NEXT_DISABLE_PAGINATION_XPATH)).size() == 0)) {
+            getDriver().findElement(By.xpath(NEXT_TO_CLICK_XPATH)).click();
+           // wait.until(ExpectedConditions.refreshed(ExpectedConditions.presenceOfElementLocated(By.xpath(ID_RECORDS_XPATH))));
+            wait.until(ExpectedConditions.refreshed(ExpectedConditions.presenceOfElementLocated(By.xpath(RECORD_URL_XPATH))));
+            if (getDriver().findElements(By.xpath(NEXT_TO_CLICK_XPATH)).size() > 0) {
+                wait.until(ExpectedConditions.elementToBeClickable(By.xpath(NEXT_TO_CLICK_XPATH)));
             }
+            sleep(3000);  //because of Rate limiting of USPS site
             counts += resultsInThePage();
-            System.out.println(counts);
         }
         System.out.println("Found results: " + counts);
         return counts;
     }
 
     private int resultsInThePage() {
-        return getDriver().findElements(By.xpath("//div[@class='search-results']/ul/li"))
-                .size();
+        return getDriver().findElements(By.xpath(RECORD_URL_XPATH)).size();
     }
 }
 
