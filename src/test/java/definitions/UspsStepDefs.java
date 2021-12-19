@@ -75,5 +75,8 @@ public class UspsStepDefs {
         WebElement total = getDriver().findElement(By.xpath("//div[@id='total']"));
         WebDriverWait wait = new WebDriverWait(getDriver(), 5);
         wait.until(ExpectedConditions.visibilityOf(total));
+
+        String resultString = total.getText();
+        assertThat(resultString).contains(price);
     }
 }
