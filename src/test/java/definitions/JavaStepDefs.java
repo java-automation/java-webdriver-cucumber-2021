@@ -3,6 +3,7 @@ package definitions;
 import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
+import org.apache.logging.log4j.core.appender.rolling.action.IfAccumulatedFileCount;
 import org.apache.logging.log4j.core.util.JsonUtils;
 
 
@@ -522,6 +523,19 @@ public class JavaStepDefs<now> {
         }
     }
 
+
+    @Then("I practice if operators with {string}")
+    public void iPracticeIfOperatorsWith(String roleType) {
+        String type = roleType;
+        if (type.equals("admin")) {
+            System.out.println("You're an admin");
+        } else if (type.equals("moderator")){
+            System.out.println("You're a moderator");
+        } else {
+            System.out.println("You're a esh");
+        }
+    }
+
     @Then("I practice switch statement")
     public void iPracticeSwitchStatement() {
         String role = "admin";
@@ -648,6 +662,26 @@ public class JavaStepDefs<now> {
         System.out.println();
     }
 
+    @And("I solve FizzBuzz with scanner")
+    public void iSolveFizzBuzzWithScanner() {
+        Scanner scanner = new Scanner(System.in);
+        System.out.println("Number: ");
+        int number = scanner.nextInt();
+
+        if (number % 5 == 0){
+            System.out.println("Fizz");
+        } else if (number % 3 == 0) {
+            System.out.println("Buzz");
+        } else if (number % 5 == 0 && number % 3 == 0) {
+            System.out.println("FizzBuzz");
+        } else {
+            System.out.println(number);
+        }
+    }
+
+
+
+
     @And("I solve reverse")
     public void iSolveReverse() {
 //        getReversed("WebDriver");
@@ -716,6 +750,19 @@ public class JavaStepDefs<now> {
         return reversed;
     }
 
+    @Then("I calculate the mortgage")
+    public void iCalculateTheMortgage() {
+
+
+
+
+    }
+
+    @And("I say the sentence five times")
+    public void iSayTheSentenceFiveTimes() {
+        for (int i=0; i < 5; i++)
+            System.out.println("Hello World" + i);
+    }
 }
 
 

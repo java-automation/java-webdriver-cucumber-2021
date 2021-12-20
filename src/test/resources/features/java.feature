@@ -58,14 +58,18 @@ Feature: Java feature
       Then I practice comparison
       Then I practice logical operators
       Then I practice if operators
-      Then I practice switch statement
-      Then I practice insertion sort
+      Then I practice if operators with "esh"
+#      Then I practice switch statement
+#      Then I practice insertion sort
+#      Then I calculate the mortgage
 
     @java10
     Scenario: Coding challenges
       Given I solve coding challenges
       Then I solve FizzBuzz
-      And I solve reverse
+#      And I solve FizzBuzz with scanner
+      And I say the sentence five times
+#      And I solve reverse
 
 
 
