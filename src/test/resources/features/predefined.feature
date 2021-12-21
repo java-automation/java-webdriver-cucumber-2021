@@ -210,7 +210,7 @@ Feature: Smoke steps
     @predefined22
     Scenario: Quote form end to end scenario - required fields.
       Given I open url "https://skryabin.com/market/quote.html"
-      When I type "User123" into element with xpath "//input[@name='username']"
+      When I type "user123" into element with xpath "//input[@name='username']"
       And I type "user123@yahoo.com" into element with xpath "//input[@name='email']"
       And I type "password123" into element with xpath "//input[@id='password']"
       And I type "password123" into element with xpath "//input[@id='confirmPassword']"
@@ -224,7 +224,7 @@ Feature: Smoke steps
 
       Then element with xpath "//b[@name='password']" should not contain text "password123"
       Then element with xpath "//b[@name='email']" should have text as "user123@yahoo.com"
-      Then element with xpath "//div[@id='quotePageResult']" should contain text "User123"
+      Then element with xpath "//div[@id='quotePageResult']" should contain text "user123"
       Then element with xpath "//div[@id='quotePageResult']" should contain text "Amanda Smith"
       Then element with xpath "//[@name='agreedToPrivacyPolicy']" should have text as "true"
 
@@ -232,10 +232,14 @@ Feature: Smoke steps
   Scenario: Covered element.
     Given I open url "https://www.ups.com/us/en/global.page"
     When I resize window to 1024 and 800
+    And I wait for 1 sec
     And I click on element with xpath "//a[@data-map='ups-svg-mideast']//span"
     And I wait for 1 sec
     And I click on element using JavaScript with xpath "//a[@data-map='ups-svg-africa']//span"
     And I wait for 5 sec
+
+
+
 
 
 

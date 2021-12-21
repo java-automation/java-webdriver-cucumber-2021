@@ -48,6 +48,8 @@ public class Java2Stepdefs {
         int[] arr1 = {0, 1, 5, 2, 8, 3};
         int[] arr2 = {0, 5, 8, -70, 76, 87, -98, 95};
         twoArraysWithDiffLength(arr1, arr2);
+        // ********************** Dec_2 ********************************
+
     }
 
 // 1) Write a function that prints all numbers from 0 up to n
@@ -363,6 +365,22 @@ public class Java2Stepdefs {
         }
         System.out.println(Arrays.toString(arr3));
     }
+    //************************************Dec_2******************************************
+
+    // Write a function that reverses words in a sentence
+    // "I love Kansas" --> "Kansas love I"
+    // str.split() --> array
+    // StringBuilder
+
+    // for --> insert
+
+    // .split(" " | ",")
+
+    // while loop with idx, start from 0
+    // idx2
+    // "I   love Kansas"
+
+    //*******************************************************************************************
 }
 
 
