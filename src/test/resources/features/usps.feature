@@ -21,8 +21,10 @@ Feature: USPS website scenarios
   Scenario: Verify location
     Given I go to "usps" page
     When  I perform "Free Boxes" search
-    *     I set "Send" in filters
-    Then  I verify that "7" results found
+    *     I set filters
+      | Send | Receive | International | USPS Corporate |
+    Then  I verify that "330" results found
+    *     I go to 1 results page
     When  I select "Priority Mail | USPS" in results
     *     I click "Ship Now" button
     Then  I validate that Sign In is required

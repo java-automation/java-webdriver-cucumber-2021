@@ -1,5 +1,6 @@
 package definitions;
 
+import io.cucumber.java.Transpose;
 import io.cucumber.java.en.And;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
@@ -10,9 +11,7 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.Select;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 import static org.assertj.core.api.Assertions.*;
 import static support.TestContext.getDriver;
@@ -88,25 +87,88 @@ public class UspsStepDefs {
         getDriver().findElement(By.xpath(navSearchXPath + "//input[@value='Search']")).click();
     }
 
-    @And("I set {string} in filters")
-    public void iSetInFilters(String filterName) {
-        WebDriverWait wait = new WebDriverWait(getDriver(), 3);
+    @And("I set filters")
+    public void iSetFilters(@Transpose List<String> filters) {
+        int numOfFilters = filters.size();
+        if (numOfFilters < 1) throw new Error("Filter list is empty!");
 
-        By sendFilter = By.xpath("//p[@title='" + filterName + "']");
-        wait.until(ExpectedConditions.visibilityOfElementLocated(sendFilter));
+        By firstBy = By.xpath("//p[@title='" + filters.get(0) + "']");
+        new WebDriverWait(getDriver(), 3).until(ExpectedConditions.visibilityOfElementLocated(firstBy));
+        getDriver().findElement(firstBy).click();
 
         WebElement spinner = getDriver().findElement(By.xpath("//div[@class='spinner-content']"));
-        wait.until(ExpectedConditions.invisibilityOf(spinner));
 
-        getDriver().findElement(sendFilter).click();
-        wait.until(ExpectedConditions.visibilityOf(spinner));
-        wait.until(ExpectedConditions.invisibilityOf(spinner));
+        for (int i = 1; i < numOfFilters; ++i) {
+            waitForElementToBeInvisible(spinner);
+            getDriver().findElement(By.xpath("//p[@title='" + filters.get(i) + "']")).click();
+        }
+        waitForElementToBeInvisible(spinner);
+    }
+
+    private void waitForElementToBeInvisible(WebElement element) {
+        new WebDriverWait(getDriver(),3).until(ExpectedConditions.invisibilityOf(element));
     }
 
     @Then("I verify that {string} results found")
     public void iVerifyThatResultsFound(String amountOfResults) {
+        verifyByLabel(amountOfResults);
+        verifyByCountingResults(Integer.parseInt(amountOfResults));
+    }
+
+    private void verifyByLabel(String amountOfResults) {
+        assertThat(getDriver().findElement(By.xpath("//*[@id='searchResultsHeading']")).getText()).contains(amountOfResults);
+    }
+
+    private void verifyByCountingResults(int totalResults) {
+        int amountOfPages = totalResults / 10;
+        int resultsOnLastPage = totalResults % 10;
+
+        if (resultsOnLastPage > 0) amountOfPages++;
+        else resultsOnLastPage = 10;
+
+        if (amountOfPages > 1) goToSpecificResultsPage(amountOfPages);
+
         List<WebElement> results = getDriver().findElements(By.xpath("//ul[@id='records']/li"));
-        assertThat(results.size()).isEqualTo(Integer.parseInt(amountOfResults));
+        assertThat(results.size()).isEqualTo(resultsOnLastPage);
+    }
+
+    private void goToSpecificResultsPage(int page) {
+        if (page < 1) throw new Error("Invalid page number: " + page);
+
+        int currentPage = Integer.parseInt(getDriver().findElement(By.xpath("//ul[@class='pagination']//li[contains(@class,'active')]")).getText());
+        if (currentPage == page) return;
+
+        boolean goingRight = page - currentPage > 0;
+        By nextPageBy;
+        if (goingRight) {
+            nextPageBy = By.xpath("//ul[@class='pagination']/li[@class='next']/preceding-sibling::li[1]");
+        } else {
+            nextPageBy = By.xpath("//ul[@class='pagination']/li[contains(@class,'prev')]/following-sibling::li[1]");
+        }
+
+        WebElement spinner = getDriver().findElement(By.xpath("//div[@class='spinner-content']"));
+        WebElement footer = getDriver().findElement(By.xpath("//footer"));
+
+        int nextPageValue;
+        boolean isNeededPageNumberVisible;
+        do {
+            WebElement nextPage = getDriver().findElement(nextPageBy);
+            nextPageValue = Integer.parseInt(nextPage.getText());
+            isNeededPageNumberVisible = ((page <= nextPageValue && goingRight) || (page >= nextPageValue && !goingRight));
+            if (!isNeededPageNumberVisible) {
+                moveMouseToElement(footer);
+                nextPage.click();
+                waitForElementToBeInvisible(spinner);
+            }
+        } while (!isNeededPageNumberVisible);
+
+        moveMouseToElement(footer);
+        getDriver().findElement(By.xpath("//ul[@class='pagination']//*[contains(text(),'" + page + "')]")).click();
+        waitForElementToBeInvisible(spinner);
+    }
+
+    private void moveMouseToElement(WebElement element) {
+        new Actions(getDriver()).moveToElement(element).perform();
     }
 
     @When("I select {string} in results")
@@ -125,5 +187,10 @@ public class UspsStepDefs {
         assertThat(getDriver().getCurrentUrl()).contains("https://reg.usps.com");
         assertThat(getDriver().findElement(By.xpath("//button[@id='btn-submit']"))).isNotNull();
         assertThat(getDriver().findElement(By.xpath("//a[@id='sign-up-button']"))).isNotNull();
+    }
+
+    @And("I go to {int} results page")
+    public void iGoToResultsPage(int page) {
+        goToSpecificResultsPage(page);
     }
 }
