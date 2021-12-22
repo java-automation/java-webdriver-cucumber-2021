@@ -88,15 +88,21 @@ public class UspsStepDefs {
 
     @And("I set {string} in filters")
     public void iSetInFilters(String filterName) {
+        WebDriverWait wait = new WebDriverWait(getDriver(), 3);
+
         By sendFilter = By.xpath("//p[@title='" + filterName + "']");
-        new WebDriverWait(getDriver(), 3).until(ExpectedConditions.visibilityOfElementLocated(sendFilter));
+        wait.until(ExpectedConditions.visibilityOfElementLocated(sendFilter));
+
+        WebElement spinner = getDriver().findElement(By.xpath("//div[@class='spinner-content']"));
+        wait.until(ExpectedConditions.invisibilityOf(spinner));
+
         getDriver().findElement(sendFilter).click();
+        wait.until(ExpectedConditions.visibilityOf(spinner));
+        wait.until(ExpectedConditions.invisibilityOf(spinner));
     }
 
     @Then("I verify that {string} results found")
     public void iVerifyThatResultsFound(String amountOfResults) {
-        WebElement spinner = getDriver().findElement(By.xpath("//div[@class='spinner-content']"));
-        new WebDriverWait(getDriver(),3).until(ExpectedConditions.invisibilityOf(spinner));
         List<WebElement> results = getDriver().findElements(By.xpath("//ul[@id='records']/li"));
         assertThat(results.size()).isEqualTo(Integer.parseInt(amountOfResults));
     }
