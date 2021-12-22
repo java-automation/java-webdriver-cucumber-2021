@@ -11,6 +11,8 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.Select;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
+import java.text.DecimalFormat;
+import java.text.ParseException;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.*;
@@ -31,7 +33,7 @@ public class UspsStepDefs {
                 getDriver().findElement(By.xpath("//a[contains(@href,'ZipLookupAction')]")).click();
             }
             case "mouseover" -> {
-                new Actions(getDriver()).moveToElement(sendButton).perform();
+                moveMouseToElement(sendButton);
                 getDriver().findElement(By.xpath("//li[@class='tool-zip']/a[contains(@href,'zip-code-lookup')]")).click();
             }
             default -> throw new Error("Unknown strategy: " + strategy);
@@ -58,7 +60,7 @@ public class UspsStepDefs {
 
     @When("I go to Calculate Price Page")
     public void iGoToCalculatePricePage() {
-        new Actions(getDriver()).moveToElement(getDriver().findElement(By.xpath("//ul[@class='nav-list']/li[contains(@class,'qt-nav')]"))).perform();
+        moveMouseToElement(getDriver().findElement(By.xpath("//ul[@class='nav-list']/li[contains(@class,'qt-nav')]")));
         getDriver().findElement(By.xpath("//a[@role='menuitem']/img[contains(@alt,'Calculate a Price')]")).click();
     }
 
@@ -82,7 +84,7 @@ public class UspsStepDefs {
     @When("I perform {string} search")
     public void iPerformSearch(String query) {
         String navSearchXPath = "//li[contains(@class,'nav-search')]";
-        new Actions(getDriver()).moveToElement(getDriver().findElement(By.xpath(navSearchXPath))).perform();
+        moveMouseToElement(getDriver().findElement(By.xpath(navSearchXPath)));
         getDriver().findElement(By.xpath(navSearchXPath + "//input[@name='q']")).sendKeys(query);
         getDriver().findElement(By.xpath(navSearchXPath + "//input[@value='Search']")).click();
     }
@@ -106,7 +108,7 @@ public class UspsStepDefs {
     }
 
     private void waitForElementToBeInvisible(WebElement element) {
-        new WebDriverWait(getDriver(),3).until(ExpectedConditions.invisibilityOf(element));
+        new WebDriverWait(getDriver(),10).until(ExpectedConditions.invisibilityOf(element));
     }
 
     @Then("I verify that {string} results found")
@@ -163,7 +165,7 @@ public class UspsStepDefs {
         } while (!isNeededPageNumberVisible);
 
         moveMouseToElement(footer);
-        getDriver().findElement(By.xpath("//ul[@class='pagination']//*[contains(text(),'" + page + "')]")).click();
+        getDriver().findElement(By.xpath("//ul[@class='pagination']//*[normalize-space(.)='" + page + "']")).click();
         waitForElementToBeInvisible(spinner);
     }
 
@@ -173,12 +175,12 @@ public class UspsStepDefs {
 
     @When("I select {string} in results")
     public void iSelectInResults(String resultToChoose) {
-        getDriver().findElement(By.xpath("//ul[@id='records']//a//*[contains(normalize-space(),'" + resultToChoose + "')]")).click();
+        getDriver().findElement(By.xpath("//ul[@id='records']//a//*[normalize-space(.)='" + resultToChoose + "']")).click();
     }
 
     @And("I click {string} button")
     public void iClickButton(String buttonText) {
-        getDriver().findElement(By.xpath("//a[@class='button--primary'][contains(normalize-space(),'" + buttonText + "')]")).click();
+        getDriver().findElement(By.xpath("//a[@class='button--primary'][contains(normalize-space(.),'" + buttonText + "')]")).click();
     }
 
     @Then("I validate that Sign In is required")
@@ -192,5 +194,56 @@ public class UspsStepDefs {
     @And("I go to {int} results page")
     public void iGoToResultsPage(int page) {
         goToSpecificResultsPage(page);
+    }
+
+    @When("I go to {string} under {string}")
+    public void iGoToUnder(String submenuLabel, String navigationMenuLabel) {
+        moveMouseToElement(getDriver().findElement(By.xpath(getNavigationMenuItemXPath(navigationMenuLabel))));
+        getDriver().findElement(By.xpath(getSubmenuItemXPath(navigationMenuLabel, submenuLabel))).click();
+    }
+
+    private String getSubmenuItemXPath(String menuLabel, String submenuLabel) {
+        return getNavigationMenuItemXPath(menuLabel) + "/..//a[@role='menuitem'][normalize-space(.)='" + submenuLabel + "']";
+    }
+
+    private String getNavigationMenuItemXPath(String label) {
+        return "//ul[@class='nav-list']//a[@class='menuitem'][normalize-space(.)='" + label + "']";
+    }
+
+    @And("I search for {string}")
+    public void iSearchFor(String address) {
+        getDriver().findElement(By.xpath("//input[@id='cityOrZipCode']")).sendKeys(address);
+        getDriver().findElement(By.xpath("//a[contains(@class,'eddm-search-btn')]")).click();
+        waitForElementToBeInvisible(getDriver().findElement(By.xpath("//div[@class='spinner-content']")));
+    }
+
+    @And("I choose view as {string} on the map")
+    public void iChooseViewAsOnTheMap(String viewType) {
+        getDriver().findElement(By.xpath("//div[contains(@class,'refine-search-tabs')]//span[normalize-space(.)='" + viewType + "']")).click();
+    }
+
+    @When("I select all in the table")
+    public void iSelectAllInTheTable() {
+        getDriver().findElement(By.xpath("//input[@id='select-all-checkboxes']")).click();
+    }
+
+    @And("I close modal window")
+    public void iCloseModalWindow() {
+        WebElement closeButton = getDriver().findElement(By.xpath("//a[@id='closeAndUpdateTotals']"));
+        new WebDriverWait(getDriver(),3).until(ExpectedConditions.visibilityOf(closeButton));
+        closeButton.click();
+        waitForElementToBeInvisible(closeButton);
+    }
+
+    @Then("I verify that summary of all rows of Cost column is equal Approximate Cost in Order Summary")
+    public void iVerifyThatSummaryOfAllRowsOfCostColumnIsEqualApproximateCostInOrderSummary() throws ParseException {
+        DecimalFormat df = new DecimalFormat("$####.00");
+        String approxCost = getDriver().findElement(By.xpath("//p[@id='approximateCost']")).getText();
+        List<WebElement> costElements = getDriver().findElements(By.xpath("//table/tbody//input[contains(@id,'checkbox')]/ancestor::td/following-sibling::td[8]"));
+        double totalCost = 0;
+        for (WebElement el : costElements) {
+            totalCost += df.parse(el.getText()).doubleValue();
+        }
+        assertThat(approxCost).isEqualTo(df.format(totalCost));
     }
 }
