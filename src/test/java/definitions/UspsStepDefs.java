@@ -10,7 +10,9 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.Select;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import static org.assertj.core.api.Assertions.*;
 import static support.TestContext.getDriver;
@@ -119,12 +121,9 @@ public class UspsStepDefs {
 
     @Then("I validate that Sign In is required")
     public void iValidateThatSignInIsRequired() {
-        for (String handle : getDriver().getWindowHandles()) {
-            getDriver().switchTo().window(handle);
-            if (getDriver().getCurrentUrl().contains("https://www.usps.com/ship/priority-mail")) continue;
-            assertThat(getDriver().getCurrentUrl()).contains("https://reg.usps.com");
-            assertThat(getDriver().findElement(By.xpath("//button[@id='btn-submit']"))).isNotNull();
-            assertThat(getDriver().findElement(By.xpath("//a[@id='sign-up-button']"))).isNotNull();
-        }
+        getDriver().getWindowHandles().forEach(handle -> getDriver().switchTo().window(handle)); //cycle to the latest one
+        assertThat(getDriver().getCurrentUrl()).contains("https://reg.usps.com");
+        assertThat(getDriver().findElement(By.xpath("//button[@id='btn-submit']"))).isNotNull();
+        assertThat(getDriver().findElement(By.xpath("//a[@id='sign-up-button']"))).isNotNull();
     }
 }
