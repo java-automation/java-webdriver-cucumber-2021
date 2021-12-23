@@ -192,4 +192,7 @@
     Scenario: Write a function that determines palindrome (worlds like mom, civic, anna)
 
     @TestCase25
-    Scenario: Write a function that finds 2 max numbers in the array
+    Scenario: Write a function that prints 2 max numbers in an array
+
+    @TestCase26
+    Scenario: Write a function that finds if any two elements of an array result in sum
