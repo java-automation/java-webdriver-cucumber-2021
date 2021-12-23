@@ -176,3 +176,17 @@ Feature: Java feature
     And I search two highest element in array "5,6,8,1,36,94,28,74,501,500"
     And I search two highest element in array "5,6"
     And I search two highest element in array "5"
+
+  @javaDecember20
+    Scenario: Print max numbers in an array with different method
+      Given I print two max numbers in an array "1,2,3,4,5,6,7,8,9"
+      And I print two max numbers in an array "6,7,8,0,99"
+      And I print two max numbers in an array "0,99"
+      And I print two max numbers in an array "99"
+
+    Scenario: Searching if any of two elements of an array results in sum
+      Given I search two element in array "1,2,3,4,5,6,7" results in sum of 10
+      And I search two element in array "1,2,3,4,5,6,7" results in sum of 13
+      And I search two element in array "1,2,3,4,5,6,7" results in sum of 20
+      And I search two element in array "1,2" results in sum of 3
+      And I search two element in array "1" results in sum of 1

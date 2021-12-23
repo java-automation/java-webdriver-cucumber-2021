@@ -3,18 +3,13 @@ package definitions;
 import io.cucumber.java.en.And;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
-import org.apache.xpath.operations.Bool;
-import org.assertj.core.api.DurationAssert;
-import org.openqa.selenium.By;
-import org.openqa.selenium.NoSuchElementException;
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
+import org.openqa.selenium.*;
 import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.*;
 
-import java.time.Duration;
+import java.text.DecimalFormat;
+import java.text.DecimalFormatSymbols;
 import java.util.List;
-import java.util.function.Function;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static support.TestContext.getDriver;
@@ -144,5 +139,56 @@ public class USPSStepDefs {
             }
         }
         return false;
+    }
+
+    @When("I go to {string} under {string}")
+    public void iGoToUnder(String sChildMenu, String sParentMenu) {
+        new Actions(getDriver()).moveToElement(getDriver().findElement(By.xpath("//a[normalize-space()='" + sParentMenu + "']"))).perform();
+        getDriver().findElement(By.xpath("//a[normalize-space()='" + sChildMenu + "' and ancestor::ul/h3[normalize-space()='Tools']]")).click();
+        waitForElements(5, "//input[@id='cityOrZipCode']");
+    }
+
+    @And("I search for {string}")
+    public void iSearchFor(String sAdr) {
+        getDriver().findElement(By.xpath("//input[@id='cityOrZipCode']")).sendKeys(sAdr);
+        getDriver().findElement(By.xpath("//a[normalize-space()='Search' and @role='button']")).click();
+        waitForSpinnerDisappear(30);
+    }
+
+    @And("I choose view as {string} on the map")
+    public void iChooseViewAsOnTheMap(String sView) {
+        getDriver().findElement(By.xpath("//span[normalize-space()='" + sView + "']/..")).click();
+        WebDriverWait tableResult = new WebDriverWait(getDriver(), 5);
+        tableResult.until(ExpectedConditions.presenceOfAllElementsLocatedBy(By.xpath("//table[contains(@class,'target-audience-table')]/tbody")));
+    }
+
+    @When("I select all in the table")
+    public void iSelectAllInTheTable() {
+        getDriver().findElement(By.xpath("//input[@id='select-all-checkboxes']")).click();
+        waitForElements(5, "//div[@id='drop-off-location-modal']");
+    }
+
+    @And("I close modal window")
+    public void iCloseModalWindow() {
+        WebDriverWait modalWait = new WebDriverWait(getDriver(), 5);
+        modalWait.until(ExpectedConditions.visibilityOfAllElementsLocatedBy(By.xpath("//div[@id='drop-off-location-modal']")));
+        WebElement button = getDriver().findElement(By.xpath("//a[@id='closeAndUpdateTotals']"));
+        new Actions(getDriver()).moveToElement(button).click().perform();
+        modalWait.until(ExpectedConditions.invisibilityOfElementLocated(By.xpath("//div[@id='drop-off-location-modal']")));
+    }
+
+    @Then("I verify that summary of all rows of Cost column is equal Approximate Cost in Order Summary")
+    public void iVerifyThatSummaryOfAllRowsOfCostColumnIsEqualApproximateCostInOrderSummary() {
+        WebDriverWait tableResult = new WebDriverWait(getDriver(), 5);
+        tableResult.until(ExpectedConditions.visibilityOfAllElementsLocatedBy(By.xpath("//table[contains(@class,'target-audience-table')]/tbody")));
+        List<WebElement> lItems = getDriver().findElements(By.xpath("//table[contains(@class,'target-audience-table')]/tbody/tr/td[9]/p"));
+        double sum = 0.0;
+        for (WebElement el : lItems) {
+            sum += Double.parseDouble(el.getText().replace("$", ""));
+        }
+        DecimalFormatSymbols dFS = new DecimalFormatSymbols();
+        dFS.setDecimalSeparator('.');
+        DecimalFormat dF = new DecimalFormat("#.##", dFS);
+        assertThat(getDriver().findElement(By.xpath("//p[@id='approximateCost']")).getText()).contains(dF.format(sum));
     }
 }

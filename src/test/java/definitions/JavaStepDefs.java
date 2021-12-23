@@ -160,6 +160,12 @@ public class JavaStepDefs {
             case "usps":
                 getDriver().navigate().to("https://www.usps.com");
                 break;
+            case "converter":
+                getDriver().navigate().to("https://www.unitconverters.net");
+                break;
+            case "calculator":
+                getDriver().navigate().to("https://www.calculator.net");
+                break;
             default:
                 System.out.println("Unsupported page: " + sPage);
         }
@@ -639,5 +645,52 @@ public class JavaStepDefs {
     @Given("I check is word {string} palindrome with other method")
     public void iCheckIsWordPalindromeWithOtherMethod(String sWord) {
         System.out.println("Word: " + sWord + checkWordIsPalindromeMethod2(sWord));
+    }
+
+    @Given("I print two max numbers in an array {string}")
+    public void iPrintTwoMaxNumbersInAnArray(String sArray) {
+        int[] aArray = convertStringArrayToInteger(sArray);
+        if (aArray.length > 2) {
+            int iTemp;
+            for (int i = 0; i < 2; i++) {
+                for (int j = 1; j < aArray.length; j++) {
+                    if (aArray[j] > aArray[i]) {
+                        iTemp = aArray[i];
+                        aArray[i] = aArray[j];
+                        aArray[j] = iTemp;
+                    }
+                }
+            }
+
+            System.out.println("First highest element is - " +  aArray[0]);
+            System.out.println("Second highest element is - " + aArray[1]);
+        } else if (aArray.length == 2) {
+            System.out.println("First highest element is - " + Math.max(aArray[0], aArray[1]));
+            System.out.println("Second highest element is - " + Math.min(aArray[0], aArray[1]));
+        } else {
+            throw new Error("Array looks too small.");
+        }
+    }
+
+    @Given("I search two element in array {string} results in sum of {int}")
+    public void iSearchTwoElementInArrayResultsInSumOf(String sArray, int iSum) {
+        int[] aArray = convertStringArrayToInteger(sArray);
+        String sLine = "";
+        if (aArray.length >= 2) {
+            int iTemp;
+            for (int i = 0; i < aArray.length; i++) {
+                for (int j = i + 1; j < aArray.length; j++) {
+                    if (aArray[j] + aArray[i] == iSum) {
+                        sLine = "(" + Integer.toString(aArray[i]) + " + " + Integer.toString(aArray[j]) + ").";
+                        System.out.println("Elements found at: " + i + " and " + j + " positions " + sLine);
+                    }
+                }
+            }
+        } else {
+            throw new Error("Array looks too small.");
+        }
+        if (sLine == "") {
+            System.out.println("No elements found.");
+        }
     }
 }
