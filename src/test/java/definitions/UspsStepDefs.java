@@ -11,6 +11,7 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.Select;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
+import java.math.BigDecimal;
 import java.text.DecimalFormat;
 import java.text.ParseException;
 import java.util.List;
@@ -237,13 +238,15 @@ public class UspsStepDefs {
 
     @Then("I verify that summary of all rows of Cost column is equal Approximate Cost in Order Summary")
     public void iVerifyThatSummaryOfAllRowsOfCostColumnIsEqualApproximateCostInOrderSummary() throws ParseException {
-        DecimalFormat df = new DecimalFormat("$####.00");
         String approxCost = getDriver().findElement(By.xpath("//p[@id='approximateCost']")).getText();
         List<WebElement> costElements = getDriver().findElements(By.xpath("//table/tbody//input[contains(@id,'checkbox')]/ancestor::td/following-sibling::td[8]"));
-        double totalCost = 0;
+
+        DecimalFormat df = new DecimalFormat("$0.00");
+        BigDecimal totalCost = new BigDecimal(0);
         for (WebElement el : costElements) {
-            totalCost += df.parse(el.getText()).doubleValue();
+            totalCost = totalCost.add(BigDecimal.valueOf(df.parse(el.getText()).doubleValue()));
         }
-        assertThat(approxCost).isEqualTo(df.format(totalCost));
+
+        assertThat(df.format(totalCost)).isEqualTo(approxCost);
     }
 }
