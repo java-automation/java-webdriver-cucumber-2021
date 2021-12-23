@@ -223,8 +223,27 @@ Feature: Java feature
       | USSR  |
 
   @java32
-  Scenario: Largest element in array int
+  Scenario: Two largest element in array int
     Given I find two largest element in int array
+
+  @java33
+  Scenario: Sum of two numbers equals target;
+    Given an array of integers nums and an integer target return indices of the two numbers such that they add up to target Do not use the same element twice
+
+  @java33_1
+  Scenario: Sum of all elements from one to nine
+    Given I found sum of two element in array equals target number
+
+  @java34
+  Scenario: fibonacci
+    Given I find fibonacci 0
+    Given I find fibonacci 1
+    Given I find fibonacci 2
+    Given I find fibonacci 3
+    Given I find fibonacci 4
+    Given I find fibonacci 5
+    Given I find fibonacci 6
+
 
 
 

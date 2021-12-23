@@ -841,4 +841,80 @@ public class JavaStepDefs {
         out.println("Two largest element in array: " + array[array.length - 1] + " and " + array[array.length - 2]);
     }
 
+    private void solveIt(int[] arr, int target) {
+        Map<Integer, Integer> map = new HashMap<>();
+        for (int i = 0; i < arr.length - 1; i++) { // i=2->arr[i]=7 (2)
+            if (map.containsKey(arr[i])) {
+                System.out.println(map.get(arr[i]) + ", " + i);
+                return;
+            }
+            map.put(target - arr[i], i); // for pos=0 i need to find 9-2=7, (key=7, value=0)
+        }
+    }
+
+    @Given("an array of integers nums and an integer target return indices of the two numbers such that they add up to target Do not use the same element twice")
+    public void anArrayOfIntegersNumsAndAnIntegerTargetReturnIndicesOfTheTwoNumbersSuchThatTheyAddUpToTargetDoNotUseTheSameElementTwice() {
+        // int[] nums = new int[]{2, 11, 6, 15, 3};
+        int[] nums = new int[]{2, 1, 6, 5, 3};
+        int target = 9;
+        Integer[] array = new Integer[1];
+        array[0] = nums[0];
+        addingNumberToElements
+                (nums[4],
+                        addingNumberToElements
+                                (nums[3],
+                                        addingNumberToElements
+                                                (nums[2],
+                                                        addingNumberToElements
+                                                                (nums[1], array))));
+    }
+
+    private Integer[] addingNumberToElements(int number, Integer[] array) {
+        Integer[] result = new Integer[2 * array.length + 1];
+        for (int i = 0; i < array.length; i++) {
+            result[i] = array[i] + number;
+            result[array.length + i] = array[i];
+        }
+        result[2 * array.length] = number;
+        out.println(Arrays.toString(array));
+        out.println(Arrays.toString(result));
+        return result;
+    }
+
+    public static int recurcion(int start, int end) {
+        if (end > start) {
+            return end * recurcion(start, end - 1);
+        } else {
+            return end;
+        }
+    }
+
+    @Given("I found sum of two element in array equals target number")
+    public void anSumOfTwoElementsEqualsTargetNumber() {
+        //   int[] nums = new int[]{2, 1, 6, 5, 3};
+        int[] nums = new int[]{2, 11, 6, 15, 3, 2, 1, 6, 5, 3};
+        int target = 9;
+        out.println(Arrays.toString(nums));
+        for (int i = 0; i < nums.length - 1; i++) {
+            for (int j = i + 1; j < nums.length; j++) {
+                if (nums[i] + nums[j] == target) {
+                    out.println("num[" + i + "] + num[" + j + "] = " + nums[i] + " + " + nums[j] + " = " + target);
+                }
+            }
+        }
+    }
+
+
+    @Given("I find fibonacci {int}")
+    private int fib(int n) {
+        if (n <= 1) {
+            return n;
+        }
+        return fib(n - 1) + fib(n - 2);
+    }
+
+    @Given("I find fibonacci {int}")
+    public void iFindFibonacci(int arg0) {
+        System.out.println(fib(arg0));
+    }
 }
