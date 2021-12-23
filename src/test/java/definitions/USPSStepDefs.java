@@ -3,6 +3,7 @@ package definitions;
 import io.cucumber.java.en.And;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
+import org.junit.Assert;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.Actions;
@@ -10,7 +11,7 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.Select;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
-import java.text.DecimalFormat;
+import java.math.BigDecimal;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Locale;
@@ -317,7 +318,6 @@ public class USPSStepDefs extends HelperStepDefs {
                 .click()
                 .click()
                 .perform();
-        Thread.sleep(5000);
         wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//table[contains(@class,'target-audience-table')]")));
     }
 
@@ -343,16 +343,13 @@ public class USPSStepDefs extends HelperStepDefs {
     @Then("I verify that summary of all rows of Cost column is equal Approximate Cost in Order Summary")
     public void iVerifyThatSummaryOfAllRowsOfCostColumnIsEqualApproximateCostInOrderSummary() {
         List<WebElement> costList = getDriver().findElements(By.xpath("//table[contains(@class,'target-audience-table')]/tbody/tr/td[9]/p"));
-        Double sum = 0.0;
-        for (WebElement el : costList) {
-            Double elInDouble = Double.parseDouble(el.getText().replace("$", ""));
-            System.out.println(elInDouble);
-            sum += elInDouble;
+        BigDecimal sum = new BigDecimal(0);
+        for (WebElement el: costList) {
+            sum  = sum.add(new BigDecimal(el.getText().replace("$","")));
         }
-        Double approximateCost = Double.parseDouble(getDriver().findElement(By.xpath("//p[@id='approximateCost']")).getText().replace("$", ""));
-        System.out.println("sum = " + new DecimalFormat("###.00").format(sum)
-                + ", approximateCost = " + new DecimalFormat("###.00").format(approximateCost));
-        assertEquals(new DecimalFormat("###.00").format(sum), new DecimalFormat("###.00").format(approximateCost));
+        BigDecimal approximateCost = new BigDecimal(getDriver().findElement(By.xpath("//p[@id='approximateCost']")).getText().replace("$", ""));
+        Assert.assertEquals(sum.toString(), approximateCost.toString());
+
     }
 }
 
