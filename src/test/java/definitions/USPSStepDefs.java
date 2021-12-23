@@ -12,7 +12,6 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.text.DecimalFormat;
 import java.util.Arrays;
-import java.util.Currency;
 import java.util.List;
 import java.util.Locale;
 import java.util.stream.Collectors;
@@ -286,7 +285,7 @@ public class USPSStepDefs extends HelperStepDefs {
 
     private int resultsInThePage() {
         List<WebElement> results = getDriver().findElements(By.xpath(RECORD_URL_XPATH));
-       return results.size();
+        return results.size();
     }
 
     @When("I go to {string} under {string}")
@@ -307,6 +306,8 @@ public class USPSStepDefs extends HelperStepDefs {
     public void iSearchFor(String address) {
         getDriver().findElement(By.xpath("//input[@id='cityOrZipCode']")).sendKeys(address);
         getDriver().findElement(By.xpath("//a[@role='button'][contains(@class,'search-btn')]")).click();
+        wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//div[@id='searchProcessing']//div[@class='spinner-content']/h5")));
+        wait.until(ExpectedConditions.invisibilityOfElementLocated(By.xpath("//div[@id='searchProcessing']//div[@class='spinner-content']/h5")));
     }
 
     @And("I choose view as {string} on the map")
@@ -322,9 +323,7 @@ public class USPSStepDefs extends HelperStepDefs {
 
     @When("I select all in the table")
     public void iSelectAllInTheTable() throws InterruptedException {
-        wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//table[contains(@class,'target-audience-table')]/tbody")));
         wait.until(ExpectedConditions.visibilityOfAllElementsLocatedBy(By.xpath("//table[contains(@class,'target-audience-table')]/tbody")));
-        Thread.sleep(3000);
         new Actions(getDriver())
                 .moveToElement(getDriver().findElement(By.xpath("//input[@id='select-all-checkboxes']//../span")))
                 .click()
@@ -339,7 +338,6 @@ public class USPSStepDefs extends HelperStepDefs {
                 .click()
                 .perform();
         assertFalse(getDriver().findElement(By.xpath("//div[@id='drop-off-location-modal']/div[@class='modal-dialog medium']")).isDisplayed());
-
     }
 
     @Then("I verify that summary of all rows of Cost column is equal Approximate Cost in Order Summary")
@@ -351,11 +349,9 @@ public class USPSStepDefs extends HelperStepDefs {
             System.out.println(elInDouble);
             sum += elInDouble;
         }
-        Currency.getAvailableCurrencies();
-        Double approximateCost = Double.parseDouble(getDriver().findElement(By.xpath("//p[@id='approximateCost']"))
-                .getText()
-                .replace("$", ""));
-        System.out.println("sum = " + new DecimalFormat("###.00").format(sum) + ", approximateCost = " + new DecimalFormat("###.00").format(approximateCost));
+        Double approximateCost = Double.parseDouble(getDriver().findElement(By.xpath("//p[@id='approximateCost']")).getText().replace("$", ""));
+        System.out.println("sum = " + new DecimalFormat("###.00").format(sum)
+                + ", approximateCost = " + new DecimalFormat("###.00").format(approximateCost));
         assertEquals(new DecimalFormat("###.00").format(sum), new DecimalFormat("###.00").format(approximateCost));
     }
 }
