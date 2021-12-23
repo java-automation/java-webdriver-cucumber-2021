@@ -25,6 +25,9 @@ public class GenericStepDefs {
             case "usps":
                 getDriver().navigate().to("https://www.usps.com/");
                 break;
+            case "unitconverters":
+                getDriver().navigate().to("https://www.unitconverters.net/");
+                break;
             default:
                 throw new Error("Unsupported page: " + page);
         }
