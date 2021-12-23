@@ -7,7 +7,6 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.support.ui.Select;
 
 import java.text.DecimalFormat;
-import java.text.ParseException;
 
 import static org.assertj.core.api.Assertions.*;
 import static support.TestContext.getDriver;
