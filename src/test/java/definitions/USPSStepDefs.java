@@ -10,14 +10,16 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.Select;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
+import java.text.DecimalFormat;
 import java.util.Arrays;
+import java.util.Currency;
 import java.util.List;
 import java.util.Locale;
 import java.util.stream.Collectors;
 
 import static java.lang.Thread.sleep;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
+import static org.openqa.selenium.Keys.TAB;
 import static support.TestContext.getDriver;
 
 
@@ -48,14 +50,13 @@ public class USPSStepDefs extends HelperStepDefs {
     public static final String CALCULATOR_POSTCARD_TOTAL_PRICE_XPATH = "//div[@id='total']";
     public static final String NAVIGATION_SEARCH_ICON_XPATH = "//li[@class='nav-search menuheader']//a[@class='menuitem']";
     public static final String NAVIGATION_SEARCH_ICON_MENU_ACTIVE_XPATH = "//li[@class='nav-search menuheader']//a[@class='menuitem active']";
-    public static final String MOBILE_SEARCH_ICON_XPATH = "//a[@class='mobile-search active']/img[@alt='Search Icon']";
     public static final String CLASS_REQUIRED_XPATH = "//div[@id='sign-in-wrap']//span[@class='required']";
     public static final String LOGIN_REGISTER_HEADER_XPATH = "//a[@id='login-register-header']";
     public static final String NEXT_TO_CLICK_XPATH = "//ul[@class='pagination']/li[@class='page-item active']/a/following::li[@class='page-item']/a[1]";
     public static final String RECORD_URL_XPATH = "//div[@class='search-results']/ul/li/p/a[contains(@class,'record-url')]";
     public static final String NEXT_DISABLE_PAGINATION_XPATH = "//ul[@class='pagination']/li[@class='next disabled']/a";
-    public static final String ID_RECORDS_XPATH = "//ul[@id='records']";
-    private final WebDriverWait wait = new WebDriverWait(getDriver(), 5, 200);
+    public static final String Close_Modal_Window_Icon = "//div[@id='drop-off-location-modal']/div[@class='modal-dialog medium']//span[@class='visuallyhidden']";
+    private final WebDriverWait wait = new WebDriverWait(getDriver(), 10, 200);
 
 
     @When("I go to Lookup ZIP page by address")
@@ -159,7 +160,6 @@ public class USPSStepDefs extends HelperStepDefs {
         new Select(getDriver().findElement(By.xpath(CALCULATOR_DESTINATION_SELECT_XPATH)))
                 .selectByVisibleText(destination);
         getWebElementFromListByAttributeValue(CALCULATOR_SUBMIT_PANEL_XPATH, "value", shape).click();
-        //getDriver().findElement(By.xpath("//input[@value='" + shape + "']")).click(); //Example of generic XPATH from String + parameter shape
     }
 
     @And("I define {string} quantity")
@@ -267,8 +267,12 @@ public class USPSStepDefs extends HelperStepDefs {
     private int iAmCountingSearchResults() throws InterruptedException {
         int counts = resultsInThePage();
         while ((getDriver().findElements(By.xpath(NEXT_DISABLE_PAGINATION_XPATH)).size() == 0)) {
+            new Actions(getDriver())
+                    .moveToElement(getDriver().findElement(By.xpath(NEXT_TO_CLICK_XPATH)))
+                    .sendKeys(TAB)
+                    .sendKeys(TAB)
+                    .perform();
             getDriver().findElement(By.xpath(NEXT_TO_CLICK_XPATH)).click();
-           // wait.until(ExpectedConditions.refreshed(ExpectedConditions.presenceOfElementLocated(By.xpath(ID_RECORDS_XPATH))));
             wait.until(ExpectedConditions.refreshed(ExpectedConditions.presenceOfElementLocated(By.xpath(RECORD_URL_XPATH))));
             if (getDriver().findElements(By.xpath(NEXT_TO_CLICK_XPATH)).size() > 0) {
                 wait.until(ExpectedConditions.elementToBeClickable(By.xpath(NEXT_TO_CLICK_XPATH)));
@@ -281,7 +285,78 @@ public class USPSStepDefs extends HelperStepDefs {
     }
 
     private int resultsInThePage() {
-        return getDriver().findElements(By.xpath(RECORD_URL_XPATH)).size();
+        List<WebElement> results = getDriver().findElements(By.xpath(RECORD_URL_XPATH));
+       return results.size();
+    }
+
+    @When("I go to {string} under {string}")
+    public void iGoToUnder(String toolsSubMenuItem, String menuItem) {
+        new Actions(getDriver())
+                .moveToElement(
+                        getDriver().findElement(By.xpath("//a[@class='menuitem'][contains(@href,'" + menuItem.toLowerCase(Locale.ROOT) + "')]")))
+                .perform();
+        new Actions(getDriver())
+                .moveToElement(
+                        getDriver().findElement(By.xpath("//a[@role='menuitem'][contains(text(),'" + toolsSubMenuItem + "')]")))
+                .click()
+                .perform();
+        wait.until(ExpectedConditions.textToBePresentInElement(getDriver().findElement(By.xpath("//div[contains(@class,'main-header')]/h1")), toolsSubMenuItem));
+    }
+
+    @And("I search for {string}")
+    public void iSearchFor(String address) {
+        getDriver().findElement(By.xpath("//input[@id='cityOrZipCode']")).sendKeys(address);
+        getDriver().findElement(By.xpath("//a[@role='button'][contains(@class,'search-btn')]")).click();
+    }
+
+    @And("I choose view as {string} on the map")
+    public void iChooseViewAsOnTheMap(String viewAs) throws InterruptedException {
+        new Actions(getDriver())
+                .moveToElement(getDriver().findElement(By.xpath("//span[@class='table-view-icon'][contains(text(),'" + viewAs + "')]")))
+                .click()
+                .click()
+                .perform();
+        Thread.sleep(5000);
+        wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//table[contains(@class,'target-audience-table')]")));
+    }
+
+    @When("I select all in the table")
+    public void iSelectAllInTheTable() throws InterruptedException {
+        wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//table[contains(@class,'target-audience-table')]/tbody")));
+        wait.until(ExpectedConditions.visibilityOfAllElementsLocatedBy(By.xpath("//table[contains(@class,'target-audience-table')]/tbody")));
+        Thread.sleep(3000);
+        new Actions(getDriver())
+                .moveToElement(getDriver().findElement(By.xpath("//input[@id='select-all-checkboxes']//../span")))
+                .click()
+                .perform();
+    }
+
+    @And("I close modal window")
+    public void iCloseModalWindow() {
+        assertTrue(getDriver().findElement(By.xpath("//div[@id='drop-off-location-modal']/div[@class='modal-dialog medium']")).isDisplayed());
+        new Actions(getDriver())
+                .moveToElement(getDriver().findElement(By.xpath("//a[@id='closeAndUpdateTotals']")))
+                .click()
+                .perform();
+        assertFalse(getDriver().findElement(By.xpath("//div[@id='drop-off-location-modal']/div[@class='modal-dialog medium']")).isDisplayed());
+
+    }
+
+    @Then("I verify that summary of all rows of Cost column is equal Approximate Cost in Order Summary")
+    public void iVerifyThatSummaryOfAllRowsOfCostColumnIsEqualApproximateCostInOrderSummary() {
+        List<WebElement> costList = getDriver().findElements(By.xpath("//table[contains(@class,'target-audience-table')]/tbody/tr/td[9]/p"));
+        Double sum = 0.0;
+        for (WebElement el : costList) {
+            Double elInDouble = Double.parseDouble(el.getText().replace("$", ""));
+            System.out.println(elInDouble);
+            sum += elInDouble;
+        }
+        Currency.getAvailableCurrencies();
+        Double approximateCost = Double.parseDouble(getDriver().findElement(By.xpath("//p[@id='approximateCost']"))
+                .getText()
+                .replace("$", ""));
+        System.out.println("sum = " + new DecimalFormat("###.00").format(sum) + ", approximateCost = " + new DecimalFormat("###.00").format(approximateCost));
+        assertEquals(new DecimalFormat("###.00").format(sum), new DecimalFormat("###.00").format(approximateCost));
     }
 }
 
