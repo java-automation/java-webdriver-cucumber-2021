@@ -4,6 +4,7 @@ import io.cucumber.java.Transpose;
 import io.cucumber.java.en.And;
 import io.cucumber.java.en.Then;
 
+import java.math.BigInteger;
 import java.util.*;
 
 public class JavaStepDefs {
@@ -930,5 +931,33 @@ public class JavaStepDefs {
         }
 
         System.out.println("*".repeat(maxLen + 4));
+    }
+
+    @And("I find a factorial for {int}")
+    public void iFindAFactorialFor(int num) {
+        if (num < 1) throw new Error("Not a natural number!");
+        System.out.println("int:         " + getFactorialInt(num));
+        System.out.println("long:        " + getFactorialLong(num));
+        System.out.println("big integer: " + getFactorialBigInt(num));
+    }
+
+    private BigInteger getFactorialBigInt(int num) {
+        BigInteger result = new BigInteger(String.valueOf(1));
+        for (int i = 2; i <= num; ++i) {
+            result = result.multiply(new BigInteger(String.valueOf(i)));
+        }
+        return result;
+    }
+
+    private long getFactorialLong(int num) {
+        long result = 1;
+        for (int i = 2; i <= num; ++i) result *= i;
+        return result;
+    }
+
+    private int getFactorialInt(int num) {
+        int result = 1;
+        for (int i = 2; i <= num; ++i) result *= i;
+        return result;
     }
 }

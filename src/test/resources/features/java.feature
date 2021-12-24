@@ -180,3 +180,7 @@ Feature: Java experiments
   @java32
   Scenario: Hello World in a frame
     And I print phrase "Hello World in a frame" in a frame
+
+  @java33
+  Scenario: Factorial
+    And I find a factorial for 15
