@@ -4,14 +4,13 @@ import io.cucumber.java.DataTableType;
 import io.cucumber.java.en.And;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
-import org.openqa.selenium.By;
-import org.openqa.selenium.Keys;
-import org.openqa.selenium.WebElement;
+import org.openqa.selenium.*;
 import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.Select;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Map;
 import java.util.regex.Matcher;
@@ -23,6 +22,7 @@ import static support.TestContext.getDriver;
 public class UspsStepDefs {
 
     private MailingAddress testAddress = null;
+    private String lastUsedFilter = "";
 
     @DataTableType(replaceWithEmptyString = "[blank]")
     public MailingAddress convert(Map<String, String> entry) {
@@ -39,10 +39,38 @@ public class UspsStepDefs {
                 .until(ExpectedConditions.visibilityOfElementLocated(locator));
     }
 
+    public void waitTillVisible(WebElement element) {
+        new WebDriverWait(getDriver(), 10, 200)
+                .until(ExpectedConditions.visibilityOf(element));
+    }
+
+    public void waitTillNotVisible(By locator) {
+        new WebDriverWait(getDriver(), 10, 200)
+                .until(ExpectedConditions.invisibilityOfElementLocated(locator));
+    }
+
+    public void waitTillNotVisible(WebElement element) {
+        new WebDriverWait(getDriver(), 10, 200)
+                .until(ExpectedConditions.invisibilityOf(element));
+    }
+
     public void waitForOverlayToHide() {
         List<WebElement> overlays = getDriver().findElements(By.xpath("//div[contains(@class,'white-spinner-wrapper')]"));
         if (overlays.size() != 0) {
-            new WebDriverWait(getDriver(), 3).until(driver -> !overlays.get(0).isDisplayed());
+            new WebDriverWait(getDriver(), 10).until(driver -> !overlays.get(0).isDisplayed());
+        }
+    }
+
+    public void waitForDialogToAppear() {
+        waitTillVisible(getDriver().findElement(By.xpath("//div[@class='modal fade show']//a[@class='close']")));
+    }
+
+    public void waitForDialogToHide() {
+        // ids for faded dialog background are likely dialog specific like id="drop-off-location-modal",
+        // so using set of classes that uniquely identifies visible dialog background
+        List<WebElement> dialogs = getDriver().findElements(By.xpath("//div[@class='modal fade show']"));
+        if (dialogs.size() == 1) {
+            new WebDriverWait(getDriver(), 10).until(driver -> !dialogs.get(0).isDisplayed());
         }
     }
 
@@ -151,6 +179,12 @@ public class UspsStepDefs {
         mouseOverToSendMenu();
         getDriver().findElement(
                 By.xpath("//a[@id='navmailship']//following-sibling::div//a[contains(@href,'postcalc')]")).click();
+
+        // did not work in Firefox
+//        WebElement sendMenu = getDriver().findElement(By.id("mail-ship-width"));
+//        WebElement calcPrice = getDriver().findElement(
+//                By.xpath("//a[@id='navmailship']//following-sibling::div//a[contains(@href,'postcalc')]"));
+//        new Actions(getDriver()).moveToElement(sendMenu).click(calcPrice).build().perform();
     }
 
     @And("I select {string} with {string} shape")
@@ -176,8 +210,15 @@ public class UspsStepDefs {
 
     @When("I perform {string} search")
     public void iPerformSearch(String category) {
+//        getDriver().findElements(By.className("repos")).forEach(e -> System.out.println(e.isDisplayed()));
         WebElement searchIcon =
                getDriver().findElement(By.xpath("//ul[contains(@class,'nav-list')]/li[contains(@class,'nav-search')]"));
+
+          // did not work in Firefox (also opening Help menu and clicking there)
+//        WebElement searchBar = getDriver().findElement(By.xpath("//li[contains(@class,'nav-search')]//input[@name='q']"));
+//        WebElement doSearch = getDriver().findElement(By.xpath(".//input[contains(@class,'input--search')]"));
+//        new Actions(getDriver()).moveToElement(searchIcon).click(searchBar).sendKeys(category+Keys.RETURN).click(doSearch).build().perform();
+
         new Actions(getDriver()).moveToElement(searchIcon).perform();
         By searchBarLoc = By.xpath("//li[contains(@class,'nav-search')]//input[@name='q']");
         waitTillVisible(searchBarLoc);
@@ -188,23 +229,30 @@ public class UspsStepDefs {
 
     @And("I set {string} in filters")
     public void iSetInFilters(String filter) {
-        waitTillVisible(By.xpath("//div[@id='dyn_nav_col']//p[@title='Send']/label"));
+        waitTillVisible(By.xpath("//div[@id='dyn_nav_col']//p[@title='"+filter+"']/label"));
         waitForOverlayToHide();
-        WebElement sendCheckboxLabel = getDriver().findElement(By.xpath("//div[@id='dyn_nav_col']//p[@title='Send']/label"));
-        if (!sendCheckboxLabel.isSelected()) sendCheckboxLabel.click();
+        WebElement filterCheckboxLabel = getDriver().findElement(By.xpath("//div[@id='dyn_nav_col']//p[@title='"+
+                                                                                                 filter+"']/label"));
+        if (!filterCheckboxLabel.isSelected()) {
+            filterCheckboxLabel.click();
+            lastUsedFilter = filter;
+        }
     }
 
     @Then("I verify that {string} results found")
     public void iVerifyThatResultsFound(String numOfResults) {
+        waitForOverlayToHide();
         Pattern p = Pattern.compile(".*\\((\\d+)\\)");
-        Matcher m = p.matcher(getDriver().findElement(By.xpath("//div[@id='dyn_nav_col']//p[@title='Send']/label"))
-                                                                                                          .getText());
+        Matcher m = p.matcher(getDriver().findElement(By.xpath("//div[@id='dyn_nav_col']//p[@title='" + lastUsedFilter +
+                                                                                               "']/label")).getText());
         if (m.find()) {
             assertThat(m.group(1)).isEqualTo(numOfResults);
         }
-        assertThat(getDriver().findElement(By.id("searchResultsHeading")).getText()).contains(numOfResults);
+        By resultsHeadingLoc = By.id("searchResultsHeading");
+        waitTillVisible(resultsHeadingLoc);
+        assertThat(getDriver().findElement(resultsHeadingLoc).getText()).contains(numOfResults);
         new WebDriverWait(getDriver(), 10, 200).until(driver -> getDriver()
-                           .findElements(By.xpath("//ul[@id='records']/li")).size() == Integer.parseInt(numOfResults));
+              .findElements(By.xpath("//ul[@id='records']/li")).size() == Math.min(Integer.parseInt(numOfResults),10));
     }
 
     @When("I select {string} in results")
@@ -234,6 +282,90 @@ public class UspsStepDefs {
         waitTillVisible(By.xpath("//input[@name='username']"));
         assertThat(getDriver().findElements(By.xpath("//input[@name='password']")).size()).isEqualTo(1);
         assertThat(getDriver().findElements(By.xpath("//button[@id='btn-submit']")).size()).isEqualTo(1);
+    }
+
+    @Then("I click last page number in pagination and verify moving")
+    public void iClickLastPageNumberInPagination() {
+        waitForOverlayToHide();
+        WebElement lastPageLink = getDriver().findElement(
+                                            By.xpath("//ul[@class='pagination']/li[@class='next']/preceding::li[1]"));
+        String pageNumToClick = lastPageLink.getText();
+//        List<WebElement> els = getDriver().findElements(By.xpath("//div[contains(@class,'floating-viewer ')]"));
+//        List<WebElement> els = getDriver().findElements(By.xpath("//iframe[@id='frame']" +
+//                                                               "/ancestor::div[contains(@class,'floating-viewer')]"));
+        List<WebElement> els = getDriver().findElements(By.xpath("//iframe[@id='frame']/../.."));
+        for (WebElement el : els) {
+            if (el.isDisplayed()) {
+                Actions actionProvider = new Actions(getDriver());
+                actionProvider.moveToElement(el,el.getRect().getWidth()/2+1,0).perform();
+//                actionProvider.sendKeys(Keys.TAB).perform();
+                waitTillNotVisible(el);
+            }
+        }
+        lastPageLink.click();
+        String activePageNum = getDriver().findElement(
+                                        By.xpath("//ul[@class='pagination']/li[contains(@class,'active')]")).getText();
+        assertThat(activePageNum).isEqualTo(pageNumToClick);
+    }
+
+    @When("I go to {string} under {string}")
+    public void iGoToSubmenu(String submenu, String menu) {
+        WebElement mainMenuItem =
+                    getDriver().findElement(By.xpath("//a[@id='navbusiness']/following-sibling::a[contains(text(),'" +
+                                                                                                       menu + "')]"));
+        new Actions(getDriver()).moveToElement(mainMenuItem).perform();
+        By submenuLoc = By.xpath("//li[contains(@class,'tool-eddm')]//a[contains(text(),'" + submenu + "')]");
+        waitTillVisible(submenuLoc);
+        getDriver().findElement(submenuLoc).click();
+        waitTillVisible(getDriver().findElement(By.xpath("//input[@id='cityOrZipCode']")));
+    }
+
+    @And("I search for {string}")
+    public void iSearchFor(String address) {
+        getDriver().findElement(By.xpath("//input[@id='cityOrZipCode']")).sendKeys(address);
+        getDriver().findElement(By.xpath("//a[contains(@class,'eddm-search-btn')]")).click();
+        waitForOverlayToHide();
+    }
+
+    @And("I choose view as {string} on the map")
+    public void iChooseViewAs(String viewType) {
+        getDriver().findElement(By.xpath("//span[text()='" + viewType + "']/parent::a[contains(@class,'nav-link')]")).click();
+        waitTillVisible(getDriver().findElement(By.xpath("//h3[text()='Target Audience']")));
+    }
+
+    @When("I select all in the table")
+    public void iSelectAllInTheTable() {
+        WebElement selectAll = getDriver().findElement(By.xpath("//input[@id='select-all-checkboxes']"));
+        if (!selectAll.isSelected()) selectAll.findElement(By.xpath("./following-sibling::span")).click();
+        waitForDialogToAppear();
+    }
+
+    @And("I close modal window")
+    public void iCloseModalWindow() {
+        List<WebElement> els = getDriver().findElements(By.xpath("//div[contains(@class,'modal-dialog')]" +
+                                                                                              "//a[@class='close']"));
+        for (WebElement el : els) {
+            if (el.isDisplayed()) el.click();
+        }
+        waitForDialogToHide();
+    }
+
+    @Then("I verify that summary of all rows of Cost column is equal Approximate Cost in Order Summary")
+    public void iVerifyApproximateCost() throws InterruptedException {
+        String costInSummary = getDriver().findElement(By.xpath("//p[@id='approximateCost']")).getText();
+        BigDecimal approximateCost = new BigDecimal(costInSummary.substring(1));
+        WebElement table = getDriver().findElement(By.xpath("//table[contains(@class,'target-audience-table')]"));
+        List<WebElement> list = table.findElements(By.xpath("./tbody/tr"));
+        list.removeIf(el -> !el.isDisplayed());
+        BigDecimal total = BigDecimal.valueOf(0);
+        String cost = "";
+        for (WebElement el : list) {
+                // hard coded 'Cost' column number
+                cost = el.findElement(By.xpath("./td[9]")).getText();
+                // expected format '$xxx.xx', so handles costs less than 1k
+                total = total.add(new BigDecimal(cost.substring(1)));
+        }
+        assertThat(total).isEqualTo(approximateCost);
     }
 }
 
