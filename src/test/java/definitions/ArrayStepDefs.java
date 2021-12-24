@@ -203,10 +203,75 @@ public class ArrayStepDefs {
         return list;
     }
 
+    public static List<Integer> twoLargest4Adapter(int[] arr) {
+        int[] resArr;
+        if (arr == null) {
+            resArr = twoLargest4(null);
+        } else {
+            resArr = twoLargest4(Arrays.stream(arr).boxed().collect(Collectors.toList()));
+        }
+        return Arrays.stream(resArr).boxed().collect(Collectors.toList());
+    }
+
+    public static int[] twoLargest4(List<Integer> list) {
+        if ((list == null) || list.isEmpty()) return new int[]{};
+        int[] arr;
+        if (list.size() == 1) {
+            arr = new int[1];
+            arr[0] = list.get(0);
+            return arr;
+        }
+        list.sort(Comparator.reverseOrder()); // if unique elements should be returned: Set set = new TreeSet(list);
+        arr = new int[2];
+        arr[0] = list.get(1);
+        arr[1] = list.get(0);
+        return arr;
+    }
+
+    public static boolean twoResultInSum(List<Integer> list, int sum) {
+        if ((list == null) || list.isEmpty() || (list.size() == 1)) return false;
+        list.sort(Comparator.naturalOrder());
+        int left = 0;
+        int right = list.size() - 1;
+        int curSum;
+        while (left != right) {
+            curSum = list.get(left) + list.get(right);
+            if (curSum == sum) {
+                return true;
+            } else if (curSum < sum) {
+                left += 1;
+            } else {
+                right -= 1;
+            }
+        }
+        return false;
+    }
+
+    @Then("run test cases for twoResultInSum method")
+    public void runTestCasesForResultInSum() {
+        assertThat(twoResultInSum(null, 0)).isFalse();
+        assertThat(twoResultInSum(List.of(), 0)).isFalse();
+        assertThat(twoResultInSum(Arrays.asList(10), 10)).isFalse();
+        assertThat(twoResultInSum(Arrays.asList(1,1), 2)).isTrue();
+        assertThat(twoResultInSum(Arrays.asList(0,0), 0)).isTrue();
+        assertThat(twoResultInSum(Arrays.asList(0,10), 10)).isTrue();
+        assertThat(twoResultInSum(Arrays.asList(1,5,-3,8,-2,35,12,10,0), 1)).isTrue(); // on the sides not sorted
+        assertThat(twoResultInSum(Arrays.asList(5,-3,8,7,3,-2,-9,35,12,10), 1)).isTrue(); // in the middle not sorted
+        assertThat(twoResultInSum(Arrays.asList(-3,-2,0,5,9,11,34), 31)).isTrue(); // on the sides sorted
+        assertThat(twoResultInSum(Arrays.asList(0,5,-3,-2,5,34,9,11), 31)).isTrue(); // on the sides after sort
+        assertThat(twoResultInSum(Arrays.asList(1,5,-3,8,-2,35,12,10,0), 12)).isTrue();
+        assertThat(twoResultInSum(Arrays.asList(-3,3,7,7), 0)).isTrue();
+        assertThat(twoResultInSum(Arrays.asList(Integer.MAX_VALUE,1),Integer.MIN_VALUE)).isTrue();
+        assertThat(twoResultInSum(Arrays.asList(Integer.MAX_VALUE/2,Integer.MAX_VALUE/2+1), Integer.MAX_VALUE)).isTrue();
+        assertThat(twoResultInSum(Arrays.asList(-Integer.MIN_VALUE/2,-Integer.MIN_VALUE/2), -Integer.MIN_VALUE)).isTrue();
+        assertThat(twoResultInSum(Arrays.asList(-Integer.MIN_VALUE,-Integer.MIN_VALUE), -Integer.MIN_VALUE)).isFalse();
+    }
+
     @Then("run test cases for all implementations of twoLargest method")
     public void runTestCasesForTwoLargest() {
         new ArrayList<Function<int[],List<Integer>>>(Arrays.asList(ArrayStepDefs::twoLargest,
-          ArrayStepDefs::twoLargest2, ArrayStepDefs::twoLargest3)).forEach(twoLargest -> {
+          ArrayStepDefs::twoLargest2, ArrayStepDefs::twoLargest3, ArrayStepDefs::twoLargest4Adapter))
+          .forEach(twoLargest -> {
             assertThat(twoLargest.apply(null)).isEqualTo(List.of());
             assertThat(twoLargest.apply(new int[]{})).isEqualTo(List.of());
             assertThat(twoLargest.apply(new int[]{1})).isEqualTo(List.of(1));

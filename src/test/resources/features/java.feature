@@ -137,3 +137,7 @@ Feature: Java feature
   @java14
   Scenario: Finds 2 max numbers in array
     Then run test cases for all implementations of twoLargest method
+
+  @java15
+  Scenario: Find if any two elements of an array result in sum
+    Then run test cases for twoResultInSum method
