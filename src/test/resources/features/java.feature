@@ -183,4 +183,8 @@ Feature: Java experiments
 
   @java33
   Scenario: Factorial
-    And I find a factorial for 15
+    And I find a factorial of 15
+
+  @java34
+  Scenario: Prime number
+    And I find if 654687221 is a prime number

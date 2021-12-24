@@ -933,8 +933,8 @@ public class JavaStepDefs {
         System.out.println("*".repeat(maxLen + 4));
     }
 
-    @And("I find a factorial for {int}")
-    public void iFindAFactorialFor(int num) {
+    @And("I find a factorial of {int}")
+    public void iFindAFactorialOf(int num) {
         if (num < 1) throw new Error("Not a natural number!");
         System.out.println("int:         " + getFactorialInt(num));
         System.out.println("long:        " + getFactorialLong(num));
@@ -959,5 +959,21 @@ public class JavaStepDefs {
         int result = 1;
         for (int i = 2; i <= num; ++i) result *= i;
         return result;
+    }
+
+    @And("I find if {int} is a prime number")
+    public void iFindIfIsAPrimeNumber(int num) {
+        if (num < 2) throw new Error("Not a natural number >1 !");
+        System.out.println("Prime check for " + num + ": " + isPrimeNumber(num));
+    }
+
+    private boolean isPrimeNumber(int num) {
+        for (int i = 2; i <= num / 2; ++i) {
+            if (num % i == 0) {
+                System.out.println("Divisor: " + i);
+                return false;
+            }
+        }
+        return true;
     }
 }
