@@ -245,6 +245,48 @@ Feature: Java feature
     Given I find fibonacci 6
 
 
+  @java35
+  Scenario Outline: is the number a prime?
+    Given is the "<number>" a prime
+    Examples:
+      | number |
+      | 197    |
+      | 199    |
+      | 5      |
+      | 7      |
+      | 1      |
+      | 2      |
+      | 10     |
+      | 0      |
+      | -5     |
+
+
+  @java36
+  Scenario Outline: Write all prime numbers till number
+    Given I write prime numbers till "<number>"
+    Examples:
+      | number |
+      | 5      |
+      | 10     |
+      | 100    |
+      | 200    |
+      | 1000   |
+
+  @java37
+  Scenario Outline: Factorial of a number
+    Given I found factorial of a "<number>"
+    Examples:
+      | number |
+      | 5      |
+      | 10     |
+      | 25     |
+      | 0      |
+      | 1      |
+
+
+
+
+
 
 
 

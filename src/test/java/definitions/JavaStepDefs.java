@@ -17,6 +17,7 @@ import static java.lang.Character.toChars;
 import static java.lang.String.valueOf;
 import static java.lang.System.out;
 import static java.util.Arrays.asList;
+import static org.junit.Assert.assertTrue;
 import static support.TestContext.getDriver;
 
 
@@ -671,8 +672,8 @@ public class JavaStepDefs {
         iPrintArray(array);
         int indexFirstToSwap = place1 - 1;
         int indexSecondToSwap = place2 - 1;
-        Assert.assertTrue((0 <= indexFirstToSwap) && (indexFirstToSwap < array.length));
-        Assert.assertTrue((0 <= indexSecondToSwap) && (indexSecondToSwap < array.length));
+        assertTrue((0 <= indexFirstToSwap) && (indexFirstToSwap < array.length));
+        assertTrue((0 <= indexSecondToSwap) && (indexSecondToSwap < array.length));
         int temp = array[indexFirstToSwap];
         array[indexFirstToSwap] = array[indexSecondToSwap];
         array[indexSecondToSwap] = temp;
@@ -789,7 +790,7 @@ public class JavaStepDefs {
     public void iFindIfArrayContainsDuplicates() {
         int[] array = new int[]{3, 3, 6, 4, 8, 8, 9, 24, 42, 33, 5, 6, 8};
         //int[] array = new int[]{3, 33, 5, 6, 8};
-        Assert.assertTrue("Array has no duplicates", iFindDuplicatesInIntArray(array));
+        assertTrue("Array has no duplicates", iFindDuplicatesInIntArray(array));
     }
 
     @Given("I find duplicates in int array")
@@ -812,7 +813,7 @@ public class JavaStepDefs {
     @Given("I determine if the word {string} is palindrome")
     public void iDetermineIfTheWordIsPalindrome(String word) {
         out.println(word + " " + isPalindrome(word));
-        Assert.assertTrue(word + " is not a palindrome.", isPalindrome(word));
+        assertTrue(word + " is not a palindrome.", isPalindrome(word));
 
     }
 
@@ -916,5 +917,40 @@ public class JavaStepDefs {
     @Given("I find fibonacci {int}")
     public void iFindFibonacci(int arg0) {
         System.out.println(fib(arg0));
+    }
+
+    @Given("I write prime numbers till {string}")
+    public void iWritePrimeNumbersTill(String n) {
+        int number = Integer.parseInt(n);
+        for (int i = 2; i <= number; i++) {
+            isPrime(i);
+        }
+    }
+
+    private boolean isPrime(int n) {
+        boolean result = true;
+        if (n <= 0) result = false;
+        for (int k = 2; k < (n / 2 + 1); k++) {
+            if (n % k == 0)
+                result = false;
+        }
+        if (result) out.print(n + " ");
+        return result;
+    }
+
+    @Given("is the {string} a prime")
+    public void isTheAPrime(String number) {
+        assertTrue(number + " is NOT a prime number", isPrime(Integer.parseInt(number)));
+    }
+
+    @Given("I found factorial of a {string}")
+    public void iFoundFactorialOfA(String number) {
+        int n = Integer.parseInt(number);
+        out.println(number + "! = " + factorial(n));
+    }
+
+    private int factorial(int n) {
+        if ((n == 1) || (n == 0)) return 1;
+        return factorial(n - 1) * n;
     }
 }
