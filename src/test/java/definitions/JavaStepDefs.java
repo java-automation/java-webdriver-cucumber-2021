@@ -963,17 +963,49 @@ public class JavaStepDefs {
 
     @And("I find if {int} is a prime number")
     public void iFindIfIsAPrimeNumber(int num) {
-        if (num < 2) throw new Error("Not a natural number >1 !");
+        if (num < 2) throw new Error("Not a natural number > 1 !");
         System.out.println("Prime check for " + num + ": " + isPrimeNumber(num));
     }
 
     private boolean isPrimeNumber(int num) {
-        for (int i = 2; i <= num / 2; ++i) {
+        for (int i = 2; i * i <= num; ++i) {
             if (num % i == 0) {
-                System.out.println("Divisor: " + i);
+                System.out.println("Found divisor: " + i + " ");
                 return false;
             }
         }
         return true;
+    }
+
+    @And("I print all prime numbers up to {int}")
+    public void iPrintAllPrimeNumbersUpToNumber(int num) {
+        if (num < 2) throw new Error("Not a natural number > 1 !");
+        printPrimes(num);
+    }
+
+    /*
+    n = 500000
+    11.5s - n/2 naive
+    n = 20000000
+    21.5s - i*i checking divisibility
+    7-7.5s - boolean sieve / BitSet / remove even numbers - same speed, but less memory
+     */
+    private void printPrimes(int num) {
+        int sieveSize = num / 2 + num % 2 - 1; //odd primes only
+        BitSet sieve = new BitSet(sieveSize);
+        sieve.flip(0, sieveSize);
+
+        for (int p = 3; p * p <= num; p += 2) {
+            if (!sieve.get(p / 2 - 1)) continue;
+            for (int k = p * p; k <= num; k += 2 * p) {
+                sieve.set(k / 2 - 1, false);
+            }
+        }
+
+        System.out.print("2 "); //the only even prime number
+        for (int i = 0; i < sieveSize; ++i) {
+            if (sieve.get(i)) System.out.print(((i + 1) * 2 + 1) + " ");
+        }
+        System.out.println();
     }
 }
