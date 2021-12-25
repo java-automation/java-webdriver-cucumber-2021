@@ -193,3 +193,7 @@ Feature: Java experiments
     Examples:
       | number       |
       | 19876543     |
+
+  @java35
+  Scenario: Square root
+    And I calculate square root for 2.5

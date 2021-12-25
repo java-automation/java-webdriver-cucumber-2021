@@ -1022,4 +1022,23 @@ public class JavaStepDefs {
         }
         System.out.println();
     }
+
+    @And("I calculate square root for {double}")
+    public void iCalculateSquareRootFor(double num) {
+        if (num <= 0) throw new Error("Invalid number: " + num);
+        System.out.println("Square root for " + num + " is: " + getSquareRoot(num));
+    }
+
+    private double getSquareRoot(double num) {
+        double previous;
+        double approximation = num / 2;
+        int i = 0;
+        do {
+            previous = approximation;
+            approximation = (previous + num / previous) / 2;
+            ++i;
+        } while ((previous - approximation) != 0);
+        System.out.println("Found square root in " + i + " approximations");
+        return approximation;
+    }
 }
