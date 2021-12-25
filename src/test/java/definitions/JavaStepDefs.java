@@ -271,9 +271,23 @@ public class JavaStepDefs {
             System.out.println(fibonacciNumberArray(elNum));
             System.out.print("Fibonacci using array list: ");
             System.out.println(fibonacciNumberList(elNum));
+            System.out.print("Fibonacci using BigInteger array: ");
+            System.out.println(fibonacciNumberBigIntArray(elNum));
             System.out.print("Fibonacci using recursion: ");
             System.out.println(fibonacciNumberRecursion(elNum));
         } else throw new Error("Not a whole number: " + elNum);
+    }
+
+    private BigInteger fibonacciNumberBigIntArray(int elNum) {
+        if (elNum <= 1) return new BigInteger(String.valueOf(elNum));
+
+        BigInteger[] fibSeq = new BigInteger[] {new BigInteger(String.valueOf(0)), new BigInteger(String.valueOf(1))};
+        for (int i = 2; i <= elNum; ++i) {
+            BigInteger newFibNum = fibSeq[0].add(fibSeq[1]);
+            fibSeq[0] = fibSeq[1];
+            fibSeq[1] = newFibNum;
+        }
+        return fibSeq[1];
     }
 
     private long fibonacciNumberArray(int elNum) {

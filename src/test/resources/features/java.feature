@@ -94,7 +94,7 @@ Feature: Java experiments
   @java16
   #three methods: 2-element array, dynamic list (all elements), recursion
   Scenario: Fibonacci number
-    And I print Fibonacci number for n = 50
+    And I print Fibonacci number for n = 40
 
   @java17
   Scenario: Palindrome word
