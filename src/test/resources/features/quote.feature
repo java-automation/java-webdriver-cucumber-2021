@@ -103,3 +103,20 @@ Feature: Fill out all Quote fields and verify that submitted fields saved correc
     And I submit the page
     Then I verify the required fields
     And I verify the optional fields
+
+  @quote4
+  Scenario: Quote end to end
+    Given I go to "quote" page
+    And I print logs to the console
+    When I fill out required fields1
+    And I submit the page1
+    And I wait for 2 sec
+    Then I verify the required fields1
+
+  @quote5
+  Scenario: Quote switchTo
+    Given I go to "quote" page
+    And I click on Related Documents1
+    And I verify "Document 2" is in the list1
+    And I "accept" third party agreement1
+    And I enter "Richard Roe" as contact person with a phone "123456789" one

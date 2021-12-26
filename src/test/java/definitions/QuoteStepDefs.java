@@ -9,11 +9,13 @@ import org.openqa.selenium.WebElement;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 import static support.TestContext.getDriver;
+import static support.TestContext.getData;
 
 public class QuoteStepDefs extends HelperStepDefs {
     public static final String TITLE_GET_A_QUOTE_TEXT = "Get a Quote";
@@ -62,6 +64,8 @@ public class QuoteStepDefs extends HelperStepDefs {
     public static final String SUBMITTED_APPLICATION_AGREEMENT_PRIVACY_POLICY_TEXT = "true";
     public static final String SUBMITTED_APPLICATION_PAGE_ALLOWED_TO_CONTACT_TEXT = "true";
     public static final String SUBMITTED_APPLICATION_THIRD_PARTY_AGREEMENT_TEXT = "accepted";
+
+    Map<String, String> user = getData("user");
 
     PersonData person = new PersonData("Irina", "Aleksandrovna", "Gavrilova", "gavrilova.irina", "passioninsoftwaretesting@gmail.com",
             "p1234", "p1234", "512111111", "Russia", "Female", "here is an address", "Other", "01/25/2000");
@@ -146,5 +150,87 @@ public class QuoteStepDefs extends HelperStepDefs {
         assertEquals(getText(SUBMITTED_APPLICATION_PAGE_DATE_OF_BIRTH), person.getDateOfBirth());
         assertEquals(getText(SUBMITTED_APPLICATION_PAGE_THIRD_PARTY_AGREEMENT_XPATH), SUBMITTED_APPLICATION_THIRD_PARTY_AGREEMENT_TEXT);
         assertEquals(getText(SUBMITTED_APPLICATION_PAGE_ALLOWED_TO_CONTACT_XPATH), SUBMITTED_APPLICATION_PAGE_ALLOWED_TO_CONTACT_TEXT);
+    }
+
+    @When("I fill out required fields1")
+    public void iFillOutRequiredFields1() {
+        getDriver().findElement(By.xpath("//input[@name='username']")).sendKeys(user.get("username"));
+        getDriver().findElement(By.xpath("//input[@name='email']")).sendKeys(user.get("email"));
+        getDriver().findElement(By.xpath("//input[@name='password']")).sendKeys(user.get("password"));
+        getDriver().findElement(By.xpath("//input[@name='confirmPassword']")).sendKeys(user.get("password"));
+
+        WebElement nameElement = getDriver().findElement(By.xpath("//input[@id='name']"));
+        nameElement.click();
+        getDriver().findElement(By.xpath("//input[@id='firstName']")).sendKeys(user.get("firstName"));
+        getDriver().findElement(By.xpath("//input[@id='lastName']")).sendKeys(user.get("lastName"));
+        getDriver().findElement(By.xpath("//span[text()='Save']")).click();
+        System.out.println(nameElement.getAttribute("value"));
+
+        WebElement privacyPolicy = getDriver().findElement(By.xpath("//input[@name='agreedToPrivacyPolicy']"));
+        if (!privacyPolicy.isSelected()) {
+            privacyPolicy.click();
+        }
+    }
+
+    @And("I submit the page1")
+    public void iSubmitThePage1() {
+        getDriver().findElement(By.xpath("//button[@id='formSubmit']")).click();
+    }
+
+    @Then("I verify the required fields1")
+    public void iVerifyTheRequiredFields1() {
+        String resultText = getDriver().findElement(By.xpath("//div[@id='quotePageResult']")).getText();
+        System.out.println(resultText);
+        assertThat(resultText).contains(user.get("username"), user.get("firstName") + " " + user.get("lastName"), user.get("email"));
+        assertThat(resultText).doesNotContain(user.get("password"));
+
+        String agreed = getDriver().findElement(By.xpath("//b[@name='agreedToPrivacyPolicy']")).getText();
+        assertThat(agreed).isEqualTo("true");
+
+        String password = getDriver().findElement(By.xpath("//b[@name='password']")).getText();
+        assertThat(password).isEqualTo("[entered]");
+    }
+
+    @And("I click on Related Documents1")
+    public void iClickOnRelatedDocuments1() {
+        getDriver().findElement(By.xpath("//button[contains(@onclick, 'new')]")).click();
+    }
+
+    @And("I verify {string} is in the list1")
+    public void iVerifyIsInTheList1(String document) throws InterruptedException {
+        String originalHandle = getDriver().getWindowHandle();
+
+        // switch webdriver focus to a new window
+        getDriver().getWindowHandles().forEach(handle -> getDriver().switchTo().window(handle));
+
+        String windowText = getDriver().findElement(By.xpath("//body")).getText();
+        assertThat(windowText).contains(document);
+
+        // switch back
+        getDriver().switchTo().window(originalHandle);
+    }
+
+    @And("I {string} third party agreement1")
+    public void iThirdPartyAgreement1(String action) throws InterruptedException {
+        getDriver().findElement(By.xpath("//button[@id='thirdPartyButton']")).click();
+        switch (action) {
+            case "accept":
+                getDriver().switchTo().alert().accept();
+                break;
+            default:
+                getDriver().switchTo().alert().dismiss();
+        }
+    }
+
+
+    @And("I enter {string} as contact person with a phone {string} one")
+    public void iEnterAsContactPersonWithAPhone(String contactName, String contactPhone) throws InterruptedException {
+
+        getDriver().switchTo().frame("additionalInfo");
+
+        getDriver().findElement(By.xpath("//input[@id='contactPersonName']")).sendKeys(contactName);
+        getDriver().findElement(By.xpath("//input[@id='contactPersonPhone']")).sendKeys(contactPhone);
+
+        getDriver().switchTo().defaultContent();
     }
 }
