@@ -18,6 +18,8 @@ import org.openqa.selenium.remote.DesiredCapabilities;
 import org.openqa.selenium.remote.LocalFileDetector;
 import org.openqa.selenium.remote.RemoteWebDriver;
 import org.openqa.selenium.safari.SafariDriver;
+
+import java.io.File;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
@@ -59,6 +61,8 @@ public class TestContext {
                     chromePreferences.put("credentials_enable_service", false);
                     chromePreferences.put("password_manager_enabled", false);
                     ChromeOptions chromeOptions = new ChromeOptions();
+                    File chroPathFile = new File(System.getProperty("user.dir") + "/src/test/resources/data/ChroPath.crx");
+                    chromeOptions.addExtensions(chroPathFile);
                     chromeOptions.addArguments("--start-maximized");
                     chromeOptions.setExperimentalOption("prefs", chromePreferences);
                     System.setProperty(ChromeDriverService.CHROME_DRIVER_SILENT_OUTPUT_PROPERTY, "true");
