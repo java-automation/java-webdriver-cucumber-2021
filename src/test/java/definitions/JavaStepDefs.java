@@ -1002,23 +1002,23 @@ public class JavaStepDefs {
     11.5s - n/2 naive
     n = 20000000
     21.5s - i*i checking divisibility
-    7-7.5s - boolean sieve / BitSet / remove even numbers - same speed, but less memory
+    7-7.5s - boolean sieve / BitSet / remove even numbers - same speed, less memory?
      */
     private void printPrimes(int num) {
-        int sieveSize = num / 2 + num % 2 - 1; //odd primes only
+        int sieveSize = (num + 1) / 2; //odd numbers only
         BitSet sieve = new BitSet(sieveSize);
         sieve.flip(0, sieveSize);
 
         for (int p = 3; p * p <= num; p += 2) {
-            if (!sieve.get(p / 2 - 1)) continue;
+            if (!sieve.get(p / 2)) continue;
             for (int k = p * p; k <= num; k += 2 * p) {
-                sieve.set(k / 2 - 1, false);
+                sieve.set(k / 2, false);
             }
         }
 
         System.out.print("2 "); //the only even prime number
-        for (int i = 0; i < sieveSize; ++i) {
-            if (sieve.get(i)) System.out.print(((i + 1) * 2 + 1) + " ");
+        for (int i = 1; i < sieveSize; ++i) {
+            if (sieve.get(i)) System.out.print((i * 2 + 1) + " ");
         }
         System.out.println();
     }
