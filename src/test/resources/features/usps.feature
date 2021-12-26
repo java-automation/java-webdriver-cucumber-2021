@@ -77,3 +77,31 @@ Feature: USPS scenarios
     When I select all in the table
     And I close modal window
     Then I verify that summary of all rows of Cost column is equal Approximate Cost in Order Summary
+
+  @usps8
+  Scenario Outline: Validate ZIP code for Portnov Computer School with 3 addresses
+    Given I go to "usps" page
+    When I go to Lookup ZIP page by address
+    And I fill out "<street>" street, "<city>" city, "<state>" state
+    Then I validate "<zipCode>" zip code exists in the result
+    Examples:
+      | street              | city        | state | zipCode |
+      | 4970 El Camino Real | Los Altos   | CA    | 94022   |
+      | 6025 S Pecos Rd     | Las Vegas   | NV    | 89120   |
+      | 3903 N St Mary's St | San Antonio | TX    | 78212   |
+
+  @usps9
+  Scenario Outline: Quadcopters delivery
+    Given I go to "usps" page
+    When I go to "Help" tab
+    And I perform "<search query>" help search
+    Then I verify that "<doWeHaveResultsAvailable>" results of "<search query>" available in help search
+    Examples:
+      | search query         | doWeHaveResultsAvailable |
+      | Quadcopters delivery |                          |
+      | Quadcopters          | no                       |
+      | Operation Santa      |                          |
+
+
+
+

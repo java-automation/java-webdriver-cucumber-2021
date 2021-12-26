@@ -3,8 +3,8 @@ package definitions;
 import io.cucumber.java.en.And;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
-import org.junit.Assert;
 import org.openqa.selenium.By;
+import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.ExpectedConditions;
@@ -25,6 +25,7 @@ import static support.TestContext.getDriver;
 
 public class USPSStepDefs extends HelperStepDefs {
     public static final String MOBILE_HAMBURGER_ACTIVE_DROPDOWN_MENU_XPATH = "//a[@class='mobile-hamburger active']";
+    public static final String INPUT_CONTAINS_CLASS_SEARCH_FIELD = "//input[contains(@class,'search-field')]";
     private static final String STREET_XPATH = "//input[@id='tAddress']";
     private static final String STATE_XPATH = "//select[@id='tState']";
     private static final String CITY_XPATH = "//input[@id='tCity']";
@@ -56,6 +57,12 @@ public class USPSStepDefs extends HelperStepDefs {
     public static final String RECORD_URL_XPATH = "//div[@class='search-results']/ul/li/p/a[contains(@class,'record-url')]";
     public static final String NEXT_DISABLE_PAGINATION_XPATH = "//ul[@class='pagination']/li[@class='next disabled']/a";
     public static final String Close_Modal_Window_Icon = "//div[@id='drop-off-location-modal']/div[@class='modal-dialog medium']//span[@class='visuallyhidden']";
+    public static final String NO_RESULTS_SEARCH_IMG_XPATH = "//img[contains(@src,'no-results')]";
+    public static final String LIST_EACH_SEARCH_RESULTS_XPATH = "//div[@class='listContent']//knowledgeui-result-stencil";
+    public static final String LIST_OF_SEARCH_RESULTS_XPATH = "//div[@class='listContent']//ul[@class='slds-has-dividers--bottom']//li[contains(@class,'kbResultStencil')]";
+    public static final String FIELD_NON_EMPTY_SEARCH_CONTENT_XPATH = "//div[@class='listContent']//ul[@class='slds-has-dividers--bottom']";
+    public static final String NO_RESULTS_TITLE = "//div[contains(@class,'noResultsTitle')]";
+    public static final String EMPTY_SEARCH_CONTENT_XPATH = "//div[contains(@class,'showEmptyContent')]//div[@class='emptyListContent']";
     private final WebDriverWait wait = new WebDriverWait(getDriver(), 10, 200);
 
 
@@ -344,12 +351,48 @@ public class USPSStepDefs extends HelperStepDefs {
     public void iVerifyThatSummaryOfAllRowsOfCostColumnIsEqualApproximateCostInOrderSummary() {
         List<WebElement> costList = getDriver().findElements(By.xpath("//table[contains(@class,'target-audience-table')]/tbody/tr/td[9]/p"));
         BigDecimal sum = new BigDecimal(0);
-        for (WebElement el: costList) {
-            sum  = sum.add(new BigDecimal(el.getText().replace("$","")));
+        for (WebElement el : costList) {
+            sum = sum.add(new BigDecimal(el.getText().replace("$", "")));
         }
         BigDecimal approximateCost = new BigDecimal(getDriver().findElement(By.xpath("//p[@id='approximateCost']")).getText().replace("$", ""));
-        Assert.assertEquals(sum.toString(), approximateCost.toString());
+        assertEquals(sum.toString(), approximateCost.toString());
+    }
 
+    @When("I go to {string} tab")
+    public void iGoToTab(String menuItem) {
+        getDriver().findElement(By.xpath("//a[@role='menuitem'][contains(text(),'" + menuItem + "')]")).click();
+        wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath(INPUT_CONTAINS_CLASS_SEARCH_FIELD)));
+    }
+
+    @And("I perform {string} help search")
+    public void iPerformHelpSearch(String searchQuery) throws InterruptedException {
+        getDriver().findElement(By.xpath(INPUT_CONTAINS_CLASS_SEARCH_FIELD)).sendKeys(searchQuery);
+        new Actions(getDriver())
+                .sendKeys(Keys.ENTER)
+                .perform();
+        wait.until(ExpectedConditions.presenceOfAllElementsLocatedBy(By.xpath(FIELD_NON_EMPTY_SEARCH_CONTENT_XPATH)));
+    }
+
+    @Then("I verify that {string} results of {string} available in help search")
+    public void iVerifyThatResultsOfAvailableInHelpSearch(String doWeHaveResultsAvailable, String searchQuery) {
+        if (doWeHaveResultsAvailable.toLowerCase(Locale.ROOT).equals("no")) {
+            wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath(NO_RESULTS_SEARCH_IMG_XPATH)));
+            assertEquals(getDriver().findElements(By.xpath(LIST_EACH_SEARCH_RESULTS_XPATH)).size(), 0);
+            assertTrue(getDriver().findElement(By.xpath(EMPTY_SEARCH_CONTENT_XPATH)).isDisplayed());
+            assertTrue(getDriver().findElement(By.xpath(NO_RESULTS_SEARCH_IMG_XPATH)).isDisplayed());
+            System.out.println(getDriver().findElement(By.xpath(NO_RESULTS_TITLE)).getText());
+        } else {
+            wait.until(ExpectedConditions.presenceOfAllElementsLocatedBy(By.xpath(LIST_OF_SEARCH_RESULTS_XPATH)));
+            assertTrue(getDriver().findElements(By.xpath(LIST_EACH_SEARCH_RESULTS_XPATH)).size() > 0);
+            String text = getDriver().findElement(By.xpath(FIELD_NON_EMPTY_SEARCH_CONTENT_XPATH)).getText();
+            assertTrue(text.contains(searchQuery)
+                    || Arrays
+                    .stream(searchQuery.split(" "))
+                    .filter(e -> text.contains(e))
+                    .collect(Collectors.toList())
+                    .size() > 0);
+            System.out.println("We've found " + getDriver().findElements(By.xpath(LIST_EACH_SEARCH_RESULTS_XPATH)).size() + " results");
+        }
     }
 }
 
