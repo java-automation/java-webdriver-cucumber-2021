@@ -3,6 +3,9 @@ package definitions;
 import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
+import java.util.Scanner;
+
+import okhttp3.Route;
 import org.apache.logging.log4j.core.appender.rolling.action.IfAccumulatedFileCount;
 import org.apache.logging.log4j.core.util.JsonUtils;
 
@@ -536,6 +539,23 @@ public class JavaStepDefs<now> {
         }
     }
 
+
+    @And("I solve while loop")
+    public void iSolveWhileLoop() {
+        Scanner scanner = new Scanner(System.in);
+        String input = "";
+        while (!input.equals("quit")) {
+            System.out.println("Input: ");
+            input = scanner.next().toLowerCase();
+            if (!input.equals("quit")) {
+                System.out.println(input);
+            }
+        }
+    }
+
+
+
+
     @Then("I practice switch statement")
     public void iPracticeSwitchStatement() {
         String role = "admin";
@@ -763,6 +783,8 @@ public class JavaStepDefs<now> {
         for (int i=0; i < 5; i++)
             System.out.println("Hello World" + i);
     }
+
+
 }
 
 

@@ -2,13 +2,18 @@
   Feature: Converter scenarios
 
     @converter1
-    Scenario: Validate Temperature
+    Scenario Outline: Validate Temperature
       Given I go to "converter" page
-      When I go to "Temperature" tab
-      And I set "Fahrenheit" to "Celsius"
-      And I enter into From field "54"
-      Then I verify "12.2" conversion result
+      When I go to "<unit>" tab
+      And I set "<from>" to "<to>"
+      And I enter into From field "<value>"
+      Then I verify "<result>" conversion result
       And I wait for 2 sec
+      Examples:
+        | unit        | from       | to       | value | result   |
+        | Temperature | Fahrenheit | Celsius  | 54    | 12.2     |
+        | Weight      | Pound      | Kilogram | 170   | 77       |
+        | Length      | Mile       | Kilometer| 50    | 80.4     |
 
     @converter2
     Scenario: Validate Weight
