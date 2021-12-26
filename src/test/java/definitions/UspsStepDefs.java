@@ -7,7 +7,6 @@ import io.cucumber.java.en.When;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.Actions;
-import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.Select;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
@@ -17,6 +16,7 @@ import java.text.ParseException;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.*;
+import static org.openqa.selenium.support.ui.ExpectedConditions.*;
 import static support.TestContext.getDriver;
 
 public class UspsStepDefs {
@@ -40,7 +40,7 @@ public class UspsStepDefs {
             default -> throw new Error("Unknown strategy: " + strategy);
         }
         WebElement findByAddress = getDriver().findElement(By.xpath("//a[@class='btn-primary zip-code-home'][@data-location='byaddress']"));
-        new WebDriverWait(getDriver(), 3).until(ExpectedConditions.visibilityOf(findByAddress)).click();
+        new WebDriverWait(getDriver(), 3).until(visibilityOf(findByAddress)).click();
     }
 
     @And("I fill out {string} street, {string} city, {string} state")
@@ -54,7 +54,7 @@ public class UspsStepDefs {
     @Then("I validate {string} zip code exists in all results")
     public void iValidateZipCodeExistsInTheResult(String zip) {
         String containerXPath = "//div[@id='zipByAddressDiv']";
-        new WebDriverWait(getDriver(), 3).until(ExpectedConditions.visibilityOf(getDriver().findElement(By.xpath(containerXPath))));
+        new WebDriverWait(getDriver(), 3).until(visibilityOf(getDriver().findElement(By.xpath(containerXPath))));
         List<WebElement> results = getDriver().findElements(By.xpath(containerXPath + "//li[contains(@class,'list-group-item')]"));
         for (WebElement el : results) assertThat(el.getText()).contains(zip);
     }
@@ -84,7 +84,7 @@ public class UspsStepDefs {
 
     @When("I perform {string} search")
     public void iPerformSearch(String query) {
-        String navSearchXPath = "//li[contains(@class,'nav-search')]";
+        String navSearchXPath = "//a[@id='navsearch']/..";
         moveMouseToElement(getDriver().findElement(By.xpath(navSearchXPath)));
         getDriver().findElement(By.xpath(navSearchXPath + "//input[@name='q']")).sendKeys(query);
         getDriver().findElement(By.xpath(navSearchXPath + "//input[@value='Search']")).click();
@@ -95,21 +95,21 @@ public class UspsStepDefs {
         int numOfFilters = filters.size();
         if (numOfFilters < 1) throw new Error("Filter list is empty!");
 
-        By firstBy = By.xpath("//p[@title='" + filters.get(0) + "']");
-        new WebDriverWait(getDriver(), 3).until(ExpectedConditions.visibilityOfElementLocated(firstBy));
+        By firstBy = By.xpath("//div[@id='dyn_nav_col']//p[@title='" + filters.get(0) + "']");
+        new WebDriverWait(getDriver(), 3).until(presenceOfElementLocated(firstBy));
         getDriver().findElement(firstBy).click();
 
         WebElement spinner = getDriver().findElement(By.xpath("//div[@class='spinner-content']"));
 
         for (int i = 1; i < numOfFilters; ++i) {
             waitForElementToBeInvisible(spinner);
-            getDriver().findElement(By.xpath("//p[@title='" + filters.get(i) + "']")).click();
+            getDriver().findElement(By.xpath("//div[@id='dyn_nav_col']//p[@title='" + filters.get(i) + "']")).click();
         }
         waitForElementToBeInvisible(spinner);
     }
 
     private void waitForElementToBeInvisible(WebElement element) {
-        new WebDriverWait(getDriver(),10).until(ExpectedConditions.invisibilityOf(element));
+        new WebDriverWait(getDriver(),10).until(invisibilityOf(element));
     }
 
     @Then("I verify that {string} results found")
@@ -133,6 +133,8 @@ public class UspsStepDefs {
 
         List<WebElement> results = getDriver().findElements(By.xpath("//ul[@id='records']/li"));
         assertThat(results.size()).isEqualTo(resultsOnLastPage);
+
+        goToSpecificResultsPage(1);
     }
 
     private void goToSpecificResultsPage(int page) {
@@ -153,17 +155,17 @@ public class UspsStepDefs {
         WebElement footer = getDriver().findElement(By.xpath("//footer"));
 
         int nextPageValue;
-        boolean isNeededPageNumberVisible;
+        boolean isTargetPageVisible;
         do {
             WebElement nextPage = getDriver().findElement(nextPageBy);
             nextPageValue = Integer.parseInt(nextPage.getText());
-            isNeededPageNumberVisible = ((page <= nextPageValue && goingRight) || (page >= nextPageValue && !goingRight));
-            if (!isNeededPageNumberVisible) {
+            isTargetPageVisible = ((page <= nextPageValue && goingRight) || (page >= nextPageValue && !goingRight));
+            if (!isTargetPageVisible) {
                 moveMouseToElement(footer);
                 nextPage.click();
                 waitForElementToBeInvisible(spinner);
             }
-        } while (!isNeededPageNumberVisible);
+        } while (!isTargetPageVisible);
 
         moveMouseToElement(footer);
         getDriver().findElement(By.xpath("//ul[@class='pagination']//*[normalize-space(.)='" + page + "']")).click();
@@ -186,10 +188,15 @@ public class UspsStepDefs {
 
     @Then("I validate that Sign In is required")
     public void iValidateThatSignInIsRequired() {
+        String originalWindow = getDriver().getWindowHandle();
+
         getDriver().getWindowHandles().forEach(handle -> getDriver().switchTo().window(handle)); //cycle to the latest one
+
         assertThat(getDriver().getCurrentUrl()).contains("https://reg.usps.com");
         assertThat(getDriver().findElement(By.xpath("//button[@id='btn-submit']"))).isNotNull();
         assertThat(getDriver().findElement(By.xpath("//a[@id='sign-up-button']"))).isNotNull();
+
+        getDriver().switchTo().window(originalWindow);
     }
 
     @And("I go to {int} results page")
@@ -231,7 +238,7 @@ public class UspsStepDefs {
     @And("I close modal window")
     public void iCloseModalWindow() {
         WebElement closeButton = getDriver().findElement(By.xpath("//a[@id='closeAndUpdateTotals']"));
-        new WebDriverWait(getDriver(),3).until(ExpectedConditions.visibilityOf(closeButton));
+        new WebDriverWait(getDriver(),3).until(visibilityOf(closeButton));
         closeButton.click();
         waitForElementToBeInvisible(closeButton);
     }
