@@ -5,7 +5,11 @@ import org.junit.*;
 import org.openqa.selenium.*;
 import org.openqa.selenium.interactions.*;
 import org.openqa.selenium.support.ui.*;
+
+import java.text.*;
 import java.util.*;
+
+import static java.lang.Double.parseDouble;
 import static java.lang.Integer.parseInt;
 import static org.assertj.core.api.Assertions.assertThat;
 import static support.TestContext.getDriver;
@@ -19,7 +23,7 @@ public class UspsStepDefs {
         getDriver().findElement(By.xpath("//*[@id='navquicktools']/..")).click();
         getDriver().findElement(By.xpath("//p[contains(text(),'Look Up')]")).click();
         assertThat(getDriver().getTitle().toLowerCase()).contains("zip code");
-        wait.until(ExpectedConditions.titleContains("zip code"));
+        //wait.until(ExpectedConditions.titleContains("zip code"));
     }
 
     @And("I fill out {string} street, {string} city, {string} state")
@@ -102,5 +106,56 @@ public class UspsStepDefs {
         assertThat(getDriver().findElement(By.xpath("//h1[contains(@id,'sign-in')]")).getText()).isEqualTo("Sign In To Your Account");
         Assert.assertTrue(getDriver().findElement(By.xpath("//button[@id='btn-submit']")).isDisplayed());
 
+    }
+
+    @When("I go to {string} under {string}")
+    public void iGoToUnder(String subCategory, String category) {
+        //wait.until(ExpectedConditions.elementToBeClickable(getDriver().findElement(By.xpath("//a[@id='navbusiness']"))));
+        actions.moveToElement(getDriver().findElement(By.xpath("//li[@class='menuheader']//a[text()='" + category + "']"))).perform();
+        getDriver().findElement(By.xpath("//li[@class='tool-eddm']//a[contains(text(),'" + subCategory + "')]")).click();
+        wait.until(ExpectedConditions.titleContains(subCategory));
+    }
+
+    @And("I search for {string}")
+    public void iSearchFor(String address) throws InterruptedException {
+        getDriver().findElement(By.xpath("//input[@id='cityOrZipCode']")).sendKeys(address);
+        getDriver().findElement(By.xpath("//a[contains(@class,'search-btn')]")).click();
+        Thread.sleep(3000);
+        wait.until(ExpectedConditions.invisibilityOf(getDriver().findElement(By.xpath("//*[contains(@class,'spinner-content')]//h5"))));
+    }
+
+    @And("I choose view as {string} on the map")
+    public void iChooseViewAsOnTheMap(String viewType) {
+        getDriver().findElement(By.xpath("//a[@aria-label='Display " + viewType + " View']")).click();
+    }
+
+    @When("I select all in the table")
+    public void iSelectAllInTheTable() {
+        getDriver().findElement(By.xpath("//input[@id='select-all-checkboxes']")).click();
+    }
+
+    @And("I close modal window")
+    public void iCloseModalWindow() {
+        wait.until(ExpectedConditions.visibilityOf(getDriver().findElement(By.xpath("//div[@id='drop-off-location-modal']"))));
+        getDriver().findElement(By.xpath("//h3[contains(text(),'Drop-Off')]/../a")).click();
+    }
+
+    @Then("I verify that summary of all rows of Cost column is equal Approximate Cost in Order Summary")
+    public void iVerifyThatSummaryOfAllRowsOfCostColumnIsEqualApproximateCostInOrderSummary() {
+        List<WebElement> elements = getDriver().findElements(By.xpath("//td[9]//p"));
+        double sum = 0.00;
+        DecimalFormat toTheFormat = new DecimalFormat("0.00");
+        for(WebElement list: elements) {
+            double temp = parseDouble((list.getText()).replace("$", ""));
+            sum += temp;
+        }
+        String tempCost = (getDriver().findElement(By.xpath("//p[@id='approximateCost']")).getText()).replace("$", "");
+        double approximateCost = parseDouble(tempCost);
+
+        /*
+        workaround using decimal format
+         */
+        System.out.println("The sum is: " + toTheFormat.format(sum) + "\nThe cost is: " + toTheFormat.format(approximateCost));
+        assertThat(toTheFormat.format(sum)).isEqualTo(toTheFormat.format(approximateCost));
     }
 }
