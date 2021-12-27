@@ -8,14 +8,19 @@ import org.junit.Assert;
 import org.openqa.selenium.By;
 import org.testng.asserts.Assertion;
 
+import java.io.FileNotFoundException;
+import java.util.Map;
+
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertThat;
+import static support.TestContext.getData;
 import static support.TestContext.getDriver;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class QuoteStepDefs {
     @When("I fill out required fields")
-    public void iFillOutRequiredFields() {
+    public void iFillOutRequiredFields()  {
+        Map<String, String> user = getData("user");
         getDriver().findElement(By.xpath("//input[@name='username']")).sendKeys("jdoe");
         getDriver().findElement(By.xpath("//input[@name='email']")).sendKeys("jdoe@example.com");
         getDriver().findElement(By.xpath("//input[@name='password']")).sendKeys("welcome");

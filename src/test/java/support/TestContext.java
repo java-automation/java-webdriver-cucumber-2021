@@ -45,13 +45,15 @@ public class TestContext<getData> {
         driver.quit();
     }
 
-    Map<String, String> getData(String fileName) {
+    public static Map<String, String> getData(String fileName)  {
         String filePath = System.getProperty("user.dir") + "/src/test/resources/data/" + fileName + ".yml";
-
-
-        FileInputStream stream = new FileInputStream(fileName);
-        Yaml yaml = new Yaml();
-        return yaml.load(stream);
+        try {
+            FileInputStream stream = new FileInputStream(filePath);
+            Yaml yaml = new Yaml();
+            return yaml.load(stream);
+        } catch (FileNotFoundException e) {
+            throw new Error(e);
+        }
     }
 
     public static void initialize(String browser, String testEnv, boolean isHeadless) {
