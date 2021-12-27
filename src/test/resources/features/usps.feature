@@ -102,6 +102,11 @@ Feature: USPS scenarios
       | Quadcopters          | no                       |
       | Operation Santa      |                          |
 
-
+  @usps10
+  Scenario: Phone number of the nearest Mail Pickup
+    Given I go to "usps" page
+    When I navigate to "Locations" heading link
+    And I search for location "4970 El Camino Real 110, Los Altos, CA"
+    Then I verify closest location phone number is "800-275-8777"
 
 

@@ -922,7 +922,7 @@ public class JavaStepDefs {
     @Given("I write prime numbers till {string}")
     public void iWritePrimeNumbersTill(String n) {
         int number = Integer.parseInt(n);
-        for (int i = 2; i <= number; i++) {
+        for (int i = 1; i <= number; i++) {
             isPrime(i);
         }
     }

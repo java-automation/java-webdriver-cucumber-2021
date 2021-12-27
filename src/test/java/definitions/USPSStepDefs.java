@@ -26,6 +26,7 @@ import static support.TestContext.getDriver;
 public class USPSStepDefs extends HelperStepDefs {
     public static final String MOBILE_HAMBURGER_ACTIVE_DROPDOWN_MENU_XPATH = "//a[@class='mobile-hamburger active']";
     public static final String INPUT_CONTAINS_CLASS_SEARCH_FIELD = "//input[contains(@class,'search-field')]";
+    public static final String FIND_USPS_LOCATIONS_SEARCH_BUTTON = "//a[@id='searchLocations']";
     private static final String STREET_XPATH = "//input[@id='tAddress']";
     private static final String STATE_XPATH = "//select[@id='tState']";
     private static final String CITY_XPATH = "//input[@id='tCity']";
@@ -63,6 +64,11 @@ public class USPSStepDefs extends HelperStepDefs {
     public static final String FIELD_NON_EMPTY_SEARCH_CONTENT_XPATH = "//div[@class='listContent']//ul[@class='slds-has-dividers--bottom']";
     public static final String NO_RESULTS_TITLE = "//div[contains(@class,'noResultsTitle')]";
     public static final String EMPTY_SEARCH_CONTENT_XPATH = "//div[contains(@class,'showEmptyContent')]//div[@class='emptyListContent']";
+    public static final String FIND_USPS_LOCATION = "//input[@id='city-state-input']";
+    public static final String ASK_USPS_PHONE_XPATH = "//p[@class='ask-usps']";
+    public static final String LIST_USPS_OFFICE_H2_XPATH = "//div[@class='location-address']/h2";
+    public static final String LINK_LOCATOR_LOCATIONS_XPATH = "//a[@id='link-locator']";
+    public static final String LIST_ITEM_LOCATION = "//div[contains(@class,'list-item-location')]";
     private final WebDriverWait wait = new WebDriverWait(getDriver(), 10, 200);
 
 
@@ -393,6 +399,29 @@ public class USPSStepDefs extends HelperStepDefs {
                     .size() > 0);
             System.out.println("We've found " + getDriver().findElements(By.xpath(LIST_EACH_SEARCH_RESULTS_XPATH)).size() + " results");
         }
+    }
+
+    @When("I navigate to {string} heading link")
+    public void iNavigateToHeadingLink(String menuItem) {
+        getDriver()
+                .findElements(By.xpath(LINK_LOCATOR_LOCATIONS_XPATH)).forEach(e -> e.click());
+        wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath(FIND_USPS_LOCATION)));
+    }
+
+    @And("I search for location {string}")
+    public void iSearchForLocation(String location) {
+        getDriver().findElement(By.xpath(FIND_USPS_LOCATION)).sendKeys(location);
+        getDriver().findElement(By.xpath(FIND_USPS_LOCATIONS_SEARCH_BUTTON)).click();
+        wait.until(ExpectedConditions.presenceOfAllElementsLocatedBy(By.xpath(LIST_ITEM_LOCATION)));
+    }
+
+    @Then("I verify closest location phone number is {string}")
+    public void iVerifyClosestLocationPhoneNumberIs(String phone) {
+        wait.until(ExpectedConditions.elementToBeClickable
+                        (getDriver().findElements(By.xpath(LIST_USPS_OFFICE_H2_XPATH)).get(0)))
+                .click();
+        String actual = wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath(ASK_USPS_PHONE_XPATH))).getText();
+        assertTrue(actual.contains(phone));
     }
 }
 
