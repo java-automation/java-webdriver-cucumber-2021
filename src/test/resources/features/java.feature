@@ -34,12 +34,13 @@ Feature: Java feature
 
   @java6:
   Scenario: Joining arrays alternating coding challenge
-#    Then array {1,5,8,3,6} and array {8,3,6} are joined together alternating into {1,8,5,3,8,6,3,6}
-#    Then list {5,34,0} and list {0,3,0,-12,-4} are joined together alternating into {5,0,34,3,0,0,-12,-4}
-#    Then array {1,2,3,4} and array {"a","b","c"} are joined together alternating into {"1","a","2","b","3","c","4"}
+    Then array {1,5,8,3,6} and array {8,3,6} are joined together alternating into {1,8,5,3,8,6,3,6}
+    Then list {5,34,0} and list {0,3,0,-12,-4} are joined together alternating into {5,0,34,3,0,0,-12,-4}
     Then array {} and array {8,3,6} are joined together alternating into {8,3,6}
+    Then array {1,2,3,4} and array {} are joined together alternating into {1,2,3,4}
+    Then array {} and array {} are joined together alternating into {}
+    Then array {1,2,3,4} and array {"a","b","c"} are joined together alternating into {"1","a","2","b","3","c","4"}
     Then array {1,2,3,4} and array {""} are joined together alternating into {"1","","2","3","4"}
-#    Then array {1,2,3,4} and array {} are joined together alternating into {"1","","2","3","4"}
 
   @java7:
   Scenario: FizzBuzz coding challenge
