@@ -23,7 +23,6 @@ public class UspsStepDefs {
         getDriver().findElement(By.xpath("//*[@id='navquicktools']/..")).click();
         getDriver().findElement(By.xpath("//p[contains(text(),'Look Up')]")).click();
         assertThat(getDriver().getTitle().toLowerCase()).contains("zip code");
-        //wait.until(ExpectedConditions.titleContains("zip code"));
     }
 
     @And("I fill out {string} street, {string} city, {string} state")
@@ -75,7 +74,6 @@ public class UspsStepDefs {
     @And("I set {string} in filters")
     public void iSetInFilters(String websiteFilter) {
         getDriver().findElement(By.xpath("//a[contains(@class,'sub-catagory')]//p[@title='" + websiteFilter + "']")).click();
-        //wait.until(ExpectedConditions.invisibilityOf(getDriver().findElement(By.xpath("//span[@title='Filter by Media Type']"))));
     }
 
     @Then("I verify that {string} results found")
@@ -108,7 +106,6 @@ public class UspsStepDefs {
 
     @When("I go to {string} under {string}")
     public void iGoToUnder(String subCategory, String category) {
-        //wait.until(ExpectedConditions.elementToBeClickable(getDriver().findElement(By.xpath("//a[@id='navbusiness']"))));
         actions.moveToElement(getDriver().findElement(By.xpath("//li[@class='menuheader']//a[text()='" + category + "']"))).perform();
         getDriver().findElement(By.xpath("//li[@class='tool-eddm']//a[contains(text(),'" + subCategory + "')]")).click();
         wait.until(ExpectedConditions.titleContains(subCategory));
@@ -149,11 +146,50 @@ public class UspsStepDefs {
         }
         String tempCost = (getDriver().findElement(By.xpath("//p[@id='approximateCost']")).getText()).replace("$", "");
         double approximateCost = parseDouble(tempCost);
-
         /*
         workaround using decimal format
          */
         System.out.println("The sum is: " + toTheFormat.format(sum) + "\nThe cost is: " + toTheFormat.format(approximateCost));
         assertThat(toTheFormat.format(sum)).isEqualTo(toTheFormat.format(approximateCost));
+    }
+
+    @When("I go to {string} tab")
+    public void iGoToTab(String tab) {
+        getDriver().findElement(By.xpath("//a[@class='menuitem'][contains(text(),'" + tab + "')]")).click();
+    }
+
+    @And("I perform {string} help search")
+    public void iPerformHelpSearch(String searchItem) {
+        getDriver().findElement(By.xpath("//input[@id='137:0']")).sendKeys(searchItem);
+        getDriver().findElement(By.xpath("//button[contains(@class,'search-button')]")).click();
+    }
+
+    @Then("I verify that no results of {string} available in help search")
+    public void iVerifyThatNoResultsOfAvailableInHelpSearch(String searchItem) throws InterruptedException {
+//        TODO: replace sleep
+        Thread.sleep(4000);
+       // wait.until(ExpectedConditions.visibilityOf(getDriver().findElement(By.xpath("//*[@data-aura-class='uiAbstractList']"))));
+        Assert.assertFalse(getDriver().findElement(By.xpath("//*[@data-aura-class='uiAbstractList']")).getText().contains(searchItem));
+    }
+
+    @When("I navigate to {string} heading link")
+    public void iNavigateToHeadingLink(String headingLink) {
+        getDriver().findElement(By.xpath("//a[@id='link-locator']")).click();
+    }
+
+    @And("I search for location {string}")
+    public void iSearchForLocation(String searchLocation) {
+        getDriver().findElement(By.xpath("//input[@id='city-state-input']")).sendKeys(searchLocation);
+        getDriver().findElement(By.xpath("//a[@id='searchLocations']")).click();
+
+    }
+
+    @Then("I verify closest location phone number is {string}")
+    public void iVerifyClosestLocationPhoneNumberIs(String phoneNum) throws InterruptedException {
+//        TODO: replace sleep
+        Thread.sleep(2000);
+        getDriver().findElement(By.xpath("//div[@id='resultBox']/div[1]")).click();
+        System.out.println(getDriver().findElement(By.xpath("//p[@id='detailTollFree']/p")).getText());
+        assertThat(getDriver().findElement(By.xpath("//p[@id='detailTollFree']/p")).getText()).contains(phoneNum);
     }
 }

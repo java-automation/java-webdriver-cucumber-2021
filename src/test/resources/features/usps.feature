@@ -48,5 +48,16 @@
       | "8525 Garland Rd"       | "Dallas"    | "TX"  | "75218" |
       | "148 Chestnut Hill Ave" | "Brighton"  | "MA"  | "02135" |
 
-#  backlog
-#  more tasks from slack
+    @usps6
+    Scenario: Quadcopters delivery
+      Given I go to "usps" page and print details
+      When I go to "Help" tab
+      And I perform "Quadcopters delivery" help search
+      Then I verify that no results of "Quadcopters delivery" available in help search
+
+    @usps7
+    Scenario: Phone number of the nearest Mail Pickup
+      Given I go to "usps" page and print details
+      When I navigate to "Locations" heading link
+      And I search for location "4970 El Camino Real 110, Los Altos, CA"
+      Then I verify closest location phone number is "800-275-8777"
