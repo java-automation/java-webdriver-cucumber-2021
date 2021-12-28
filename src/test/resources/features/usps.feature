@@ -36,6 +36,17 @@
       And I close modal window
       Then I verify that summary of all rows of Cost column is equal Approximate Cost in Order Summary
 
-#  homework: make @usps1 an scenario outline
+    @usps5
+    Scenario Outline: Validate zip code for address
+      Given I go to "usps" page and print details
+      When I go to Lookup ZIP page by address
+      And I fill out <street> street, <city> city, <state> state
+      Then I validate <zip> zip code exists in the result
+      Examples:
+      | street                  | city        | state | zip     |
+      | "4970 El Camino Real"   | "Los Altos" | "CA"  | "94022" |
+      | "8525 Garland Rd"       | "Dallas"    | "TX"  | "75218" |
+      | "148 Chestnut Hill Ave" | "Brighton"  | "MA"  | "02135" |
+
 #  backlog
 #  more tasks from slack

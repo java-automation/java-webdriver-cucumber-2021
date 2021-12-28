@@ -37,9 +37,7 @@ public class UspsStepDefs {
     @Then("I validate {string} zip code exists in the result")
     public void iValidateZipCodeExistsInTheResult(String zip) throws InterruptedException {
         getDriver().findElement(By.xpath("//a[@id='zip-by-address']")).click();
-       // getDriver().findElement(By.xpath("//ul[contains(@class,'entered-address')]")).isDisplayed();
         Thread.sleep(2000);
-        wait(2000);
         assertThat(getDriver().findElement(By.xpath("//ul[contains(@class,'industry-detail')]//li[1]")).getText()).contains(zip);
     }
 
