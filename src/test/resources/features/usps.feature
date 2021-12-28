@@ -2,12 +2,17 @@
 Feature: USPS website scenarios
 
   @usps1
-  #valid inputs for Lookup ZIP strategies: "quick tools"/"send"/"mouseover"
-  Scenario: Validate ZIP code for Portnov Computer School
+  Scenario Outline: Validate ZIP code for specific address
     Given I go to "usps" page
-    When  I go to Lookup ZIP page by address through "mouseover"
-    *     I fill out "4970 El Camino Real" street, "Los Altos" city, "CA" state
-    Then  I validate "94022" zip code exists in all results
+    When  I go to Lookup ZIP page by address through "<strategy>"
+    *     I fill out "<address>" street, "<city>" city, "<state>" state
+    Then  I validate "<zip>" zip code exists in all results
+
+    Examples:
+      | strategy    | address               | city          | state | zip   |
+      | quick tools | 4970 El Camino Real   | Los Altos     | CA    | 94022 |
+      | send        | Pacific Coast Highway | Malibu        | CA    | 90265 |
+      | mouseover   | Golden Gate Bridge    | San Fransisco | CA    | 94102 |
 
   @usps2
   Scenario: Calculate price

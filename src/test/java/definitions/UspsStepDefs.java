@@ -52,11 +52,11 @@ public class UspsStepDefs {
     }
 
     @Then("I validate {string} zip code exists in all results")
-    public void iValidateZipCodeExistsInTheResult(String zip) {
-        String containerXPath = "//div[@id='zipByAddressDiv']";
-        new WebDriverWait(getDriver(), 3).until(visibilityOf(getDriver().findElement(By.xpath(containerXPath))));
-        List<WebElement> results = getDriver().findElements(By.xpath(containerXPath + "//li[contains(@class,'list-group-item')]"));
-        for (WebElement el : results) assertThat(el.getText()).contains(zip);
+    public void iValidateZipCodeExistsInTheResults(String zip) {
+        By resultLocator = By.xpath("//div[@id='zipByAddressDiv']//li[contains(@class,'list-group-item')]");
+        new WebDriverWait(getDriver(), 3).until(presenceOfElementLocated(resultLocator));
+        List<WebElement> results = getDriver().findElements(resultLocator);
+        for (WebElement el : results) assertThat(el.getAttribute("textContent")).contains(zip);
     }
 
     @When("I go to Calculate Price Page")
