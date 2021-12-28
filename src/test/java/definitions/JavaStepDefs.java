@@ -365,12 +365,23 @@ public class JavaStepDefs {
 
     @And("I reverse words in a sentence")
     public void iReverseWordsInASentence() {
-        String sentence[] = "now I know it".split(" ");
-        String result = "";
-        for (int i = sentence.length-1; i >= 0; i--)
-            result += sentence[i] + " ";
+        String sentenseFirst = "I love Webdriver";
+        String[] sentenseArray = sentenseFirst.split(" ");
+        System.out.print("The result: ");
+        for (int i = sentenseArray.length-1; i >=0; i--){
+            System.out.print(sentenseArray[i] + " ");
+        }
 
-        System.out.println("The result: " + result);
+        //OR
+        System.out.println(); //чтобы не сливались строки между двумя вариантами
+
+        String sentenceSecond[] = "now I know it".split(" ");
+        String result = "";
+        for (int i = sentenceSecond.length-1; i >= 0; i--)
+            result += sentenceSecond[i] + " ";
+
+        System.out.print("The result: " + result);
+
     }
 
     @And("I sort an array")
@@ -403,6 +414,90 @@ public class JavaStepDefs {
                 }
             }
         }
+    }
+
+    @And("I determine if {string} is a palindrome")
+    public void iDetermineIfIsAPalindrome(String word) {
+        String result = "";
+        for (int i = word.length() - 1; i >= 0; i--) {
+            result += word.charAt(i);
+        }
+        if (word.equals(result))
+            System.out.println(word + " is a palindrome");
+        else
+            System.out.println(word + " is not a palindrome");
+    }
+
+    @And("I find the max number in array")
+    public void iFindTheMaxNumberInArray() {
+        int[] array = {4, 3, 1 ,5, 8, 4, 6, 5};
+        int max = 0;
+
+        for (int i = 0; i < array.length; i++) {
+            if (array[i] > max)
+                max = array[i];
+        }
+        System.out.println("Max: " + max);
+    }
+
+    @And("I find two max numbers in array")
+    public void iFindTwoMaxNumbersInArray() {
+        int[] array = {4, 3, 1 ,5, 8, 4};
+        System.out.println(Arrays.toString(array));
+        Arrays.sort(array); //сортируем array в порядке возрастания
+        //нам надо i=5 и i=4, длина 6
+        int maxFirst = array[array.length - 1]; //берем последний элемент (i = 6-1) (самый большой)
+        int maxSecond = array[array.length - 2]; //берем предпоследний элемент (i = 6-2) (следующий после самого большого)
+
+        System.out.println("Two max numbers are: " + maxFirst + " and " + maxSecond);
+    }
+
+
+    @And("I find the min number in array")
+    public void iFindTheMinNumberInArray() {
+        int[] array = {4, 3, 1 ,5, 8, 4};
+        int min = 1000; //намеренно большое число, чтобы даже самый первый элемент имел возможность был меньше
+
+        for (int i = 0; i < array.length; i++) {
+            if (array[i] < min)
+                min = array[i];
+        }
+        System.out.println("Min: " + min);
+    }
+
+    @And("I find if any two elements of an array result in sum")
+    public void iFindIfAnyTwoElementsOfAnArrayResultInSum() {
+
+
+
+    }
+
+
+    @And("I find if {int} is a prime number")
+    public void iFindIfAIsAPrime(int number) {
+        boolean prime = true;
+
+        for (int i = 2; i < number; i++) { //for non-prime number. We are making sure that out number is not divided by any number between 2 and itself.
+            if (number%i==0) {
+                prime = false;
+                break;
+            }
+        }
+        if (prime)
+            System.out.println(number + " is a prime number");
+        else
+            System.out.println(number + " is not a prime number");
+    }
+
+    @And("I find factorial of {int}")
+    public void iFindFactorialOf(int number) {
+        int factorial = 1;
+        for (int i = 1; i <= number; i++) {
+            factorial *= i;
+        }
+        System.out.println("The factorial of " + number + " is " + factorial);
+
+
     }
 }
 
