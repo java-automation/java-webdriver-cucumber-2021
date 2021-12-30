@@ -245,8 +245,9 @@ public class UspsStepDefs {
 
     @Then("I verify that summary of all rows of Cost column is equal Approximate Cost in Order Summary")
     public void iVerifyThatSummaryOfAllRowsOfCostColumnIsEqualApproximateCostInOrderSummary() throws ParseException {
-        String approxCost = getDriver().findElement(By.xpath("//p[@id='approximateCost']")).getText();
-        List<WebElement> costElements = getDriver().findElements(By.xpath("//table/tbody//input[contains(@id,'checkbox')]/ancestor::td/following-sibling::td[8]"));
+        int costColumnIndex = getCostColumnIndex();
+        String costElementsXPath = "//table/tbody//input[contains(@id,'checkbox')]/ancestor::td/following-sibling::td[" + costColumnIndex + "]";
+        List<WebElement> costElements = getDriver().findElements(By.xpath(costElementsXPath));
 
         DecimalFormat df = new DecimalFormat("$0.00");
         BigDecimal totalCost = new BigDecimal(0);
@@ -254,6 +255,13 @@ public class UspsStepDefs {
             totalCost = totalCost.add(BigDecimal.valueOf(df.parse(el.getText()).doubleValue()));
         }
 
-        assertThat(df.format(totalCost)).isEqualTo(approxCost);
+        assertThat(df.format(totalCost)).isEqualTo(getDriver().findElement(By.xpath("//p[@id='approximateCost']")).getText());
+    }
+
+    private int getCostColumnIndex() {
+        List<WebElement> headersList = getDriver().findElements(By.xpath("//table/thead//th"));
+        for (int i = 0; i < headersList.size(); ++i)
+            if (headersList.get(i).getText().equals("Cost")) return i;
+        throw new Error("Couldn't locate 'Cost' column.");
     }
 }
