@@ -8,6 +8,7 @@ import org.openqa.selenium.support.ui.*;
 
 import java.text.*;
 import java.util.*;
+import java.util.concurrent.*;
 
 import static java.lang.Double.parseDouble;
 import static java.lang.Integer.parseInt;
@@ -166,9 +167,7 @@ public class UspsStepDefs {
 
     @Then("I verify that no results of {string} available in help search")
     public void iVerifyThatNoResultsOfAvailableInHelpSearch(String searchItem) throws InterruptedException {
-//        TODO: replace sleep
-        Thread.sleep(4000);
-       // wait.until(ExpectedConditions.visibilityOf(getDriver().findElement(By.xpath("//*[@data-aura-class='uiAbstractList']"))));
+        getDriver().manage().timeouts().implicitlyWait(4, TimeUnit.SECONDS);
         Assert.assertFalse(getDriver().findElement(By.xpath("//*[@data-aura-class='uiAbstractList']")).getText().contains(searchItem));
     }
 
@@ -186,8 +185,7 @@ public class UspsStepDefs {
 
     @Then("I verify closest location phone number is {string}")
     public void iVerifyClosestLocationPhoneNumberIs(String phoneNum) throws InterruptedException {
-//        TODO: replace sleep
-        Thread.sleep(2000);
+        getDriver().manage().timeouts().implicitlyWait(2, TimeUnit.SECONDS);
         getDriver().findElement(By.xpath("//div[@id='resultBox']/div[1]")).click();
         System.out.println(getDriver().findElement(By.xpath("//p[@id='detailTollFree']/p")).getText());
         assertThat(getDriver().findElement(By.xpath("//p[@id='detailTollFree']/p")).getText()).contains(phoneNum);
