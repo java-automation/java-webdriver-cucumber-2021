@@ -85,8 +85,6 @@ public class TestContext {
                     break;
                 case "safari":
                     driver = new SafariDriver();
-                    driver.manage().window().setPosition(position);
-                    driver.manage().window().setSize(size);
                     break;
                 case "edge":
                     WebDriverManager.edgedriver().setup();
@@ -113,5 +111,7 @@ public class TestContext {
         } else {
             throw new RuntimeException("Unsupported test environment: " + testEnv);
         }
+        driver.manage().window().setPosition(position);
+        driver.manage().window().setSize(size);
     }
 }
