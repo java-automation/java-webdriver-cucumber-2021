@@ -12,49 +12,10 @@ import java.time.format.DateTimeFormatter;
 import java.util.Map;
 
 import static org.assertj.core.api.Assertions.*;
+import static support.TestContext.getData;
 import static support.TestContext.getDriver;
 
 public class QuoteStepDefs {
-
-    private static final Map<String, String> profileOne = Map.ofEntries(
-            Map.entry("username", "jdoe"),
-            Map.entry("email", "john.doe@corp.com"),
-            Map.entry("password", "jsecret"),
-            Map.entry("firstName", "John"),
-            Map.entry("middleName", "Vitaljevich"),
-            Map.entry("lastName", "Doe"),
-            Map.entry("phone", "2223456789"),
-            Map.entry("dateofbirth", "11/01/1990"),
-            Map.entry("countryoforigin", "Canada"),
-            Map.entry("gender", "male"),
-            Map.entry("allowedtocontact", "true"),
-            Map.entry("address", "111 222 Street San Jose CA US 75000"),
-            Map.entry("carmake", "BMW"),
-            Map.entry("contactname", "Juanita Alvares"),
-            Map.entry("contactphone", "+1 (222) 987-6543"),
-            Map.entry("3rdpartyagreement", "accepted"),
-            Map.entry("attachment", "downloadedResume.pdf")
-    );
-
-    private static final Map<String, String> profileTwo = Map.ofEntries(
-            Map.entry("username", "msmith"),
-            Map.entry("email", "monica.smith@corp.com"),
-            Map.entry("password", "msecret"),
-            Map.entry("firstName", "Monica"),
-            Map.entry("middleName", "Ivanovich"),
-            Map.entry("lastName", "Smith"),
-            Map.entry("phone", "3333456789"),
-            Map.entry("dateofbirth", "01/25/1995"),
-            Map.entry("countryoforigin", "USA"),
-            Map.entry("gender", "female"),
-            Map.entry("allowedtocontact", "false"),
-            Map.entry("address", "222 111 Avenue San Jose CA US 75000"),
-            Map.entry("carmake", "Toyota, Other"),
-            Map.entry("contactname", "Albert Navarro"),
-            Map.entry("contactphone", "+1 (333) 987-6543"),
-            Map.entry("3rdpartyagreement", "declined"),
-            Map.entry("attachment", "downloadedResume.pdf")
-    );
 
     private Map<String, String> workingProfile;
     private boolean fullForm;
@@ -113,11 +74,7 @@ public class QuoteStepDefs {
             case "all" -> fullForm = true;
             default -> throw new Error("Unknown scenario context reference: " + scenarioContext);
         }
-        switch (profileReference.toLowerCase()) {
-            case "john doe" -> workingProfile = profileOne;
-            case "monica smith" -> workingProfile = profileTwo;
-            default -> throw new Error("Unknown profile reference: " + profileReference);
-        }
+        workingProfile = getData(profileReference.toLowerCase().replace(" ", ""));
     }
 
     @When("I fill out {string} fields with {string} profile")

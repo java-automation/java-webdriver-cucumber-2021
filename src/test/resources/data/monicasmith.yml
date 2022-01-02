@@ -1,0 +1,17 @@
+username: msmith
+email: monica.smith@corp.com
+password: msecret
+firstName: Monica
+middleName: Ivanovich
+lastName: Smith
+phone: "3333456789"
+dateofbirth: 01/25/1995
+countryoforigin: USA
+gender: female
+allowedtocontact: "false"
+address: 222 111 Avenue San Jose CA US 75000
+carmake: Toyota, Other
+contactname: Albert Navarro
+contactphone: +1 (333) 987-6543
+3rdpartyagreement: declined
+attachment: downloadedResume.pdf

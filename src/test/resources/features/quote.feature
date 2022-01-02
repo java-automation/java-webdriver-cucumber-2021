@@ -23,7 +23,7 @@ Feature: Selenium WebDriver API exercises using quote form
     Then  I verify email field behavior
 
   @quote3
-  #valid entries: "quote form"; "all"/"required"; "Monica Smith"/"John Doe"
+  #valid entries when filling the form: "all"/"required"; "Monica Smith"/"John Doe"
   Scenario: Submit the form with specified field set and one of the preset profiles
     Given I go to "quote form" page
     When  I fill out "all" fields with "Monica Smith" profile

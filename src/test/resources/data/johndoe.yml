@@ -1,0 +1,17 @@
+username: jdoe
+email: john.doe@corp.com
+password: jsecret
+firstName: John
+middleName: Vitaljevich
+lastName: Doe
+phone: "2223456789"
+dateofbirth: 11/01/1990
+countryoforigin: Canada
+gender: male
+allowedtocontact: "true"
+address: 111 222 Street San Jose CA US 75000
+carmake: BMW
+contactname: Juanita Alvares
+contactphone: +1 (222) 987-6543
+3rdpartyagreement: accepted
+attachment: downloadedResume.pdf
