@@ -16,6 +16,7 @@ public class Hooks {
     public void scenarioStart() {
         TestContext.initialize();
         getDriver().manage().timeouts().pageLoadTimeout(60, TimeUnit.SECONDS);
+//        getDriver().manage().timeouts().implicitlyWait(1, TimeUnit.SECONDS);
         getDriver().manage().deleteAllCookies();
     }
 

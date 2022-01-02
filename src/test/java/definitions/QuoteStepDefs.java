@@ -11,20 +11,25 @@ import org.openqa.selenium.Dimension;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebElement;
 
+import java.util.Map;
+
+import static support.TestContext.getData;
 import static support.TestContext.getDriver;
 
 public class QuoteStepDefs {
+    Map<String, String> user = getData("user");
     @When("I fill out required fields")
     public void iFillOutRequiredFields() {
-        getDriver().findElement(By.xpath("//input[@name='username']")).sendKeys("jdoe");
-        getDriver().findElement(By.xpath("//input[@name='email']")).sendKeys("jdoe@example.com");
-        getDriver().findElement(By.xpath("//input[@id='password']")).sendKeys("test123" + Keys.ENTER);
-        getDriver().findElement(By.xpath("//input[@id='confirmPassword']")).sendKeys("test123" + Keys.ENTER);
+
+        getDriver().findElement(By.xpath("//input[@name='username']")).sendKeys(user.get("username"));
+        getDriver().findElement(By.xpath("//input[@name='email']")).sendKeys(user.get("email"));
+        getDriver().findElement(By.xpath("//input[@id='password']")).sendKeys(user.get("password") + Keys.ENTER);
+        getDriver().findElement(By.xpath("//input[@id='confirmPassword']")).sendKeys(user.get("password") + Keys.ENTER);
 
         WebElement nameElement =  getDriver().findElement(By.xpath("//input[@name='name']"));
         nameElement.click();
-        getDriver().findElement(By.xpath("//input[@name='firstName']")).sendKeys("john");
-        getDriver().findElement(By.xpath("//input[@name='lastName']")).sendKeys("doe");
+        getDriver().findElement(By.xpath("//input[@name='firstName']")).sendKeys(user.get("firstName"));
+        getDriver().findElement(By.xpath("//input[@name='lastName']")).sendKeys(user.get("lastName"));
         getDriver().findElement(By.xpath("//span[normalize-space()='Save']")).click();
         System.out.println(nameElement.getAttribute("value"));
 

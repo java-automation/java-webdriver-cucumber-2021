@@ -18,6 +18,10 @@ import org.openqa.selenium.remote.DesiredCapabilities;
 import org.openqa.selenium.remote.LocalFileDetector;
 import org.openqa.selenium.remote.RemoteWebDriver;
 import org.openqa.selenium.safari.SafariDriver;
+import org.yaml.snakeyaml.Yaml;
+
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
@@ -38,6 +42,17 @@ public class TestContext {
 
     public static void teardown() {
         driver.quit();
+    }
+
+    public static Map<String, String> getData(String fileName) {
+        String filePath = System.getProperty("user.dir") + "/src/test/resources/data/" + fileName + ".yml";
+        try {
+            FileInputStream stream = new FileInputStream(fileName);
+            Yaml yaml = new Yaml();
+            return yaml.load(stream);
+        } catch(FileNotFoundException e){ //runtime exception to avoid using add exception
+            throw new Error(e);
+        }
     }
 
     public static void initialize(String browser, String testEnv, boolean isHeadless) {

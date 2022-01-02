@@ -278,10 +278,22 @@ Result for 20:
 
     @And("I write a function that finds if array contains duplicates")
     public void iWriteAFunctionThatFindsIfArrayContainsDuplicates() {
-
-
+        Integer[] intArray = {3,7,9,24,65,21,-76,-35,98,65,24,21,-76,9,9,98,98};
+        Set<Integer> dupSet = dupArrElements(intArray);
+        System.out.println(dupSet);
     }
 
+    private Set<Integer> dupArrElements(Integer[] arr){
+        Set<Integer> arrSet = new HashSet<>(); // set of unique elements in array
+        Set<Integer> dupSet = new HashSet<>(); // set of duplicates
+        for(int i = 0; i < arr.length; i++){
+            if(arrSet.contains(arr[i])){
+                dupSet.add(arr[i]);
+            }
+            arrSet.add(arr[i]);
+        }
+        return dupSet;
+    }
 
     @And("I write a function that determines palindrome")
     public void iWriteAFunctionThatDeterminesPalindrome() {
@@ -303,14 +315,30 @@ Result for 20:
         return false;
     }
 
-    @And("I write a function that finds {int} max numbers in the array")
-    public void iWriteAFunctionThatFindsMaxNumbersInTheArray(int arg0) {
-        int[] intArray = {3,7,9,24,65,21,-76,-35,98};
-        int maxVal = maxArr(intArray);
-        System.out.println(maxVal);
+    @And("I write a function that finds two max numbers in the array")
+    public void iWriteAFunctionThatFindsMaxNumbersInTheArray() {
+        Integer[] intArray = {3,7,9,24,65,21,-76,-35,98};
+        Integer maxVal = maxArr(intArray);
+        intArray = removeFromArray(intArray, maxVal);
+        Integer nextMaxVal = maxArr(intArray);
+        System.out.println("Two max numbers in array are " + maxVal + " and " + nextMaxVal);
     }
-    private int maxArr(int[] arr){
-        int max = -Integer.MIN_VALUE;
+
+    private Integer[] removeFromArray(Integer[] arr, Integer num){
+        List<Integer> returnList = new ArrayList<>();
+        for(int i = 0; i < arr.length; i++){
+            if(arr[i]!=num){
+                returnList.add(arr[i]);
+            }
+        }
+        // Create integer array with returnList size
+        Integer[] array = new Integer[returnList.size()];
+        return returnList.toArray(array);
+    }
+
+
+    private Integer maxArr(Integer[] arr){
+        Integer max = -Integer.MIN_VALUE;
         for (int i = 0; i < arr.length; i++){
             if(max < arr[i]){
                 max = arr[i];
@@ -331,6 +359,13 @@ Result for 20:
             System.out.println(stringArray[i]+" ");
         }
         System.out.println();
+    }
+
+    @And("I write a function that finds max number in the array")
+    public void iWriteAFunctionThatFindsMaxNumberInTheArray() {
+        Integer[] intArray = {3,7,9,24,65,21,-76,-35,98};
+        Integer maxVal = maxArr(intArray);
+        System.out.println(maxVal);
     }
 }
 

@@ -22,6 +22,10 @@ public class GenericStepDefs {
                 getDriver().navigate().to("https://google.com");
             case "quote":
                 getDriver().navigate().to("https://skryabin.com/market/quote.html");
+            case "unitconverters":
+                getDriver().navigate().to("https://www.unitconverters.net");
+            case "calculator":
+                getDriver().navigate().to("http://www.calculator.net");
             case "usps":
                 getDriver().navigate().to("https://www.usps.com");
                 break;

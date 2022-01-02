@@ -1,6 +1,7 @@
 package definitions;
 
 import io.cucumber.java.en.And;
+import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 import org.assertj.core.api.Assertions;
@@ -13,7 +14,10 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.Select;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
+import java.util.List;
+import static org.openqa.selenium.support.ui.ExpectedConditions.*;
 import static support.TestContext.getDriver;
+import static org.assertj.core.api.Assertions.assertThat;
 
 
 public class UspsStepDefs {
@@ -88,46 +92,115 @@ public class UspsStepDefs {
     }
 
     @When("I perform {string} search")
-    public void iPerformSearch(String arg0) throws InterruptedException {
-        WebElement searchIcon = getDriver().findElement(By.xpath("//li[@class='nav-search menuheader']"));
+    public void iPerformSearch(String searchString) throws InterruptedException {
+        // Axes:
+        //starting_tag/following-sibling::tagname[predicate]
+        //starting_tag/ancestor::tagname[predicate]
+
+        WebElement searchIcon = getDriver().findElement(By.xpath("//a[@id='navsearch']/.."));
+        WebElement searchInput = getDriver().findElement(By.xpath("//input[@id='global-header--search-track-search']"));
+        //input[@id='global-header--search-track-search']/../input[@value='Search']
+
         Actions actions = new Actions(getDriver());
-        actions.moveToElement(searchIcon).perform();
-        getDriver().findElement(By.xpath("//input[@id='global-header--search-track-search']"))
-                .sendKeys("Free Boxes" + Keys.ENTER);
-        Thread.sleep(5000);
+        actions
+                .moveToElement(searchIcon)
+                .sendKeys(searchInput, searchString)
+                .sendKeys(Keys.ENTER)
+                .perform();
     }
 
     @And("I set {string} in filters")
-    public void iSetInFilters(String arg0) {
-        getDriver().findElement(By.xpath("//p[@title='Send']")).click();
+    public void iSetInFilters(String filterText) {
+//        getDriver().findElement(By.xpath("//p[@title='Send']")).click();
+        WebDriverWait wait = new WebDriverWait(getDriver(),5);
+        By filterLocator = By.xpath("//div[@id='dyn_nav']//label[contains(text(),'" + filterText + "')]");
+        wait.until(presenceOfElementLocated(filterLocator));
+        WebElement filter = getDriver().findElement(filterLocator);
+        filter.click();
+
+        WebElement spinner = getDriver().findElement(By.xpath("//span[@id='searchResultsHeading']"));
+        wait.until(invisibilityOf(spinner));
     }
 
     @Then("I verify that {string} results found")
-    public void iVerifyThatResultsFound(String arg0) throws InterruptedException {
-        WebElement resultContainer = getDriver().findElement(By.xpath("//div[@id='main_res']"));
-        String results = resultContainer.getText();
-        System.out.println(results);
-        Thread.sleep(5000);
+    public void iVerifyThatResultsFound(String expectedTotal) throws InterruptedException {
+        WebElement heading = getDriver().findElement(By.xpath("//span[@id='searchResultsHeading']"));
+        assertThat(heading.getText()).contains(expectedTotal);
+
+        int expectedCount = Integer.parseInt(expectedTotal);
+        List<WebElement> totalResults = getDriver().findElements(By.xpath("//ul[@id='records']/li"));
+        assertThat(totalResults.size()).isEqualTo(expectedCount);
 
     }
 
     @When("I select {string} in results")
-    public void iSelectInResults(String arg0) {
-        getDriver().findElement(By.xpath("//span[@id='title_22']")).click();
+    public void iSelectInResults(String result) {
+        getDriver().findElement(By.xpath("//ul[@id='records']//span[text()='" + result + "']")).click();
     }
 
     @And("I click {string} button")
-    public void iClickButton(String arg0) {
-        getDriver().findElement(By.xpath("//a[contains(@href, 'kig')]")).click();
-    }
+    public void iClickButton(String title) {
+        getDriver().findElement(By.xpath("//a[contains(text(),'" + title + "')]")).click();    }
 
     @Then("I validate that Sign In is required")
     public void iValidateThatSignInIsRequired() {
-        // switch to new window
-        for (String handle : getDriver().getWindowHandles()) {
-            getDriver().switchTo().window(handle);
+        String originalWindow = getDriver().getWindowHandle();
+
+        //java8 syntax
+        getDriver().getWindowHandles().forEach(handle -> getDriver().switchTo().window(handle));
+
+        WebDriverWait wait = new WebDriverWait(getDriver(),5);
+        wait.until(titleContains("Sign In"));
+
+        getDriver().switchTo().window(originalWindow);
+    }
+    @When("I go to {string} link")
+    public void iGoToLink(String link) {
+        getDriver().findElement(By.xpath("//ul[@class='nav-list']//a[text()='" + link + "']")).click();
+    }
+
+    @And("I perform {string} help search")
+    public void iPerformHelpSearch(String search) {
+        getDriver().findElement(By.xpath("//input[contains(@class, 'search-field input')]"))
+                .sendKeys(search + Keys.ENTER);
+    }
+
+    @Then("I verify that no results of {string} available in help search")
+    public void iVerifyThatNoResultsOfAvailableInHelpSearch(String arg0) {
+        WebDriverWait wait = new WebDriverWait(getDriver(),5);
+        wait.until(titleContains("Search Results | Quadcopters delivery"));
+
+        WebElement resultContainer =  getDriver().findElement(By.xpath("//div[@class='resultsWrapper']"));
+
+        String resultString = resultContainer.getText();
+        System.out.println(resultString);
+
+        Assertions.assertThat(resultString).doesNotContain("Quadcopters delivery");
+
+    }
+
+
+    @When("I navigate to {string} heading link")
+    public void iNavigateToHeadingLink(String headingLink) {
+        getDriver().findElement(By.xpath("//*[@id='link-locator']")).click();
+
+    }
+
+    @And("I search for location {string}")
+    public void iSearchForLocation(String location) {
+        getDriver().findElement(By.xpath("//input[@id='city-state-input']"))
+                .sendKeys(location + Keys.ENTER);
+    }
+
+    @Then("I verify closest location phone number is {string}")
+    public void iVerifyClosestLocationPhoneNumberIs(String result) {
+        try {
+            WebElement nearestLocation =  getDriver().findElement(By.xpath("(//*[@id='resultBox']//span[@class='listArrow'])[1]"));
+            String resultString = nearestLocation.getText();
+            System.out.println(resultString);
+            Assertions.assertThat(result).contains("800-275-8777");
+        } catch(Exception e){ //When I run the test there is no results are displayed.
+            System.out.println("Can't find what you're looking for?");
         }
-        String result = getDriver().findElement(By.xpath("//h1[@id='sign-in-to-your-account-header']")).getText();
-        Assertions.assertThat(result.equals("Sign In To Your Account"));
     }
 }

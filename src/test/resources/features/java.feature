@@ -14,8 +14,9 @@
 #      And I print 5 day of the week
 #       And I solve coding challenges
 #      And I write a function that finds if array contains duplicates
-      And I write a function that determines palindrome
-#      And I write a function that finds 2 max numbers in the array
+#      And I write a function that determines palindrome
+      And I write a function that finds two max numbers in the array
+#        And I write a function that finds max number in the array
     @java2
       Scenario: Java
 #      And I work with Arrays
