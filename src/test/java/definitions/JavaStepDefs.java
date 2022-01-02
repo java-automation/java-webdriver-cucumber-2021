@@ -430,38 +430,95 @@ public class JavaStepDefs {
 
     @And("I find the max number in array")
     public void iFindTheMaxNumberInArray() {
-        int[] array = {4, 3, 1 ,5, 8, 4, 6, 5};
-        int max = 0;
+        int[] array = {4, 3, 1 ,5, 8, 4, 6, 5}; //дан array
+        //Variant 1
+        int max = Integer.MIN_VALUE; //то же самое, что и int max = 0 (обозначение), но только 0 не универсален на случай, если array состоит из отрицательных чисел
 
         for (int i = 0; i < array.length; i++) {
             if (array[i] > max)
                 max = array[i];
         }
         System.out.println("Max: " + max);
+
+        //Variant 2  (с минимальными изменениями):
+        int maxN = array[0]; ////по умолчанию ставим самый первый элемент(это может быть любой элемент, мы просто выбираем то, с чем будем сравнивать всё остальное) для сравнения с ним других
+
+        for (int i = 0; i < array.length; i++) { ////i=1, так i=0 мы уже использовали для изначального firstMax, чтобы сравнивать с ним все другие элементы
+            if (array[i] > max)
+                max = array[i];
+        }
+        System.out.println("Max: " + max);
+
+        //variant 3
+        Arrays.sort(array); //сортуруем по возратанию имеющийся array
+        max = array[array.length-1]; //обозначаем последний элемент как max
+        System.out.println("Max: " + max);
     }
 
     @And("I find two max numbers in array")
     public void iFindTwoMaxNumbersInArray() {
-        int[] array = {4, 3, 1 ,5, 8, 4};
-        System.out.println(Arrays.toString(array));
-        Arrays.sort(array); //сортируем array в порядке возрастания
-        //нам надо i=5 и i=4, длина 6
-        int maxFirst = array[array.length - 1]; //берем последний элемент (i = 6-1) (самый большой)
-        int maxSecond = array[array.length - 2]; //берем предпоследний элемент (i = 6-2) (следующий после самого большого)
 
+        //Вариант 1:
+        //Выбираем любой из этих array для проверки:
+        //int[] array = {4, 3, 1 ,5, 8, 4}; //two max numbers = 8 and 5 (классический вариант с одной 8)
+        //int[] array = {4, 3, 1 ,5, 8, 4, 8}; //two max numbers = 8 and 5 (доп вариант для проверки с двойной 8)
+        //int[] array = {4, 3, 1 ,5, 8, 4, 8, 8}; //two max numbers = 8 and 5 (доп вариант для проверки с 3-мя 8)
+        int[] array = {4, 3, 1 ,5, 8, 8, 6, 4, 8, 8}; ////two max numbers = 8 and 6 (доп вариант для проверки с 4-мя 8)
+        //int[] array = {4, 3, 1 ,5, 8, 12, 9, 12}; //two max numbers = 12 and 9 (доп вариант для проверки с двойной 12)
+
+        System.out.println(Arrays.toString(array)); //выводим изначальный array на экран
+        Arrays.sort(array); //сортируем array в порядке возрастания
+
+        int maxFirst = array[array.length - 1]; //берем последний элемент (i = 6-1) (самый большой) (он без вариантов max)
+        int maxSecond = 0; //второй по счету max пока не известен, тк нам надо проверить, есть ли у нас дубли самого большого (первого) max
+
+        //Если последние два и более чисел равны, то мы ждем число, которое будет им не равно, чтобы назначить его вторым максом
+        //Итак, у нас уже есть array sorted. Проверяем на случай, если мы имеем два и более одинаковых max числа на конце :
+        for (int i = array.length-2; i >= 0; i--) { //число на 1 левее
+            if (maxFirst!=array[i]){ //если эти два числа не равны (int maxFirst = array[array.length - 1] - он нам уже известен выше, берем его как константу)
+                maxSecond = array[i];
+                break; //если не равны, получаем наш maxSecond и прерываем петлю. Если равны, то сравниваем со следующим числом на шаг левее от предыдущего (i--)
+            }
+        }
         System.out.println("Two max numbers are: " + maxFirst + " and " + maxSecond);
+
+
+        //Вариант 2:
+        //int[] numArray = {6, 2, 3, 5, 9};
+        //int[] numArray = {6, 2, 3, 5, 9, 7};
+        int[] numArray = {9, 6, 2, 3, 5, 9, 7};
+        int firstMaxNum = numArray[0]; //по умолчанию ставим самый первый элемент(это может быть любой элемент, мы просто выбираем то, с чем будем сравнивать всё остальное) для сравнения с ним других
+        int secondMaxNum = 0; //просто обозначаем с 0, тк с ним мы сравнивать ничего не будем
+        System.out.println("The array is: " + Arrays.toString(numArray));
+
+        for (int i = 0; i < numArray.length; i++) { //используем в данном случае i=0, чтобы сравнить его самого с собой для того, чтобы оно тоже имело возможность быть записанным в secondMaxNum
+            if (numArray[i] > firstMaxNum) {
+                secondMaxNum = firstMaxNum; //мы сохраняем предыдущее значение max перед тем, как присвоить ему новое значение
+                firstMaxNum = numArray[i];
+            } else if (numArray[i] > secondMaxNum && numArray[i]!= firstMaxNum) { //на тот случай, если в array firstMaxNum стоит раньше, чем secondMaxNum, соответственно мы не можем присвоить secondMaxNum в предыдущем условии
+                secondMaxNum = numArray[i];
+            }
+        }
+        System.out.println("Two max numbers are: " + firstMaxNum + " and " + secondMaxNum);
     }
 
 
     @And("I find the min number in array")
     public void iFindTheMinNumberInArray() {
+
+        //Вариант 1
         int[] array = {4, 3, 1 ,5, 8, 4};
-        int min = 1000; //намеренно большое число, чтобы даже самый первый элемент имел возможность был меньше
+        int min = Integer.MAX_VALUE; //намеренно самое большое число, чтобы даже самый первый элемент имел возможность был меньше
 
         for (int i = 0; i < array.length; i++) {
             if (array[i] < min)
                 min = array[i];
         }
+        System.out.println("Min: " + min);
+
+        //Вариант 2:
+        Arrays.sort(array); //сортуруем по возратанию имеющийся array
+        min = array[0]; ////обозначаем первый элемент (с 0 индексом) как min
         System.out.println("Min: " + min);
     }
 

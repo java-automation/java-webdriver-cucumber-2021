@@ -9,23 +9,36 @@ import org.junit.Assert;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 
+import java.io.FileNotFoundException;
+import java.util.Map;
+
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertThat;
+import static support.TestContext.getData;
 import static support.TestContext.getDriver;
 
 public class QuoteStepDefs {
     @When("I fill out the required fields")
     public void iFillOutTheRequiredFields() {
+        Map<String, String> user = getData("user");
+
         getDriver().findElement(By.xpath("//input[@name='name']")).click();
-        getDriver().findElement(By.xpath("//input[@name='firstName']")).sendKeys("john");
-        getDriver().findElement(By.xpath("//input[@name='lastName']")).sendKeys("doe");
+//        getDriver().findElement(By.xpath("//input[@name='firstName']")).sendKeys("john");
+        getDriver().findElement(By.xpath("//input[@name='firstName']")).sendKeys(user.get("firstname"));
+//        getDriver().findElement(By.xpath("//input[@name='lastName']")).sendKeys("doe");
+        getDriver().findElement(By.xpath("//input[@name='lastName']")).sendKeys(user.get("lastname"));
         getDriver().findElement(By.xpath("//span[text()='Save']")).click();
 //        System.out.println(getDriver().findElement(By.xpath("//input[@name='name']")).getAttribute("value"));
 
-        getDriver().findElement(By.xpath("//input[@name='username']")).sendKeys("jdoe");
-        getDriver().findElement(By.xpath("//input[@name='email']")).sendKeys("jdoe@gmail.com");
-        getDriver().findElement(By.xpath("//input[@name='password']")).sendKeys("qwerty");
-        getDriver().findElement(By.xpath("//input[@name='confirmPassword']")).sendKeys("qwerty");
+//        getDriver().findElement(By.xpath("//input[@name='username']")).sendKeys("jdoe");
+        getDriver().findElement(By.xpath("//input[@name='username']")).sendKeys(user.get("username"));
+//        getDriver().findElement(By.xpath("//input[@name='email']")).sendKeys("jdoe@gmail.com");
+        getDriver().findElement(By.xpath("//input[@name='email']")).sendKeys(user.get("email"));
+
+//        getDriver().findElement(By.xpath("//input[@name='password']")).sendKeys("qwerty");
+        getDriver().findElement(By.xpath("//input[@name='password']")).sendKeys(user.get("password"));
+//        getDriver().findElement(By.xpath("//input[@name='confirmPassword']")).sendKeys("qwerty");
+        getDriver().findElement(By.xpath("//input[@name='confirmPassword']")).sendKeys(user.get("password"));
 
         WebElement privacyPolicy = getDriver().findElement(By.xpath("//input[@name='agreedToPrivacyPolicy']")); // проверка на случай, если чек-бокс выбран автоматом
         if (!privacyPolicy.isSelected()){

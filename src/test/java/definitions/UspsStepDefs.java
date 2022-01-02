@@ -237,9 +237,69 @@ public class UspsStepDefs {
 
     @Then("I verify that summary of all rows of Cost column is equal Approximate Cost in Order Summary")
     public void iVerifyThatSummaryOfAllRowsOfCostColumnIsEqualApproximateCostInOrderSummary() {
+//        WebElement approximateCost = getDriver().findElement(By.xpath("//p[@id='approximateCost']")); //обозначаем approximate cost element
+//        approximateCost.getText();
+//
+//        String[] costArray = new String[];
+//        int i = 0;
+//
+//        for (String el : costArray) {
+//            costArray[i] = getDriver().findElement(By.xpath("")).getText();
+//            i++;
+//        }
 
-        WebElement approximateCost = getDriver().findElement(By.xpath("//p[@id='approximateCost']")); //обозначаем approximate cost element
-        approximateCost.getText();
+
+    }
+
+    @And("I perform {string} help search")
+    public void iPerformHelpSearch(String searchText) throws InterruptedException {
+        WebDriverWait wait = new WebDriverWait(getDriver(), 3);
+        wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//button[@class='slds-button slds-button_brand search-button']")));
+        Thread.sleep(3000);
+
+        WebElement searchField = getDriver().findElement(By.xpath("//div[@class='search-field-wrapper slds-size_1-of-1 smallOnlyDisplay']")); //обозначаем searchField для дальнейшего использования
+
+
+        //searchField.sendKeys(searchText); //вводим текст
+        new Actions(getDriver()).moveToElement(searchField).click().sendKeys(searchText).sendKeys(Keys.ENTER).perform();
+
+    }
+
+    @Then("I verify that no results of {string} available in help search")
+    public void iVerifyThatNoResultsOfAvailableInHelpSearch(String textToFind) {
+        WebDriverWait wait = new WebDriverWait(getDriver(), 5);
+        wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//div[@class='slds-has-dividers--bottom uiAbstractList']")));
+
+        String searchResult = getDriver().findElement(By.xpath("//div[@class='slds-has-dividers--bottom uiAbstractList']")).getText();
+        Assertions.assertThat(searchResult).doesNotContain(textToFind);
+    }
+
+    @When("I navigate to {string} heading link")
+    public void iNavigateToHeadingLink(String link) {
+        getDriver().findElement(By.xpath("//a[@id='link-locator']")).click();
+    }
+
+    @And("I search for location {string}")
+    public void iSearchForLocation(String address) throws InterruptedException {
+        WebElement searchField = getDriver().findElement(By.xpath("//input[@id='city-state-input']"));
+
+        WebDriverWait wait = new WebDriverWait(getDriver(), 3);
+        wait.until(ExpectedConditions.visibilityOf(searchField));
+
+        new Actions(getDriver()).moveToElement(searchField).click().sendKeys(address).sendKeys(Keys.ENTER).perform();
+    }
+
+    @Then("I verify closest location phone number is {string}")
+    public void iVerifyClosestLocationPhoneNumberIs(String phoneNumber) throws InterruptedException {
+        //div[@id='resultBox']//div[@class='list-item-location popover-trigger']
+        WebDriverWait wait = new WebDriverWait(getDriver(), 5);
+        wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//div[@id='resultBox']"))); //ждем появления всего блока с результатами
+        Thread.sleep(3000);
+        getDriver().findElement(By.xpath("//div[@id='resultBox']//div[@class='list-item-location popover-trigger']")).click(); //выберется всегда самый первый результат
+        Thread.sleep(3000);
+        String resultBlock = getDriver().findElement(By.xpath("//p[@id='detailTollFree']")).getText();
+        //div[@class='col-md-4 col-sm-4 col-xs-12 location-address-phone']
+        Assertions.assertThat(resultBlock).contains(phoneNumber);
     }
 }
 

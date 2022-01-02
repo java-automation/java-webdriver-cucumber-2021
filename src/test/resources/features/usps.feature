@@ -1,12 +1,25 @@
 @usps
   Feature: Usps scenarios
     @usps1
-    Scenario: Validate zip code for address
+    Scenario Outline: Validate zip code for address
       Given I go to "USPS" page
       When I go to Lookup ZIP page by address
-      And I fill out "4970 El Camino Real" street, "Los Altos" city, "CA" state
+      And I fill out "<address>" street, "<city>" city, "<state>" state
 #      And I wait for 1 second
-      Then I validate "94022" zip code exists in the result
+      Then I validate "<zip>" zip code exists in the result
+      Examples:
+        | address                 | city          | state | zip   |
+        | 4970 El Camino Real     | Los Altos     | CA    | 94022 |
+        | 11400 Space Center Blvd | Houston       | TX    | 77059 |
+        | 1156 San Ysidro Dr      | Beverly Hills | CA    | 90210 |
+
+#    @usps01
+#    Scenario: Validate zip code for address
+#      Given I go to "USPS" page
+#      When I go to Lookup ZIP page by address
+#      And I fill out "4970 El Camino Real" street, "Los Altos" city, "CA" state
+##      And I wait for 1 second
+#      Then I validate "94022" zip code exists in the result
 
 
     @usps2
@@ -37,6 +50,20 @@
         When I select all in the table
         And I close modal window
 #        Then I verify that summary of all rows of Cost column is equal Approximate Cost in Order Summary
+
+      @usps5
+      Scenario: Quadcopters delivery
+        Given I go to "usps" page
+        When I go to "Help" tab
+#        And I perform "Quadcopters delivery" help search
+#        Then I verify that no results of "Quadcopters delivery" available in help search
+
+      @usps6
+      Scenario: Phone number of the nearest Mail Pickup
+        Given I go to "usps" page
+        When I navigate to "Locations" heading link
+        And I search for location "4970 El Camino Real 110, Los Altos, CA"
+        Then I verify closest location phone number is "800-275-8777"
 
 
 

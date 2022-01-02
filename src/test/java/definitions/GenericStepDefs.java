@@ -30,6 +30,9 @@ public class GenericStepDefs {
             case "calculator":
                 getDriver().get("https://www.calculator.net/");
                 break;
+            case "converter":
+                getDriver().get("https://www.unitconverters.net/");
+                break;
             default:
                 throw new Error("Unsupported page: " + page);
         }
