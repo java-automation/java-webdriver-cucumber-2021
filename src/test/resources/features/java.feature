@@ -190,3 +190,13 @@ Feature: Java feature
       And I search two element in array "1,2,3,4,5,6,7" results in sum of 20
       And I search two element in array "1,2" results in sum of 3
       And I search two element in array "1" results in sum of 1
+
+  @javaDecember23
+    Scenario: Find if a number is a prime
+      Given I check number 15 is a prime
+      And I check number 3 is a prime
+
+    Scenario: Find factorial
+      Given I calculate factorial for 5
+      Given I calculate factorial for 6
+      Given I calculate factorial for 3

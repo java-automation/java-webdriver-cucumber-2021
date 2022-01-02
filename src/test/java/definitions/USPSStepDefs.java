@@ -6,15 +6,20 @@ import io.cucumber.java.en.When;
 import org.openqa.selenium.*;
 import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.*;
+import support.TestContext;
 
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.openqa.selenium.support.ui.ExpectedConditions.not;
 import static support.TestContext.getDriver;
 
 public class USPSStepDefs {
+
+    WebElement container;
+
     @When("I go to Lookup ZIP page by address")
     public void iGoToLookupZIPPageByAddress() {
         getDriver().findElement(By.xpath("//a[normalize-space()='Quick Tools']")).click();
@@ -190,5 +195,61 @@ public class USPSStepDefs {
         dFS.setDecimalSeparator('.');
         DecimalFormat dF = new DecimalFormat("#.##", dFS);
         assertThat(getDriver().findElement(By.xpath("//p[@id='approximateCost']")).getText()).contains(dF.format(sum));
+    }
+
+    @When("I go to {string} tab")
+    public void iGoToTab(String sTab) {
+//        waitForElements(10, "//li[@class='menuheader']/a[normalize-space()='" + sTab + "']");
+        getDriver().findElement(By.xpath("//li[@class='menuheader']/a[normalize-space()='" + sTab + "']")).click();
+        waitForElements(5, "//div[contains(@class,'acn-page-layout-container-body')]");
+    }
+
+    @And("I perform {string} help search")
+    public void iPerformHelpSearch(String sSearchText) {
+        getDriver().findElement(By.xpath("//input[@placeholder='Search for a topic']")).sendKeys(sSearchText);
+        getDriver().findElement(By.xpath("//button[@title='Search' and contains(@class,'search-button')]")).click();
+        waitForElements(10, "//div[contains(@class,'searchResultsGridHeader')]");
+    }
+
+    @Then("I verify that no results of {string} available in help search")
+    public void iVerifyThatNoResultsOfAvailableInHelpSearch(String sSearchText) {
+        assertThat(getDriver().findElement(By.xpath("//div[@class='resultsWrapper']")).getText()).doesNotContain(sSearchText);
+    }
+
+    @When("I navigate to {string} heading link")
+    public void iNavigateToHeadingLink(String sNavLink) {
+        getDriver().findElement(By.xpath("//a[@id='link-locator']")).click();
+        waitForElements(5, "//input[@id='city-state-input']");
+    }
+
+    @And("I search for location {string}")
+    public void iSearchForLocation(String sSearch) {
+        container = getDriver().findElement(By.xpath("//div[@class='po-location']"));
+        container.findElement(By.xpath("//input[@id='city-state-input']")).sendKeys(sSearch);
+        By buttonSearch = By.xpath("//a[@id='searchLocations']");
+        new WebDriverWait(getDriver(), 5, 1).until(ExpectedConditions.elementToBeClickable(buttonSearch));
+//        container.findElement(buttonSearch).click();
+        new Actions(getDriver()).moveToElement(getDriver().findElement(buttonSearch)).perform();
+        new Actions(getDriver()).click(getDriver().findElement(buttonSearch)).perform();
+        By results = By.xpath("//div[@id='resultBox']/div[1]");
+        WebDriverWait tableResult = new WebDriverWait(getDriver(), 20);
+        tableResult.until(ExpectedConditions.elementToBeClickable(results));
+    }
+
+    @Then("I verify closest location phone number is {string}")
+    public void iVerifyClosestLocationPhoneNumberIs(String sPhone) {
+        By elements = By.xpath("//div[contains(@class,'list-item-location')]");
+        new WebDriverWait(getDriver(), 5, 1000).until(ExpectedConditions.presenceOfAllElementsLocatedBy(elements));
+        List<WebElement> addresses = container.findElements(elements);
+
+        new Actions(getDriver()).moveToElement(addresses.get(0)).perform();
+
+        By fullInfo = By.xpath("//div[@class='po-location-detail-view']//div[@class='phone-wrapper']");
+
+        do {
+            new Actions(getDriver()).click(addresses.get(0)).perform();
+        } while (!container.findElement(fullInfo).isDisplayed());
+
+        assertThat(container.findElement(By.xpath("//div[@class='po-location-detail-view']//div[@class='phone-wrapper']")).getText()).contains(sPhone);
     }
 }

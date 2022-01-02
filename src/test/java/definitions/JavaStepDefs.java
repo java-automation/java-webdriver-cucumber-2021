@@ -13,6 +13,7 @@ import org.openqa.selenium.WebElement;
 import java.util.*;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.in;
 import static support.TestContext.getDriver;
 
 public class JavaStepDefs {
@@ -692,5 +693,34 @@ public class JavaStepDefs {
         if (sLine == "") {
             System.out.println("No elements found.");
         }
+    }
+
+    @Given("I check number {int} is a prime")
+    public void iCheckNumberIsAPrime(int iNum) {
+        if (iNum <= 1) {
+            System.out.println("Number " + iNum + " is not a prime.");
+            return;
+        }
+        for (int i = 2; i <= Math.sqrt(iNum); i++) {
+            if (iNum % i == 0) {
+                System.out.println("Number " + iNum + " is not a prime.");
+                return;
+            }
+        }
+        System.out.println("Number " + iNum + " is a prime.");
+    }
+
+    @Given("I calculate factorial for {int}")
+    public void iCalculateFactorialFor(int iNum) {
+        System.out.println("Factorial for " + iNum + " is " + getFactorial(iNum));
+    }
+
+    int getFactorial(int iNum) {
+        int iFa = iNum;
+        if (iNum == 1) {
+            return iFa;
+        }
+        iFa *= getFactorial(iNum - 1);
+        return iFa;
     }
 }
