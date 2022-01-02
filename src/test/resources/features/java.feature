@@ -190,9 +190,22 @@
 
     @TestCase24
     Scenario: Write a function that determines palindrome (worlds like mom, civic, anna)
+      Given I check for palindrome word "taco cat"
 
     @TestCase25
     Scenario: Write a function that prints 2 max numbers in an array
+      Given I print two max numbers in an array
 
     @TestCase26
     Scenario: Write a function that finds if any two elements of an array result in sum
+      Given I found if two elements results in sum
+
+    @TestCase27
+    Scenario: Find if a number is a prime
+    # a natural number greater than 1 that is not a product of two smaller natural numbers
+      Given I find if 29 is a prime number
+
+    @TestCase28
+    Scenario: Find factorial of a number
+    # (5! = 5 * 4 * 3 * 2 * 1)
+      Given I calculate factorial of -7

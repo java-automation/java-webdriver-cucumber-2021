@@ -560,13 +560,14 @@ public class JavaStepDefs {
     }
 
     @Given("I reverse a string {string}")
-    public void iReverseAString(String arg0) {
+    public Object iReverseAString(String arg0) {
         String str = arg0;
         String res = "";
         for(int i=str.length()-1; i>=0; i--) {
             res += str.charAt(i);
         }
         System.out.println(res);
+        return res;
     }
 
     @Given("I reverse words in sentence {string}")
@@ -596,4 +597,71 @@ public class JavaStepDefs {
         System.out.println("Array does not contain duplicates");
     }
 
+    @Given("I check for palindrome word {string}")
+    public void iCheckForPalindromeWord(String word) {
+        if(word.equals(iReverseAString(word))) {
+            System.out.println("Word '"+ word + "' is a palindrome");
+        } else {
+            System.out.println("Word '"+ word + "' is not a palindrome");
+        }
+    }
+
+    @Given("I print two max numbers in an array")
+    public void iPrintTwoMaxNumbersInAnArray() {
+        int[] intArray = {15, -5, 0, 15, 10, 13};
+        int max1 = 0;
+        int max2 = 0;
+        for(int element : intArray) {
+            if(max1 < element) {
+                max2 = max1;
+                max1 = element;
+            } else {
+                if(element > max2 && element != max1) {
+                    max2 = element;
+                }
+            }
+        }
+
+        System.out.println(max1);
+        System.out.println(max2);
+
+    }
+
+    @Given("I found if two elements results in sum")
+    public void iFoundIfTwoElementsResultsInSum() {
+        int[] intArray = {15, -5, 0, 26, 15, 10, 6};
+        int sum = 21;
+        int arrayLength = intArray.length;
+        int index = 0;
+        for(int i=0; i<arrayLength; i++) {
+            for(int j=i+1; j<arrayLength; j++) {
+                if(sum == intArray[i] + intArray[j]) {
+                    System.out.println("Elements " + intArray[i] + "[" + i + "] and " + intArray[j] + "[" + j + "] results in sum " + sum);
+                }
+            }
+        }
+    }
+
+    @Given("I find if {int} is a prime number")
+    public void iFindIfIsAPrimeNumber(int num) {
+        for(int i=2; i<num; i++) {
+            if(num % i == 0) {
+                System.out.println("The number is not prime");
+                return;
+            }
+        }
+        System.out.println("The number is prime");
+    }
+
+    @Given("I calculate factorial of {int}")
+    public void iCalculateFactorialOf(int num) {
+        if(num < 0) {
+           num = Math.abs(num);
+        }
+        int result = 1;
+        for(int i = num; i>0; i--) {
+            result *= i;
+        }
+        System.out.println(result);
+    }
 }
