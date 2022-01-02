@@ -18,6 +18,9 @@ import org.openqa.selenium.remote.DesiredCapabilities;
 import org.openqa.selenium.remote.LocalFileDetector;
 import org.openqa.selenium.remote.RemoteWebDriver;
 import org.openqa.selenium.safari.SafariDriver;
+import org.yaml.snakeyaml.*;
+
+import java.io.*;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
@@ -109,5 +112,16 @@ public class TestContext {
         } else {
             throw new RuntimeException("Unsupported test environment: " + testEnv);
         }
+    }
+    Map<String, String> getData(String fileName) {
+        String filePath = System.getProperty("user.dir") + "/src/test/resources/data" + fileName + ".yml";
+        try {
+            FileInputStream stream = new FileInputStream(filePath);
+            Yaml yaml = new Yaml();
+            return yaml.load(stream);
+        } catch (FileNotFoundException e) {
+            throw new Error(e);
+        }
+
     }
 }
