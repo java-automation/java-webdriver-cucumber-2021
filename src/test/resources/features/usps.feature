@@ -2,12 +2,15 @@
   Feature: Usps scenario
 
     @usps1
-    Scenario: Validate zip code for address
+    Scenario Outline: : Validate zip code for address
       Given I go to "usps" page
       When I go to Lookup ZIP page by address
       And I wait for 2 sec
-      And I fill out "4970 El Camino Real" street, "Los Altos" city, "CA" state
-      Then I validate "94022" zip code exists in the result
+      And I fill out "<Street Address>" street, "<City>" city, "<State>" state
+      Then I validate "<Zip Code>" zip code exists in the result
+      Examples:
+        |Street Address  | City   | State | Zip Code |
+        | 1109 Alomar Way| Belmont| CA    |  94002 |
 
     @usps2
     Scenario: Calculate price
@@ -26,3 +29,16 @@
       When I select "Priority Mail | USPS" in results
       And I click "Ship Now" button
       Then I validate that Sign In is required
+
+    Scenario: Quadcopters delivery
+      Given I go to "usps" page
+      When I go to "Help" tab
+      And I perform "Quadcopters delivery" help search
+      Then I verify that no results of "Quadcopters delivery" available in help search
+
+    Scenario: Phone number of the nearest Mail Pickup
+      Given I go to "usps" page
+      When I navigate to "Locations" heading link
+      And I search for location "4970 El Camino Real 110, Los Altos, CA"
+      And I wait for 2 sec
+      Then I verify closest location phone number is "800-275-8777"

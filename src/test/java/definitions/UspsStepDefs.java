@@ -139,4 +139,20 @@ public class UspsStepDefs {
             }
         }
     }
+
+    @When("I navigate to {string} heading link")
+    public void iNavigateToHeadingLink(String navigation) {
+        getDriver().findElement(By.xpath("//a[@id='link-locator']")).click();
+
+
+    }
+
+    @And("I search for location {string}")
+    public void iSearchForLocation(String location) throws InterruptedException {
+        getDriver().findElement(By.xpath("//input[@id='city-state-input']")).sendKeys(location);
+        getDriver().findElement(By.xpath("//button[@id='within-select']")).click();
+        getDriver().findElement(By.xpath("//a[contains(text(),'10 Miles')]")).click();
+        getDriver().findElement(By.xpath("//a[@id='searchLocations']")).click();
+
+    }
 }
