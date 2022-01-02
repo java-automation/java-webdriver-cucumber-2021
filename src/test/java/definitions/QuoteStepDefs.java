@@ -18,21 +18,22 @@ import static support.TestContext.getDriver;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class QuoteStepDefs {
+    Map<String, String> user = getData("user");
+
     @When("I fill out required fields")
     public void iFillOutRequiredFields()  {
-        Map<String, String> user = getData("user");
-        getDriver().findElement(By.xpath("//input[@name='username']")).sendKeys("jdoe");
-        getDriver().findElement(By.xpath("//input[@name='email']")).sendKeys("jdoe@example.com");
-        getDriver().findElement(By.xpath("//input[@name='password']")).sendKeys("welcome");
-        getDriver().findElement(By.xpath("//input[@name='confirmPassword']")).sendKeys("welcome");
+        getDriver().findElement(By.xpath("//input[@name='username']")).sendKeys(user.get("username"));
+        getDriver().findElement(By.xpath("//input[@name='email']")).sendKeys(user.get("email"));
+        getDriver().findElement(By.xpath("//input[@name='password']")).sendKeys(user.get("password"));
+        getDriver().findElement(By.xpath("//input[@name='confirmPassword']")).sendKeys(user.get("password"));
 
         getDriver().findElement(By.xpath("//input[@id='name']")).click();
-        getDriver().findElement(By.xpath("//input[@id='firstName']")).sendKeys("John");
-        getDriver().findElement(By.xpath("//input[@id='lastName']")).sendKeys("Doe");
+        getDriver().findElement(By.xpath("//input[@id='firstName']")).sendKeys(user.get("firstName"));
+        getDriver().findElement(By.xpath("//input[@id='lastName']")).sendKeys(user.get("lastName"));
         getDriver().findElement(By.xpath("//span[text()='Save']")).click();
 
-        String nameValue = getDriver().findElement(By.xpath("//input[@id='name']")).getAttribute("value");
-        System.out.println(nameValue);
+//        String nameValue = getDriver().findElement(By.xpath("//input[@id='name']")).getAttribute("value");
+//        System.out.println(nameValue);
 
         getDriver().findElement(By.xpath("//input[@name='agreedToPrivacyPolicy']")).click();
 
@@ -46,26 +47,20 @@ public class QuoteStepDefs {
     @Then("I verify the required fields")
     public void iVerifyTheRequiredFields() {
 
+
         String resultText = getDriver().findElement(By.xpath("//div[@id='quotePageResult']")).getText();
-        System.out.println(resultText);
-        assertThat(resultText).contains("jdoe");
-        assertThat(resultText).doesNotContain("welcome");
+        System.out.println(resultText); // to print the results of the page
+        assertThat(resultText).contains(user.get("username"), user.get("firstName"), user.get("lastName"), user.get("email"));
+        assertThat(resultText).doesNotContain(user.get("password"));
 
-        String agreed = getDriver().findElement(By.xpath("//b[@name='agreedToPrivacyPolicy']")).getText();
-        assertThat(agreed).isEqualTo("true");
-
-        String password = getDriver().findElement(By.xpath("//b[@name='password']")).getText();
-        assertThat(password).isEqualTo("[entered]");
-
-
-        String usernameResult = getDriver().findElement(By.xpath("//b[@name='username']")).getText();
-//        if (!usernameResult.equals("jdoe")) {
-//            throw new Error("Incorrect username: " + usernameResult);
-//        }
+//        String agreed = getDriver().findElement(By.xpath("//b[@name='agreedToPrivacyPolicy']")).getText();
+//        assertThat(agreed).isEqualTo("true");
 //
-//        Assert.assertEquals(usernameResult, "jdoe");
-        Assertions.assertThat(usernameResult).isEqualTo("jdoe");
-
-
+//        String password = getDriver().findElement(By.xpath("//b[@name='password']")).getText();
+//        assertThat(password).isEqualTo("[entered]");
+//
+//
+//        String usernameResult = getDriver().findElement(By.xpath("//b[@name='username']")).getText();
+//        Assertions.assertThat(usernameResult).isEqualTo("jdoe");
     }
 }
