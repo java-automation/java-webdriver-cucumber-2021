@@ -5,6 +5,7 @@ import io.cucumber.java.en.And;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 import org.openqa.selenium.By;
+import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.Select;
@@ -263,5 +264,25 @@ public class UspsStepDefs {
         for (int i = 0; i < headersList.size(); ++i)
             if (headersList.get(i).getText().equals("Cost")) return i;
         throw new Error("Couldn't locate 'Cost' column.");
+    }
+
+    @When("I go to {string} tab")
+    public void iGoToTab(String navigationMenuLabel) {
+        getDriver().findElement(By.xpath(getNavigationMenuItemXPath(navigationMenuLabel))).click();
+    }
+
+    @And("I perform {string} help search")
+    public void iPerformHelpSearch(String query) {
+        getDriver().findElement(By.xpath("//div[@class='searchBox']//input")).sendKeys(query + Keys.ENTER);
+    }
+
+    @Then("I verify that no results of {string} available in help")
+    public void iVerifyThatNoResultsOfAvailableInHelp(String query) {
+        By firstResultLocator = By.xpath("//div[@class='resultsWrapper']//li[contains(@class,'kbResultStencil')]");
+        new WebDriverWait(getDriver(), 3).until(visibilityOfElementLocated(firstResultLocator));
+        List<WebElement> results = getDriver().findElements(firstResultLocator);
+        for (WebElement el : results) {
+            assertThat(el.getText()).doesNotContainIgnoringCase(query);
+        }
     }
 }
