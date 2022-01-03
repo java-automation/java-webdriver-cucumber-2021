@@ -8,6 +8,7 @@ import org.openqa.selenium.logging.LogType;
 import support.TestContext;
 
 import java.io.InterruptedIOException;
+import java.util.Locale;
 import java.util.logging.Level;
 
 import static support.TestContext.getDriver;
@@ -15,7 +16,7 @@ import static support.TestContext.getDriver;
 public class GenericStepDefs {
     @Given("I go to {string} page")
     public void iGoToPage(String page) {
-        switch (page) {
+        switch (page.toLowerCase()) {
             case "quote":
                 getDriver().get("https://skryabin.com/market/quote.html");
                 break;
@@ -25,6 +26,16 @@ public class GenericStepDefs {
             case "yahoo":
                 getDriver().get("https://www.yahoo.com");
                 break;
+            case "usps":
+                getDriver().get("https://www.usps.com");
+                break;
+            case "unitconverters":
+                getDriver().get("https://www.unitconverters.net");
+                break;
+            case "calculator":
+                getDriver().get("http://www.calculator.net");
+                break;
+
             default:
                     throw new Error("Unsupported page: " +page);
         }
