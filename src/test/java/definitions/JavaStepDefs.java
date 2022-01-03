@@ -1016,11 +1016,16 @@ public class JavaStepDefs {
             }
         }
 
+        int totalPrimes = 1;
         System.out.print("2 "); //the only even prime number
         for (int i = 1; i < sieveSize; ++i) {
-            if (sieve.get(i)) System.out.print((i * 2 + 1) + " ");
+            if (sieve.get(i)) {
+                ++totalPrimes;
+                System.out.print((i * 2 + 1) + " ");
+            }
         }
         System.out.println();
+        System.out.println("Found " + totalPrimes + " primes!");
     }
 
     @And("I calculate square root for {double}")
