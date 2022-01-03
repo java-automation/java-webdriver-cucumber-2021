@@ -279,10 +279,31 @@ public class UspsStepDefs {
     @Then("I verify that no results of {string} available in help")
     public void iVerifyThatNoResultsOfAvailableInHelp(String query) {
         By firstResultLocator = By.xpath("//div[@class='resultsWrapper']//li[contains(@class,'kbResultStencil')]");
-        new WebDriverWait(getDriver(), 3).until(visibilityOfElementLocated(firstResultLocator));
+        new WebDriverWait(getDriver(), 5).until(visibilityOfElementLocated(firstResultLocator));
         List<WebElement> results = getDriver().findElements(firstResultLocator);
         for (WebElement el : results) {
             assertThat(el.getText()).doesNotContainIgnoringCase(query);
         }
+    }
+
+    @When("I navigate to {string} heading link")
+    public void iNavigateToHeadingLink(String linkLabel) {
+        getDriver().findElement(By.xpath("//a[contains(@id,'link')][normalize-space(.)='" + linkLabel + "']")).click();
+    }
+
+    @And("I search for location {string}")
+    public void iSearchForLocation(String address) {
+        getDriver().findElement(By.xpath("//input[@id='city-state-input']")).sendKeys(address);
+        getDriver().findElement(By.xpath("//a[@id='searchLocations']")).click();
+    }
+
+    @Then("I verify closest location phone number is {string}")
+    public void iVerifyClosestLocationPhoneNumberIs(String phone) {
+        new WebDriverWait(getDriver(), 3)
+                .until(visibilityOfElementLocated(By.xpath("//div[@id='searchResultMap']//div[@class='esri-view-surface']")));
+
+        getDriver().findElement(By.xpath("//div[@id='resultBox']//div[contains(@class,'list-item-location')]")).click();
+
+        assertThat(getDriver().findElement(By.xpath("//div[@id='po-location-detail']//div[@class='phone-wrapper']")).getText()).contains(phone);
     }
 }

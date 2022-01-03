@@ -47,12 +47,12 @@ Feature: USPS website scenarios
   Scenario: Quadcopters delivery
     Given I go to "usps" page
     When  I go to "Help" tab
-    And   I perform "Quadcopters delivery" help search
+    *     I perform "Quadcopters delivery" help search
     Then  I verify that no results of "Quadcopters delivery" available in help
 
   @usps6
   Scenario: Phone number of the nearest Mail Pickup
     Given I go to "usps" page
     When  I navigate to "Locations" heading link
-    And   I search for location "4970 El Camino Real 110, Los Altos, CA"
-    Then  I verify closest location phone number is "800-275-8777"
+    *     I search for location "4970 El Camino Real 110, Los Altos, CA"
+    Then  I verify closest location phone number is "650-960-0817"
