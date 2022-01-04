@@ -8,6 +8,18 @@ Feature: Usps scenarios
     And I fill out "4970 El Camino Real" street, "Los Altos" city, "CA" state
     Then I validate "94022" zip code exists in the result
 
+  @usps1.1
+  Scenario Outline: Validate zip code for address
+    Given I go to "usps" page
+    When I go to Lookup ZIP page by address
+    And I fill out "<street>" street, "<city>" city, "<state>" state
+    Then I validate "<zipCode>" zip code exists in the result
+    Examples:
+      | street                | city        | state | zipCode |
+      | 4970 El Camino Real   | Los Altos   | CA    | 94022   |
+      | 9501 S. King Drive    | Chicago     | IL    | 60628   |
+      | 915 S. Jackson Street | Montgomery  | AL    | 36104   |
+
   Rule: Available navigation paths at different device sizes should allow lookup of zip code by address
         Chrome width 1035px, Firefox width 991px
         message on the blue banner background jumps from being on the left to below the picture
@@ -88,3 +100,18 @@ Feature: Usps scenarios
       When I select all in the table
       And I close modal window
       Then I verify that summary of all rows of Cost column is equal Approximate Cost in Order Summary
+
+    @usps9
+    Scenario: Quadcopters delivery
+      Given I go to "usps" page
+      When I go to "Help" tab
+#      Chrome requires you to enable cookies to use help search
+      And I perform "\"Quadcopters delivery\"" help search
+      Then I verify that no results of "\"Quadcopters delivery\"" available in help search
+
+    @usps10
+    Scenario: Phone number of the nearest Mail Pickup
+      Given I go to "usps" page
+      When I navigate to "Locations" heading link
+      And I search for location "4970 El Camino Real 110, Los Altos, CA"
+      Then I verify closest location phone number is "650-960-0817"

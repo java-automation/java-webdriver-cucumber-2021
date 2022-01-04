@@ -35,22 +35,22 @@ public class UspsStepDefs {
     }
 
     public void waitTillVisible(By locator) {
-        new WebDriverWait(getDriver(), 10, 200)
+        new WebDriverWait(getDriver(), 20, 200)
                 .until(ExpectedConditions.visibilityOfElementLocated(locator));
     }
 
     public void waitTillVisible(WebElement element) {
-        new WebDriverWait(getDriver(), 10, 200)
+        new WebDriverWait(getDriver(), 20, 200)
                 .until(ExpectedConditions.visibilityOf(element));
     }
 
     public void waitTillNotVisible(By locator) {
-        new WebDriverWait(getDriver(), 10, 200)
+        new WebDriverWait(getDriver(), 20, 200)
                 .until(ExpectedConditions.invisibilityOfElementLocated(locator));
     }
 
     public void waitTillNotVisible(WebElement element) {
-        new WebDriverWait(getDriver(), 10, 200)
+        new WebDriverWait(getDriver(), 20, 200)
                 .until(ExpectedConditions.invisibilityOf(element));
     }
 
@@ -351,14 +351,14 @@ public class UspsStepDefs {
     }
 
     @Then("I verify that summary of all rows of Cost column is equal Approximate Cost in Order Summary")
-    public void iVerifyApproximateCost() throws InterruptedException {
+    public void iVerifyApproximateCost() {
         String costInSummary = getDriver().findElement(By.xpath("//p[@id='approximateCost']")).getText();
         BigDecimal approximateCost = new BigDecimal(costInSummary.substring(1));
         WebElement table = getDriver().findElement(By.xpath("//table[contains(@class,'target-audience-table')]"));
         List<WebElement> list = table.findElements(By.xpath("./tbody/tr"));
         list.removeIf(el -> !el.isDisplayed());
         BigDecimal total = BigDecimal.valueOf(0);
-        String cost = "";
+        String cost;
         for (WebElement el : list) {
                 // hard coded 'Cost' column number
                 cost = el.findElement(By.xpath("./td[9]")).getText();
@@ -366,6 +366,55 @@ public class UspsStepDefs {
                 total = total.add(new BigDecimal(cost.substring(1)));
         }
         assertThat(total).isEqualTo(approximateCost);
+    }
+
+    @When("I go to {string} tab")
+    public void iGoToTab(String tab) {
+        getDriver().findElement(By.xpath("//ul[@class='nav-list']//a[text()='" + tab + "']")).click();
+    }
+
+    @And("I perform {string} help search")
+    public void iPerformHelpSearch(String searchPhrase) {
+        By searchField = By.xpath("//input[contains(@class,'search-field')]");
+        waitTillVisible(searchField);
+        getDriver().findElement(searchField).sendKeys(searchPhrase);
+        waitTillVisible(By.xpath("//div[@class='result-container']"));
+        getDriver().findElement(By.xpath("//span[@class='search-input-group']" +
+                                                                "//button[contains(@class,'search-button')]")).click();
+    }
+
+    @Then("I verify that no results of {string} available in help search")
+    public void iVerifyThatNoResultsOfAvailableInHelpSearch(String searchPhrase) {
+        waitTillVisible(By.xpath("//div[contains(@class,'noResultsTitle')]"));
+        List<WebElement> results = getDriver().findElements(By.xpath("//div[@class='resultsWrapper']" +
+                                                                                "//div[@class='listContent']/ul/li"));
+        assertThat(results.size()).isEqualTo(0);
+        WebElement noResultsTitle = getDriver().findElement(By.xpath("//div[contains(@class,'noResultsTitle')]"));
+        assertThat(noResultsTitle.getText()).contains("No results for \"" + searchPhrase + "\"");
+    }
+
+    @When("I navigate to {string} heading link")
+    public void iNavigateToHeadingLink(String headingLink) {
+        getDriver().findElement(By.xpath("//div[@class='utility-links']/a[text()='" + headingLink + "']")).click();
+    }
+
+    @And("I search for location {string}")
+    public void iSearchForLocation(String location) {
+        getDriver().findElement(By.xpath("//input[@id='city-state-input']")).sendKeys(location + Keys.RETURN);
+        getDriver().findElement(By.xpath("//a[@id='searchLocations']")).click();
+    }
+
+    @Then("I verify closest location phone number is {string}")
+    public void iVerifyClosestLocationPhoneNumberIs(String phoneNumber) {
+        waitTillVisible(By.xpath("//div[contains(@class,'floating-map')]//canvas"));
+        new WebDriverWait(getDriver(),10).until(ExpectedConditions.elementToBeClickable(
+                                                                          By.xpath("//div[@id='resultBox']/div[1]")));
+        getDriver().findElement(By.xpath("//div[@id='resultBox']/div[1]")).click();
+        waitTillVisible(By.xpath("//div[contains(@class,'location-detail-view')]" +
+                "//p[@id='detailPhone']/p"));
+        String locationPhone = getDriver().findElement(By.xpath("//div[contains(@class,'location-detail-view')]" +
+                                                                               "//p[@id='detailPhone']/p")).getText();
+        assertThat(locationPhone).contains(phoneNumber);
     }
 }
 
