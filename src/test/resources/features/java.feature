@@ -142,3 +142,49 @@ Feature: Java feature
   @java15
   Scenario: Find if any two elements of an array result in sum
     Then run test cases for twoResultInSum method
+
+  @java16
+  Scenario: Find if a number is a prime
+  Prime number is a natural number greater than 1 that is not a product of two smaller natural numbers
+    Then 0 is prime should be false
+    Then 1 is prime should be false
+    Then 2 is prime should be true
+    Then 4 is prime should be false
+    Then 13 is prime should be true
+    Then -1 is prime should be false
+#    If it is not true, it is considered false (anonymous parameter type)
+    Then 10 is prime should be some123thing
+
+  @java17
+  Scenario: Find all primes up to a number
+    Then I print list of all prime numbers up to 2
+    Then I print list of all prime numbers up to 100
+    Then I print list of all prime numbers up to 0
+    Then I print list of all prime numbers up to 1
+    Then I print list of all prime numbers up to -5
+#    Done in 23min 49sec; printed: ", 71, 73, 79, [all numbers in between], 1675763, 1675769, 167<...> "
+#    Then I print list of all prime numbers up to 7483646
+#    Runtime error: java.lang.OutOfMemoryError (due to creation of list of all numbers for Sieve of Eratosthenes method)
+#    Then I print list of all prime numbers up to the following 2147483646
+
+  @java18
+  Scenario: Find factorial of a number
+  Factorial is the product of all positive integers less than or equal to the number. 5! = 5 * 4 * 3 * 2 * 1
+  The value of 0! is 1, according to the convention for an empty product.
+    Then I check factorial of number 5 is 120
+    Then I check factorial of number 12 is 479001600
+#    Integer.MAX_VALUE = 2,147,483,647
+    Then I check factorial of number 13 is 6227020800
+    Then I check factorial of number 20 is 2432902008176640000
+#    Long.MAX_VALUE = 9,223,372,036,854,775,807
+    Then I check factorial of number 21 is 51090942171709440000
+#    55! is a number with 74 digits
+    Then I check factorial of number 55 is 12696403353658275925965100847566516959580321051449436762275840000000000000
+    Then I check factorial of number 1 is 1
+    Then I check factorial of number 0 is 1
+    Then I check factorial of number -1 is null
+    Then I check factorial of number -2147483648 is null
+#    8400! is a number with 29319 digits
+#    Then I check factorial of number 8400 is 17123353330123785291936535903053776901831152538542925695100043901335615...
+#    Then I check factorial of number 2147483646 is ...
+#    Runtime error: java.lang.StackOverflowError due to recursion

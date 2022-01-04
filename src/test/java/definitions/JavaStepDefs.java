@@ -4,9 +4,16 @@ import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import org.apache.commons.lang.StringEscapeUtils;
+
+import java.math.BigInteger;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Set;
+import java.util.TreeSet;
+import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
-import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.*;
 
 public class JavaStepDefs {
 
@@ -255,5 +262,78 @@ public class JavaStepDefs {
         assertThat(isWordPalindrome("   ")).isFalse();
         assertThat(isWordPalindrome("")).isFalse();
         assertThat(isWordPalindrome(null)).isFalse();
+    }
+
+    public static boolean isPrime(int num) {
+        if (num <= 1) return false;
+        //for (int i=2; i<=num/2; i++) {
+        for (int i=2; i<=Math.sqrt(num); i++) {
+            if (num%i == 0) return false;
+        }
+        return true;
+    }
+
+    // {} is anonymous parameter type; see https://github.com/cucumber/cucumber-expressions#readme
+    @Then("{int} is prime should be {}")
+    public void isPrime(int num, boolean expected) {
+        System.out.println("Expected: " + expected);
+        assertThat(isPrime(num)).isEqualTo(expected);
+    }
+
+    @Then("I print list of all prime numbers up to the following {int}")
+    public static void allPrimeUpToTheFollowing(int num) {
+        List<Integer> numList = new ArrayList<>();
+        if (num > 1) {
+            numList = IntStream.range(2, num + 1).boxed().collect(Collectors.toList());
+            int cur = 0;
+            do {
+                Integer i = numList.get(cur);
+                numList.removeIf(n -> (n > i) && (n % i == 0));
+                cur++;
+            } while (cur < numList.size());
+        }
+        System.out.println("All prime numbers up to " + num + ": " + numList);
+    }
+
+    @Then("I print list of all prime numbers up to {int}")
+    public static void allPrimeUpTo(int num) {
+        Set<Integer> set = new TreeSet<>();
+        boolean prime;
+        for (int n=2; n<=num; n++) {
+            prime = true;
+            for (Integer divider : set) {
+                if (n%divider == 0) {
+                    prime = false;
+                    break;
+                }
+            }
+            if (prime) set.add(n);
+        }
+        System.out.println("All prime numbers up to " + num + ": " + set);
+    }
+
+    private static BigInteger findFactorialWithoutRecursion(int num) {
+        if (num < 0) throw new Error ("Factorial is not defined for negative numbers");
+        BigInteger actual = BigInteger.ONE;
+        for (int i=2; i<=num; i++) {
+            actual = actual.multiply(BigInteger.valueOf(i));
+        }
+        return actual;
+    }
+
+    private static BigInteger findFactorial(int num) {
+        if (num < 0) throw new Error ("Factorial is not defined for negative numbers");
+        if (num == 0 || num == 1) return BigInteger.ONE;
+        return findFactorial(num-1).multiply(BigInteger.valueOf(num));
+    }
+
+    @Then("I check factorial of number {int} is {}")
+    public void iCheckFactorialOfNumber(int num, String expectation) {
+        BigInteger expected = (expectation.equals("null")) ? null : new BigInteger(expectation);
+        if (expected == null) {
+            assertThatThrownBy(() -> findFactorial(num)).isInstanceOf(Error.class).hasMessageContaining("not defined");
+        } else {
+            assertThat(findFactorial(num)).isEqualTo(expected);
+        }
     }
 }
