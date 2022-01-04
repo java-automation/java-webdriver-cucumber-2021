@@ -110,9 +110,8 @@ Feature: USPS scenarios
     Then I verify closest location phone number is "800-275-8777"
 
   @usps11
-  Scenario: Quadcopters delivery
+  Scenario: Quadcopters delivery2
     Given I go to "usps" page
     When I go to "Help" tab
     And I perform "Quadcopters delivery" help search
     Then I verify that no results of "Quadcopters delivery" available in help search
-

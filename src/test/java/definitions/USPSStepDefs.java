@@ -4,22 +4,24 @@ import io.cucumber.java.en.And;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 import org.openqa.selenium.By;
-import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.Select;
 import org.openqa.selenium.support.ui.WebDriverWait;
-import org.testng.Assert;
 
 import java.math.BigDecimal;
+import java.text.MessageFormat;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Locale;
 import java.util.stream.Collectors;
 
+import static definitions.PredefinedStepDefs.*;
+import static java.lang.System.out;
 import static java.lang.Thread.sleep;
 import static org.junit.Assert.*;
+import static org.openqa.selenium.Keys.ENTER;
 import static org.openqa.selenium.Keys.TAB;
 import static support.TestContext.getDriver;
 
@@ -69,17 +71,18 @@ public class USPSStepDefs extends HelperStepDefs {
     public static final String LIST_USPS_OFFICE_H2_XPATH = "//div[@class='location-address']/h2";
     public static final String LINK_LOCATOR_LOCATIONS_XPATH = "//a[@id='link-locator']";
     public static final String LIST_ITEM_LOCATION = "//div[contains(@class,'list-item-location')]";
+    public static final String SHOW_MORE_BUTTON_XPATH = "//div[contains(@class,'slds-text-align--center')]/button[@type='button']";
     private final WebDriverWait wait = new WebDriverWait(getDriver(), 10, 200);
 
 
     @When("I go to Lookup ZIP page by address")
     public void iGoToLookupZIPPageByAddress() throws Error {
         if ((getWebElement(NAV_LIST_XPATH).isDisplayed())) {
-            System.out.println("I run from Navigation list menu");
+            out.println("I run from Navigation list menu");
             iGoToLookupZIPPageByAddressThroughNavigationPanel();
 
         } else if ((getWebElement(A_CLASS_MOBILE_HAMBURGER_IMG_XPATH)).isDisplayed()) {
-            System.out.println("I run from hamburger menu");
+            out.println("I run from hamburger menu");
             iGoToLookupZIPPageByAddressThroughHamburgerMenuBar();
 
         } else if (getWebElement(QUICK_TOOL_TRACK_OPTION_XPATH).isDisplayed()) {
@@ -89,7 +92,7 @@ public class USPSStepDefs extends HelperStepDefs {
     }
 
     public void iGoToLookupZIPPageByAddressBySetWindowSize() {
-        System.out.println("I run from resizing initial window and Quick Tool Option panel ");
+        out.println("I run from resizing initial window and Quick Tool Option panel ");
         wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath(ZIP_CODE_LINK_XPATH)));
         setSize(700, 700);
         click(ZIP_CODE_LINK_XPATH);
@@ -117,7 +120,7 @@ public class USPSStepDefs extends HelperStepDefs {
         getDriver().findElements(By.xpath(ZIPCODE_BY_RESULTS_ADDRESS_XPATH))
                 .forEach(el -> {
                     assertTrue(el.getText().contains(zipcode));
-                    System.out.println(el.getText());
+                    out.println(el.getText());
                 });
     }
 
@@ -129,7 +132,7 @@ public class USPSStepDefs extends HelperStepDefs {
     @When("I go to Lookup ZIP page by address through navigation panel")
     public void iGoToLookupZIPPageByAddressThroughNavigationPanel() {
         if ((getWebElement(NAV_LIST_XPATH).isDisplayed())) {
-            System.out.println("I run from Navigation panel menu");
+            out.println("I run from Navigation panel menu");
             new Actions(getDriver())
                     .moveToElement(getWebElement(NAVIGATION_QUICKTOOLS_MENU_ITEM_XPATH))
                     .build()
@@ -150,7 +153,7 @@ public class USPSStepDefs extends HelperStepDefs {
     public void iGoToLookupZIPPageByAddressThroughHamburgerMenuBar() {
         setSize(700, 700);
         if ((getWebElement(A_CLASS_MOBILE_HAMBURGER_IMG_XPATH)).isDisplayed()) {
-            System.out.println("I run from hamburger menu");
+            out.println("I run from hamburger menu");
             click(A_CLASS_MOBILE_HAMBURGER_IMG_XPATH);
             wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath(MOBILE_HAMBURGER_ACTIVE_DROPDOWN_MENU_XPATH)));
             click(NAVQUICKTOOLS_A_ARIA_EXPANDED_FALSE_XPATH);
@@ -161,7 +164,7 @@ public class USPSStepDefs extends HelperStepDefs {
 
     @When("I go to Calculate Price Page")
     public void iGoToCalculatePricePage() {
-        System.out.println("I run from resizing initial window and Quick Tool Option panel ");
+        out.println("I run from resizing initial window and Quick Tool Option panel ");
         wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath(QUICK_TOOL_TRACK_OPTION_BUTTON_LINK_XPATH)));
         setSize(700, 700);
         getWebElementFromListByAttributeValue(QUICK_TOOL_TRACK_OPTION_BUTTON_LINK_XPATH, "data-gtm-label", "calculate-price-link").click();
@@ -199,8 +202,8 @@ public class USPSStepDefs extends HelperStepDefs {
     public void iCalculateThePriceAndValidateCostIs(String price) throws NumberFormatException {
         Double price_0 = getPrice("//div[@id='price-0']");
         Double quantity = Double.parseDouble(getWebElement("//input[@id='quantity-0']").getAttribute("value"));
-        System.out.println("Quantity = " + quantity + "price = " + price_0);
-        System.out.println("Total price =  " + getTotalPrice());
+        out.println("Quantity = " + quantity + "price = " + price_0);
+        out.println("Total price =  " + getTotalPrice());
         assertEquals(price_0 * quantity, parseDouble(price), 0.0);
         assertEquals(getTotalPrice(), parseDouble(price), 0.0);
     }
@@ -209,7 +212,7 @@ public class USPSStepDefs extends HelperStepDefs {
     public void iPerformSearch(String searchText) {
         assertTrue(getWebElement(LOGIN_REGISTER_HEADER_XPATH).getText().contains("Sign In"));
         if ((getWebElement(NAVIGATION_SEARCH_ICON_XPATH).isDisplayed())) {
-            System.out.println("I run from Navigation panel menu");
+            out.println("I run from Navigation panel menu");
             new Actions(getDriver())
                     .moveToElement(getWebElement(NAVIGATION_SEARCH_ICON_XPATH))
                     .click()
@@ -268,7 +271,7 @@ public class USPSStepDefs extends HelperStepDefs {
 
     @Then("I verify that {string} results found")
     public void iVerifyThatResultsFound(String searchResults) throws InterruptedException {
-        System.out.println("search Results: " + getText("//span[@id='searchResultsHeading']"));
+        out.println("search Results: " + getText("//span[@id='searchResultsHeading']"));
         assertEquals(Arrays.stream(getText("//span[@id='searchResultsHeading']").split(" ")).toList().get(0), searchResults);
         if (getDriver().findElements(By.xpath("//ul[@class='pagination']/li[@class='page-item']")).size() == 0) {
             assertEquals(getDriver().findElements(By.xpath("//div[@class='search-results']/ul/li")).size(), Integer.parseInt(searchResults));
@@ -293,7 +296,7 @@ public class USPSStepDefs extends HelperStepDefs {
             sleep(3000);  //because of Rate limiting of USPS site
             counts += resultsInThePage();
         }
-        System.out.println("Found results: " + counts);
+        out.println("Found results: " + counts);
         return counts;
     }
 
@@ -374,7 +377,7 @@ public class USPSStepDefs extends HelperStepDefs {
     public void iPerformHelpSearch(String searchQuery) {
         getDriver().findElement(By.xpath(INPUT_CONTAINS_CLASS_SEARCH_FIELD)).sendKeys(searchQuery);
         new Actions(getDriver())
-                .sendKeys(Keys.ENTER)
+                .sendKeys(ENTER)
                 .perform();
         wait.until(ExpectedConditions.presenceOfAllElementsLocatedBy(By.xpath(FIELD_NON_EMPTY_SEARCH_CONTENT_XPATH)));
     }
@@ -386,7 +389,7 @@ public class USPSStepDefs extends HelperStepDefs {
             assertEquals(getDriver().findElements(By.xpath(LIST_EACH_SEARCH_RESULTS_XPATH)).size(), 0);
             assertTrue(getDriver().findElement(By.xpath(EMPTY_SEARCH_CONTENT_XPATH)).isDisplayed());
             assertTrue(getDriver().findElement(By.xpath(NO_RESULTS_SEARCH_IMG_XPATH)).isDisplayed());
-            System.out.println(getDriver().findElement(By.xpath(NO_RESULTS_TITLE)).getText());
+            out.println(getDriver().findElement(By.xpath(NO_RESULTS_TITLE)).getText());
         } else {
             wait.until(ExpectedConditions.presenceOfAllElementsLocatedBy(By.xpath(LIST_OF_SEARCH_RESULTS_XPATH)));
             assertTrue(getDriver().findElements(By.xpath(LIST_EACH_SEARCH_RESULTS_XPATH)).size() > 0);
@@ -394,7 +397,7 @@ public class USPSStepDefs extends HelperStepDefs {
             assertTrue(text.contains(searchQuery)
                     || Arrays
                     .stream(searchQuery.split(" ")).anyMatch(text::contains));
-            System.out.println("We've found " + getDriver().findElements(By.xpath(LIST_EACH_SEARCH_RESULTS_XPATH)).size() + " results");
+            out.println(MessageFormat.format("We''ve found {0} results", getDriver().findElements(By.xpath(LIST_EACH_SEARCH_RESULTS_XPATH)).size()));
         }
     }
 
@@ -423,24 +426,24 @@ public class USPSStepDefs extends HelperStepDefs {
         assertTrue(actual.contains(phone));
     }
 
-    @Then("I verify that no results of {string} available in help search")
-    public void iVerifyThatNoResultsOfAvailableInHelpSearch(String searchQuery) {
-        if (getDriver().findElements(By.xpath("//div[@class='listContent']//li[contains(@class,'kbResultStencil')]")).size() > 0) {
-            while ((getDriver().findElements(By.xpath("//div[contains(@class,'slds-text-align--center')]/button[@type='button']")).size() > 0)
-                    && (!isContains(searchQuery))) {
-                getDriver().findElement(By.xpath("//div[contains(@class,'slds-text-align--center')]/button[@type='button']")).click();
-                wait.until(ExpectedConditions.presenceOfAllElementsLocatedBy(By.xpath(FIELD_NON_EMPTY_SEARCH_CONTENT_XPATH)));
-            }
-            Assert.assertFalse(isContains(searchQuery));
-        } else if (getDriver().findElements(By.xpath("//img[@alt='Einstein']")).size() == 0) {
-            System.out.println("I've got an Einstein in search page!");
-        } else {
-            Assert.assertTrue(getDriver().findElement(By.xpath("//div[@class='listContent']")).getText().contains("No results for " + searchQuery + " in Articles"));
-        }
+    private boolean isContains(String searchQuery) {
+        return getDriver().findElement(By.xpath("//div[@class='listContent']//li[contains(@class,'kbResultStencil')]/..")).getText().contains(searchQuery);
     }
 
-    private boolean isContains(String searchQuery) {
-        return getDriver().findElement(By.xpath("//div[@class='listContent']/ul[@class='slds-has-dividers--bottom']")).getText().contains(searchQuery);
+    @Then("I verify that no results of {string} available in help search")
+    public void iVerifyThatResultsOfAvailableInHelpSearch(String searchQuery) {
+        wait.until(ExpectedConditions.presenceOfAllElementsLocatedBy(By.xpath(LIST_OF_SEARCH_RESULTS_XPATH)));
+        assertTrue(getDriver().findElements(By.xpath(LIST_EACH_SEARCH_RESULTS_XPATH)).size() > 0);
+        while ((getDriver().findElement(By.xpath("//button[contains(text(),'Show More')]")).isDisplayed()) && (!isContains(searchQuery))) {
+            getDriver().findElements(By.xpath(LIST_OF_SEARCH_RESULTS_XPATH)).forEach(el -> {
+                new Actions(getDriver()).moveToElement(el).perform();
+            });
+            iClickOnElementUsingJavaScriptWithXpath("//button[contains(text(),'Show More')]");
+            out.println(getDriver().findElement(By.xpath("//div[contains(@class,'searchResultsGridHeader')]")).getText());
+            wait.until(ExpectedConditions.refreshed(ExpectedConditions.presenceOfElementLocated(By.xpath("//div[@class='listContent']//li[contains(@class,'kbResultStencil')]/.."))));
+        }
+        assertFalse(isContains(searchQuery));
+        out.println("We've found " + getDriver().findElements(By.xpath(LIST_OF_SEARCH_RESULTS_XPATH)).size() + " results");
     }
 }
 
