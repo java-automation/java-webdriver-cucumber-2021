@@ -4,6 +4,7 @@ import io.cucumber.java.en.And;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 import org.openqa.selenium.By;
+import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.Action;
 import org.openqa.selenium.interactions.Actions;
@@ -11,6 +12,7 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.nio.charset.StandardCharsets;
+import java.sql.Time;
 
 import static java.lang.Thread.sleep;
 import static org.assertj.core.api.Assertions.*;
@@ -142,9 +144,7 @@ public class UspsStepDefs {
 
     @When("I navigate to {string} heading link")
     public void iNavigateToHeadingLink(String navigation) {
-        getDriver().findElement(By.xpath("//a[@id='link-locator']")).click();
-
-
+        getDriver().findElement(By.xpath("//a[@id='link-locator'][contains(text(),'" + navigation + "')]")).click();
     }
 
     @And("I search for location {string}")
@@ -153,6 +153,37 @@ public class UspsStepDefs {
         getDriver().findElement(By.xpath("//button[@id='within-select']")).click();
         getDriver().findElement(By.xpath("//a[contains(text(),'10 Miles')]")).click();
         getDriver().findElement(By.xpath("//a[@id='searchLocations']")).click();
+        sleep(1000);
+        getDriver().findElement(By.xpath("//div[@class='list-item-location popover-trigger']//p[text()='221 MAIN ST LOS ALTOS, CA 94022-2937']")).click();
+//        getDriver().findElement(By.xpath("//div[@class='list-item-location popover-trigger']//p[contains(text(),'" + location + "')]")).click();
+    }
 
+    @Then("I verify closest location phone number is {string}")
+    public void iVerifyClosestLocationPhoneNumberIs(String phoneNumber) throws InterruptedException {
+        WebElement searchResults = getDriver().findElement(By.xpath("//div[@class='phone-wrapper']//p[contains(text(),'" + phoneNumber + "')]"));// to locate the result number
+        String number = searchResults.getText();
+        sleep(1000);
+        System.out.println(number);
+        sleep(1000);
+        assertThat(number).contains(phoneNumber);
+    }
+
+    @When("I navigate to {string} tab")
+    public void iNavigateToTab(String help) {
+        getDriver().findElement(By.xpath("//a[@id='navhelp']/..")).click();
+    }
+
+    @And("I perform {string} help search")
+    public void iPerformHelpSearch(String search) {
+        getDriver().findElement(By.xpath("//div[@class='searchBox']//input")).sendKeys(search + Keys.ENTER);
+    }
+
+    @Then("I verify that no results of {string} available in help search")
+    public void iVerifyThatNoResultsOfAvailableInHelpSearch(String searchQuery) {
+        WebDriverWait wait = new WebDriverWait(getDriver(), 5);
+        By resultLocator = By.xpath("//div[@class='resultsWrapper']//li[contains(@class,'kbResultStencil')]"); //checks the first result of the page
+        wait.until(ExpectedConditions.visibilityOfElementLocated(resultLocator));
+        String resultBox = getDriver().findElement(By.xpath("//div[@class='resultsWrapper']")).getText();
+        assertThat(resultBox).doesNotContainIgnoringCase(searchQuery);
     }
 }

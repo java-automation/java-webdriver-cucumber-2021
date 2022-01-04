@@ -30,15 +30,39 @@
       And I click "Ship Now" button
       Then I validate that Sign In is required
 
+    @usps4
+    Scenario: Every door direct mail
+      Given I go to "usps" page
+      When I go to "Every Door Direct Mail" under "Business"
+      And I search for "4970 El Camino Real, Los Altos, CA 94022"
+      And I choose view as "Table" on the map
+      When I select all in the table
+      And I close modal window
+      Then I verify that summary of all rows of Cost column is equal Approximate Cost in Order Summary
+
+    @usps5
+    Scenario: Verify calculator result
+      Given I go to "calculator" page
+      When I navigate to "Auto Loan Calculator"
+      And I clear all calculator fields
+      And I calculate
+      Then I verify "Please provide a positive auto price." calculator error
+      Then I verify "Please provide a positive interest value." calculator error
+      And I enter "25000" price, "60" months, "4.5" interest, "5000" downpayment, "0" trade-in, "California" state, "7" percent tax, "300" fees
+      And I calculate
+      Then I verify monthly pay is "$372.86"
+
+    @usps6
     Scenario: Quadcopters delivery
       Given I go to "usps" page
-      When I go to "Help" tab
+      When I navigate to "Help" tab
       And I perform "Quadcopters delivery" help search
       Then I verify that no results of "Quadcopters delivery" available in help search
 
+    @usps7
     Scenario: Phone number of the nearest Mail Pickup
       Given I go to "usps" page
       When I navigate to "Locations" heading link
       And I search for location "4970 El Camino Real 110, Los Altos, CA"
       And I wait for 2 sec
-      Then I verify closest location phone number is "800-275-8777"
+      Then I verify closest location phone number is "650-960-0817"
