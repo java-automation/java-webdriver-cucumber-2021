@@ -197,3 +197,7 @@ Feature: Java experiments
   @java35
   Scenario: Square root
     And I calculate square root for 2.5
+
+  @java36
+  Scenario: Basic class exercises
+    And I work with classes

@@ -3,6 +3,7 @@ package definitions;
 import io.cucumber.java.Transpose;
 import io.cucumber.java.en.And;
 import io.cucumber.java.en.Then;
+import pages.Cat;
 
 import java.math.BigInteger;
 import java.util.*;
@@ -1045,5 +1046,22 @@ public class JavaStepDefs {
         } while ((previous - approximation) != 0);
         System.out.println("Found square root in " + i + " approximations");
         return approximation;
+    }
+
+    @And("I work with classes")
+    public void iWorkWithClasses() {
+        Cat cat = new Cat("Josephine");
+        cat.walk();
+        cat.speak();
+        cat.eat("mouse");
+        cat.setName("Jojoba");
+        cat.sleep();
+        System.out.println(cat.getName());
+
+        Cat anotherCat = new Cat();
+        anotherCat.walk();
+        anotherCat.speak();
+        anotherCat.sleep();
+        System.out.println(anotherCat.getName());
     }
 }
