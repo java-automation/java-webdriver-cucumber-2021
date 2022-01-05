@@ -18,7 +18,7 @@ public class GenericStepDefs {
         getDriver().get(getURLUsingKnownReference(websiteReference));
     }
 
-    public static String getURLUsingKnownReference(String websiteReference) {
+    static String getURLUsingKnownReference(String websiteReference) {
         return switch (websiteReference.toLowerCase()) {
             case "google" -> "https://google.com";
             case "yahoo" -> "https://yahoo.com";

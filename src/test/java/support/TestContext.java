@@ -1,10 +1,7 @@
 package support;
 
 import io.github.bonigarcia.wdm.WebDriverManager;
-import org.openqa.selenium.Dimension;
-import org.openqa.selenium.Platform;
-import org.openqa.selenium.Point;
-import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.*;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeDriverService;
 import org.openqa.selenium.chrome.ChromeOptions;
@@ -34,6 +31,10 @@ public class TestContext {
 
     public static WebDriver getDriver() {
         return driver;
+    }
+
+    public static JavascriptExecutor getExecutor() {
+        return (JavascriptExecutor) getDriver();
     }
 
     public static void initialize() {
