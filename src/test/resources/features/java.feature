@@ -209,3 +209,14 @@
     Scenario: Find factorial of a number
     # (5! = 5 * 4 * 3 * 2 * 1)
       Given I calculate factorial of -7
+
+    @TestCase29
+    Scenario: Working with classes
+      Given I work with class
+      And I work with a new class
+
+    @TestCase30
+    Scenario: Experiment with multi selection in a dropdown
+      Given I use Actions to select multiple options
+      And I use Select to select multiple options
+

@@ -3,6 +3,7 @@ package definitions;
 import io.cucumber.java.en.*;
 import org.junit.*;
 import org.openqa.selenium.*;
+import pages.*;
 
 import java.util.*;
 
@@ -663,5 +664,34 @@ public class JavaStepDefs {
             result *= i;
         }
         System.out.println(result);
+    }
+
+    @Given("I work with class")
+    public void iWorkWithClass() {
+        Cat cat = new Cat("Kuzea");
+        cat.sleep();
+        cat.walk();
+        cat.speak();
+        cat.eat("fish");
+        cat.setName("Tom");
+        cat.sleep();
+        System.out.println(cat.getName());
+    }
+
+    @And("I work with a new class")
+    public void iWorkWithANewClass() {
+        Recipe recipe = new Recipe("Honey Cake", "Heat oven to 325 F and ...", "flour");
+        recipe.create();
+        recipe.edit();
+        System.out.println(recipe.getInstructions());
+        recipe.setInstructions("Heat oven to 325 F and prepare the ingredients");
+        System.out.println(recipe.getInstructions());
+        System.out.println(recipe.getName());
+        System.out.println(recipe.getIngredients());
+        recipe.setIngredients("backing soda");
+        recipe.setIngredients("honey");
+        System.out.println(recipe.getIngredients());
+        recipe.save();
+        recipe.delete();
     }
 }
