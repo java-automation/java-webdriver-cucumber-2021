@@ -186,4 +186,37 @@ public class UspsStepDefs {
         String resultBox = getDriver().findElement(By.xpath("//div[@class='resultsWrapper']")).getText();
         assertThat(resultBox).doesNotContainIgnoringCase(searchQuery);
     }
+
+    @When("I go to {string} under {string}")
+    public void iGoToUnder(String subMenuItem, String menuItem) {
+        WebElement menuItemElement = getDriver().findElement(By.xpath("//a[@role='menuitem'][text()='" + menuItem + "']"));
+        WebElement subMenuItemElement = getDriver().findElement(By.xpath("//a[@role='menuitem'][text()='" + subMenuItem + "']"));
+
+        new Actions(getDriver())
+                .moveToElement(menuItemElement)
+                .click(subMenuItemElement)
+                .perform();
+    }
+
+    @And("I search for {string}")
+    public void iSearchFor(String text) {
+        getDriver().findElement(By.id("cityOrZipCode")).sendKeys(text);
+        getDriver().findElement(By.cssSelector(".eddm-search-btn")).click();
+        WebElement spinner = getDriver().findElement(By.id("searchProcessing"));
+        WebDriverWait wait = new WebDriverWait(getDriver(), 10);
+        wait.until(ExpectedConditions.visibilityOf(spinner));
+        wait.until(ExpectedConditions.invisibilityOf(spinner));
+    }
+
+    @And("I choose view as {string} on the map")
+    public void iChooseViewAsOnTheMap(String viewAs) {
+        getDriver().findElement(By.xpath("//span[text()='" +viewAs+ "']")).click();
+
+    }
+
+    @When("I select all in the table")
+    public void iSelectAllInTheTable() {
+        getDriver().findElement(By.id("select-all-checkboxes")).click();
+
+    }
 }

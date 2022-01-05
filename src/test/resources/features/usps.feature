@@ -36,6 +36,7 @@
       When I go to "Every Door Direct Mail" under "Business"
       And I search for "4970 El Camino Real, Los Altos, CA 94022"
       And I choose view as "Table" on the map
+      And I wait for 5 sec
       When I select all in the table
       And I close modal window
       Then I verify that summary of all rows of Cost column is equal Approximate Cost in Order Summary
