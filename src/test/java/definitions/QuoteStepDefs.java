@@ -5,6 +5,7 @@ import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 import org.openqa.selenium.By;
 import org.openqa.selenium.Keys;
+import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.Select;
 
 import java.time.LocalDate;
@@ -121,10 +122,7 @@ public class QuoteStepDefs {
 
             getDriver().findElement(By.xpath("//textarea[@name='address']")).sendKeys(workingProfile.get("address"));
 
-            String carMakeValue = workingProfile.get("carmake");
-            String[] carMakeOptions = carMakeValue.split(", ");
-            Select carMakeSelect = new Select(getDriver().findElement(By.xpath("//select[@name='carMake']")));
-            for (String carMakeOption : carMakeOptions) { carMakeSelect.selectByValue(carMakeOption); }
+            selectCarMakeWithSelectClass(workingProfile.get("carmake"));
 
             getDriver().switchTo().frame("additionalInfo");
             getDriver().findElement(By.xpath("//input[@id='contactPersonName']")).sendKeys(workingProfile.get("contactname"));
@@ -155,5 +153,33 @@ public class QuoteStepDefs {
         getDriver().findElement(By.xpath("//input[@name='email']")).sendKeys("john.doe@corp.com");
         getDriver().findElement(By.xpath("//input[@name='email']")).submit();
         Thread.sleep(1000);
+    }
+
+    @Then("I select {string} in Car Make Select with {string}")
+    public void iSelectInCarMakeSelectWith(String options, String strategy) {
+        switch (strategy.toLowerCase()) {
+            case "select" -> selectCarMakeWithSelectClass(options);
+            case "actions" -> selectCarMakeWithActions(options);
+            default -> throw new Error("Unknown strategy: " + strategy);
+        }
+    }
+
+    private void selectCarMakeWithActions(String options) {
+        String[] carMakeOptions = options.split(", ");
+        Actions actions = new Actions(getDriver());
+        for (String carMakeOption : carMakeOptions) {
+            actions
+                    .moveToElement(getDriver().findElement(By.xpath("//select[@name='carMake']/option[@value='" + carMakeOption + "']")))
+                    .keyDown(Keys.CONTROL)
+                    .click()
+                    .perform();
+        }
+        actions.keyUp(Keys.CONTROL).perform();
+    }
+
+    private void selectCarMakeWithSelectClass(String options) {
+        String[] carMakeOptions = options.split(", ");
+        Select carMakeSelect = new Select(getDriver().findElement(By.xpath("//select[@name='carMake']")));
+        for (String carMakeOption : carMakeOptions) { carMakeSelect.selectByValue(carMakeOption); }
     }
 }

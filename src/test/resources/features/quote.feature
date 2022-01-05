@@ -31,3 +31,14 @@ Feature: Selenium WebDriver API exercises using quote form
     *     Submit the form
     Then  I verify that submitted fields got saved correctly
     *     I wait for 5 sec
+
+  @quote4
+  Scenario Outline: Multiple choice select
+    Given I go to "quote form" page
+    Then  I select "<options>" in Car Make Select with "<strategy>"
+    *     I wait for 2 sec
+
+    Examples:
+      | options          | strategy   |
+      | Ford, BMW, Other | select     |
+      | Toyota, BMW      | Actions    |
