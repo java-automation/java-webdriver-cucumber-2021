@@ -2,9 +2,11 @@ package pages;
 
 public class Cat extends Animal {
 
-    public Cat() { super(); }
+    public Cat() {}
 
-    public Cat(String newName) { super(newName); }
+    public Cat(String newName) {
+        super(newName);
+    }
 
     @Override
     public void setName(String newName) {
