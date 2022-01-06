@@ -1,9 +1,11 @@
 @usps
 Feature: USPS website scenarios
 
+  Background:
+    Given I go to "usps" page
+
   @usps1
   Scenario Outline: Validate ZIP code for specific address
-    Given I go to "usps" page
     When  I go to Lookup ZIP page by address through "<strategy>"
     *     I fill out "<address>" street, "<city>" city, "<state>" state
     Then  I validate "<zip>" zip code exists in all results
@@ -16,7 +18,6 @@ Feature: USPS website scenarios
 
   @usps2
   Scenario: Calculate price
-    Given I go to "usps" page
     When  I go to Calculate Price Page
     *     I select "Canada" with "Postcard" shape
     *     I define "2" quantity
@@ -24,7 +25,6 @@ Feature: USPS website scenarios
 
   @usps3
   Scenario: Verify location
-    Given I go to "usps" page
     When  I perform "Free Boxes" search
     *     I set filters
       | Send | Receive | International | USPS Corporate |
@@ -35,7 +35,6 @@ Feature: USPS website scenarios
 
   @usps4
   Scenario: Every door direct mail
-    Given I go to "usps" page
     When  I go to "Every Door Direct Mail" under "Business"
     *     I search for "4970 El Camino Real, Los Altos, CA 94022"
     *     I choose view as "Table" on the map
@@ -45,14 +44,12 @@ Feature: USPS website scenarios
 
   @usps5
   Scenario: Quadcopters delivery
-    Given I go to "usps" page
     When  I go to "Help" tab
     *     I perform "Quadcopters delivery" help search
     Then  I verify that no results of "Quadcopters delivery" available in help
 
   @usps6
   Scenario: Phone number of the nearest Mail Pickup
-    Given I go to "usps" page
     When  I navigate to "Locations" heading link
     *     I search for location "4970 El Camino Real 110, Los Altos, CA"
     Then  I verify closest location phone number is "650-960-0817"

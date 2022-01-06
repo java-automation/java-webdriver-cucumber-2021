@@ -167,10 +167,10 @@ public class QuoteStepDefs {
     private void selectCarMakeWithActions(String options) {
         String[] carMakeOptions = options.split(", ");
         Actions actions = new Actions(getDriver());
+        actions.keyDown(Keys.CONTROL).perform();
         for (String carMakeOption : carMakeOptions) {
             actions
                     .moveToElement(getDriver().findElement(By.xpath("//select[@name='carMake']/option[@value='" + carMakeOption + "']")))
-                    .keyDown(Keys.CONTROL)
                     .click()
                     .perform();
         }
