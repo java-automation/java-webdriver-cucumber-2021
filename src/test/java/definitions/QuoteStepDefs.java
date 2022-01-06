@@ -4,6 +4,11 @@ import com.sun.xml.bind.v2.*;
 import io.cucumber.java.en.*;
 import org.junit.*;
 import org.openqa.selenium.*;
+import org.openqa.selenium.interactions.*;
+import org.openqa.selenium.support.ui.*;
+
+import java.util.*;
+
 import static support.TestContext.*;
 
 
@@ -97,4 +102,35 @@ public class QuoteStepDefs {
         Assert.assertEquals(getDriver().findElement(By.xpath("//b[@name='location']")).getText(), testdata.address1);
     }
 
+    @And("I select multiple options with Actions")
+    public void iSelectMultipleOptionsWithActions() {
+        Actions actions = new Actions(getDriver());
+        int[] options = {0, 2};
+        List<WebElement> dropdown = getDriver().findElements(By.xpath("//*[@name='carMake']//option"));
+        for(int i=0; i<options.length; i++) {
+            actions.keyDown(Keys.CONTROL)
+                    .click(dropdown.get(options[i]))
+                    .keyUp(Keys.CONTROL)
+                    .perform();
+        }
+
+    }
+
+    @And("I select multiple options with Select")
+    public void iSelectMultipleOptionsWithSelect() {
+        Select selectCarMake = new Select(getDriver().findElement(By.xpath("//*[@name='carMake']")));
+        if(selectCarMake.isMultiple()) {
+            int[] options = {0, 2};
+             for(int i=0; i<options.length; i++) {
+                 selectCarMake.selectByIndex(options[i]);
+             }
+        }
+    }
+
+    @And("I verify selected options were displayed")
+    public void iVerifySelectedOptionsWereDisplayed() {
+        int[] options = {0, 2};
+        String optionsSelected = "Ford, BMW";
+        Assert.assertEquals(getDriver().findElement(By.xpath("//b[@name='carMake']")).getText(), optionsSelected);
+    }
 }

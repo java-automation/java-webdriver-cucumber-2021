@@ -26,3 +26,23 @@
       And I submit the page
       Then I verify the required fields
       And I verify the optional fields
+
+    @quote4
+    Scenario: Use Actions to select multiple options in dropdown
+      Given I go to "Quote" page and print details
+      And I fill out required fields
+      And I select multiple options with Actions
+      And I wait for 5 seconds
+      And I submit the page
+      And I wait for 5 seconds
+      And I verify selected options were displayed
+
+    @quote5
+    Scenario: Use Select to select multiple options in dropdown
+      Given I go to "Quote" page and print details
+      And I fill out required fields
+      And I select multiple options with Select
+      And I wait for 5 seconds
+      And I submit the page
+      And I wait for 5 seconds
+      And I verify selected options were displayed
