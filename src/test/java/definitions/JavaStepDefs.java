@@ -3,6 +3,8 @@ package definitions;
 import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
+import pages.Cat;
+import pages.Tiger;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -592,7 +594,72 @@ public class JavaStepDefs {
             System.out.println(str + " is not palindrome word");
         }
     }
+
+    @Given("I work with classes")
+    public void iWorkWithClasses() {
+
+        Cat cat = new Cat("Tom"); //instance of object
+        cat.sleep();
+        cat.eat("fish");
+        cat.walk();
+        cat.speak();
+        cat.setName("Bebe");
+        System.out.println(cat.getName());
+
+        Cat secondCat = new Cat("Marsik");
+        secondCat.sleep();
+        secondCat.speak();
+        System.out.println(secondCat.getName());
+
+
+
+    }
+
+    @Then("I work with tiger")
+    public void iWorkWithTiger() {
+
+        Tiger tiger = new Tiger("Simba"); //the object
+
+        tiger.hunt();
+        tiger.mate();
+        tiger.sleep();
+        tiger.play();
+        tiger.setName("Boba");
+        System.out.println(tiger.getName());
+
+        System.out.println(tiger.getName());
+
+
+
+    }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 //  // Homework5  ----- BEtter do not touch because cucumber will not run

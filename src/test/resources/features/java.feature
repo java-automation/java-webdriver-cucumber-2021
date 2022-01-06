@@ -76,7 +76,11 @@
 
 
 
+@cat
 
+Scenario: Cats
+  #Given I work with classes
+  Then I work with tiger
 
 
 
