@@ -3,6 +3,7 @@ package definitions;
 import io.cucumber.java.en.And;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
+import org.assertj.core.data.Percentage;
 import org.openqa.selenium.By;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebElement;
@@ -13,6 +14,7 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.nio.charset.StandardCharsets;
 import java.sql.Time;
+import java.util.List;
 
 import static java.lang.Thread.sleep;
 import static org.assertj.core.api.Assertions.*;
@@ -200,10 +202,11 @@ public class UspsStepDefs {
 
     @And("I search for {string}")
     public void iSearchFor(String text) {
-        getDriver().findElement(By.id("cityOrZipCode")).sendKeys(text);
+        WebDriverWait wait = new WebDriverWait(getDriver(), 10);
+        By searchLocator = new By.ById("cityOrZipCode");
+        wait.until(ExpectedConditions.presenceOfElementLocated(searchLocator)).sendKeys(text);
         getDriver().findElement(By.cssSelector(".eddm-search-btn")).click();
         WebElement spinner = getDriver().findElement(By.id("searchProcessing"));
-        WebDriverWait wait = new WebDriverWait(getDriver(), 10);
         wait.until(ExpectedConditions.visibilityOf(spinner));
         wait.until(ExpectedConditions.invisibilityOf(spinner));
     }
@@ -218,5 +221,32 @@ public class UspsStepDefs {
     public void iSelectAllInTheTable() {
         getDriver().findElement(By.id("select-all-checkboxes")).click();
 
+    }
+
+    @And("I close modal window")
+    public void iCloseModalWindow() {
+        WebElement closeModal = getDriver().findElement(By.xpath("//div[@id='drop-off-location-modal']//a[@class='close']"));
+        new WebDriverWait(getDriver(), 5).until(ExpectedConditions.elementToBeClickable(closeModal));
+        closeModal.click();
+    }
+
+    @Then("I verify that summary of all rows of Cost column is equal Approximate Cost in Order Summary")
+    public void iVerifyThatSummaryOfAllRowsOfCostColumnIsEqualApproximateCostInOrderSummary() {
+        WebDriverWait wait = new WebDriverWait(getDriver(), 5);
+        String totalRoutesText = getDriver().findElement(By.id("totalRoutesSelected")).getText();
+        int totalRoutes = Integer.parseInt(totalRoutesText); // converting string to integer
+        List<WebElement> costElements = getDriver().findElements(By.xpath("//table[contains(@class,'target-audience-table')]//td[9]"));
+        assertThat(costElements.size()).isEqualTo(totalRoutes);
+
+        double totalCostSum = 0;
+        for (WebElement costElement: costElements){
+            wait.until(driver -> !costElement.getText().isEmpty());
+            double costElementDouble = Double.parseDouble(costElement.getText().replace("$", ""));
+            totalCostSum = totalCostSum + costElementDouble;
+        }
+        System.out.println(totalCostSum);
+        String approximateCostString = getDriver().findElement(By.id("approximateCost")).getText().replace("$", "");
+        double approximateCost = Double.parseDouble(approximateCostString);
+        assertThat(approximateCost).isCloseTo(totalCostSum, Percentage.withPercentage(1));
     }
 }

@@ -73,6 +73,10 @@ Feature: Java feature
 #      And I solve reverse
 
 
+    @java11
+    Scenario: Classes
+      Given I work with classes
+
 
 
 

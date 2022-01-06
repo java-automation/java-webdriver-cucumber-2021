@@ -18,4 +18,11 @@
       And I "Accept" third party agreement
       And I enter "Richard Roe" as contact person with a phone "123456789"
 
+    @quote3:
+    Scenario: Multi select car brands
+      Given I go to "quote" page
+      And I select "Ford Toyota Other" with Select
+      And I select "Ford BMW" with actions
+      And I wait for 3 sec
+
 

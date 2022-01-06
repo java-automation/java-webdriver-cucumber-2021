@@ -8,6 +8,7 @@ import java.util.Scanner;
 import okhttp3.Route;
 import org.apache.logging.log4j.core.appender.rolling.action.IfAccumulatedFileCount;
 import org.apache.logging.log4j.core.util.JsonUtils;
+import pages.Cat;
 
 
 import java.util.*;
@@ -772,16 +773,32 @@ public class JavaStepDefs<now> {
 
     @Then("I calculate the mortgage")
     public void iCalculateTheMortgage() {
-
-
-
-
     }
 
     @And("I say the sentence five times")
     public void iSayTheSentenceFiveTimes() {
         for (int i=0; i < 5; i++)
             System.out.println("Hello World" + i);
+    }
+
+
+    @Given("I work with classes")
+    public void iWorkWithClasses() {
+        Cat cat = new Cat();
+        cat.sleep();
+        cat.walk();
+        cat.speak();
+        cat.eat("fish");
+        cat.setName("Esh");
+        System.out.println(cat.getName()); //to get the name of the cat
+        cat.sleep();
+
+
+        Cat anotherCat = new Cat(); // no name cat
+        anotherCat.sleep();
+        anotherCat.walk();
+        anotherCat.speak();
+        System.out.println(anotherCat.getName()); // does not return any name
     }
 
 

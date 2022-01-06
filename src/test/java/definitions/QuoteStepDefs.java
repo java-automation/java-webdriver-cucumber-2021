@@ -6,8 +6,12 @@ import io.cucumber.java.en.When;
 import org.assertj.core.api.Assertions;
 import org.junit.Assert;
 import org.openqa.selenium.By;
+import org.openqa.selenium.Keys;
+import org.openqa.selenium.interactions.Actions;
+import org.openqa.selenium.support.ui.Select;
 import org.testng.asserts.Assertion;
 
+import javax.swing.*;
 import java.io.FileNotFoundException;
 import java.util.Map;
 
@@ -62,5 +66,29 @@ public class QuoteStepDefs {
 //
 //        String usernameResult = getDriver().findElement(By.xpath("//b[@name='username']")).getText();
 //        Assertions.assertThat(usernameResult).isEqualTo("jdoe");
+    }
+
+    @And("I select {string} with Select")
+    public void iSelectWithSelect(String brands) {
+        String[] options = brands.split(" ");
+        Select select = new Select(getDriver().findElement(By.xpath("//select[@name='carMake']")));
+        for (String el: options) {
+            select.selectByValue(el);
+        }
+    }
+
+    @And("I select {string} with actions")
+    public void iSelectWithActions(String brands) {
+        Actions actions = new Actions(getDriver());
+        String[] options = brands.split(" ");
+        //select[@name='carMake']//option[@value='Ford']
+        actions.keyDown(Keys.COMMAND).perform();
+       for (String el: options) {
+           actions
+                   .moveToElement(getDriver().findElement(By.xpath("//select[@name='carMake']//option[@value='" +el+ "']")))
+                   .click()
+                   .perform();
+       }
+       actions.keyUp(Keys.COMMAND).perform();
     }
 }
