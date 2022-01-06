@@ -5,7 +5,9 @@ import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 import models.PersonData;
 import org.openqa.selenium.By;
+import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.interactions.Actions;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -14,8 +16,8 @@ import java.util.Map;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
-import static support.TestContext.getDriver;
 import static support.TestContext.getData;
+import static support.TestContext.getDriver;
 
 public class QuoteStepDefs extends HelperStepDefs {
     public static final String TITLE_GET_A_QUOTE_TEXT = "Get a Quote";
@@ -68,7 +70,7 @@ public class QuoteStepDefs extends HelperStepDefs {
     Map<String, String> user = getData("user");
 
     PersonData person = new PersonData("Irina", "Aleksandrovna", "Gavrilova", "gavrilova.irina", "passioninsoftwaretesting@gmail.com",
-            "p1234", "p1234", "512111111", "Russia", "Female", "here is an address", "Other", "01/25/2000");
+            "p1234", "p1234", "512111111", "Russia", "Female", "here is an address", "Ford, Toyota", "01/25/2000");
 
     @When("I fill out required fields")
     public void iFillOutRequiredFields() {
@@ -224,13 +226,27 @@ public class QuoteStepDefs extends HelperStepDefs {
 
 
     @And("I enter {string} as contact person with a phone {string} one")
-    public void iEnterAsContactPersonWithAPhone(String contactName, String contactPhone) throws InterruptedException {
+    public void iEnterAsContactPersonWithAPhone(String contactName, String contactPhone) {
 
         getDriver().switchTo().frame("additionalInfo");
-
         getDriver().findElement(By.xpath("//input[@id='contactPersonName']")).sendKeys(contactName);
         getDriver().findElement(By.xpath("//input[@id='contactPersonPhone']")).sendKeys(contactPhone);
-
         getDriver().switchTo().defaultContent();
+    }
+
+    @Then("I manipulate multi-select using Actions and key press")
+    public void iManipulateMultiSelectUsingActionsAndKeyPress() { //Ford, Toyota in multi-section options
+        new Actions(getDriver())
+                .click(getDriver().findElement(By.xpath("//select[@name='carMake']/option")))
+                .keyDown(Keys.COMMAND)
+                .click(getDriver().findElement(By.xpath("//select[@name='carMake']/option[2]")))
+                .keyUp(Keys.COMMAND)
+                .build()
+                .perform();
+    }
+
+    @And("I verify the multi-select field")
+    public void iVerifyTheMultiSelectField() {
+        assertTrue(getText(SUBMITTED_APPLICATION_PAGE_CAR_MAKE_XPATH).contains(person.getCarMake()));
     }
 }

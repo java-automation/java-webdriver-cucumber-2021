@@ -120,3 +120,12 @@ Feature: Fill out all Quote fields and verify that submitted fields saved correc
     And I verify "Document 2" is in the list1
     And I "accept" third party agreement1
     And I enter "Richard Roe" as contact person with a phone "123456789" one
+
+  @quote6
+  Scenario: By using Actions and key press (CTRL or COMMAND + mouse) manipulate multi-select in quote page. Select few options from it. Then try it with Select class.
+    Given I go to "quote" page
+    Then I fill out required fields
+    Then I manipulate multi-select using Actions and key press
+    And I submit the page
+    Then I verify the required fields
+    And I verify the multi-select field
