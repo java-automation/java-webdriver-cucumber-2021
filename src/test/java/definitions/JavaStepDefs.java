@@ -4,6 +4,7 @@ import io.cucumber.java.Transpose;
 import io.cucumber.java.en.And;
 import io.cucumber.java.en.Then;
 import pages.Cat;
+import pages.Dog;
 
 import java.math.BigInteger;
 import java.util.*;
@@ -1063,5 +1064,12 @@ public class JavaStepDefs {
         anotherCat.speak();
         anotherCat.sleep();
         System.out.println(anotherCat.getName());
+
+        Dog dog = new Dog("Mike");
+        dog.walk();
+        dog.speak();
+        dog.eat("meat");
+        dog.sleep();
+        System.out.println(dog.getName());
     }
 }
