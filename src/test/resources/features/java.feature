@@ -200,3 +200,11 @@ Feature: Java feature
       Given I calculate factorial for 5
       Given I calculate factorial for 6
       Given I calculate factorial for 3
+
+  @javaClasses
+    Scenario: Classes
+      Given I work with classes
+
+  @javaJanuary03
+    Scenario: Classes kangaroo
+      Given I work with Kangaroo

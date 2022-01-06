@@ -9,6 +9,8 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.Dimension;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebElement;
+import pages.Cat;
+import pages.Kangaroo;
 
 import java.util.*;
 
@@ -722,5 +724,25 @@ public class JavaStepDefs {
         }
         iFa *= getFactorial(iNum - 1);
         return iFa;
+    }
+
+    @Given("I work with classes")
+    public void iWorkWithClasses() {
+        Cat cat = new Cat("Tom");
+        cat.sleep();
+        cat.walk();
+        cat.speak();
+        cat.eat("fish");
+        System.out.println(cat.getName());
+    }
+
+    @Given("I work with Kangaroo")
+    public void iWorkWithKangaroo() {
+        Kangaroo kang = new Kangaroo("Ruth");
+        kang.speak();
+        kang.sleep();
+        kang.eat("Pelmeni");
+        kang.drink("Cola");
+        kang.jump();
     }
 }
