@@ -12,6 +12,7 @@ public class Animal {
     }
 
     public void setName(String newName) {
+        if (newName.isEmpty()) throw new Error("Empty animal name!");
         name = newName;
     }
 

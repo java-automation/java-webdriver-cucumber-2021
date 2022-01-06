@@ -5,6 +5,7 @@ import io.cucumber.java.en.And;
 import io.cucumber.java.en.Then;
 import pages.Cat;
 import pages.Dog;
+import pages.Frog;
 
 import java.math.BigInteger;
 import java.util.*;
@@ -1052,24 +1053,31 @@ public class JavaStepDefs {
     @And("I work with classes")
     public void iWorkWithClasses() {
         Cat cat = new Cat("Josephine");
-        cat.walk();
-        cat.speak();
-        cat.eat("mouse");
-        cat.setName("Jojoba");
-        cat.sleep();
         System.out.println(cat.getName());
+        cat.walk();
+        cat.meow();
+        cat.eat("mouse");
+        cat.sleep();
 
         Cat anotherCat = new Cat();
-        anotherCat.walk();
-        anotherCat.speak();
-        anotherCat.sleep();
         System.out.println(anotherCat.getName());
+        anotherCat.walk();
+        anotherCat.meow();
+        anotherCat.sleep();
 
         Dog dog = new Dog("Mike");
+        System.out.println(dog.getName());
         dog.walk();
-        dog.speak();
+        dog.bark();
         dog.eat("meat");
         dog.sleep();
-        System.out.println(dog.getName());
+
+        Frog frog = new Frog();
+        frog.setName("Lucy");
+        System.out.println(frog.getName());
+        frog.walk();
+        frog.quack();
+        frog.eat("fly");
+        frog.sleep();
     }
 }

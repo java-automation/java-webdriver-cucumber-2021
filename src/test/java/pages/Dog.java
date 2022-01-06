@@ -8,14 +8,11 @@ public class Dog extends Animal {
 
     @Override
     public void setName(String newName) {
-        if (!newName.isEmpty() && !newName.equals("Tom") && !newName.equals("Jerry")) {
-            super.setName(newName);
-        } else {
-            throw new Error("Unacceptable dog name! " + newName);
-        }
+        if (newName.equals("Tom") || newName.equals("Jerry")) throw new Error("Unacceptable dog name! " + newName);
+        super.setName(newName);
     }
 
-    public void speak() {
+    public void bark() {
         System.out.println("Dog " + this.getName() + " is barking!");
     }
 }
