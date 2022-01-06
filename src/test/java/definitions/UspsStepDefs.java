@@ -107,8 +107,8 @@ public class UspsStepDefs {
 
     @When("I go to {string} under {string}")
     public void iGoToUnder(String subCategory, String category) {
-        actions.moveToElement(getDriver().findElement(By.xpath("//li[@class='menuheader']//a[text()='" + category + "']"))).perform();
-        getDriver().findElement(By.xpath("//li[@class='tool-eddm']//a[contains(text(),'" + subCategory + "')]")).click();
+        actions.moveToElement(getDriver().findElement(By.xpath("//a[text()='" + category + "']"))).perform();
+        getDriver().findElement(By.xpath("//a[contains(text(),'" + subCategory + "')]")).click();
         wait.until(ExpectedConditions.titleContains(subCategory));
     }
 
@@ -190,4 +190,5 @@ public class UspsStepDefs {
         System.out.println(getDriver().findElement(By.xpath("//p[@id='detailTollFree']/p")).getText());
         assertThat(getDriver().findElement(By.xpath("//p[@id='detailTollFree']/p")).getText()).contains(phoneNum);
     }
+
 }
