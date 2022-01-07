@@ -2,7 +2,7 @@ package pages;
 
 public class Cat {
     //fields
-    public String name;
+    private String name;
 
     public void setName(String newName) {
         if ((!newName.isEmpty()) && (!newName.equals("Jerry"))) {
