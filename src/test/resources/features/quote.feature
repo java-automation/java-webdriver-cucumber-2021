@@ -129,3 +129,11 @@ Feature: Fill out all Quote fields and verify that submitted fields saved correc
     And I submit the page
     Then I verify the required fields
     And I verify the multi-select field
+  @quote7
+  Scenario:  Manipulate multi-select in quote page with Select class.
+    Given I go to "quote" page
+    Then I fill out required fields
+    Then I manipulate multi-select with Select class
+    And I submit the page
+    Then I verify the required fields
+    And I verify the multi-select field

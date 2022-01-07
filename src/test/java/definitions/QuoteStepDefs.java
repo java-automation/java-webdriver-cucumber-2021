@@ -8,6 +8,7 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.Actions;
+import org.openqa.selenium.support.ui.Select;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -241,12 +242,20 @@ public class QuoteStepDefs extends HelperStepDefs {
                 .keyDown(Keys.COMMAND)
                 .click(getDriver().findElement(By.xpath("//select[@name='carMake']/option[2]")))
                 .keyUp(Keys.COMMAND)
-                .build()
                 .perform();
     }
 
     @And("I verify the multi-select field")
     public void iVerifyTheMultiSelectField() {
         assertTrue(getText(SUBMITTED_APPLICATION_PAGE_CAR_MAKE_XPATH).contains(person.getCarMake()));
+    }
+
+    @Then("I manipulate multi-select with Select class")
+    public void iManipulateMultiSelectWithSelectClass() {
+        List<String> carMakeList = List.of(person.getCarMake().split(", "));
+        for (String car : carMakeList) {
+            new Select(getDriver().findElement(By.xpath("//select[@name='carMake']"))).selectByVisibleText(car.replace(" ", ""));
+        }
+
     }
 }
