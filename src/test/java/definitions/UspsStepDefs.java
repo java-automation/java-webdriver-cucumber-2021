@@ -35,7 +35,7 @@ public class UspsStepDefs {
                 getDriver().findElement(By.xpath("//a[contains(@href,'ZipLookupAction')]")).click();
             }
             case "mouseover" -> {
-                moveMouseToElement(sendButton);
+                new Actions(getDriver()).moveToElement(sendButton).perform();
                 getDriver().findElement(By.xpath("//li[@class='tool-zip']/a[contains(@href,'zip-code-lookup')]")).click();
             }
             default -> throw new Error("Unknown strategy: " + strategy);
@@ -60,12 +60,6 @@ public class UspsStepDefs {
         for (WebElement el : results) assertThat(el.getAttribute("textContent")).contains(zip);
     }
 
-    @When("I go to Calculate Price Page")
-    public void iGoToCalculatePricePage() {
-        moveMouseToElement(getDriver().findElement(By.xpath("//ul[@class='nav-list']/li[contains(@class,'qt-nav')]")));
-        getDriver().findElement(By.xpath("//a[@role='menuitem']/img[contains(@alt,'Calculate a Price')]")).click();
-    }
-
     @And("I select {string} with {string} shape")
     public void iSelectWithShape(String country, String shape) {
         new Select(getDriver().findElement(By.xpath("//select[@id='CountryID']"))).selectByVisibleText(country);
@@ -86,7 +80,7 @@ public class UspsStepDefs {
     @When("I perform {string} search")
     public void iPerformSearch(String query) {
         String navSearchXPath = "//a[@id='navsearch']/..";
-        moveMouseToElement(getDriver().findElement(By.xpath(navSearchXPath)));
+        new Actions(getDriver()).moveToElement(getDriver().findElement(By.xpath(navSearchXPath))).perform();
         getDriver().findElement(By.xpath(navSearchXPath + "//input[@name='q']")).sendKeys(query);
         getDriver().findElement(By.xpath(navSearchXPath + "//input[@value='Search']")).click();
 
@@ -150,6 +144,7 @@ public class UspsStepDefs {
         }
 
         WebDriverWait wait = new WebDriverWait(getDriver(), 5);
+        Actions actions = new Actions(getDriver());
         WebElement spinner = getDriver().findElement(By.xpath("//div[@class='spinner-content']"));
 
         int nextPageValue;
@@ -165,12 +160,8 @@ public class UspsStepDefs {
             }
             wait.until(visibilityOf(spinner));
             wait.until(invisibilityOf(spinner));
-            moveMouseToElement(getDriver().findElement(By.xpath("//footer")));
+            actions.moveToElement(getDriver().findElement(By.xpath("//footer"))).perform();
         } while (!isTargetPageVisible);
-    }
-
-    private void moveMouseToElement(WebElement element) {
-        new Actions(getDriver()).moveToElement(element).perform();
     }
 
     @When("I select {string} in results")
@@ -202,17 +193,19 @@ public class UspsStepDefs {
     }
 
     @When("I go to {string} under {string}")
-    public void iGoToUnder(String submenuLabel, String navigationMenuLabel) {
-        moveMouseToElement(getDriver().findElement(By.xpath(getNavigationMenuItemXPath(navigationMenuLabel))));
-        getDriver().findElement(By.xpath(getSubmenuItemXPath(navigationMenuLabel, submenuLabel))).click();
+    public void iGoToUnder(String subMenuLabel, String navMenuLabel) {
+        new Actions(getDriver())
+                .moveToElement(getDriver().findElement(By.xpath(getNavMenuItemXPath(navMenuLabel))))
+                .click(getDriver().findElement(By.xpath(getSubMenuItemXPath(navMenuLabel, subMenuLabel))))
+                .perform();
     }
 
-    private String getSubmenuItemXPath(String menuLabel, String submenuLabel) {
-        return getNavigationMenuItemXPath(menuLabel) + "/..//a[@role='menuitem'][normalize-space(.)='" + submenuLabel + "']";
+    private String getSubMenuItemXPath(String navMenuLabel, String subMenuLabel) {
+        return getNavMenuItemXPath(navMenuLabel) + "/..//a[@role='menuitem'][normalize-space(.)='" + subMenuLabel + "']";
     }
 
-    private String getNavigationMenuItemXPath(String label) {
-        return "//ul[@class='nav-list']//a[@class='menuitem'][normalize-space(.)='" + label + "']";
+    private String getNavMenuItemXPath(String label) {
+        return "//ul[@class='nav-list']//a[contains(@class,'menuitem')][normalize-space(.)='" + label + "']";
     }
 
     @And("I search for {string}")
@@ -265,8 +258,8 @@ public class UspsStepDefs {
     }
 
     @When("I go to {string} tab")
-    public void iGoToTab(String navigationMenuLabel) {
-        getDriver().findElement(By.xpath(getNavigationMenuItemXPath(navigationMenuLabel))).click();
+    public void iGoToTab(String navMenuLabel) {
+        getDriver().findElement(By.xpath(getNavMenuItemXPath(navMenuLabel))).click();
     }
 
     @And("I perform {string} help search")

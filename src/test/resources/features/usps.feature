@@ -18,7 +18,7 @@ Feature: USPS website scenarios
 
   @usps2
   Scenario: Calculate price
-    When  I go to Calculate Price Page
+    When  I go to "Calculate a Price" under "Quick Tools"
     *     I select "Canada" with "Postcard" shape
     *     I define "2" quantity
     Then  I calculate the price and validate cost is "$2.60"
