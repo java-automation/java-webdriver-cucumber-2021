@@ -71,7 +71,7 @@
 #      Given print array
 #      And sorting asc using while
 #      And sorting desc using while
-#      And sorting desc
+      And sorting desc
 #      And sorting desc odd numbers
 #      And sorting desc odd numbers mk
 #      And prints multiplication table of numbers practice
@@ -90,4 +90,9 @@
 #      And a function to find the largest element in an array
       And a function that reverses words in a sentence
 #      And FizzBuzz challenge
-  dsfsdfsdfsf
+
+
+  Scenario:
+    Given I work with classes
+#    And I work with classes Dog
+#  And Print animal names

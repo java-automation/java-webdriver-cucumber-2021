@@ -5,12 +5,16 @@ import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 import io.cucumber.java.sl.In;
+import io.cucumber.java8.Ca;
 import org.apache.commons.compress.archivers.ar.ArArchiveEntry;
 import org.apache.commons.lang3.ArrayUtils;
 import org.openqa.selenium.By;
 import org.openqa.selenium.Dimension;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.remote.server.handler.DeleteSession;
+import pages.Animal;
+import pages.Cat;
+import pages.Dog;
 
 import static org.assertj.core.api.Assertions.*;
 
@@ -136,6 +140,7 @@ public class JavaStepDef {
         switch (page.toLowerCase()) {
             case "google" -> getDriver().get("https://google.com");
             case "quote" -> getDriver().get("https://skryabin.com/market/quote.html");
+            case "usps" -> getDriver().get("https://www.usps.com/");
             default -> System.out.println("Unsupported page: " + page);
         }
     }
@@ -814,12 +819,12 @@ public class JavaStepDef {
 
     @And("a function that reverses words in a sentence")
     public void aFunctionThatReversesWordsInASentence() {
-        String s[] = "you shall not pass".split(" ");
-        String ans = "";
+        String[] s = "My name is Bond".split(" ");
+        StringBuilder reverse = new StringBuilder();
         for (int i = s.length - 1; i >= 0; i--) {
-            ans += s[i] + " ";
+            reverse.append(s[i]).append(" ");
         }
-        System.out.println("Reversed String: " + ans);
+        System.out.println("Reversed String: " + reverse);
     }
 
 
@@ -887,6 +892,59 @@ public class JavaStepDef {
             System.out.print(str.charAt(i));
         }
     }
+
+    @Given("I work with classes")
+    public void iWorkWithClasses() {
+
+        Animal cat = new Cat("Tom");
+        cat.sleep();
+        cat.walk();
+        cat.speak();
+        cat.eat("fish");
+        cat.getName();
+
+
+        Animal anotherCat = new Cat();
+        anotherCat.sleep();
+        anotherCat.walk();
+        anotherCat.eat("milk");
+        anotherCat.getName();
+
+        Animal dog = new Dog();
+        System.out.println("Dog name is " + dog.getName());
+        dog.setName("Bobby");
+        dog.eat("Bone");
+        dog.sleep();
+        dog.speak();
+
+        List<Animal> animals = new ArrayList<>();
+        animals.add(cat);
+        animals.add(anotherCat);
+        animals.add(dog);
+        printAnimalNames(animals);
+    }
+
+    void printAnimalNames(List<Animal> animals){
+        System.out.println();
+        System.out.println("All animals name>>>");
+        for (Animal animal: animals ){
+            System.out.println(animal.getName());
+            animal.sleep();
+            animal.speak();
+        }
+    }
+
+    @And("I work with classes Dog")
+    public void iWorkWithClassesDog() {
+//        Dog dog = new Dog("Nana");
+//        dog.dogOwner("Nika");
+//        dog.getDogName();
+//        dog.getOwnerName();
+//        dog.walk();
+    }
+
+
+
 
 }
 
