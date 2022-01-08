@@ -28,7 +28,7 @@ Feature: USPS website scenarios
     When  I perform "Free Boxes" search
     *     I set filters
       | Send | Receive | International | USPS Corporate |
-    Then  I verify that "330" results found
+    Then  I verify that "329" results found
     When  I select "Priority Mail | USPS" in results
     *     I click "Ship Now" button
     Then  I validate that Sign In is required

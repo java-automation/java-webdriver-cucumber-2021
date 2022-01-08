@@ -89,6 +89,10 @@ public class UspsStepDefs {
         moveMouseToElement(getDriver().findElement(By.xpath(navSearchXPath)));
         getDriver().findElement(By.xpath(navSearchXPath + "//input[@name='q']")).sendKeys(query);
         getDriver().findElement(By.xpath(navSearchXPath + "//input[@value='Search']")).click();
+
+        WebDriverWait wait = new WebDriverWait(getDriver(), 5);
+        WebElement spinner =  wait.until(visibilityOfElementLocated(By.xpath("//div[@class='spinner-content']")));
+        wait.until(invisibilityOf(spinner));
     }
 
     @And("I set filters")
@@ -96,21 +100,14 @@ public class UspsStepDefs {
         int numOfFilters = filters.size();
         if (numOfFilters < 1) throw new Error("Filter list is empty!");
 
-        By firstBy = By.xpath("//div[@id='dyn_nav_col']//p[@title='" + filters.get(0) + "']");
-        new WebDriverWait(getDriver(), 3).until(presenceOfElementLocated(firstBy));
-        getDriver().findElement(firstBy).click();
+        WebDriverWait wait = new WebDriverWait(getDriver(), 5);
+        WebElement spinner =  getDriver().findElement(By.xpath("//div[@class='spinner-content']"));
 
-        WebElement spinner = getDriver().findElement(By.xpath("//div[@class='spinner-content']"));
-
-        for (int i = 1; i < numOfFilters; ++i) {
-            waitForElementToBeInvisible(spinner);
-            getDriver().findElement(By.xpath("//div[@id='dyn_nav_col']//p[@title='" + filters.get(i) + "']")).click();
+        for (String filter : filters) {
+            getDriver().findElement(By.xpath("//div[@id='dyn_nav_col']//p[@title='" + filter + "']")).click();
+            wait.until(visibilityOf(spinner));
+            wait.until(invisibilityOf(spinner));
         }
-        waitForElementToBeInvisible(spinner);
-    }
-
-    private void waitForElementToBeInvisible(WebElement element) {
-        new WebDriverWait(getDriver(),10).until(invisibilityOf(element));
     }
 
     @Then("I verify that {string} results found")
@@ -127,7 +124,7 @@ public class UspsStepDefs {
         int amountOfPages = totalResults / 10;
         int resultsOnLastPage = totalResults % 10;
 
-        if (resultsOnLastPage > 0) amountOfPages++;
+        if (resultsOnLastPage > 0) ++amountOfPages;
         else resultsOnLastPage = 10;
 
         if (amountOfPages > 1) goToSpecificResultsPage(amountOfPages);
@@ -152,8 +149,8 @@ public class UspsStepDefs {
             nextPageBy = By.xpath("//ul[@class='pagination']/li[contains(@class,'prev')]/following-sibling::li[1]");
         }
 
+        WebDriverWait wait = new WebDriverWait(getDriver(), 5);
         WebElement spinner = getDriver().findElement(By.xpath("//div[@class='spinner-content']"));
-        WebElement footer = getDriver().findElement(By.xpath("//footer"));
 
         int nextPageValue;
         boolean isTargetPageVisible;
@@ -161,16 +158,15 @@ public class UspsStepDefs {
             WebElement nextPage = getDriver().findElement(nextPageBy);
             nextPageValue = Integer.parseInt(nextPage.getText());
             isTargetPageVisible = ((page <= nextPageValue && goingRight) || (page >= nextPageValue && !goingRight));
-            if (!isTargetPageVisible) {
-                moveMouseToElement(footer);
+            if (isTargetPageVisible) {
+                getDriver().findElement(By.xpath("//ul[@class='pagination']//*[normalize-space(.)='" + page + "']")).click();
+            } else {
                 nextPage.click();
-                waitForElementToBeInvisible(spinner);
             }
+            wait.until(visibilityOf(spinner));
+            wait.until(invisibilityOf(spinner));
+            moveMouseToElement(getDriver().findElement(By.xpath("//footer")));
         } while (!isTargetPageVisible);
-
-        moveMouseToElement(footer);
-        getDriver().findElement(By.xpath("//ul[@class='pagination']//*[normalize-space(.)='" + page + "']")).click();
-        waitForElementToBeInvisible(spinner);
     }
 
     private void moveMouseToElement(WebElement element) {
@@ -221,9 +217,11 @@ public class UspsStepDefs {
 
     @And("I search for {string}")
     public void iSearchFor(String address) {
+        WebDriverWait wait = new WebDriverWait(getDriver(), 10);
         getDriver().findElement(By.xpath("//input[@id='cityOrZipCode']")).sendKeys(address);
         getDriver().findElement(By.xpath("//a[contains(@class,'eddm-search-btn')]")).click();
-        waitForElementToBeInvisible(getDriver().findElement(By.xpath("//div[@class='spinner-content']")));
+        WebElement spinner = wait.until(visibilityOf(getDriver().findElement(By.xpath("//div[@class='spinner-content']"))));
+        wait.until(invisibilityOf(spinner));
     }
 
     @And("I choose view as {string} on the map")
@@ -238,10 +236,10 @@ public class UspsStepDefs {
 
     @And("I close modal window")
     public void iCloseModalWindow() {
+        WebDriverWait wait = new WebDriverWait(getDriver(),3);
         WebElement closeButton = getDriver().findElement(By.xpath("//a[@id='closeAndUpdateTotals']"));
-        new WebDriverWait(getDriver(),3).until(visibilityOf(closeButton));
-        closeButton.click();
-        waitForElementToBeInvisible(closeButton);
+        wait.until(visibilityOf(closeButton)).click();
+        wait.until(invisibilityOf(closeButton));
     }
 
     @Then("I verify that summary of all rows of Cost column is equal Approximate Cost in Order Summary")
@@ -274,13 +272,14 @@ public class UspsStepDefs {
     @And("I perform {string} help search")
     public void iPerformHelpSearch(String query) {
         getDriver().findElement(By.xpath("//div[@class='searchBox']//input")).sendKeys(query + Keys.ENTER);
+        By firstResultLocator = By.xpath("//div[@class='resultsWrapper']//li[contains(@class,'kbResultStencil')]");
+        new WebDriverWait(getDriver(), 10).until(visibilityOfElementLocated(firstResultLocator));
     }
 
     @Then("I verify that no results of {string} available in help")
     public void iVerifyThatNoResultsOfAvailableInHelp(String query) {
-        By firstResultLocator = By.xpath("//div[@class='resultsWrapper']//li[contains(@class,'kbResultStencil')]");
-        new WebDriverWait(getDriver(), 5).until(visibilityOfElementLocated(firstResultLocator));
-        List<WebElement> results = getDriver().findElements(firstResultLocator);
+        By resultLocator = By.xpath("//div[@class='resultsWrapper']//li[contains(@class,'kbResultStencil')]");
+        List<WebElement> results = getDriver().findElements(resultLocator);
         for (WebElement el : results) {
             assertThat(el.getText()).doesNotContainIgnoringCase(query);
         }
