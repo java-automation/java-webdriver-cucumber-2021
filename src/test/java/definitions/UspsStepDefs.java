@@ -80,12 +80,14 @@ public class UspsStepDefs {
     @When("I perform {string} search")
     public void iPerformSearch(String query) {
         String navSearchXPath = "//a[@id='navsearch']/..";
-        new Actions(getDriver()).moveToElement(getDriver().findElement(By.xpath(navSearchXPath))).perform();
-        getDriver().findElement(By.xpath(navSearchXPath + "//input[@name='q']")).sendKeys(query);
-        getDriver().findElement(By.xpath(navSearchXPath + "//input[@value='Search']")).click();
+        new Actions(getDriver())
+                .moveToElement(getDriver().findElement(By.xpath(navSearchXPath)))
+                .sendKeys(getDriver().findElement(By.xpath(navSearchXPath + "//input[@name='q']")), query)
+                .click(getDriver().findElement(By.xpath(navSearchXPath + "//input[@value='Search']")))
+                .perform();
 
         WebDriverWait wait = new WebDriverWait(getDriver(), 5);
-        WebElement spinner =  wait.until(visibilityOfElementLocated(By.xpath("//div[@class='spinner-content']")));
+        WebElement spinner =  wait.until(visibilityOfElementLocated(By.cssSelector(".spinner-content")));
         wait.until(invisibilityOf(spinner));
     }
 
@@ -95,7 +97,7 @@ public class UspsStepDefs {
         if (numOfFilters < 1) throw new Error("Filter list is empty!");
 
         WebDriverWait wait = new WebDriverWait(getDriver(), 5);
-        WebElement spinner =  getDriver().findElement(By.xpath("//div[@class='spinner-content']"));
+        WebElement spinner =  getDriver().findElement(By.cssSelector(".spinner-content"));
 
         for (String filter : filters) {
             getDriver().findElement(By.xpath("//div[@id='dyn_nav_col']//p[@title='" + filter + "']")).click();
@@ -145,7 +147,7 @@ public class UspsStepDefs {
 
         WebDriverWait wait = new WebDriverWait(getDriver(), 5);
         Actions actions = new Actions(getDriver());
-        WebElement spinner = getDriver().findElement(By.xpath("//div[@class='spinner-content']"));
+        WebElement spinner = getDriver().findElement(By.cssSelector(".spinner-content"));
 
         int nextPageValue;
         boolean isTargetPageVisible;
@@ -211,9 +213,10 @@ public class UspsStepDefs {
     @And("I search for {string}")
     public void iSearchFor(String address) {
         WebDriverWait wait = new WebDriverWait(getDriver(), 10);
-        getDriver().findElement(By.xpath("//input[@id='cityOrZipCode']")).sendKeys(address);
-        getDriver().findElement(By.xpath("//a[contains(@class,'eddm-search-btn')]")).click();
-        WebElement spinner = wait.until(visibilityOf(getDriver().findElement(By.xpath("//div[@class='spinner-content']"))));
+        getDriver().findElement(By.id("cityOrZipCode")).sendKeys(address);
+        getDriver().findElement(By.cssSelector(".eddm-search-btn")).click();
+        WebElement spinner = getDriver().findElement(By.id("searchProcessing"));
+        wait.until(visibilityOf(spinner));
         wait.until(invisibilityOf(spinner));
     }
 
@@ -224,13 +227,13 @@ public class UspsStepDefs {
 
     @When("I select all in the table")
     public void iSelectAllInTheTable() {
-        getDriver().findElement(By.xpath("//input[@id='select-all-checkboxes']")).click();
+        getDriver().findElement(By.id("select-all-checkboxes")).click();
     }
 
     @And("I close modal window")
     public void iCloseModalWindow() {
         WebDriverWait wait = new WebDriverWait(getDriver(),3);
-        WebElement closeButton = getDriver().findElement(By.xpath("//a[@id='closeAndUpdateTotals']"));
+        WebElement closeButton = getDriver().findElement(By.id("closeAndUpdateTotals"));
         wait.until(visibilityOf(closeButton)).click();
         wait.until(invisibilityOf(closeButton));
     }
@@ -238,20 +241,22 @@ public class UspsStepDefs {
     @Then("I verify that summary of all rows of Cost column is equal Approximate Cost in Order Summary")
     public void iVerifyThatSummaryOfAllRowsOfCostColumnIsEqualApproximateCostInOrderSummary() throws ParseException {
         int costColumnIndex = getCostColumnIndex();
-        String costElementsXPath = "//table/tbody//input[contains(@id,'checkbox')]/ancestor::td/following-sibling::td[" + costColumnIndex + "]";
+        String costElementsXPath = "//table[contains(@class,'target-audience')]/tbody//input[contains(@id,'checkbox')]/ancestor::td/following-sibling::td[" + costColumnIndex + "]";
         List<WebElement> costElements = getDriver().findElements(By.xpath(costElementsXPath));
+        assertThat(costElements.size()).isEqualTo(Integer.parseInt(getDriver().findElement(By.id("totalRoutesSelected")).getText()));
 
+        //approximate cost is not localized, so we don't care about localization that much and just use this pattern
         DecimalFormat df = new DecimalFormat("$0.00");
         BigDecimal totalCost = new BigDecimal(0);
         for (WebElement el : costElements) {
             totalCost = totalCost.add(BigDecimal.valueOf(df.parse(el.getText()).doubleValue()));
         }
 
-        assertThat(df.format(totalCost)).isEqualTo(getDriver().findElement(By.xpath("//p[@id='approximateCost']")).getText());
+        assertThat(df.format(totalCost)).isEqualTo(getDriver().findElement(By.id("approximateCost")).getText());
     }
 
     private int getCostColumnIndex() {
-        List<WebElement> headersList = getDriver().findElements(By.xpath("//table/thead//th"));
+        List<WebElement> headersList = getDriver().findElements(By.xpath("//table[contains(@class,'target-audience')]/thead//th"));
         for (int i = 0; i < headersList.size(); ++i)
             if (headersList.get(i).getText().equals("Cost")) return i;
         throw new Error("Couldn't locate 'Cost' column.");
