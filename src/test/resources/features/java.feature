@@ -199,5 +199,5 @@ Feature: Java experiments
     And I calculate square root for 2.5
 
   @java36
-  Scenario: Basic class exercises
-    And I work with classes
+  Scenario: OOP exercise
+    And I work with Animal classes

@@ -1051,24 +1051,27 @@ public class JavaStepDefs {
         return approximation;
     }
 
-    @And("I work with classes")
-    public void iWorkWithClasses() {
+    @And("I work with Animal classes")
+    public void iWorkWithAnimalClasses() {
         Animal cat = new Cat("Tom");
         cat.walk();
         cat.birthday();
         cat.speak();
         cat.eat("mouse");
-        cat.birthday();
         cat.sleep();
         System.out.println();
 
         Animal anotherCat = new Cat();
         anotherCat.walk();
+        anotherCat.birthday();
         anotherCat.speak();
         anotherCat.setName("Josephine");
         anotherCat.eat("fancy cat food");
         anotherCat.speak();
         anotherCat.sleep();
+        anotherCat.birthday();
+        String ageDifference = (cat.getAge() > anotherCat.getAge()) ? "older" : "younger";
+        System.out.println(cat.getName() + " is " + ageDifference + " than " + anotherCat.getName());
         System.out.println();
 
         Animal dog = new Dog("Spike", 3);

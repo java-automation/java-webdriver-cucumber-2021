@@ -9,31 +9,15 @@ public abstract class Animal {
 
     public Animal() {
         setClassName();
-        setName("nameless");
-        setAge(0);
-        System.out.println("New 'nameless' " + this.className + ", 0 years old!");
-    }
-
-    public Animal(String newName) {
-        setClassName();
-        setName(newName);
-        setAge(0);
-        System.out.println("New " + this.className + " - '" + this.name + "', 0 years old!");
-    }
-
-    public Animal(String newName, int age) {
-        setClassName();
-        setName(newName);
-        setAge(age);
-        System.out.println("New " + this.className + " - '" + this.name + "', " + this.age + " years old!");
+        System.out.println("New " + this.className + "!");
+        name = "nameless";
+        age = 0;
     }
 
     public void setName(String name) {
         if (name.isEmpty()) throw new Error("Empty animal name!");
-        if (this.name != null) {
-            System.out.println(this.className + " '" + this.name + "' has been adopted as '" + name + "'!");
-        }
         this.name = name;
+        System.out.println("This " + this.className + " is now known as '" + this.name + "'!");
     }
 
     public String getName() {
@@ -45,7 +29,9 @@ public abstract class Animal {
     }
 
     public void setAge(int age) {
+        if (age < this.age) throw new Error("Haven't invented time machine yet!");
         this.age = age;
+        System.out.println(this.className + " '" + this.name + "' is " + getAgeAsString() + "!");
     }
 
     public void walk() {
@@ -61,15 +47,15 @@ public abstract class Animal {
     }
 
     public void birthday() {
+        System.out.println(this.className + " '" + this.name + "' has a birthday!");
         setAge(++this.age);
-        System.out.println(this.className + " '" + this.name + "' has a birthday! Now " + this.age + " years old!");
     }
 
     public void birthday(Animal[] friends) {
         birthday();
         System.out.println("Friends attended:");
         for (Animal a : friends) {
-            System.out.println(" - " + a.className + " '" + a.getName() + "', " + a.getAge() + " years old");
+            System.out.println(" - " + a.className + " '" + a.getName() + "', " + a.getAgeAsString());
         }
     }
 
@@ -78,5 +64,9 @@ public abstract class Animal {
     private void setClassName() {
         String fullClassName = getClass().getName();
         className = fullClassName.substring(fullClassName.lastIndexOf('.') + 1);
+    }
+
+    private String getAgeAsString() {
+        return (this.age == 1) ? "1 year old" : this.age + " years old";
     }
 }
