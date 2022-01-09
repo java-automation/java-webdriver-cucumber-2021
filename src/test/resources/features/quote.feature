@@ -56,3 +56,21 @@ Feature: Quote Feature
   Scenario: Email field behavior
     Given I go to "quote" page
     When I verify email field behavior
+
+  @quote9:
+  Scenario: Manipulate multi-select in quote page with Actions
+    Given I go to "quote" page
+    When I select "Ford,Toyota,BMW" car makes with Actions
+    And I fill out required fields
+    And I submit the form
+    Then I verify that submitted fields saved correctly
+    Then I verify car makes
+
+  @quote10:
+  Scenario: Manipulate multi-select in quote page with Select
+    Given I go to "quote" page
+    When I select "BMW,Toyota,Other" car makes with Actions
+    And I fill out required fields
+    And I submit the form
+    Then I verify that submitted fields saved correctly
+    Then I verify car makes

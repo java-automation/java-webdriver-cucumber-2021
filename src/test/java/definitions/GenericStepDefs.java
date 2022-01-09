@@ -7,12 +7,16 @@ import io.cucumber.java.en.When;
 import org.openqa.selenium.By;
 import org.openqa.selenium.Dimension;
 import org.openqa.selenium.Keys;
+import org.openqa.selenium.WebElement;
+import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.logging.LogEntries;
 import org.openqa.selenium.logging.LogEntry;
 import org.openqa.selenium.logging.LogType;
+import org.openqa.selenium.support.ui.Select;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.logging.Level;
 
@@ -21,7 +25,8 @@ import static support.TestContext.getDriver;
 
 public class GenericStepDefs {
 
-    private Map<String,String> lastUsedRequiredFields = new HashMap<>();
+    private Map<String,String> lastUsedRequiredFields = new LinkedHashMap<>();
+    private Map<String,String> lastUsedNonRequiredFields = new LinkedHashMap<>();
 
     @And("I print logs to the console")
     public void iPrintLogsToTheConsole() throws InterruptedException {
@@ -97,7 +102,7 @@ public class GenericStepDefs {
     }
 
     private Map<String,String> generateRequiredFields() {
-        Map<String,String> requiredFields = new HashMap<>();
+        Map<String,String> requiredFields = new LinkedHashMap<>();  // insertion-order iteration important for password field
         requiredFields.put("name","Dan Beck");
         requiredFields.put("email","dan@example.com");
         requiredFields.put("password","qwerty");
@@ -114,6 +119,12 @@ public class GenericStepDefs {
         requiredFields.forEach((key,value) ->
                                     getDriver().findElement(By.xpath("//input[@name='" + key + "']")).sendKeys(value));
         getDriver().findElement(By.xpath("//input[@name='agreedToPrivacyPolicy']")).click();
+
+        // filling out name via dialog with first, middle and last name fields
+//        getDriver().findElement(By.xpath("//input[@name='name']")).click();
+//        getDriver().findElement(By.xpath("//div[@id='nameDialog']//input[@id='firstName']")).sendKeys("Dan");
+//        getDriver().findElement(By.xpath("//div[@id='nameDialog']//input[@id='lastName']")).sendKeys("Beck");
+//        getDriver().findElement(By.xpath("//span[text()='Save']")).click();
     }
 
     @Then("I verify the required fields")
@@ -196,5 +207,47 @@ public class GenericStepDefs {
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
+    }
+
+    @When("I select {string} car makes with Actions")
+    public void iSelectCarMakesViaActions(String carMakes) {
+        String[] makes = carMakes.split(",");
+        if (makes.length == 0) return;
+        Actions actions = new Actions(getDriver());
+        WebElement carMakeSelect = getDriver().findElement(By.xpath("//select[@name='carMake']"));
+
+        actions = actions.click(carMakeSelect.findElement(By.xpath("./option[@value='" + makes[0] + "']")))
+                         .keyDown(Keys.CONTROL);
+        for (int i=1; i<makes.length; i++) {
+            actions = actions.click(carMakeSelect.findElement(By.xpath("./option[@value='" + makes[i] + "']")));
+        }
+        actions.keyUp(Keys.CONTROL).perform();
+        lastUsedNonRequiredFields.put("carMake",carMakes);
+    }
+
+    @When("I select {string} car makes with Select")
+    public void iSelectCarMakesViaSelect(String carMakes) {
+        Select carMakeSelect = new Select(getDriver().findElement(By.xpath("//select[@name='carMake']")));
+        String[] makes = carMakes.split(",");
+        if (makes.length == 0) return;
+        for (String make : makes){
+            carMakeSelect.selectByValue(make);
+        }
+        lastUsedNonRequiredFields.put("carMake",carMakes);
+    }
+
+    @Then("I verify car makes")
+    public void iVerifyCarMakes() {
+        String expectedCarMakes = lastUsedNonRequiredFields.get("carMake");
+        String[] makes = expectedCarMakes.split(",");
+        String carMakeFieldText = getDriver().findElement(By.xpath("//b[@name='carMake']")).getText();
+        String carMakeText = carMakeFieldText;
+        for (String make : makes) {
+            assertThat(expectedCarMakes).contains(make);
+            carMakeFieldText = carMakeFieldText.replace(make,"");
+        }
+        carMakeFieldText = carMakeFieldText.replaceAll("\\W|_","");
+        assertThat(carMakeFieldText).overridingErrorMessage("Unexpected <%s> found in <%s>," +
+                 " only <%s> car makes where expected", carMakeFieldText, carMakeText, expectedCarMakes).isEqualTo("");
     }
 }
