@@ -2,19 +2,17 @@ package pages;
 
 public class Dog extends Animal {
 
-    public Dog() {}
-
-    public Dog(String newName) {
-        super(newName);
+    public Dog(String name, int age) {
+        super(name, age);
     }
 
     @Override
-    public void setName(String newName) {
-        if (newName.equals("Tom") || newName.equals("Jerry")) throw new Error("Unacceptable dog name! " + newName);
-        super.setName(newName);
+    public void setName(String name) {
+        if (name.equals("Tom") || name.equals("Jerry")) throw new Error("Unacceptable dog name! " + name);
+        super.setName(name);
     }
 
-    public void bark() {
-        System.out.println("Dog " + this.getName() + " is barking!");
+    public void speak() {
+        System.out.println("Dog '" + getName() + "' is barking!");
     }
 }

@@ -3,6 +3,7 @@ package definitions;
 import io.cucumber.java.Transpose;
 import io.cucumber.java.en.And;
 import io.cucumber.java.en.Then;
+import pages.Animal;
 import pages.Cat;
 import pages.Dog;
 import pages.Frog;
@@ -1052,32 +1053,39 @@ public class JavaStepDefs {
 
     @And("I work with classes")
     public void iWorkWithClasses() {
-        Cat cat = new Cat("Josephine");
-        System.out.println(cat.getName());
+        Animal cat = new Cat("Tom");
         cat.walk();
-        cat.meow();
+        cat.birthday();
+        cat.speak();
         cat.eat("mouse");
+        cat.birthday();
         cat.sleep();
+        System.out.println();
 
-        Cat anotherCat = new Cat();
-        System.out.println(anotherCat.getName());
+        Animal anotherCat = new Cat();
         anotherCat.walk();
-        anotherCat.meow();
+        anotherCat.speak();
+        anotherCat.setName("Josephine");
+        anotherCat.eat("fancy cat food");
+        anotherCat.speak();
         anotherCat.sleep();
+        System.out.println();
 
-        Dog dog = new Dog("Mike");
-        System.out.println(dog.getName());
+        Animal dog = new Dog("Spike", 3);
         dog.walk();
-        dog.bark();
+        dog.speak();
+        dog.birthday();
         dog.eat("meat");
         dog.sleep();
+        System.out.println();
 
-        Frog frog = new Frog();
+        Animal frog = new Frog();
         frog.setName("Lucy");
-        System.out.println(frog.getName());
         frog.walk();
-        frog.quack();
+        frog.speak();
         frog.eat("fly");
+        frog.birthday(new Animal[] {cat, anotherCat, dog, new Cat ("Nefertiti"), new Dog("Mike", 2), new Frog()});
         frog.sleep();
+        System.out.println();
     }
 }

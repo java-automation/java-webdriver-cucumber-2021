@@ -9,12 +9,12 @@ public class Cat extends Animal {
     }
 
     @Override
-    public void setName(String newName) {
-        if (newName.equals("Jerry") || newName.equals("Spike")) throw new Error("Unacceptable cat name! " + newName);
-        super.setName(newName);
+    public void setName(String name) {
+        if (name.equals("Jerry") || name.equals("Spike")) throw new Error("Unacceptable cat name! " + name);
+        super.setName(name);
     }
 
-    public void meow() {
-        System.out.println("Cat " + this.getName() + " is meowing!");
+    public void speak() {
+        System.out.println("Cat '" + getName() + "' is meowing!");
     }
 }
