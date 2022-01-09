@@ -9,7 +9,10 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.Dimension;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebElement;
+import pages.Animal;
 import pages.Cat;
+import pages.Dog;
+import pages.Parrot;
 import pages.Kangaroo;
 
 import java.util.*;
@@ -728,21 +731,67 @@ public class JavaStepDefs {
 
     @Given("I work with classes")
     public void iWorkWithClasses() {
-        Cat cat = new Cat("Tom");
+        System.out.println();
+        System.out.println();
+
+        Animal cat = new Cat("Tom");
         cat.sleep();
         cat.walk();
         cat.speak();
         cat.eat("fish");
         System.out.println(cat.getName());
+
+        System.out.println();
+
+        Animal anotherCat = new Cat();
+        anotherCat.sleep();
+        anotherCat.speak();
+        System.out.println("Street cat name is " + anotherCat.getName());
+
+        System.out.println();
+        System.out.println();
+
+        Animal dog = new Dog();
+        System.out.println("Dog name is " + dog.getName());
+        dog.setName("Bobby");
+        dog.eat("bone");
+        dog.sleep();
+        dog.speak();
+
+        System.out.println();
+        System.out.println();
+
+        Animal kang = new Kangaroo("Ruth");
+        kang.speak();
+        kang.sleep();
+        kang.eat("Pelmeni");
+        kang.jump();
+        kang.setBag(true);
+
+        List<Animal> animals = new ArrayList<>();
+        animals.add(cat);
+        animals.add(anotherCat);
+        animals.add(dog);
+        animals.add(kang);
+        printAnimalNames(animals);
     }
 
     @Given("I work with Kangaroo")
     public void iWorkWithKangaroo() {
-        Kangaroo kang = new Kangaroo("Ruth");
+        Animal kang = new Kangaroo("Ruth");
         kang.speak();
         kang.sleep();
         kang.eat("Pelmeni");
-        kang.drink("Cola");
         kang.jump();
+    }
+
+    void printAnimalNames(List<Animal> animals) {
+        System.out.println();
+        System.out.println("All animal names >>>> ");
+        for (Animal animal : animals) {
+            System.out.println(animal.getName());
+            animal.sleep();
+            animal.speak();
+        }
     }
 }

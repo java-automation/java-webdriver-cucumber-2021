@@ -18,6 +18,11 @@ import org.openqa.selenium.remote.DesiredCapabilities;
 import org.openqa.selenium.remote.LocalFileDetector;
 import org.openqa.selenium.remote.RemoteWebDriver;
 import org.openqa.selenium.safari.SafariDriver;
+import org.yaml.snakeyaml.Yaml;
+
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
@@ -40,6 +45,17 @@ public class TestContext {
         driver.quit();
     }
 
+    public static Map<String, String> getData(String fileName) {
+        try {
+            String filePath = System.getProperty("user.dir") + "/src/test/resources/data/" + fileName + ".yml";
+            FileInputStream stream = new FileInputStream(filePath);
+            return new Yaml().load(stream);
+        } catch (FileNotFoundException e) {
+            throw new Error(e);
+        }
+    }
+
+
     public static void initialize(String browser, String testEnv, boolean isHeadless) {
         Dimension size = new Dimension(1920, 1080);
         Point position = new Point(0, 0);
@@ -58,7 +74,10 @@ public class TestContext {
                     chromePreferences.put("plugins.plugins_disabled", new ArrayList<String>(){{ add("Chrome PDF Viewer"); }});
                     chromePreferences.put("credentials_enable_service", false);
                     chromePreferences.put("password_manager_enabled", false);
+//                    chromePreferences.put("profile.default_content_setting_values.cookies", 2);
                     ChromeOptions chromeOptions = new ChromeOptions();
+//                    File chroPathFile = new File(System.getProperty("user.dir") + "/src/test/resources/data/ChroPath.crx");
+//                    chromeOptions.addExtensions(chroPathFile);
                     chromeOptions.addArguments("--start-maximized");
                     chromeOptions.setExperimentalOption("prefs", chromePreferences);
                     System.setProperty(ChromeDriverService.CHROME_DRIVER_SILENT_OUTPUT_PROPERTY, "true");
@@ -81,8 +100,6 @@ public class TestContext {
                     break;
                 case "safari":
                     driver = new SafariDriver();
-                    driver.manage().window().setPosition(position);
-                    driver.manage().window().setSize(size);
                     break;
                 case "edge":
                     WebDriverManager.edgedriver().setup();
@@ -109,5 +126,7 @@ public class TestContext {
         } else {
             throw new RuntimeException("Unsupported test environment: " + testEnv);
         }
+        driver.manage().window().setPosition(position);
+        driver.manage().window().setSize(size);
     }
 }
