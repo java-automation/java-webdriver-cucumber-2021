@@ -15,23 +15,26 @@
 #       And I solve coding challenges
 #      And I write a function that finds if array contains duplicates
 #      And I write a function that determines palindrome
-      And I write a function that finds two max numbers in the array
+ #     And I write a function that finds two max numbers in the array
 #        And I write a function that finds max number in the array
     @java2
-      Scenario: Java
+    Scenario: Coding challenges
 #      And I work with Arrays
 
-#      @JavaTasks
-#      Scenario: Java challenge
+      @JavaTasks
+      Scenario: Java challenge
 #        Given I solve Java task
-    @homeworks
-    Scenario: Homework of Day 7
-#      And Task one
-#      And Task two
-#      And Task three
-#      And Task Four
-#      And Task Six
-#      And Task Five
+#        And Task one
+#        And Task two
+#        And Task three
+#        And Task Four
+#        And Task Six
+#        And Task Five
+
+
+  @java3
+  Scenario: Classes
+    Given I work with classes
 
 
 

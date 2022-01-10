@@ -2,6 +2,8 @@ package definitions;
 
 import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
+import pages.Cat;
+import pages.Dog;
 
 import java.util.*;
 
@@ -119,8 +121,8 @@ public class JavaStepDefs {
         //Write  function that prints all numbers from 0 to n:0,1,2,3
         int i = 3;
         solve(1);
-    }
 
+    }
 
     private void solve(int i) {
         for (int j = 0; j <= i; j++) {
@@ -361,11 +363,30 @@ Result for 20:
         System.out.println();
     }
 
-    @And("I write a function that finds max number in the array")
-    public void iWriteAFunctionThatFindsMaxNumberInTheArray() {
-        Integer[] intArray = {3,7,9,24,65,21,-76,-35,98};
-        Integer maxVal = maxArr(intArray);
-        System.out.println(maxVal);
+
+    @Given("I work with classes")
+    public void iWorkWithClasses() {
+        Cat cat =  new Cat("Tom");
+        cat.walk();
+        cat.eat("fish");
+        cat.speak();
+        cat.sleep();
+        cat.setName("Charlie");
+        cat.sleep();
+        System.out.println(cat.getName());
+
+        Cat  anotherCat = new Cat();
+        anotherCat.sleep();
+        anotherCat.speak();
+        System.out.println(anotherCat.getName());
+
+        Dog dog = new Dog("Belka");
+        dog.walk();
+        dog.speak();
+        dog.eat("food");
+        dog.sleep();
+
+
     }
 }
 
