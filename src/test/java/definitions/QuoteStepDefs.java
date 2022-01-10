@@ -1,6 +1,7 @@
 package definitions;
 
 import com.sun.xml.bind.v2.*;
+import definitions.*;
 import io.cucumber.java.en.*;
 import org.junit.*;
 import org.openqa.selenium.*;

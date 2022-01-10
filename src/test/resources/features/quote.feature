@@ -8,6 +8,7 @@
       When I fill out required fields
       And I wait for 2 seconds
       And I submit the page
+      And I wait for 2 seconds
       Then I verify the required fields
 
     @quote2
