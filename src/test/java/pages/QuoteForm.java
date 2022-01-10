@@ -10,39 +10,39 @@ public class QuoteForm {
 
     private String url = "https://skryabin.com/market/quote.html";
 
-    @FindBy (xpath = "//input[@name='username']")
+    @FindBy(xpath = "//input[@name='username']")
     private WebElement username;
 
-    @FindBy (xpath = "//input[@name='email']")
+    @FindBy(xpath = "//input[@name='email']")
     private WebElement email;
 
-    @FindBy (xpath = "//input[@name='password']")
+    @FindBy(xpath = "//input[@name='password']")
     private WebElement password;
 
-    @FindBy (xpath = "//input[@name='confirmPassword']")
+    @FindBy(xpath = "//input[@name='confirmPassword']")
     private WebElement confirmPassword;
 
-    @FindBy (xpath = "//input[@id='name']")
+    @FindBy(xpath = "//input[@id='name']")
     private WebElement name;
 
     //name modal dialog ->
-    @FindBy (xpath = "//input[@id='firstName']")
+    @FindBy(xpath = "//input[@id='firstName']")
     private WebElement firstName;
 
-    @FindBy (xpath = "//input[@id='middleName']")
+    @FindBy(xpath = "//input[@id='middleName']")
     private WebElement middleName;
 
-    @FindBy (xpath = "//input[@id='lastName']")
+    @FindBy(xpath = "//input[@id='lastName']")
     private WebElement lastName;
 
-    @FindBy (xpath = "//*[@id='nameDialog']/..//*[text()='Save']")
+    @FindBy(xpath = "//*[@id='nameDialog']/..//*[text()='Save']")
     private WebElement saveButton;
     // <- name modal dialog
 
-    @FindBy (xpath = "//input[@name='agreedToPrivacyPolicy']")
+    @FindBy(xpath = "//input[@name='agreedToPrivacyPolicy']")
     private WebElement privacyPolicy;
 
-    @FindBy (xpath = "//button[@id='formSubmit']")
+    @FindBy(xpath = "//button[@id='formSubmit']")
     private WebElement submitButton;
 
     public QuoteForm() {
