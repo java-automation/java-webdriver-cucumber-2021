@@ -3,10 +3,14 @@ package definitions;
 import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
+import pages.Animals;
 import pages.Cat;
+import pages.Elephant;
 import pages.Tiger;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class JavaStepDefs {
@@ -597,8 +601,9 @@ public class JavaStepDefs {
 
     @Given("I work with classes")
     public void iWorkWithClasses() {
+        System.out.println();
 
-        Cat cat = new Cat("Tom"); //instance of object
+        Animals cat = new Cat("Tom"); //instance of object
         cat.sleep();
         cat.eat("fish");
         cat.walk();
@@ -606,32 +611,49 @@ public class JavaStepDefs {
         cat.setName("Bebe");
         System.out.println(cat.getName());
 
-        Cat secondCat = new Cat("Marsik");
+        Animals secondCat = new Cat("Sun");
         secondCat.sleep();
         secondCat.speak();
-        System.out.println(secondCat.getName());
+        System.out.println("Street cat name is " + secondCat.getName());
+
+        System.out.println();
 
 
+        Animals tiger = new Tiger("Simba"); //the object
+        System.out.println("Tiger name is " + tiger.getName());
 
-    }
-
-    @Then("I work with tiger")
-    public void iWorkWithTiger() {
-
-        Tiger tiger = new Tiger("Simba"); //the object
-
-        tiger.hunt();
-        tiger.mate();
+        tiger.eat("meat");
         tiger.sleep();
-        tiger.play();
         tiger.setName("Boba");
+        tiger.speak();
         System.out.println(tiger.getName());
 
-        System.out.println(tiger.getName());
 
+        Animals elephant = new Elephant("Bumby");
+        System.out.println(" Elephant " + elephant.getName());
+        elephant.eat("grass");
+        elephant.sleep();
+        elephant.speak();
+        System.out.println(elephant.getName());
 
+        List<Animals> animals = new ArrayList<>();
+        animals.add(cat);
+        animals.add(secondCat);
+        animals.add(tiger);
 
     }
+
+    void printAnimalName(List<Animals> animals) {
+        System.out.println();
+        System.out.println("All animal names >>>>>>>> ");
+        for (Animals animal : animals) {
+            System.out.println(animal.getName());
+            animal.sleep();
+            animal.speak();
+        }
+    }
+
+
 }
 
 

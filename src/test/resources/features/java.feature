@@ -78,9 +78,9 @@
 
 @cat
 
-Scenario: Cats
-  #Given I work with classes
-  Then I work with tiger
+Scenario: Classes
+  Given I work with classes
+
 
 
 

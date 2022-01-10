@@ -1,47 +1,21 @@
 package pages;
 
-public class Tiger {
+public class Tiger extends Animals{
 
-    private String name;
-
-
-    public Tiger(String tigerName) {  //constructor
-
-        name = tigerName;
-    }
-    public Tiger() {       //constructor
-        setName("no name");
+// constructor
+    public Tiger(String newName) {
+        name = newName;
     }
 
-    public void setName(String tigerName){
-        if(!tigerName.isBlank() && !tigerName.contains("Boris")){
+        public  void speak() {
 
-           name = tigerName;
-        } else {
-            throw new Error("Unacceptable name " + tigerName);
-        }
-
+        System.out.println("Tiger " + name + " is growling");
     }
-
-    public  String getName() {
-        return name;
-    }
-
-    public void hunt() {
-        System.out.println("Tiger " + name + " is hunting");
-    }
-
+    @Override
     public void sleep(){
-        System.out.println("Tiger " + name + " is sleeping");
+        System.out.println("Tiger doesn't sleep a lot");
     }
 
-    public void mate(){
-        System.out.println("Tidier " + name + " is mating" );
-    }
-
-    public void play(){
-        System.out.println("Tiger " + name + " is playing");
-    }
 }
 
 
