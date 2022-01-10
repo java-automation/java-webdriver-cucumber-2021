@@ -1,6 +1,8 @@
 package definitions;
 
+import io.cucumber.java.bs.*;
 import io.cucumber.java.en.*;
+import io.cucumber.java8.*;
 import org.junit.*;
 import org.openqa.selenium.*;
 import pages.*;
@@ -668,7 +670,7 @@ public class JavaStepDefs {
 
     @Given("I work with class")
     public void iWorkWithClass() {
-        Cat cat = new Cat("Kuzea");
+        Animal cat = new Cat("Kuzea");
         cat.sleep();
         cat.walk();
         cat.speak();
@@ -676,7 +678,57 @@ public class JavaStepDefs {
         cat.setName("Tom");
         cat.sleep();
         System.out.println(cat.getName());
+        cat.setColor("black");
+        cat.setType("cat");
+        cat.setSize("small");
+        System.out.println(cat.getName() + " is a " + cat.getSize() + ", " + cat.getColor() + " " + cat.getType());
+
+        System.out.println();
+
+        Animal dog = new Dog();
+        System.out.println("Dog name is " + dog.getName());
+        dog.setName("Lord");
+        dog.eat("snowflakes");
+        dog.sleep();
+        dog.speak();
+        dog.setType("dog");
+        dog.setColor("white");
+        dog.setSize("big");
+        System.out.println(dog.getName() + " is a " + dog.getSize() + ", " + dog.getColor() + " " + dog.getType());
+
+        System.out.println();
+
+        Animal anotherCat = new Animal();
+        anotherCat.setSize("big");
+        anotherCat.setType("cat");
+        anotherCat.setColor("grey");
+        anotherCat.setName("Simon");
+        System.out.println(anotherCat.getName() + " is a " + anotherCat.getSize() + ", " + anotherCat.getColor() + " " + anotherCat.getType());
+
+        System.out.println();
+
+        List<Animal> animals = new ArrayList<>();
+        animals.add(cat);
+        //animals.add(anotherCat);
+        printAnimalNames(animals);
+        animals.add(dog);
+        printAnimalNames(animals);
+
+        Animal parrot = new Parrot();
+        parrot.setName("Dakota");
+        parrot.speak();
+        parrot.walk();
     }
+
+    void printAnimalNames(List<Animal> animals) {
+        System.out.println("All animals names");
+        for(Animal animal : animals) {
+            System.out.println(animal.getName());
+            animal.sleep();
+            animal.speak();
+        }
+    }
+
 
     @And("I work with a new class")
     public void iWorkWithANewClass() {
