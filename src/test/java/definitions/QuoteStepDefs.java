@@ -19,7 +19,7 @@ import static support.TestContext.getDriver;
 public class QuoteStepDefs {
 
     private Map<String, String> workingProfile;
-    private boolean fullForm;
+    private boolean isCompleteForm;
 
     @And("Submit the form")
     public void submitTheForm() {
@@ -50,7 +50,7 @@ public class QuoteStepDefs {
 
         verifyElementValueInSummary("//*[@name='agreedToPrivacyPolicy']", "true");
 
-        if (fullForm) {
+        if (isCompleteForm) {
             verifyElementValueInSummary("//*[@name='phone']", workingProfile.get("phone"));
             verifyElementValueInSummary("//*[@name='dateOfBirth']", workingProfile.get("dateofbirth"));
             verifyElementValueInSummary("//*[@name='countryOfOrigin']", workingProfile.get("countryoforigin"));
@@ -69,11 +69,11 @@ public class QuoteStepDefs {
         }
     }
 
-    private void setFormFillingContext(String scenarioContext, String profileReference) {
-        switch (scenarioContext.toLowerCase()) {
-            case "required" -> fullForm = false;
-            case "all" -> fullForm = true;
-            default -> throw new Error("Unknown scenario context reference: " + scenarioContext);
+    private void setFormFillingContext(String whatFields, String profileReference) {
+        switch (whatFields.toLowerCase()) {
+            case "required" -> isCompleteForm = false;
+            case "all" -> isCompleteForm = true;
+            default -> throw new Error("Unknown scenario context reference: " + whatFields);
         }
         workingProfile = getData(profileReference.toLowerCase().replace(" ", ""));
     }
@@ -94,7 +94,7 @@ public class QuoteStepDefs {
 
         getDriver().findElement(By.xpath("//input[@name='agreedToPrivacyPolicy']")).click();
 
-        if (fullForm) {
+        if (isCompleteForm) {
             getDriver().findElement(By.xpath("//input[@name='phone']")).sendKeys(workingProfile.get("phone"));
 
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MM/dd/yyyy"); //01/25/1995
