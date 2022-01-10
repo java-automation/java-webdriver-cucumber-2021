@@ -43,6 +43,7 @@ public class TestContext {
         driver.quit();
     }
 
+
     public static void initialize(String browser, String testEnv, boolean isHeadless) {
         Dimension size = new Dimension(1920, 1080);
         Point position = new Point(0, 0);
@@ -113,8 +114,8 @@ public class TestContext {
             throw new RuntimeException("Unsupported test environment: " + testEnv);
         }
     }
-    Map<String, String> getData(String fileName) {
-        String filePath = System.getProperty("user.dir") + "/src/test/resources/data" + fileName + ".yml";
+    public static Map<String, String> getData(String fileName) {
+        String filePath = System.getProperty("user.dir") + "/src/test/resources/data/" + fileName + ".yml";
         try {
             FileInputStream stream = new FileInputStream(filePath);
             Yaml yaml = new Yaml();
