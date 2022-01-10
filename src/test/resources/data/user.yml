@@ -1,6 +1,9 @@
 {
   username: "eckimsey",
   email: "casianolga@gmail.com",
+  password: "testpass123",
+  firstname: "Eric",
+  lastname: "Kimsey",
   count: 5,
   number: "6"
 }
