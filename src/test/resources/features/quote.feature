@@ -47,3 +47,7 @@
       And I submit the page
       And I wait for 5 seconds
       And I verify selected options were displayed
+
+#      TODO: maintain scenarios:
+#       quote1: ComparisonFailure: expected:<[[entered]]> but was:<[testPass2021-11-10]>
+#       quote3: NoSuchElementException: no such element: Unable to locate element: {"method":"xpath","selector":"//input[@id='contactPersonName']"}

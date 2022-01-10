@@ -214,3 +214,9 @@
     Scenario: Working with classes
       Given I work with class
       And I work with a new class
+
+#      TODO: maintain scenarios:
+#       TestCase1: AssertionError: Expected size: 1 but was: 0 in:[]
+#       TestCase7: ComparisonFailure: expected:<[green]> but was:<[yellow]>
+#       TestCase11: InvalidArgumentException: invalid argument: File not found : C:\Users\casia\Downloads\Documents.pdf
+#       TestCase23: ArrayIndexOutOfBoundsException: Index 8 out of bounds for length 8
