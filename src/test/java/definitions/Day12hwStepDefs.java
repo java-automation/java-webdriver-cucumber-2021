@@ -15,6 +15,7 @@ import java.util.logging.Level;
 
 import static support.TestContext.getDriver;
 
+
 public class Day12hwStepDefs {
     @Given("I open {string} page")
     public void openPage(String arg0) {

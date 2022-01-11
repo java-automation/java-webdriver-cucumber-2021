@@ -28,6 +28,16 @@ Feature: Java feature
     Then I calculate the price and validate cost is "$2.60"
     And I wait & check for 2 sec
 
+  @d16_hw_Java6
+  Scenario: Verify location
+    Given I open "usps" page
+    And I wait & check for 1 sec
+    When I perform "Free Boxes" search
+    And I set "Send" in filters
+    Then I verify that "7" results found
+    When I select "Priority Mail | USPS" in results
+    And I click "Ship Now" button
+    Then I validate that Sign In is required
 
 
 
