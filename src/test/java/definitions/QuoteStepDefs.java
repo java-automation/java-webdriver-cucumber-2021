@@ -52,19 +52,19 @@ public class QuoteStepDefs {
 
         if (isCompleteForm) {
             verifyElementValueInSummary("//*[@name='phone']", workingProfile.get("phone"));
-            verifyElementValueInSummary("//*[@name='dateOfBirth']", workingProfile.get("dateofbirth"));
-            verifyElementValueInSummary("//*[@name='countryOfOrigin']", workingProfile.get("countryoforigin"));
+            verifyElementValueInSummary("//*[@name='dateOfBirth']", workingProfile.get("dateOfBirth"));
+            verifyElementValueInSummary("//*[@name='countryOfOrigin']", workingProfile.get("countryOfOrigin"));
             verifyElementValueInSummary("//*[@name='gender']", workingProfile.get("gender"));
 
             //ignoring the case when checkbox was checked, but then unchecked again - in that case we would have a label saying "Allowed to Contact false"
-            if (workingProfile.get("allowedtocontact").equalsIgnoreCase("true")) {
-                verifyElementValueInSummary("//*[@name='allowedToContact']", workingProfile.get("allowedtocontact"));
+            if (workingProfile.get("allowedToContact").equalsIgnoreCase("true")) {
+                verifyElementValueInSummary("//*[@name='allowedToContact']", workingProfile.get("allowedToContact"));
             }
             verifyElementValueInSummary("//*[@name='address']", workingProfile.get("address"));
-            verifyElementValueInSummary("//*[@name='carMake']", workingProfile.get("carmake"));
-            verifyElementValueInSummary("//*[@name='contactPersonName']", workingProfile.get("contactname"));
-            verifyElementValueInSummary("//*[@name='contactPersonPhone']", workingProfile.get("contactphone"));
-            verifyElementValueInSummary("//*[@name='thirdPartyAgreement']", workingProfile.get("3rdpartyagreement"));
+            verifyElementValueInSummary("//*[@name='carMake']", workingProfile.get("carMake"));
+            verifyElementValueInSummary("//*[@name='contactPersonName']", workingProfile.get("contactName"));
+            verifyElementValueInSummary("//*[@name='contactPersonPhone']", workingProfile.get("contactPhone"));
+            verifyElementValueInSummary("//*[@name='thirdPartyAgreement']", workingProfile.get("thirdPartyAgreement"));
             verifyElementValueInSummary("//*[@name='attachmentName']", workingProfile.get("attachment"));
         }
     }
@@ -98,7 +98,7 @@ public class QuoteStepDefs {
             getDriver().findElement(By.xpath("//input[@name='phone']")).sendKeys(workingProfile.get("phone"));
 
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MM/dd/yyyy"); //01/25/1995
-            LocalDate parsedDate = LocalDate.parse(workingProfile.get("dateofbirth"), formatter);
+            LocalDate parsedDate = LocalDate.parse(workingProfile.get("dateOfBirth"), formatter);
             String year = String.valueOf(parsedDate.getYear());
             String month = String.valueOf(parsedDate.getMonthValue() - 1);
             String day = String.valueOf(parsedDate.getDayOfMonth());
@@ -111,26 +111,26 @@ public class QuoteStepDefs {
             getDriver().findElement(By.xpath("//*[@id='ui-datepicker-div']//td[@data-handler='selectDay']/a[contains(text(),'" + day + "')]")).click();
 
             Select countryOfOriginSelect = new Select(getDriver().findElement(By.xpath("//select[@name='countryOfOrigin']")));
-            countryOfOriginSelect.selectByValue(workingProfile.get("countryoforigin"));
+            countryOfOriginSelect.selectByValue(workingProfile.get("countryOfOrigin"));
 
             String genderXPath = "//input[@name='gender']" + "[@value='" + workingProfile.get("gender") + "']";
             getDriver().findElement(By.xpath(genderXPath)).click();
 
-            if (workingProfile.get("allowedtocontact").equalsIgnoreCase("true")) {
+            if (workingProfile.get("allowedToContact").equalsIgnoreCase("true")) {
                 getDriver().findElement(By.xpath("//input[@name='allowedToContact']")).click();
             }
 
             getDriver().findElement(By.xpath("//textarea[@name='address']")).sendKeys(workingProfile.get("address"));
 
-            selectCarMakeWithSelectClass(workingProfile.get("carmake"));
+            selectCarMakeWithSelectClass(workingProfile.get("carMake"));
 
             getDriver().switchTo().frame("additionalInfo");
-            getDriver().findElement(By.xpath("//input[@id='contactPersonName']")).sendKeys(workingProfile.get("contactname"));
-            getDriver().findElement(By.xpath("//input[@id='contactPersonPhone']")).sendKeys(workingProfile.get("contactphone"));
+            getDriver().findElement(By.xpath("//input[@id='contactPersonName']")).sendKeys(workingProfile.get("contactName"));
+            getDriver().findElement(By.xpath("//input[@id='contactPersonPhone']")).sendKeys(workingProfile.get("contactPhone"));
             getDriver().switchTo().defaultContent();
 
             getDriver().findElement(By.xpath("//*[@id='thirdPartyButton']")).click();
-            if (workingProfile.get("3rdpartyagreement").equalsIgnoreCase("accepted")) { getDriver().switchTo().alert().accept(); }
+            if (workingProfile.get("thirdPartyAgreement").equalsIgnoreCase("accepted")) { getDriver().switchTo().alert().accept(); }
             else { getDriver().switchTo().alert().dismiss(); }
 
             String currentDirectory = System.getProperty("user.dir");

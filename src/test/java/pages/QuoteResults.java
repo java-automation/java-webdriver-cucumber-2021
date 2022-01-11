@@ -7,6 +7,8 @@ public class QuoteResults extends QuoteForm {
 
     private final String resultsFrame = "//*[@id='quotePageResult']";
 
+
+    // +++ REQUIRED +++
     @FindBy(xpath = resultsFrame + "//*[@name='username']")
     private WebElement username;
 
@@ -33,6 +35,41 @@ public class QuoteResults extends QuoteForm {
 
     @FindBy(xpath = resultsFrame + "//button[@id='return']")
     private WebElement returnButton;
+
+    // +++ OPTIONAL +++
+    @FindBy(xpath = resultsFrame + "//*[@name='phone']")
+    private WebElement phone;
+
+    @FindBy(xpath = resultsFrame + "//*[@name='dateOfBirth']")
+    private WebElement dateOfBirth;
+
+    @FindBy(xpath = resultsFrame + "//*[@name='countryOfOrigin']")
+    private WebElement country;
+
+    @FindBy(xpath = resultsFrame + "//*[@name='gender']")
+    private WebElement gender;
+
+    @FindBy(xpath = resultsFrame + "//*[@name='allowedToContact']")
+    private WebElement allowedToContact;
+
+    @FindBy(xpath = resultsFrame + "//*[@name='address']")
+    private WebElement address;
+
+    @FindBy(xpath = resultsFrame + "//*[@name='carMake']")
+    private WebElement carMake;
+
+    @FindBy(xpath = resultsFrame + "//*[@name='contactPersonName']")
+    private WebElement contactName;
+
+    @FindBy(xpath = resultsFrame + "//*[@name='contactPersonPhone']")
+    private WebElement contactPhone;
+
+    @FindBy(xpath = resultsFrame + "//*[@name='thirdPartyAgreement']")
+    private WebElement thirdPartyAgreement;
+
+    @FindBy(xpath = resultsFrame + "//*[@name='attachmentName']")
+    private WebElement attachment;
+
 
     public String getUsername() {
         return username.getText();
@@ -69,5 +106,49 @@ public class QuoteResults extends QuoteForm {
 
     public void returnToQuoteForm() {
         returnButton.click();
+    }
+
+    public String getPhone() {
+        return phone.getText();
+    }
+
+    public String getDateOfBirth() {
+        return dateOfBirth.getText();
+    }
+
+    public String getCountry() {
+        return country.getText();
+    }
+
+    public String getGender() {
+        return gender.getText();
+    }
+
+    public String getAllowedToContact() {
+        return allowedToContact.getText();
+    }
+
+    public String getAddress() {
+        return address.getText();
+    }
+
+    public String getCarMake() {
+        return carMake.getText();
+    }
+
+    public String getContactName() {
+        return contactName.getText();
+    }
+
+    public String getContactPhone() {
+        return contactPhone.getText();
+    }
+
+    public String getThirdPartyAgreement() {
+        return thirdPartyAgreement.getText();
+    }
+
+    public String getAttachmentName() {
+        return attachment.getText();
     }
 }

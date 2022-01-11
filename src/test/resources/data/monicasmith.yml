@@ -5,13 +5,13 @@ firstName: Monica
 middleName: Ivanovich
 lastName: Smith
 phone: "3333456789"
-dateofbirth: 01/25/1995
-countryoforigin: USA
+dateOfBirth: 01/25/1995
+countryOfOrigin: USA
 gender: female
-allowedtocontact: "false"
+allowedToContact: "false"
 address: 222 111 Avenue San Jose CA US 75000
-carmake: Toyota, Other
-contactname: Albert Navarro
-contactphone: +1 (333) 987-6543
-3rdpartyagreement: declined
+carMake: Toyota, Other
+contactName: Albert Navarro
+contactPhone: +1 (333) 987-6543
+thirdPartyAgreement: declined
 attachment: downloadedResume.pdf

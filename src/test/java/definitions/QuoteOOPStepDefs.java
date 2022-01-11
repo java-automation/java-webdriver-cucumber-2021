@@ -47,24 +47,24 @@ public class QuoteOOPStepDefs {
             form.fillPhone(user.get("phone"));
 
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MM/dd/yyyy");
-            LocalDate parsedDate = LocalDate.parse(user.get("dateofbirth"), formatter);
+            LocalDate parsedDate = LocalDate.parse(user.get("dateOfBirth"), formatter);
             String year = String.valueOf(parsedDate.getYear());
             String month = String.valueOf(parsedDate.getMonthValue());
             String day = String.valueOf(parsedDate.getDayOfMonth());
             form.fillDateOfBirth(year, month, day);
 
-            form.selectCountry(user.get("countryoforigin"));
+            form.selectCountry(user.get("countryOfOrigin"));
             form.selectGender(user.get("gender"));
 
             //workaround to generate both "true" and "false" outputs on results page
             form.allowToContact();
-            if (user.get("allowedtocontact").equals("false")) form.disallowToContact();
+            if (user.get("allowedToContact").equals("false")) form.disallowToContact();
 
             form.fillAddress(user.get("address"));
-            form.selectCarMakes(user.get("carmake").split(", "));
-            form.fillAdditionalInfo(user.get("contactname"), user.get("contactphone"));
+            form.selectCarMakes(user.get("carMake").split(", "));
+            form.fillAdditionalInfo(user.get("contactName"), user.get("contactPhone"));
 
-            if (user.get("3rdpartyagreement").equalsIgnoreCase("accepted")) form.accept3rdPartyAgreement();
+            if (user.get("thirdPartyAgreement").equalsIgnoreCase("accepted")) form.accept3rdPartyAgreement();
             else form.decline3rdPartyAgreement();
 
             String currentDir = System.getProperty("user.dir");
@@ -94,7 +94,17 @@ public class QuoteOOPStepDefs {
         assertThat(results.getPrivacyPolicy()).isEqualTo("true");
 
         if (isCompleteForm) {
-            System.out.println("Verifying All!");
+            assertThat(results.getPhone()).isEqualTo(user.get("phone"));
+            assertThat(results.getDateOfBirth()).isEqualTo(user.get("dateOfBirth"));
+            assertThat(results.getCountry()).isEqualTo(user.get("countryOfOrigin"));
+            assertThat(results.getGender()).isEqualTo(user.get("gender"));
+            assertThat(results.getAllowedToContact()).isEqualTo(user.get("allowedToContact"));
+            assertThat(results.getAddress()).isEqualTo(user.get("address"));
+            assertThat(results.getCarMake()).isEqualTo(user.get("carMake"));
+            assertThat(results.getContactName()).isEqualTo(user.get("contactName"));
+            assertThat(results.getContactPhone()).isEqualTo(user.get("contactPhone"));
+            assertThat(results.getThirdPartyAgreement()).isEqualTo(user.get("thirdPartyAgreement"));
+            assertThat(results.getAttachmentName()).isEqualTo(user.get("attachment"));
         }
     }
 
