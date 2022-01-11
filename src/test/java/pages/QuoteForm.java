@@ -1,8 +1,10 @@
 package pages;
 
+import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
+import org.openqa.selenium.support.ui.Select;
 
 import static support.TestContext.getDriver;
 
@@ -10,6 +12,7 @@ public class QuoteForm {
 
     private String url = "https://skryabin.com/market/quote.html";
 
+    //required
     @FindBy(xpath = "//input[@name='username']")
     private WebElement username;
 
@@ -42,8 +45,55 @@ public class QuoteForm {
     @FindBy(xpath = "//input[@name='agreedToPrivacyPolicy']")
     private WebElement privacyPolicy;
 
-    @FindBy(xpath = "//button[@id='formSubmit']")
+    @FindBy(id = "formSubmit")
     private WebElement submitButton;
+
+    //optional
+    @FindBy(xpath = "//input[@name='phone']")
+    private WebElement phone;
+
+    //date picker ->
+    @FindBy(xpath = "//input[@name='dateOfBirth']")
+    private WebElement datePicker;
+
+    @FindBy(xpath = "//*[@id='ui-datepicker-div']//select[@data-handler='selectYear']")
+    private WebElement datePickerYear;
+
+    @FindBy(xpath = "//*[@id='ui-datepicker-div']//select[@data-handler='selectMonth']")
+    private WebElement datePickerMonth;
+
+    private final String datePickerDay = "//*[@id='ui-datepicker-div']//td[@data-handler='selectDay']";
+    // <- date picker
+
+    @FindBy(xpath = "//select[@name='countryOfOrigin']")
+    private WebElement country;
+
+    private final String gender = "//input[@name='gender']";
+
+    @FindBy(xpath = "//input[@name='allowedToContact']")
+    private WebElement allowedToContact;
+
+    @FindBy(xpath = "//textarea[@name='address']")
+    private WebElement address;
+
+    @FindBy(xpath = "//select[@name='carMake']")
+    private WebElement carMake;
+
+    //additional info iframe ->
+    private final String iframe = "additionalInfo";
+
+    @FindBy(xpath = "//input[@id='contactPersonName']")
+    private WebElement contactName;
+
+    @FindBy(xpath = "//input[@id='contactPersonPhone']")
+    private WebElement contactPhone;
+    // <- additional info iframe
+
+    @FindBy(id = "thirdPartyButton")
+    private WebElement thirdPartyButton;
+
+    @FindBy(xpath = "//input[@name='attachment']")
+    private WebElement attachmentButton;
 
     public QuoteForm() {
         PageFactory.initElements(getDriver(), this);
@@ -74,6 +124,10 @@ public class QuoteForm {
         saveButton.click();
     }
 
+    public String getName() {
+        return name.getAttribute("value");
+    }
+
     public void acceptPrivacyPolicy() {
         if (!privacyPolicy.isSelected()) privacyPolicy.click();
     }
@@ -84,5 +138,63 @@ public class QuoteForm {
 
     public void submit() {
         submitButton.click();
+    }
+
+    public void fillPhone(String value) {
+        phone.sendKeys(value);
+    }
+
+    public void fillDateOfBirth(String year, String month, String day) throws InterruptedException {
+        datePicker.click();
+        new Select(datePickerYear).selectByValue(year);
+        new Select(datePickerMonth).selectByValue(String.valueOf(Integer.parseInt(month) - 1));
+        Thread.sleep(1000);
+        getDriver().findElement(By.xpath(datePickerDay + "/a[normalize-space(.)='" + day + "']")).click();
+    }
+
+    public void selectCountry(String value) {
+        new Select(country).selectByValue(value);
+    }
+
+    public void selectGender(String value) {
+        getDriver().findElement(By.xpath(gender + "[@value='" + value + "']")).click();
+    }
+
+    public void allowToContact() {
+        if (!allowedToContact.isSelected()) allowedToContact.click();
+    }
+
+    public void disallowToContact() {
+        if (allowedToContact.isSelected()) allowedToContact.click();
+    }
+
+    public void fillAddress(String value) {
+        address.sendKeys(value);
+    }
+
+    public void selectCarMakes(String[] values) {
+        Select carMakeSelect = new Select(carMake);
+        for (String carMake : values) carMakeSelect.selectByValue(carMake);
+    }
+
+    public void fillAdditionalInfo(String contactNameValue, String contactPhoneValue) {
+        getDriver().switchTo().frame(iframe);
+        contactName.sendKeys(contactNameValue);
+        contactPhone.sendKeys(contactPhoneValue);
+        getDriver().switchTo().defaultContent();
+    }
+
+    public void accept3rdPartyAgreement() {
+        thirdPartyButton.click();
+        getDriver().switchTo().alert().accept();
+    }
+
+    public void decline3rdPartyAgreement() {
+        thirdPartyButton.click();
+        getDriver().switchTo().alert().dismiss();
+    }
+
+    public void attachFile(String filePath) {
+        attachmentButton.sendKeys(filePath);
     }
 }

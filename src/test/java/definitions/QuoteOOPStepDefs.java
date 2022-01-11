@@ -7,6 +7,8 @@ import io.cucumber.java.en.When;
 import pages.QuoteForm;
 import pages.QuoteResults;
 
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.Map;
 
 import static org.assertj.core.api.Assertions.*;
@@ -26,17 +28,47 @@ public class QuoteOOPStepDefs {
     }
 
     @When("I fill out {string} fields with {string} profile OOP")
-    public void iFillOutFieldsWithProfileOOP(String whatFields, String profileReference) {
+    public void iFillOutFieldsWithProfileOOP(String whatFields, String profileReference) throws InterruptedException {
         setFormFillingContext(whatFields, profileReference);
 
         form.fillUsername(user.get("username"));
         form.fillEmail(user.get("email"));
         form.fillPasswords(user.get("password"));
-        form.fillName(user.get("firstName"), user.get("middleName"), user.get("lastName"));
+
+        String firstName = user.get("firstName");
+        String middleName = user.get("middleName");
+        String lastName = user.get("lastName");
+        form.fillName(firstName, middleName, lastName);
+        assertThat(form.getName()).isEqualTo(firstName + " " + middleName + " " + lastName);
+
         form.acceptPrivacyPolicy();
 
         if (isCompleteForm) {
-            System.out.println("Filling All!");
+            form.fillPhone(user.get("phone"));
+
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MM/dd/yyyy");
+            LocalDate parsedDate = LocalDate.parse(user.get("dateofbirth"), formatter);
+            String year = String.valueOf(parsedDate.getYear());
+            String month = String.valueOf(parsedDate.getMonthValue());
+            String day = String.valueOf(parsedDate.getDayOfMonth());
+            form.fillDateOfBirth(year, month, day);
+
+            form.selectCountry(user.get("countryoforigin"));
+            form.selectGender(user.get("gender"));
+
+            //workaround to generate both "true" and "false" outputs on results page
+            form.allowToContact();
+            if (user.get("allowedtocontact").equals("false")) form.disallowToContact();
+
+            form.fillAddress(user.get("address"));
+            form.selectCarMakes(user.get("carmake").split(", "));
+            form.fillAdditionalInfo(user.get("contactname"), user.get("contactphone"));
+
+            if (user.get("3rdpartyagreement").equalsIgnoreCase("accepted")) form.accept3rdPartyAgreement();
+            else form.decline3rdPartyAgreement();
+
+            String currentDir = System.getProperty("user.dir");
+            form.attachFile(currentDir + "/src/test/resources/data/" + user.get("attachment"));
         }
     }
 

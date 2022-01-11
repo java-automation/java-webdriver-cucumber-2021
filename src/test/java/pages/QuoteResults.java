@@ -46,6 +46,7 @@ public class QuoteResults extends QuoteForm {
         return password.getText();
     }
 
+    @Override
     public String getName() {
         return name.getText();
     }
