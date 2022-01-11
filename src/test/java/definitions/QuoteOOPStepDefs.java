@@ -28,7 +28,7 @@ public class QuoteOOPStepDefs {
     }
 
     @When("I fill out {string} fields with {string} profile OOP")
-    public void iFillOutFieldsWithProfileOOP(String whatFields, String profileReference) throws InterruptedException {
+    public void iFillOutFieldsWithProfileOOP(String whatFields, String profileReference) {
         setFormFillingContext(whatFields, profileReference);
 
         form.fillUsername(user.get("username"));

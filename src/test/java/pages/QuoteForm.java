@@ -1,18 +1,20 @@
 package pages;
 
-import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
 import org.openqa.selenium.support.ui.Select;
 
+import java.util.List;
+
 import static support.TestContext.getDriver;
 
 public class QuoteForm {
 
-    private String url = "https://skryabin.com/market/quote.html";
+    private final String url = "https://skryabin.com/market/quote.html";
 
-    //required
+
+    // +++ REQUIRED +++
     @FindBy(xpath = "//input[@name='username']")
     private WebElement username;
 
@@ -28,6 +30,7 @@ public class QuoteForm {
     @FindBy(xpath = "//input[@id='name']")
     private WebElement name;
 
+
     //name modal dialog ->
     @FindBy(xpath = "//input[@id='firstName']")
     private WebElement firstName;
@@ -42,15 +45,18 @@ public class QuoteForm {
     private WebElement saveButton;
     // <- name modal dialog
 
+
     @FindBy(xpath = "//input[@name='agreedToPrivacyPolicy']")
     private WebElement privacyPolicy;
 
     @FindBy(id = "formSubmit")
     private WebElement submitButton;
 
-    //optional
+
+    // +++ OPTIONAL +++
     @FindBy(xpath = "//input[@name='phone']")
     private WebElement phone;
+
 
     //date picker ->
     @FindBy(xpath = "//input[@name='dateOfBirth']")
@@ -62,13 +68,19 @@ public class QuoteForm {
     @FindBy(xpath = "//*[@id='ui-datepicker-div']//select[@data-handler='selectMonth']")
     private WebElement datePickerMonth;
 
-    private final String datePickerDay = "//*[@id='ui-datepicker-div']//td[@data-handler='selectDay']";
+    @FindBy(xpath = "//*[@id='ui-datepicker-div']//td[@data-handler='selectDay']")
+    private List<WebElement> datePickerDays;
     // <- date picker
+
 
     @FindBy(xpath = "//select[@name='countryOfOrigin']")
     private WebElement country;
 
-    private final String gender = "//input[@name='gender']";
+    @FindBy(xpath = "//input[@name='gender'][@value='male']")
+    private WebElement genderMale;
+
+    @FindBy(xpath = "//input[@name='gender'][@value='female']")
+    private WebElement genderFemale;
 
     @FindBy(xpath = "//input[@name='allowedToContact']")
     private WebElement allowedToContact;
@@ -79,8 +91,10 @@ public class QuoteForm {
     @FindBy(xpath = "//select[@name='carMake']")
     private WebElement carMake;
 
+
     //additional info iframe ->
-    private final String iframe = "additionalInfo";
+    @FindBy(name = "additionalInfo")
+    private WebElement iframe;
 
     @FindBy(xpath = "//input[@id='contactPersonName']")
     private WebElement contactName;
@@ -89,11 +103,13 @@ public class QuoteForm {
     private WebElement contactPhone;
     // <- additional info iframe
 
+
     @FindBy(id = "thirdPartyButton")
     private WebElement thirdPartyButton;
 
     @FindBy(xpath = "//input[@name='attachment']")
     private WebElement attachmentButton;
+
 
     public QuoteForm() {
         PageFactory.initElements(getDriver(), this);
@@ -144,12 +160,11 @@ public class QuoteForm {
         phone.sendKeys(value);
     }
 
-    public void fillDateOfBirth(String year, String month, String day) throws InterruptedException {
+    public void fillDateOfBirth(String year, String month, String day) {
         datePicker.click();
         new Select(datePickerYear).selectByValue(year);
         new Select(datePickerMonth).selectByValue(String.valueOf(Integer.parseInt(month) - 1));
-        Thread.sleep(1000);
-        getDriver().findElement(By.xpath(datePickerDay + "/a[normalize-space(.)='" + day + "']")).click();
+        datePickerDays.get(Integer.parseInt(day) - 1).click();
     }
 
     public void selectCountry(String value) {
@@ -157,7 +172,8 @@ public class QuoteForm {
     }
 
     public void selectGender(String value) {
-        getDriver().findElement(By.xpath(gender + "[@value='" + value + "']")).click();
+        if (value.equals("male")) genderMale.click();
+        else if (value.equals("female")) genderFemale.click();
     }
 
     public void allowToContact() {
