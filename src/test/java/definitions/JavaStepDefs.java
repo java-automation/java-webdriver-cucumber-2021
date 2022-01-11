@@ -999,19 +999,18 @@ public class JavaStepDefs {
         parrot.fly();
         parrot.speak();
 
-        Animal tiger = new Cat();
-        tiger.setName("Tigger");
-        tiger.setAge(4.5);
-        tiger.setDomestic(false);
-        tiger.setWeight(56.7);
-        tiger.setHeight(120.5);
-        tiger.setWings(false);
-        tiger.setHeight(120.6);
-        tiger.setHowManyLegs(4);
-        tiger.setDomestic(false);
-        tiger.setEndangered(true);
-
-
+        Animal tiger = new Cat()
+                .setName("Tigger")
+                .setAge(4.5)
+                .setDomestic(false)
+                .setWeight(56.7)
+                .setHeight(120.5)
+                .setWings(false)
+                .setHeight(120.6)
+                .setHowManyLegs(4)
+                .setDomestic(false)
+                .setEndangered(true);
+        out.println("%s %s %s %s".formatted("Tiger:", tiger.getName(), tiger.getAge(), tiger.getDomestic()));
         List<Animal> animals = new ArrayList<>();
         animals.add(cat);
         animals.add(anotherCat);

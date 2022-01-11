@@ -2,25 +2,26 @@ package pages;
 
 public class Cat extends Animal {
 
-    public Cat(String newName,
-               Double newWeight,
-               Double newHeight,
-               Double newAge,
-               Boolean newWings,
-               Integer newHowManyLegs,
-               Boolean newIsDomestic,
-               Boolean newIsEndangered) {
-        name = newName;
-        weight = newWeight;
-        height = newHeight;
-        age = newAge;
-        wings = newWings;
-        howManyLegs = newHowManyLegs;
-        isDomestic = newIsDomestic;
-        isEndangered = newIsEndangered;
+    public Cat(String name,
+               Double weight,
+               Double height,
+               Double age,
+               Boolean wings,
+               Integer howManyLegs,
+               Boolean isDomestic,
+               Boolean isEndangered) {
+        this.name = name;
+        this.weight = weight;
+        this.height = height;
+        this.age = age;
+        this.wings = wings;
+        this.howManyLegs = howManyLegs;
+        this.isDomestic = isDomestic;
+        this.isEndangered = isEndangered;
     }
 
     public Cat() {
+        setName("nameless one");
     }
 
     public void speak() {

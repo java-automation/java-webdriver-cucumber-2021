@@ -23,7 +23,14 @@ public class Animal {
                   Boolean isDomestic,
                   Boolean isEndangered
     ) {
-        setName("nameless one");
+        this.name = name;
+        this.weight = weight;
+        this.height = height;
+        this.age = age;
+        this.wings = wings;
+        this.howManyLegs = howManyLegs;
+        this.isDomestic = isDomestic;
+        this.isEndangered = isEndangered;
     }
 
     public Animal() {
@@ -31,71 +38,80 @@ public class Animal {
     }
 
     // methods
-    public void setName(String newName) {
-        if (!newName.isEmpty() && !newName.equals("Jerry")) {
-            name = newName;
+    public Animal setName(String name) {
+        if (!name.isEmpty() && !name.equals("Jerry")) {
+            this.name = name;
         } else {
-            throw new Error("Unacceptable name! " + newName);
+            throw new Error("Unacceptable name! " + name);
         }
+        return this;
     }
 
     public String getName() {
-        return name;
+       return name;
     }
+
     public Double getWeight() {
         return weight;
     }
 
-    public void setWeight(Double weight) {
+    public Animal setWeight(Double weight) {
         this.weight = weight;
+        return this;
     }
 
     public Double getHeight() {
         return height;
     }
 
-    public void setHeight(Double height) {
+    public Animal setHeight(Double height) {
         this.height = height;
+        return this;
     }
 
     public Double getAge() {
         return age;
     }
 
-    public void setAge(Double age) {
+    public Animal setAge(Double age) {
         this.age = age;
+        return this;
     }
 
     public Boolean getWings() {
         return wings;
     }
 
-    public void setWings(Boolean wings) {
+    public Animal setWings(Boolean wings) {
         this.wings = wings;
+        return this;
     }
 
     public Integer getHowManyLegs() {
         return howManyLegs;
     }
 
-    public void setHowManyLegs(Integer howManyLegs) {
+    public Animal setHowManyLegs(Integer howManyLegs) {
         this.howManyLegs = howManyLegs;
+        return this;
     }
 
     public Boolean getDomestic() {
         return isDomestic;
     }
 
-    public void setDomestic(Boolean domestic) {
+    public Animal setDomestic(Boolean domestic) {
         isDomestic = domestic;
+        return this;
     }
 
     public Boolean getEndangered() {
         return isEndangered;
     }
 
-    public void setEndangered(Boolean endangered) {
+    public Animal setEndangered(Boolean endangered) {
         isEndangered = endangered;
+        return this;
     }
 
     public void walk() {

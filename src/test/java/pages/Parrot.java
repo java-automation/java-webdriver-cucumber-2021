@@ -20,6 +20,7 @@ public class Parrot extends Animal {
     }
 
     public Parrot() {
+        setName("nameless one");
     }
 
     @Override
