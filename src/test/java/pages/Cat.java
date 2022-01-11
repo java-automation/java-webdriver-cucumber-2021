@@ -1,43 +1,16 @@
 package pages;
 
-public class Cat {
-    //fields
-    private String name;
+public class Cat extends Animal {
 
-    public void setName(String newName) {
-        if ((!newName.isEmpty()) && (!newName.equals("Jerry"))) {
-            name = newName;
-        } else {
-            throw new Error("Unacceptable name! " + newName);
-        }
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    //constructor
-    public Cat() {
-        setName("nameless cat");
-    }
     public Cat(String newName) {
-        setName(newName);
+        name = newName;
     }
 
-    //methods
-    public void walk() {
-        System.out.println("Cat " + name + " is walking!");
-    }
-
-    public void sleep() {
-        System.out.println("Cat " + name + " is sleeping!");
-    }
-
-    public void eat(String what) {
-        System.out.println("Cat " + name + " is eating " + what + "!");
+    public Cat() {
     }
 
     public void speak() {
-        System.out.println("Cat " + name + " is meowing!");
+        System.out.println("Cat " + name + " is meowing");
     }
+
 }
