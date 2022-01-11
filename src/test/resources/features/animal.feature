@@ -1,6 +1,6 @@
 @animal
 Feature:  Animal class usage
 
-  @cat1
-  Scenario: animal creating
-    Given I work with Animal class
+  @animal1
+  Scenario: Animal class creating and usage
+    Given I work with classes

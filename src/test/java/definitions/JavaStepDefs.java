@@ -12,6 +12,7 @@ import org.openqa.selenium.interactions.Actions;
 import pages.Animal;
 import pages.Cat;
 import pages.Dog;
+import pages.Parrot;
 
 import java.time.DayOfWeek;
 import java.util.*;
@@ -961,37 +962,62 @@ public class JavaStepDefs {
     @Given("I work with classes")
     public void iWorkWithClasses() {
 
-        System.out.println();
-        System.out.println();
+        out.println();
+        out.println();
 
-        Animal cat = new Cat("Tom");
+        Animal cat = new Cat("Tom", 6.0, 3.0, 2.0, false, 4, true, false);
         cat.sleep();
         cat.walk();
         cat.speak();
         cat.eat("fish");
-        System.out.println(cat.getName());
+        cat.fly();
+        out.println(cat.getName());
 
-        System.out.println();
+        out.println();
 
         Animal anotherCat = new Cat();
         anotherCat.sleep();
         anotherCat.speak();
-        System.out.println("Street cat name is " + anotherCat.getName());
+        anotherCat.fly();
+        out.println("Street cat name is " + anotherCat.getName());
 
-        System.out.println();
-        System.out.println();
+        out.println();
+        out.println();
 
         Animal dog = new Dog();
-        System.out.println("Dog name is " + dog.getName());
+        out.println("Dog name is " + dog.getName());
         dog.setName("Bobby");
         dog.eat("bone");
         dog.sleep();
         dog.speak();
+        dog.fly();
+
+        Animal parrot = new Parrot();
+        out.println("Parrot name is " + parrot.getName());
+        parrot.setName("Kesha");
+        parrot.eat("seeds");
+        parrot.fly();
+        parrot.speak();
+
+        Animal tiger = new Cat();
+        tiger.setName("Tigger");
+        tiger.setAge(4.5);
+        tiger.setDomestic(false);
+        tiger.setWeight(56.7);
+        tiger.setHeight(120.5);
+        tiger.setWings(false);
+        tiger.setHeight(120.6);
+        tiger.setHowManyLegs(4);
+        tiger.setDomestic(false);
+        tiger.setEndangered(true);
+
 
         List<Animal> animals = new ArrayList<>();
         animals.add(cat);
         animals.add(anotherCat);
         animals.add(dog);
+        animals.add(parrot);
+        animals.add(tiger);
         printAnimalNames(animals);
     }
 
@@ -1002,6 +1028,10 @@ public class JavaStepDefs {
             System.out.println(animal.getName());
             animal.sleep();
             animal.speak();
+            animal.fly();
+            if (animal.getEndangered() != null && animal.getEndangered().equals(true)) {
+                out.println(animal.getName() + " is endangered!");
+            }
         }
     }
 }

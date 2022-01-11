@@ -1,6 +1,26 @@
 package pages;
 
 public class Parrot extends Animal {
+    public Parrot(String newName,
+                  Double newWeight,
+                  Double newHeight,
+                  Double newAge,
+                  Boolean newWings,
+                  Integer newHowManyLegs,
+                  Boolean newIsDomestic,
+                  Boolean newIsEndangered) {
+        name = newName;
+        weight = newWeight;
+        height = newHeight;
+        age = newAge;
+        wings = newWings;
+        howManyLegs = newHowManyLegs;
+        isDomestic = newIsDomestic;
+        isEndangered = newIsEndangered;
+    }
+
+    public Parrot() {
+    }
 
     @Override
     public void speak() {
