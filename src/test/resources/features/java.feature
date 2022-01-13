@@ -283,6 +283,17 @@ Feature: Java feature
       | 0      |
       | 1      |
 
+  @java38
+  Scenario Outline: Find months with contain "R" letter in their names
+    Given I find what months has "<letter>" letter in their names
+    Then I assert that this is only collection of "<months>" that contains "<letter>"
+    Examples:
+      | letter | months                                                                  |
+      | R      | January, February, March, April, September, October, November, December |
+      | A      | January, February, March, April, May, August                            |
+      | J      | January, June, July                                                     |
+
+
 
 
 

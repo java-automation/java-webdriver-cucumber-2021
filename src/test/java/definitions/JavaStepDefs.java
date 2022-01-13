@@ -4,15 +4,12 @@ import com.google.common.primitives.Ints;
 import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
+import org.assertj.core.api.Assertions;
 import org.junit.Assert;
 import org.openqa.selenium.By;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.Actions;
-import pages.Animal;
-import pages.Cat;
-import pages.Dog;
-import pages.Parrot;
 
 import java.time.DayOfWeek;
 import java.util.*;
@@ -958,79 +955,47 @@ public class JavaStepDefs {
         return factorial(n - 1) * n;
     }
 
-
-    @Given("I work with classes")
-    public void iWorkWithClasses() {
-
-        out.println();
-        out.println();
-
-        Animal cat = new Cat("Tom", 6.0, 3.0, 2.0, false, 4, true, false);
-        cat.sleep();
-        cat.walk();
-        cat.speak();
-        cat.eat("fish");
-        cat.fly();
-        out.println(cat.getName());
-
-        out.println();
-
-        Animal anotherCat = new Cat();
-        anotherCat.sleep();
-        anotherCat.speak();
-        anotherCat.fly();
-        out.println("Street cat name is " + anotherCat.getName());
-
-        out.println();
-        out.println();
-
-        Animal dog = new Dog();
-        out.println("Dog name is " + dog.getName());
-        dog.setName("Bobby");
-        dog.eat("bone");
-        dog.sleep();
-        dog.speak();
-        dog.fly();
-
-        Animal parrot = new Parrot();
-        out.println("Parrot name is " + parrot.getName());
-        parrot.setName("Kesha");
-        parrot.eat("seeds");
-        parrot.fly();
-        parrot.speak();
-
-        Animal tiger = new Cat()
-                .setName("Tigger")
-                .setAge(4.5)
-                .setDomestic(false)
-                .setWeight(56.7)
-                .setHeight(120.5)
-                .setWings(false)
-                .setHeight(120.6)
-                .setHowManyLegs(4)
-                .setDomestic(false)
-                .setEndangered(true);
-        out.println("%s %s %s %s".formatted("Tiger:", tiger.getName(), tiger.getAge(), tiger.getDomestic()));
-        List<Animal> animals = new ArrayList<>();
-        animals.add(cat);
-        animals.add(anotherCat);
-        animals.add(dog);
-        animals.add(parrot);
-        animals.add(tiger);
-        printAnimalNames(animals);
+    @Given("I find what months has {string} letter in their names")
+    public void iFindWhatMonthsHasLetterInTheirNames(String letter) {
+        String[] months = {
+                "January",
+                "February",
+                "March",
+                "April",
+                "May",
+                "June",
+                "July",
+                "August",
+                "September",
+                "October",
+                "November",
+                "December"
+        };
+        List<String> monWithLetter = Arrays.stream(months).filter(el -> el.toLowerCase(Locale.ROOT).contains(letter.toLowerCase(Locale.ROOT))).toList();
+        out.println("List of months, contains letter " + letter + ": " + monWithLetter);
     }
 
-    void printAnimalNames(List<Animal> animals) {
-        System.out.println();
-        System.out.println("All animal names >>>> ");
-        for (Animal animal : animals) {
-            System.out.println(animal.getName());
-            animal.sleep();
-            animal.speak();
-            animal.fly();
-            if (animal.getEndangered() != null && animal.getEndangered().equals(true)) {
-                out.println(animal.getName() + " is endangered!");
-            }
-        }
+    @Then("I assert that this is only collection of {string} that contains {string}")
+    public void iAssertThatThisIsOnlyCollectionOf(String string, String letter) {
+        String[] monthsInYear = {
+                "January",
+                "February",
+                "March",
+                "April",
+                "May",
+                "June",
+                "July",
+                "August",
+                "September",
+                "October",
+                "November",
+                "December"
+        };
+
+        String[] months = string.split(", ");
+        Assertions.assertThat(monthsInYear)
+                .filteredOn(el -> el.toLowerCase(Locale.ROOT)
+                        .contains(letter.toLowerCase(Locale.ROOT)))
+                .containsOnly(months);
     }
 }
