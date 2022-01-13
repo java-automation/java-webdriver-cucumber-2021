@@ -37,7 +37,7 @@ public class QuoteStepDefs {
     public void iVerifyTheRequiredFields() {
         Assert.assertEquals(getDriver().findElement(By.xpath("//b[@name='username']")).getText(), testdata.username1);
         Assert.assertEquals(getDriver().findElement(By.xpath("//b[@name='email']")).getText(), testdata.email1);
-        Assert.assertEquals(getDriver().findElement(By.xpath("//b[@name='password']")).getText(), testdata.pass1);
+        Assert.assertEquals(getDriver().findElement(By.xpath("//b[@name='password']")).getText(), "[entered]");
         Assert.assertEquals(getDriver().findElement(By.xpath("//b[@name='name']")).getText(), testdata.name1);
         Assert.assertEquals(getDriver().findElement(By.xpath("//b[@name='agreedToPrivacyPolicy']")).getText(), testdata.policy1);
     }
@@ -64,6 +64,10 @@ public class QuoteStepDefs {
         getDriver().findElement(By.xpath("//input[@name='phone']")).click();
         Thread.sleep(3000);
 //      TODO: Continue troubleshooting the iframe - unable to locate element
+        Actions actions = new Actions(getDriver());
+        actions.moveToElement(getDriver().findElement(By.xpath("//iframe[@name='additionalInfo']"))).perform();
+
+        actions.moveToElement(getDriver().findElement(By.xpath("//input[@id='contactPersonName']"))).perform();
         getDriver().findElement(By.xpath("//input[@id='contactPersonName']")).click();
         getDriver().findElement(By.xpath("//input[@id='contactPersonName']")).sendKeys(testdata.contactName1);
         getDriver().findElement(By.xpath("//input[@id='contactPersonPhone']")).click();
