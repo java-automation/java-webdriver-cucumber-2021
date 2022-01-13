@@ -36,103 +36,116 @@ public class PersonData {
         return firstName;
     }
 
-    public void withFirstName(String firstName) {
+    public PersonData withFirstName(String firstName) {
         this.firstName = firstName;
+        return this;
     }
 
     public String getMiddleName() {
         return middleName;
     }
 
-    public void withMiddleName(String middleName) {
+    public PersonData withMiddleName(String middleName) {
         this.middleName = middleName;
+        return this;
     }
 
     public String getLastName() {
         return lastName;
     }
 
-    public void withLastName(String lastName) {
+    public PersonData withLastName(String lastName) {
         this.lastName = lastName;
+        return this;
     }
 
     public String getUsername() {
         return username;
     }
 
-    public void withUsername(String username) {
+    public PersonData withUsername(String username) {
         this.username = username;
+        return this;
     }
 
     public String getEmail() {
         return email;
     }
 
-    public void withEmail(String email) {
+    public PersonData withEmail(String email) {
         this.email = email;
+        return this;
     }
 
     public String getPassword() {
         return password;
     }
 
-    public void withPassword(String password) {
+    public PersonData withPassword(String password) {
         this.password = password;
+        return this;
     }
 
     public String getConfirmPassword() {
         return confirmPassword;
     }
 
-    public void withConfirmPassword(String confirmPassword) {
+    public PersonData withConfirmPassword(String confirmPassword) {
         this.confirmPassword = confirmPassword;
+        return this;
     }
 
     public String getPhone() {
         return phone;
     }
 
-    public void withPhone(String middleName) {
+    public PersonData withPhone(String middleName) {
         this.phone = phone;
+        return this;
     }
 
     public String getCountryOfOrigin() {
         return countryOfOrigin;
     }
 
-    public void withCountryOfOrigin(String countryOfOrigin) {
+    public PersonData withCountryOfOrigin(String countryOfOrigin) {
         this.countryOfOrigin = countryOfOrigin;
+        return this;
     }
 
     public String getGender() {
         return gender;
     }
 
-    public void withGender(String gender) {
+    public PersonData withGender(String gender) {
         this.gender = gender;
+        return this;
     }
 
     public String getAddress() {
         return address;
     }
 
-    public void withAddress(String address) {
+    public PersonData withAddress(String address) {
         this.address = address;
+        return this;
     }
 
     public String getCarMake() {
         return carMake;
     }
 
-    public void withCarMake(String carMake) {
+    public PersonData withCarMake(String carMake) {
         this.carMake = carMake;
+        return this;
     }
 
     public String getDateOfBirth() {
         return dateOfBirth;
     }
 
-    public void withDateOfBirth(String dateOfBirth) {
+    public PersonData withDateOfBirth(String dateOfBirth) {
         this.dateOfBirth = dateOfBirth;
+        return this;
     }
 }

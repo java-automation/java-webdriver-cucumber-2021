@@ -70,7 +70,7 @@ public class QuoteStepDefs extends HelperStepDefs {
 
     Map<String, String> user = getData("user");
 
-    PersonData person = new PersonData("Irina", "Aleksandrovna", "Gavrilova", "gavrilova.irina", "passioninsoftwaretesting@gmail.com",
+    PersonData person = new PersonData("Irina", "Aleksandrovna", "Gavrilova", "passioninsoftwaretesting", "passioninsoftwaretesting@gmail.com",
             "p1234", "p1234", "512111111", "Russia", "Female", "here is an address", "Ford, Toyota", "01/25/2000");
 
     @When("I fill out required fields")
@@ -200,7 +200,7 @@ public class QuoteStepDefs extends HelperStepDefs {
     }
 
     @And("I verify {string} is in the list1")
-    public void iVerifyIsInTheList1(String document) throws InterruptedException {
+    public void iVerifyIsInTheList1(String document) {
         String originalHandle = getDriver().getWindowHandle();
 
         // switch webdriver focus to a new window
@@ -214,7 +214,7 @@ public class QuoteStepDefs extends HelperStepDefs {
     }
 
     @And("I {string} third party agreement1")
-    public void iThirdPartyAgreement1(String action) throws InterruptedException {
+    public void iThirdPartyAgreement1(String action) {
         getDriver().findElement(By.xpath("//button[@id='thirdPartyButton']")).click();
         switch (action) {
             case "accept":
@@ -228,7 +228,6 @@ public class QuoteStepDefs extends HelperStepDefs {
 
     @And("I enter {string} as contact person with a phone {string} one")
     public void iEnterAsContactPersonWithAPhone(String contactName, String contactPhone) {
-
         getDriver().switchTo().frame("additionalInfo");
         getDriver().findElement(By.xpath("//input[@id='contactPersonName']")).sendKeys(contactName);
         getDriver().findElement(By.xpath("//input[@id='contactPersonPhone']")).sendKeys(contactPhone);
@@ -256,6 +255,53 @@ public class QuoteStepDefs extends HelperStepDefs {
         for (String car : carMakeList) {
             new Select(getDriver().findElement(By.xpath("//select[@name='carMake']"))).selectByVisibleText(car.replace(" ", ""));
         }
+    }
 
+    @Then("I Playing with Actions class and WebElement sendkeys")
+    public void iPlayingWithActionsClassAndWebElementSendkeys() {
+        new Actions(getDriver())
+                .click(getDriver().findElement(By.xpath("//select[@name='carMake']/option")))
+                .keyDown(Keys.COMMAND)
+                .click(getDriver().findElement(By.xpath("//select[@name='carMake']/option[2]")))
+                .keyUp(Keys.COMMAND)
+                .perform();
+    }
+
+    @Then("I fill out required fields Actions sendkeys")
+    public void iFillOutRequiredFieldsActionsSendkeys() {
+        type(USERNAME_XPATH, person.getUsername());
+        WebElement username = getDriver().findElement(By.xpath("//input[@name='username']"));
+        WebElement email = getDriver().findElement(By.xpath("//input[@name='email']"));
+        new Actions(getDriver())
+                .keyDown(Keys.COMMAND)
+                .sendKeys(username, "A")
+                .sendKeys(username, "C")
+                .keyUp(Keys.COMMAND)
+                .perform();
+        new Actions(getDriver())
+                .keyDown(Keys.COMMAND)
+                .sendKeys(email, "V")
+                .keyUp(Keys.COMMAND)
+                .perform();
+        new Actions(getDriver())
+                .click(email)
+                .keyDown(Keys.COMMAND)
+                .sendKeys(Keys.ARROW_RIGHT)
+                .keyUp(Keys.COMMAND)
+                .sendKeys("@gmail.com")
+                .perform();
+        click(NAME_XPATH);
+        type(FIRST_NAME_XPATH, person.getFirstName());
+        type(MIDDLE_NAME_XPATH, person.getMiddleName());
+        type(LASTNAME_XPATH, person.getLastName());
+        click(SAVE_NAME_BUTTON_XPATH);
+        System.out.println(getWebElement(NAME_XPATH).getAttribute("value"));
+        type(PASSWORD_XPATH, person.getPassword());
+        type(CONFIRM_PASSWORD_XPATH, person.getPassword());
+        assertEquals(getWebElement(NAME_XPATH).getAttribute("value"),
+                getFullName());
+        if (!getWebElement(PRIVACY_POLICY_XPATH).isSelected()) {
+            click(PRIVACY_POLICY_XPATH);
+        }
     }
 }

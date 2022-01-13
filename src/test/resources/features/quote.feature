@@ -137,3 +137,11 @@ Feature: Fill out all Quote fields and verify that submitted fields saved correc
     And I submit the page
     Then I verify the required fields
     And I verify the multi-select field
+
+  @quote8
+  Scenario: Playing with Actions class and WebElement.sendkeys()
+    Given I go to "quote" page
+    Then I fill out required fields Actions sendkeys
+    And I submit the page
+    Then I verify the required fields
+
