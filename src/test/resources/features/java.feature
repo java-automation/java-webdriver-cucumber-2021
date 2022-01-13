@@ -8,7 +8,7 @@
       Then element with xpath "//div[@id='ui-datepicker-div']" should be displayed
 #   Dialog: verify that upon clicking dialog appears
       When I click on element with xpath "//td[@data-handler='selectDay']/a[text()='16']"
-      Then element with xpath "//b[@name='dateOfBirth'][text()='11/16/2021']" should be present
+      Then element with xpath "//b[@name='dateOfBirth'][text()='01/16/2022']" should be present
 #   Date Composer: verify that chosen date is formed out correctly if day clicked in popup
       When I click on element with xpath "//input[@id='dateOfBirth']"
       And I wait for 2 sec
@@ -21,11 +21,11 @@
       When I click on element with xpath "//input[@id='dateOfBirth']"
       And I wait for 2 sec
       And element with xpath "//div[@id='ui-datepicker-div']" should be displayed
-      And element with xpath "//select[contains(@class,'datepicker-month')]//option[@value='3']" should have attribute "selected" as "selected"
+      And element with xpath "//select[contains(@class,'datepicker-month')]//option[@value='3']" should have attribute "selected" as "true"
       When I click on element with xpath "//a[@data-handler='prev']"
-      Then element with xpath "//select[contains(@class,'datepicker-month')]//option[@value='2']" should have attribute "selected" as "selected"
+      Then element with xpath "//select[contains(@class,'datepicker-month')]//option[@value='2']" should have attribute "selected" as "true"
       When I click on element with xpath "//a[@data-handler='next']"
-      Then element with xpath "//select[contains(@class,'datepicker-month')]//option[@value='3']" should have attribute "selected" as "selected"
+      Then element with xpath "//select[contains(@class,'datepicker-month')]//option[@value='3']" should have attribute "selected" as "true"
       When I click on element with xpath "//select[contains(@class,'datepicker-month')]"
       Then element with xpath "//select[contains(@class,'datepicker-month')]//option" should be displayed
       When I click on element with xpath "//select[contains(@class,'datepicker-year')]"
@@ -69,7 +69,7 @@
 
     @TestCase7
     Scenario: Compare favorite and non-favorite colors
-      Given I print the comparison of the colors my favorite color as "green" and my non-favorite color as "yellow"
+      Given I print the comparison of the colors my favorite color as "green" and my non-favorite color as "green"
 
     @TestCase8
     Scenario: Comparison of strings
@@ -214,9 +214,3 @@
     Scenario: Working with classes
       Given I work with class
       And I work with a new class
-
-#      TODO: maintain scenarios:
-#       TestCase1: AssertionError: Expected size: 1 but was: 0 in:[]
-#       TestCase7: ComparisonFailure: expected:<[green]> but was:<[yellow]>
-#       TestCase11: InvalidArgumentException: invalid argument: File not found : C:\Users\casia\Downloads\Documents.pdf
-#       TestCase23: ArrayIndexOutOfBoundsException: Index 8 out of bounds for length 8

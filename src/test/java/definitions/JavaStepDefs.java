@@ -256,7 +256,7 @@ public class JavaStepDefs {
 
     @And("I upload file for element {string}")
     public void iUploadFileForElement(String element) {
-        getDriver().findElement(By.xpath(element)).sendKeys("C:\\Users\\casia\\Downloads\\Documents.pdf");
+        getDriver().findElement(By.xpath(element)).sendKeys("C:\\Users\\casia\\OneDrive\\QA\\Coursera Q7F2X9FDWYUZ.pdf");
     }
 
     @Given("I print all numbers from zero up to {int}")
@@ -589,8 +589,8 @@ public class JavaStepDefs {
     @Given("I find duplicates in array [{int}, {int}, {int}, {int}, {int}, {int}, {int}, {int}]")
     public void iFindDuplicatesInArray(int arg0, int arg1, int arg2, int arg3, int arg4, int arg5, int arg6, int arg7) {
         int[] array = {arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7};
-        for(int i=0; i<array.length-1; i++) {
-            for(int j=i+1; j<array.length-1; j++) { //fix out of bound issue
+        for(int i=0; i<array.length; i++) {
+            for(int j=i+1; j<array.length-i; j++) {
                 if(array[i] == array[j+i]) {
                     System.out.println("Array contains duplicates");
                     return;

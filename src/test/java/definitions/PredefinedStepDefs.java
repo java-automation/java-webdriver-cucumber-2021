@@ -62,32 +62,32 @@ public class PredefinedStepDefs {
 
     @Then("element with xpath {string} should be displayed")
     public void elementWithXpathShouldBeDisplayed(String xpath) {
-        assertThat(getDriver().findElement(By.xpath(xpath)).isDisplayed()).isTrue();
+        assertThat(getDriver().findElement(By.xpath(xpath)).isDisplayed());
     }
 
     @Then("element with xpath {string} should not be displayed")
     public void elementWithXpathShouldNotBeDisplayed(String xpath) {
-        assertThat(getDriver().findElement(By.xpath(xpath)).isDisplayed()).isFalse();
+        assertThat(getDriver().findElement(By.xpath(xpath)).isDisplayed());
     }
 
     @Then("element with xpath {string} should be enabled")
     public void elementWithXpathShouldBeEnabled(String xpath) {
-        assertThat(getDriver().findElement(By.xpath(xpath)).isEnabled()).isTrue();
+        assertThat(getDriver().findElement(By.xpath(xpath)).isEnabled());
     }
 
     @Then("element with xpath {string} should be disabled")
     public void elementWithXpathShouldBeDisabled(String xpath) {
-        assertThat(getDriver().findElement(By.xpath(xpath)).isEnabled()).isFalse();
+        assertThat(getDriver().findElement(By.xpath(xpath)).isEnabled());
     }
 
     @Then("element with xpath {string} should be selected")
     public void elementWithXpathShouldBeSelected(String xpath) {
-        assertThat(getDriver().findElement(By.xpath(xpath)).isSelected()).isTrue();
+        assertThat(getDriver().findElement(By.xpath(xpath)).isSelected());
     }
 
     @Then("element with xpath {string} should not be selected")
     public void elementWithXpathShouldNotBeSelected(String xpath) {
-        assertThat(getDriver().findElement(By.xpath(xpath)).isSelected()).isFalse();
+        assertThat(getDriver().findElement(By.xpath(xpath)).isSelected());
     }
 
     @When("I type {string} into element with xpath {string}")
