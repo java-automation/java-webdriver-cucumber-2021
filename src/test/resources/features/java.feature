@@ -201,3 +201,9 @@ Feature: Java experiments
   @java36
   Scenario: OOP exercise
     And I work with Animal classes
+
+  @java37
+  Scenario: Recursion exercise
+    And I print numbers from 10 to one recursively
+    And I find a sum on numbers in a given array recursively
+      | 3 | 5 | 0 | 11 | 18 | 2 | -3 |

@@ -328,8 +328,16 @@ public class JavaStepDefs {
         if ((wordToCheck == null) || (wordToCheck.length() == 0)) throw new Error("Empty word - nothing to check!");
 
         System.out.println("Is '" + wordToCheck + "' a palindrome (char compare)? " + isPalindromeByComparingChars(wordToCheck));
+        System.out.println("Is '" + wordToCheck + "' a palindrome (recursion)? " + isPalindromeByRecursion(wordToCheck));
         System.out.println("Is '" + wordToCheck + "' a palindrome (reverse string)? " + wordToCheck.equals(getReversedStringWithStringBuilder(wordToCheck)));
         System.out.println("Is '" + wordToCheck + "' a palindrome (max palindrome from center)? " + wordToCheck.equals(getLongestPalindromeSubstring(wordToCheck)));
+    }
+
+    private boolean isPalindromeByRecursion(String wordToCheck) {
+        int len = wordToCheck.length();
+        if (len < 2) return true;
+        if (wordToCheck.charAt(0) != wordToCheck.charAt(len - 1)) return false;
+        return (isPalindromeByRecursion(wordToCheck.substring(1, len - 1)));
     }
 
     private String getReversedStringWithStringBuilder(String str) {
@@ -1090,5 +1098,32 @@ public class JavaStepDefs {
         frog.birthday(new Animal[] {cat, anotherCat, dog, new Cat ("Nefertiti"), new Dog("Mike", 2), new Frog()});
         frog.sleep();
         System.out.println();
+    }
+
+    @And("I print numbers from {int} to one recursively")
+    public void iPrintNumbersFromToOneRecursively(int num) {
+        if (num < 1) throw new Error("Not a natural number!" + num);
+        printFromNumToOne(num);
+    }
+
+    private void printFromNumToOne(int num) {
+        System.out.print(num + " ");
+        if (num == 1)  {
+            System.out.println();
+            return;
+        }
+        printFromNumToOne(num - 1);
+    }
+
+    @And("I find a sum on numbers in a given array recursively")
+    public void iFindASumOnNumbersInAGivenArrayRecursively(@Transpose List<Integer> list) {
+        if (list == null || list.size() < 1) throw new Error("Null or empty array!");
+        int[] arr = convertListToPrimitiveArray(list);
+        System.out.println(getArraySumRecursively(arr, arr.length));
+    }
+
+    private int getArraySumRecursively(int[] arr, int length) {
+        if (length == 1) return arr[0];
+        return arr[length - 1] + getArraySumRecursively(arr, length - 1);
     }
 }
