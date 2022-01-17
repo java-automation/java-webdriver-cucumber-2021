@@ -1,14 +1,18 @@
 package definitions;
 
+import io.cucumber.java.bs.A;
 import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import java.util.Scanner;
 
-import okhttp3.Route;
 import org.apache.logging.log4j.core.appender.rolling.action.IfAccumulatedFileCount;
 import org.apache.logging.log4j.core.util.JsonUtils;
+import org.openqa.selenium.grid.web.Route;
+import pages.Animal;
 import pages.Cat;
+import pages.Dog;
+import pages.Parrot;
 
 
 import java.util.*;
@@ -784,24 +788,61 @@ public class JavaStepDefs<now> {
 
     @Given("I work with classes")
     public void iWorkWithClasses() {
-        Cat cat = new Cat();
+        Animal myAnimal = new Animal();
+        myAnimal.speak();
+        System.out.println();
+        System.out.println();
+
+        Animal parrot = new Parrot();
+        parrot.speak();
+        parrot.sleep();
+        System.out.println();
+
+
+
+        Animal cat = new Cat("Tom");
         cat.sleep();
         cat.walk();
         cat.speak();
         cat.eat("fish");
-        cat.setName("Esh");
-        System.out.println(cat.getName()); //to get the name of the cat
+//        cat.setName("Esh"); // we can't use Jerry otherwise it throws an error
         cat.sleep();
+        System.out.println(cat.getName()); //to get the name of the cat
 
 
-        Cat anotherCat = new Cat(); // no name cat
+
+        Animal anotherCat = new Cat(); // no name cat
+        System.out.println();
         anotherCat.sleep();
         anotherCat.walk();
         anotherCat.speak();
         System.out.println(anotherCat.getName()); // does not return any name
+        System.out.println();
+
+        Animal dog = new Dog();
+        System.out.println("Dog name is " + dog.getName());
+        dog.setName("Bobby");
+        dog.eat("bone");
+        dog.sleep();
+        System.out.println(dog.getName());
+        dog.speak();
+
+
+        List<Animal> animals = new ArrayList<>();
+        animals.add(cat);
+        animals.add(anotherCat);
+        animals.add(dog);
+        printAnimalNames(animals);
     }
+    void printAnimalNames(List<Animal> animals) {
+        System.out.println();
+        System.out.println("All animal names >>>>>");
+        for (Animal animal: animals) {
+            System.out.println(animal.getName());
+            animal.speak();
 
-
+        }
+    }
 }
 
 

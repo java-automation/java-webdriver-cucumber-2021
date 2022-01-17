@@ -1,5 +1,11 @@
 username: jdoe
 email: jdoe@example.com
 password: welcome
+confirmedpass: [entered]
 firstName: John
 lastName: Doe
+name: John Doe
+contact name: Sharon
+policy: "true"
+phone: "6665554444"
+gender: male
