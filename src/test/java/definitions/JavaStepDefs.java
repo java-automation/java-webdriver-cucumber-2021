@@ -1189,4 +1189,24 @@ public class JavaStepDefs {
             assertThat(distinctList1.get(i)).isEqualTo(distinctList2.get(i));
         }
     }
+
+    @And("I find what words have {string} in their name")
+    public void iFindWhatWordsHaveInTheirName(String substring, @Transpose List<String> collection) {
+        if (substring == null || substring.isEmpty()) throw new Error("Empty string!");
+
+        printWordsContainingSubstring(collection, substring);
+    }
+
+    private void printWordsContainingSubstring(List<String> collection, String substring) {
+        int matchCounter = 0;
+        for (String entry : collection) {
+            if (entry.contains(substring)) {
+                matchCounter++;
+                System.out.println(entry.replaceAll(substring, "[" + substring + "]"));
+            }
+        }
+        System.out.println("---");
+        System.out.println("Total entries: " + collection.size());
+        System.out.println("Matches: " + matchCounter);
+    }
 }

@@ -211,3 +211,8 @@ Feature: Java experiments
   @java38
   Scenario: Comparator exercise (equals, hashCode, toString)
     And I sort list of objects and remove duplicates
+
+  @java39
+  Scenario: Substring in collection of words
+    And I find what words have "r" in their name
+      | January | February | March | April | May | June | July | August | September | October | November | December |
