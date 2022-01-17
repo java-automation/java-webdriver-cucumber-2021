@@ -207,3 +207,7 @@ Feature: Java experiments
     And I print numbers from 10 to one recursively
     And I find a sum on numbers in a given array recursively
       | 3 | 5 | 0 | 11 | 18 | 2 | -3 |
+
+  @java38
+  Scenario: Comparator exercise (equals, hashCode, toString)
+    And I sort list of objects and remove duplicates

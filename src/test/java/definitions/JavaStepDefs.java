@@ -11,6 +11,8 @@ import pages.Frog;
 import java.math.BigInteger;
 import java.util.*;
 
+import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
+
 public class JavaStepDefs {
 
     @Then("Show the greeting when I'm {string} {string} and my favorite color is {string}")
@@ -1125,5 +1127,66 @@ public class JavaStepDefs {
     private int getArraySumRecursively(int[] arr, int length) {
         if (length == 1) return arr[0];
         return arr[length - 1] + getArraySumRecursively(arr, length - 1);
+    }
+
+    @And("I sort list of objects and remove duplicates")
+    public void iSortListOfObjectsAndRemoveDuplicates() {
+        List<Animal> animals = new ArrayList<>();
+        Animal dog = new Dog("T", 3);
+        animals.add(dog);
+        Animal cat = new Cat("T");
+        cat.setAge(3);
+        animals.add(cat);
+        Animal frog = new Frog();
+        frog.setAge(3);
+        frog.setName("T");
+        animals.add(frog);
+        System.out.println();
+
+        System.out.println("Dog equals cat: " + dog.equals(cat));
+        System.out.println("Cat equals frog: " + cat.equals(frog));
+        System.out.println();
+
+        animals.add(new Dog("Spike", 0));
+        animals.add(new Dog("Bim", 1));
+        animals.add(new Dog("Zug", 4));
+        animals.add(new Dog("Spike", 4));
+        animals.add(new Dog("Bim", 1));
+        animals.add(new Dog("Zug", 2));
+        System.out.println();
+
+        System.out.println("Original: ");
+        int originalSize = animals.size();
+        animals.forEach(System.out::println);
+        System.out.println("Size: " + originalSize);
+        System.out.println();
+
+        System.out.println("Sorted by name: ");
+        animals.sort(Comparator.comparing(Animal::getName));
+        animals.forEach(System.out::println);
+        System.out.println();
+
+        System.out.println("Sorted by age: ");
+        animals.sort(Comparator.comparingInt(Animal::getAge));
+        animals.forEach(System.out::println);
+        System.out.println();
+
+        System.out.println("Removed duplicates using LinkedHashSet(), mutable: ");
+        List<Animal> distinctList1 = new ArrayList<>(new LinkedHashSet<>(animals));
+        distinctList1.forEach(System.out::println);
+        assertThat(distinctList1.size()).isEqualTo(originalSize - 1);
+        System.out.println("Size: " + distinctList1.size());
+        System.out.println();
+
+        System.out.println("Removed duplicates using stream().distinct(), immutable: ");
+        List<Animal> distinctList2 = animals.stream().distinct().toList();
+        distinctList2.forEach(System.out::println);
+        assertThat(distinctList2.size()).isEqualTo(originalSize - 1);
+        System.out.println("Size: " + distinctList2.size());
+        System.out.println();
+
+        for (int i = 0; i < distinctList1.size(); i++) {
+            assertThat(distinctList1.get(i)).isEqualTo(distinctList2.get(i));
+        }
     }
 }
