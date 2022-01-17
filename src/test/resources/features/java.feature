@@ -293,8 +293,10 @@ Feature: Java feature
       | A      | January, February, March, April, May, August                            |
       | J      | January, June, July                                                     |
 
-
-
+  @java39
+  Scenario: I read from file in data folder
+    Given I read from "admin.yml" file in data folder
+    And I getText from "downloadResume.txt"
 
 
 

@@ -11,6 +11,8 @@ import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.Actions;
 
+import java.io.File;
+import java.io.FileNotFoundException;
 import java.time.DayOfWeek;
 import java.util.*;
 
@@ -997,5 +999,46 @@ public class JavaStepDefs {
                 .filteredOn(el -> el.toLowerCase(Locale.ROOT)
                         .contains(letter.toLowerCase(Locale.ROOT)))
                 .containsOnly(months);
+    }
+
+    @Given("I read from {string} file in data folder")
+    public void iReadFromFileInDataFolder(String fileName) {
+        try {
+            StringBuilder textFromFile = new StringBuilder();
+            String path = System.getProperty("user.dir") + "/src/test/resources/data/" + fileName;
+            File file = new File(path);
+            Scanner scanner = new Scanner(file);
+            while (scanner.hasNextLine()) {
+                String line = scanner.nextLine();
+                textFromFile.append(line);
+                textFromFile.append("\n");
+            }
+            scanner.close();
+            out.println("Text from file: \n" + textFromFile);
+        } catch (FileNotFoundException e) {
+            throw new Error(e);
+        }
+    }
+
+    public StringBuilder getText(String fileName) throws FileNotFoundException {
+        try {StringBuilder textFromFile = new StringBuilder();
+        String path = System.getProperty("user.dir") + "/src/test/resources/data/" + fileName;
+        File file = new File(path);
+        Scanner scanner = new Scanner(file);
+        while (scanner.hasNextLine()) {
+            String line = scanner.nextLine();
+            textFromFile.append(line);
+            textFromFile.append("\n");
+        }
+        scanner.close();
+        return textFromFile;
+        } catch (FileNotFoundException e) {
+            throw new Error(e);
+        }
+    }
+
+    @And("I getText from {string}")
+    public void iGetTextFrom(String fileName) throws FileNotFoundException {
+        out.println(getText(fileName));
     }
 }
