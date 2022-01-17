@@ -58,11 +58,11 @@ Feature: Java feature
 #      Then I practice comparison
 #      Then I practice logical operators
 #      Then I practice if operators
-#      Then I practice if operators with "esh"
+      Then I practice if operators with "esh"
       And I solve while loop
 #      Then I practice switch statement
 #      Then I practice insertion sort
-#      Then I calculate the mortgage
+      Then I calculate the mortgage
 
     @java10
     Scenario: Coding challenges

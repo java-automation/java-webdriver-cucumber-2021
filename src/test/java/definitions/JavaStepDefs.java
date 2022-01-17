@@ -5,11 +5,9 @@ import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import java.util.Scanner;
-
-import org.apache.logging.log4j.core.appender.rolling.action.IfAccumulatedFileCount;
-import org.apache.logging.log4j.core.util.JsonUtils;
-import org.openqa.selenium.grid.web.Route;
+import java.util.*;
 import pages.Animal;
+
 import pages.Cat;
 import pages.Dog;
 import pages.Parrot;
@@ -777,6 +775,10 @@ public class JavaStepDefs<now> {
 
     @Then("I calculate the mortgage")
     public void iCalculateTheMortgage() {
+
+
+
+
     }
 
     @And("I say the sentence five times")
