@@ -18,17 +18,29 @@ public class QuoteForm {
     @FindBy(xpath = "//input[@name='username']")
     private WebElement username;
 
+    @FindBy(id = "username-error")
+    private List<WebElement> usernameError;
+
     @FindBy(xpath = "//input[@name='email']")
     private WebElement email;
 
+    @FindBy(id = "email-error")
+    private List<WebElement> emailError;
+
     @FindBy(xpath = "//input[@name='password']")
     private WebElement password;
+
+    @FindBy(id = "password-error")
+    private List<WebElement> passwordError;
 
     @FindBy(xpath = "//input[@name='confirmPassword']")
     private WebElement confirmPassword;
 
     @FindBy(xpath = "//input[@id='name']")
     private WebElement name;
+
+    @FindBy(id = "name-error")
+    private List<WebElement> nameError;
 
 
     //name modal dialog ->
@@ -48,6 +60,9 @@ public class QuoteForm {
 
     @FindBy(xpath = "//input[@name='agreedToPrivacyPolicy']")
     private WebElement privacyPolicy;
+
+    @FindBy(id = "agreedToPrivacyPolicy-error")
+    private List<WebElement> privacyPolicyError;
 
     @FindBy(id = "formSubmit")
     private WebElement submitButton;
@@ -212,5 +227,29 @@ public class QuoteForm {
 
     public void attachFile(String filePath) {
         attachmentButton.sendKeys(filePath);
+    }
+
+    public boolean isErrorMessageVisible(String fieldName) {
+        WebElement errorMessageElement = getErrorMessageElement(fieldName);
+        return (errorMessageElement != null) && errorMessageElement.isDisplayed();
+    }
+
+    public String getErrorMessage(String fieldName) {
+        WebElement errorMessageElement = getErrorMessageElement(fieldName);
+        if ((errorMessageElement == null) || !errorMessageElement.isDisplayed())
+            throw new Error("Message element does not exist or is not visible!");
+        return errorMessageElement.getText();
+    }
+
+    private WebElement getErrorMessageElement(String fieldName) {
+        List<WebElement> list = switch (fieldName) {
+            case "username" -> usernameError;
+            case "email" -> emailError;
+            case "password" -> passwordError;
+            case "name" -> nameError;
+            case "agreedToPrivacyPolicy" -> privacyPolicyError;
+            default -> throw new Error("Unknown field name reference: " + fieldName);
+        };
+        return list.size() > 0 ? list.get(0) : null;
     }
 }

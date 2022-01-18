@@ -72,8 +72,8 @@ public class QuoteOOPStepDefs {
         }
     }
 
-    @And("Submit the form OOP")
-    public void submitTheFormOOP() {
+    @And("I submit the form OOP")
+    public void iSubmitTheFormOOP() {
         form.submit();
     }
 
@@ -115,5 +115,15 @@ public class QuoteOOPStepDefs {
             default -> throw new Error("Unknown scenario context reference: " + whatFields);
         }
         user = getData(profileReference.toLowerCase().replace(" ", ""));
+    }
+
+    @Then("I don't see {string} error message")
+    public void iDonTSeeErrorMessage(String fieldName) {
+        assertThat(form.isErrorMessageVisible(fieldName)).isFalse();
+    }
+
+    @Then("I see {string} error message {string}")
+    public void iSeeErrorMessage(String fieldName, String message) {
+        assertThat(form.getErrorMessage(fieldName)).isEqualTo(message);
     }
 }
