@@ -9,25 +9,30 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.Select;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
+import java.util.Map;
+
 import static org.assertj.core.api.Assertions.as;
 import static org.assertj.core.api.Assertions.assertThat;
+import static support.TestContext.getData;
 import static support.TestContext.getDriver;
 
 public class QuoteStepDef {
 
+    Map<String,String> user = getData("user");
+  //  Map<String,String> user = getData("admin");
+
     @When("I fill out required fields")
     public void iFillOutRequiredFields() {
-
-        getDriver().findElement(By.xpath("//input[@name='username']")).sendKeys("john");
-        getDriver().findElement(By.xpath("//input[@name='email']")).sendKeys("joe@email.com");
-        getDriver().findElement(By.xpath("//input[@name='password']")).sendKeys("test56");
-        getDriver().findElement(By.xpath("//input[@name='confirmPassword']")).sendKeys("test56");
+        getDriver().findElement(By.xpath("//input[@name='username']")).sendKeys(user.get("username"));
+        getDriver().findElement(By.xpath("//input[@name='email']")).sendKeys(user.get("email"));
+        getDriver().findElement(By.xpath("//input[@name='password']")).sendKeys(user.get("password"));
+        getDriver().findElement(By.xpath("//input[@name='confirmPassword']")).sendKeys(user.get("password"));
 
         WebElement nameElement = getDriver().findElement(By.xpath("//input[@id='name']")); // variable
 
         nameElement.click();
-        getDriver().findElement(By.id("firstName")).sendKeys("John");
-        getDriver().findElement(By.xpath("//input[@id='lastName']")).sendKeys("Test");
+        getDriver().findElement(By.id("firstName")).sendKeys(user.get("firstName"));
+        getDriver().findElement(By.xpath("//input[@id='lastName']")).sendKeys(user.get("lastName"));
         getDriver().findElement(By.xpath("//span[text()='Save']")).click();
 
         String nameValue =nameElement.getAttribute("value");
@@ -59,7 +64,7 @@ public class QuoteStepDef {
         wait.until(ExpectedConditions.visibilityOf(resultEl));
 
         String  result = resultEl.getText();
-        assertThat(result).contains("john","John Test","joe@email.com"); // you can use different values here!
+        assertThat(result).contains(user.get("username"),user.get("email"),user.get("firstName")); // you can use different values here!
         assertThat(result).contains("[entered]");
 
     }
