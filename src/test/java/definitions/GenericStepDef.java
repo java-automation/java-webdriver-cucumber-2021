@@ -5,13 +5,15 @@ import io.cucumber.java.en.Given;
 import org.openqa.selenium.logging.LogEntries;
 import org.openqa.selenium.logging.LogEntry;
 import org.openqa.selenium.logging.LogType;
+
+import java.util.Locale;
 import java.util.logging.Level;
 import static support.TestContext.getDriver;
 
 public class GenericStepDef {
     @Given("I go to the {string} page")
     public void iGoToThePage(String page) {
-        switch (page) {
+        switch (page.toLowerCase()) {
             case "quote":
                 getDriver().navigate().to("https://skryabin.com/market/quote.html");
                 break;
@@ -20,6 +22,12 @@ public class GenericStepDef {
                 break;
             case "usps":
                 getDriver().navigate().to("https://www.usps.com/");
+                break;
+            case "converter":
+                getDriver().navigate().to("https://www.unitconverters.net/");
+                break;
+            case "calculator":
+                getDriver().navigate().to("http://www.calculator.net//");
                 break;
             default:
                 throw new Error("Unsupported page: " + page);
@@ -50,6 +58,5 @@ public class GenericStepDef {
             }
         }
     }
-
 }
 

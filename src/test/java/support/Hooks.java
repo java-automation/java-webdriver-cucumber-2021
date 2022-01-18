@@ -18,6 +18,7 @@ public class Hooks {
         TestContext.initialize();
 
         getDriver().manage().deleteAllCookies();
+        getDriver().manage().timeouts().implicitlyWait(1,TimeUnit.SECONDS);
     }
 
     @After(order = 0)
