@@ -1,14 +1,9 @@
 package definitions;
 
-import com.sun.xml.bind.v2.TODO;
-import io.cucumber.java.bs.A;
 import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
-import io.cucumber.java.sl.In;
-import io.cucumber.java8.Ar;
-import org.apache.logging.log4j.core.util.JsonUtils;
-import org.codehaus.groovy.reflection.GeneratedMetaMethod;
+import pages.Cat;
 
 import java.util.*;
 
@@ -1129,8 +1124,240 @@ public class JavaStepDefs {
     }
 
 
-}
+    @Given("I solve java challenges for the additional second day ten")
+    public void iSolveJavaChallengesForTheAdditionalSecondDayTen() {
+        //array of Strings String [] arr = {"Hello","World","in""};
+        // take a list of strings and print them 
+        // one per line in rectangular frame like
+        //*******
+        //*Hello*
+        //*World*
+        //*in   *
+        //*******
+        String [] arr = {"Hello","World","in", "frame"};
+//        solveArrInFrame(arr);
 
+        // calculate Fibonacci numbers F(n)
+        int n = 3; // 1+1 = 2
+        solveFibonacci(n);
+        // test Fibonacci
+        // -1 -> doesn't work
+        // 0 ? , 10 ?
+        // null
+        // time complexity - 0 (n) - n elements and loop
+        // n - is the index
+        // space complexity 0 (1) - because it's only one array with 2 elements
+    }
+
+    private void solveFibonacci(int n) {
+        int [] fib = {0,1};
+        if (n <= 1) {
+            System.out.println(fib[n]);
+            return;
+        }
+        // n >=3
+        int i = 2; // because 0 and 1 already in fib
+        while (i <= n) {
+            int fibNext = fib[0] + fib[1]; // 0+1 => 1 F(2) =1
+            fib[0] = fib[1]; // 1 (F (1)
+            fib[1] = fibNext; // 1 (F (2)
+            i++;
+        }
+        System.out.println(fib[1]);
+    }
+
+    private void solveArrInFrame(String[] arr) { // doesn't work
+        int max =0;
+        for (String word :arr) {
+            if (word.length() > max) {
+                max = word.length();
+            }
+        } // max 5
+       for (int i =1;i <= max+4; i++) {
+           System.out.println();
+       }
+       for (String word : arr) {
+           System.out.print("* ");
+           System.out.print(word);
+           for (int i =1; i <= max +4; i ++) {
+               System.out.println(" ");
+           }
+       } System.out.print(" *\n");
+    }
+
+    @Given("I solve java challenges for class twelve")
+    public void iSolveJavaChallengesForClassTwelve() {
+        Integer [] numArr = {6,2,3,5,9};
+        Integer [] numArr2 = {6,2,9,5,7};
+        Integer [] numArr3 = {9,2,6,5,7};
+        //find Max Number
+        System.out.println(findMaxNumber(numArr));
+        // find two max numbers
+        printTwoMaxNumbers(numArr);
+        printTwoMaxNumbers(numArr2);
+        printTwoMaxNumbers(numArr3);
+        System.out.println("Returned twoMax numbers: " + Arrays.toString(returnTwoMaxNumbers(numArr)));
+    }
+    private int findMaxNumber(Integer[] numArr) { // O(N)
+        System.out.println("Max number in the array: " +Arrays.toString(numArr));
+        //  int max = 0; // will not work with negative number
+        // int max =Integer.MIN_VALUE; // will work with any numbers
+        int max = numArr[0];// will work with any numbers:
+        for (int i =1; i < numArr.length; i++) {
+            if (max < numArr[i]) {
+                max = numArr[i];
+            }
+        } return max;
+    }
+
+    private void printTwoMaxNumbers(Integer[] numArr) {
+        System.out.println("Max number in the array: " + Arrays.toString(numArr));
+        int max1 = Integer.MIN_VALUE;
+        int max2 = Integer.MIN_VALUE;
+        for (int i =0; i < numArr.length; i++) {
+            if (max1 < numArr[i]) {
+                max2 = max1;
+                max1 = numArr[i]; // this part only check for max1. Doesn't compare max2
+            } else if (max2 < numArr[i]) {
+                max2 = numArr[i]; // this part compares max2
+            }
+       }  System.out.println("Largest: " + max1 + " "+ "Second largest: " +max2);
+    }
+    private int[] returnTwoMaxNumbers(Integer[] numArr) {
+        System.out.println("Max number in the array: " + Arrays.toString(numArr));
+        int max1 = Integer.MIN_VALUE;
+        int max2 = Integer.MIN_VALUE;
+        for (int i = 0; i < numArr.length; i++) {
+            if (max1 < numArr[i]) {
+                max2 = max1;
+                max1 = numArr[i]; // this part only check for max1. Doesn't compare max2
+            } else if (max2 < numArr[i]) {
+                max2 = numArr[i]; // this part compares max2
+            }
+        }
+         int [] twoMaxNumbers = {max1,max2};
+         return twoMaxNumbers;
+    }
+    @Given("I work with classes")
+    public void iWorkWithClasses() {
+        Cat cat = new Cat("Basilio");
+        cat.sleep();
+        cat.walk();
+        cat.eat("fish");
+        cat.speak();
+        cat.setName("newCatName");
+        cat.sleep();
+        cat.getName();
+    }
+
+    @Given("I work with java")
+    public void iWorkWithJava() {
+        //given array print sum of elements
+        int[] arr = {3,5,1};
+        solvePrintSum(arr);
+        // given n, print factorial: 1+2+3(...n) ??? doesn' work
+//        int n =4;
+//        solveFactorial(n);
+//        System.out.println(result);
+
+        // check string if it is Palindrome
+        // "anna" = true , "java" = false
+        String str = "java";
+        boolean result = solvePalindrome(str);
+        System.out.println(result);
+    }
+
+//    private void solveFactorial(int n) {
+//        if (n==1) {
+//            return 1;
+//        }
+//        return n * solveFactorial(n-1);
+//    }
+
+
+    private  boolean solvePalindrome(String str) {
+        for (int i =0; i < str.length() / 2 ; i++) { // half of the string
+            if (str.charAt(i) != str.charAt(str.length() -i -1)) {
+                return false;
+            }
+        } return true;
+    }
+
+    private void solvePrintSum(int[] arr) {
+        int result = 0;
+        for(int i = 0;i < arr.length;i ++) {
+            result += arr[i];
+        }
+        System.out.println(result);
+    }
+
+    @Given("I work with java challenges for homework eleven")
+    public void iWorkWithJavaChallengesForHomeworkEleven() {
+        String palindrome = "anna";
+        System.out.println(
+                isPalindrome(palindrome) ? "palindrome" : "not palindrome");
+
+        //Write a function that finds if any two elements of an array result in sum
+        int [] arrayForSum = {1,4,5,7,5};
+        int [] arrayForSum1 = {1,4,5,7,6,3,5,1,-1,11};
+        int [] arrayForDuplicate = {1,4,-1,5,5,6,3,5,1,0,-1};
+        int sum = 10;
+        findSumResult(arrayForSum,sum);
+        findSumResult(arrayForSum1,sum);
+        //sum of all elements
+        sumOfAll(arrayForSum);
+
+        //Write a function that finds if array contains duplicates
+        findDuplicates(arrayForDuplicate);
+    }
+
+    private void sumOfAll(int[] arrayForSum) {
+        System.out.println("Array to sum: " + Arrays.toString(arrayForSum));
+       int result = 0;
+       for (int i = 0; i < arrayForSum.length; i ++) {
+            result += arrayForSum[i];
+       }
+        System.out.println("Sum of all elements is: " + result);
+    }
+
+    private void findSumResult(int[] arrayForSum, int sum) {
+        System.out.println("Array to sum: " + Arrays.toString(arrayForSum));
+        for (int i =0; i < arrayForSum.length; i ++) { // get 'i' values
+            for (int j = i + 1; j < arrayForSum.length; j ++) { // i+1 because you don't need to compare each element with itself
+                if (arrayForSum[j] + arrayForSum[i] == sum) { // get i + j value
+                    System.out.println("Sum of the elements " +
+                            arrayForSum[i] +"+" +arrayForSum[j] +": is " + sum);
+                }
+            }
+        }
+    }
+    private void findDuplicates(int[] arrayForDupl) {
+        System.out.println("Array with duplicates? " + Arrays.toString(arrayForDupl));
+        for (int i =0; i < arrayForDupl.length; i++) {
+            for (int j =i+1; j <arrayForDupl.length; j ++) {
+                if (arrayForDupl[j] == arrayForDupl[i]) {
+                    System.out.println("Array contains duplicates: "  +
+                            arrayForDupl[i] +" " + arrayForDupl[i]);
+                }
+            }
+        }
+    }
+
+
+    private boolean isPalindrome(String palindrome) {
+        int i = 0;
+        int j = palindrome.length()-1; // because length more than index (it starts with 0)
+        while (i <= j ) { //loop until i and j meet == half of the string
+            if (palindrome.charAt(i) == palindrome.charAt(j)) {
+                i++;
+                j--;
+            } else {
+                return false;
+            }
+        }
+        return true;
+    }
+}
 //interview
 //1.clarify
 //2.solve the task in any way

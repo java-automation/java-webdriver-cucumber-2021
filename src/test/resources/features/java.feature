@@ -109,5 +109,24 @@
       Given I solve java challenges for the additional day nine
 
     @javachallenges11
-    Scenario: Additional class coding challenges (
+    Scenario: Additional class coding challenges (reverse number, second largest)
       Given I solve java challenges for the additional day ten
+
+    @javachallenges12
+    Scenario: Additional class coding challenges (print array in frame, Fibonacci numbers)
+      Given I solve java challenges for the additional second day ten
+
+    @javachallenges13
+    Scenario: Coding challenges for class 12 (find one and two Max Numbers)
+      Given I solve java challenges for class twelve
+
+    @java15
+    Scenario: Java classes
+
+    @java16
+    Scenario: Java classes after class 14 (sum of array el,palindrome)
+      Given I work with java
+
+    @java17
+    Scenario: Java homework 11 and 10 (palindrome, duplicates, sum of all and only two array elements)
+      Given I work with java challenges for homework eleven
