@@ -57,4 +57,34 @@ public class QuoteOopStepDefs {
                                 Objects.toString(expectedUser.get("lastName"),""));
         submittedForm.verifyPassword();
     }
+
+    @Then("I don't see {string} error message")
+    public void iDonTSeeErrorMessage(String field) {
+        form.assertNoError(field);
+    }
+
+    @Then("I see {string} error message {string}")
+    public void iSeeErrorMessage(String field, String errorMessage) {
+        form.assertErrorMessage(field, errorMessage);
+    }
+
+    @When("I fill out {string} field with {string}")
+    public void iFillOutFieldWith(String field, String value) {
+        form.fillOutField(field, value);
+    }
+
+    @When("I fill out name field with first name {string} and last name {string}")
+    public void iFillOutNameFieldWithFirstNameAndLastName(String firstName, String lastName) {
+        form.fillName(firstName, lastName);
+    }
+
+    @When("I fill out name field with first name {string}, middle name {string}, last name {string}")
+    public void iFillOutNameFieldWithFirstNameMiddleNameLastName(String firstName, String middleName, String lastName) {
+        form.fillName(firstName, middleName, lastName);
+    }
+
+    @Then("I verify {string} field value {string}")
+    public void iVerifyFieldValue(String field, String value) {
+        form.assertFieldValue(field, value);
+    }
 }
