@@ -5,6 +5,8 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
 
+import java.util.List;
+
 import static support.TestContext.getDriver;
 
 public class QuoteForm {
@@ -20,17 +22,29 @@ public class QuoteForm {
     @FindBy (xpath = "//input[@name='username']") // lazy instantiation
     private WebElement username;
 
+    @FindBy (id = "//label[@id='username-error']")
+    private List<WebElement> usernameError;                                 // Username Error
+
     @FindBy (xpath = "//input[@name='email']") // lazy instantiation
     private WebElement email;
 
+    @FindBy (id = "//label[@id='email-error']")                             // Email Error
+    private List<WebElement> emailError;
+
     @FindBy (xpath = "//input[@name='password']") // lazy instantiation
     private WebElement password;
+
+    @FindBy (id = "//label[@id='password-error']")
+    private List<WebElement> passwordError;                                 // Password Error
 
     @FindBy (xpath = "//input[@name='confirmPassword']") // lazy instantiation
     private WebElement confirmPassword;
 
     @FindBy (xpath = "//input[@id='name']") // lazy instantiation
     private WebElement name;
+
+    @FindBy (id = "//label[@id='name-error']")
+    private List<WebElement> nameError;                                     // Name Error
 
     //name dialogue
     @FindBy (xpath = "//input[@id='firstName']") // lazy instantiation
@@ -47,6 +61,9 @@ public class QuoteForm {
 
     @FindBy (xpath = "//input[@name='agreedToPrivacyPolicy']") // lazy instantiation
     private WebElement privacyPolicy;
+
+    @FindBy (id= "agreedToPrivacyPolicy-error")                  // Privacy Policy Error
+    private List<WebElement> privacyPolicyError;
 
     @FindBy (xpath = "//button[@type='submit']") // lazy instantiation
     private WebElement submitButton;
@@ -115,4 +132,32 @@ public class QuoteForm {
         getDriver().switchTo().defaultContent();
     }
 
+    public boolean isErrorMessageVisible(String fieldName) {
+        WebElement errorMessageElement = getErrorMessageElement(fieldName);
+        return (errorMessageElement != null) && errorMessageElement.isDisplayed();
+    }
+
+
+    public String getErrorMessage(String fieldName) {
+        WebElement errorMessageElement = getErrorMessageElement(fieldName);
+        if ((errorMessageElement == null) || !errorMessageElement.isDisplayed())
+            throw new Error("Message element does not exist or is not visible!");
+        return errorMessageElement.getText();
+    }
+
+
+
+    private WebElement getErrorMessageElement(String fieldName) {
+
+       List<WebElement> list = switch (fieldName) {
+            case "username" -> usernameError;
+            case "email" -> emailError;
+            case  "password" -> passwordError;
+            case "name" -> nameError;
+            case "agreedToPrivacyPolicy" -> privacyPolicyError;
+            default -> throw new Error("Unknown field name reference: " + fieldName);
+        };
+
+        return list.size() > 0 ? list.get(0) : null;
+    }
 }

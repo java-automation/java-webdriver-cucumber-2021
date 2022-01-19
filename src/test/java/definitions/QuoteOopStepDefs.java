@@ -59,4 +59,15 @@ public class QuoteOopStepDefs {
 
 
     }
+
+    @Then("I don't see {string} error message")
+    public void iDonTSeeErrorMessage(String fieldName) {
+        assertThat(form.isErrorMessageVisible(fieldName)).isFalse();
+        
+    }
+
+    @And("I see {string} error message {string}")
+    public void iSeeErrorMessage(String fieldName, String message) {
+        assertThat(form.getErrorMessage(fieldName)).isEqualTo(message);
+    }
 }
