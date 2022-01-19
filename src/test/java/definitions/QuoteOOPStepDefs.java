@@ -86,7 +86,9 @@ public class QuoteOOPStepDefs {
         String firstName = user.get("firstName");
         String middleName = user.get("middleName");
         String lastName = user.get("lastName");
-        assertThat(results.getName()).isEqualTo(firstName + " " + middleName + " " + lastName);
+        //middle name is optional, but first & last are required
+        String fullName = middleName.isEmpty() ? firstName + " " + lastName : firstName + " " + middleName + " " + lastName;
+        assertThat(results.getName()).isEqualTo(fullName);
         assertThat(results.getFirstName()).isEqualTo(firstName);
         assertThat(results.getMiddleName()).isEqualTo(middleName);
         assertThat(results.getLastName()).isEqualTo(lastName);
@@ -118,12 +120,42 @@ public class QuoteOOPStepDefs {
     }
 
     @Then("I don't see {string} error message")
-    public void iDonTSeeErrorMessage(String fieldName) {
-        assertThat(form.isErrorMessageVisible(fieldName)).isFalse();
+    public void iDonTSeeErrorMessage(String elementName) {
+        assertThat(form.isErrorMessageVisible(elementName)).isFalse();
     }
 
     @Then("I see {string} error message {string}")
-    public void iSeeErrorMessage(String fieldName, String message) {
-        assertThat(form.getErrorMessage(fieldName)).isEqualTo(message);
+    public void iSeeErrorMessage(String elementName, String message) {
+        assertThat(form.getErrorMessage(elementName)).isEqualTo(message);
+    }
+
+    @When("I fill out {string} field with {string}")
+    public void iFillOutFieldWith(String inputName, String text) {
+        switch (inputName) {
+            case "username" -> form.fillUsername(text);
+            case "email" -> form.fillEmail(text);
+            case "password" -> form.fillPassword(text);
+            case "confirmPassword" -> form.fillConfirmPassword(text);
+            default -> throw new Error("Unknown input field name reference: " + inputName);
+        }
+    }
+
+    @When("I fill out name field with first name {string} and last name {string}")
+    public void iFillOutNameFieldWithFirstNameAndLastName(String firstName, String lastName) {
+        form.fillName(firstName, "", lastName);
+    }
+
+    @When("I fill out name field with first name {string}, middle name {string}, last name {string}")
+    public void iFillOutNameFieldWithFirstNameMiddleNameLastName(String firstName, String middleName, String lastName) {
+        form.fillName(firstName, middleName, lastName);
+    }
+
+    @Then("I verify {string} field value {string}")
+    public void iVerifyFieldValue(String fieldName, String value) {
+        String actualValue = switch (fieldName) {
+            case "name" -> form.getName();
+            default -> throw new Error("Unknown field name reference: " + fieldName);
+        };
+        assertThat(actualValue).isEqualTo(value);
     }
 }

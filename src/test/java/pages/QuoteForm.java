@@ -37,6 +37,9 @@ public class QuoteForm {
     @FindBy(xpath = "//input[@name='confirmPassword']")
     private WebElement confirmPassword;
 
+    @FindBy(id = "confirmPassword-error")
+    private List<WebElement> confirmPasswordError;
+
     @FindBy(xpath = "//input[@id='name']")
     private WebElement name;
 
@@ -136,15 +139,29 @@ public class QuoteForm {
     }
 
     public void fillUsername(String value) {
+        username.clear();
         username.sendKeys(value);
     }
 
     public void fillEmail(String value) {
+        email.clear();
         email.sendKeys(value);
     }
 
     public void fillPasswords(String value) {
+        password.clear();
         password.sendKeys(value);
+        confirmPassword.clear();
+        confirmPassword.sendKeys(value);
+    }
+
+    public void fillPassword(String value) {
+        password.clear();
+        password.sendKeys(value);
+    }
+
+    public void fillConfirmPassword(String value) {
+        confirmPassword.clear();
         confirmPassword.sendKeys(value);
     }
 
@@ -173,6 +190,7 @@ public class QuoteForm {
     }
 
     public void fillPhone(String value) {
+        phone.clear();
         phone.sendKeys(value);
     }
 
@@ -201,6 +219,7 @@ public class QuoteForm {
     }
 
     public void fillAddress(String value) {
+        address.clear();
         address.sendKeys(value);
     }
 
@@ -211,7 +230,9 @@ public class QuoteForm {
 
     public void fillAdditionalInfo(String contactNameValue, String contactPhoneValue) {
         getDriver().switchTo().frame(iframe);
+        contactName.clear();
         contactName.sendKeys(contactNameValue);
+        contactPhone.clear();
         contactPhone.sendKeys(contactPhoneValue);
         getDriver().switchTo().defaultContent();
     }
@@ -230,27 +251,28 @@ public class QuoteForm {
         attachmentButton.sendKeys(filePath);
     }
 
-    public boolean isErrorMessageVisible(String fieldName) {
-        return getErrorMessageElement(fieldName)
+    public boolean isErrorMessageVisible(String elementName) {
+        return getErrorMessageElement(elementName)
                 .filter(WebElement::isDisplayed)
                 .isPresent();
     }
 
-    public String getErrorMessage(String fieldName) {
-        return getErrorMessageElement(fieldName)
+    public String getErrorMessage(String elementName) {
+        return getErrorMessageElement(elementName)
                 .filter(WebElement::isDisplayed)
                 .orElseThrow(() -> new Error("Message element does not exist or is not visible!"))
                 .getText();
     }
 
-    private Optional<WebElement> getErrorMessageElement(String fieldName) {
-        List<WebElement> list = switch (fieldName) {
+    private Optional<WebElement> getErrorMessageElement(String elementName) {
+        List<WebElement> list = switch (elementName) {
             case "username" -> usernameError;
             case "email" -> emailError;
             case "password" -> passwordError;
+            case "confirmPassword" -> confirmPasswordError;
             case "name" -> nameError;
             case "agreedToPrivacyPolicy" -> privacyPolicyError;
-            default -> throw new Error("Unknown field name reference: " + fieldName);
+            default -> throw new Error("Unknown field name reference: " + elementName);
         };
         return list.stream().findFirst();
     }
