@@ -27,6 +27,9 @@ public class GenericStepDefs {
             case "usps":
                 getDriver().get("https://www.usps.com/");
                 break;
+            case "ups":
+                getDriver().get("https://www.ups.com/us/en/Home.page");
+                break;
             case "calculator":
                 getDriver().get("https://www.calculator.net/");
                 break;

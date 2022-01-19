@@ -1,0 +1,11 @@
+country: United States
+fullname: John Doe
+address: 1156 San Ysidro Drive, Beverly Hills, CA 90210
+email: jdoe@gmail.com
+phone: "3108888888"
+
+fullnameDestination: Maria Rosa
+addressDestination: 1486 N Sweetzer Ave, Los Angeles, CA 90069
+
+weight: "5"
+description: "a gift"

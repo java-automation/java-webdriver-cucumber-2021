@@ -9,11 +9,11 @@
 #      Given I perform actions with boolean
 #      Given I compare "cloud" and "cloud" strings
 #      Given I print url for "google.com" page
-#      Given I work with numbers 10 and 3
-#      Given I work with numbers 100 and 300
-#      Given I work with numbers 3 and 3
+#      Given I compare numbers 10 and 3
+#      Given I compare numbers 100 and 300
+#      Given I compare numbers 3 and 3
 #      And I print url for "yahoo" page
-#      And I work with loops
+#      And I repeat the word "Mysh" 5 times with the help of loops
 #      And I print if number 35 is positive
 #      And I print 7 day of week
 #      And I work with arrays
@@ -28,29 +28,41 @@
 #      And I check if array contains "no"
 #      And I check if array contains "n"
 
-#      And I work with java
 #      Given I swap two variables
 #      And I convert a string "200" into int
 #      And I solve coding challenges
 #      And I check the division
-#      And I am looking for the largest element in an array
 #      And I am playing a FizzBuzz game
+#      And I am playing a Fibonacci game
+      And I determine if "civic" is a palindrome
+      And I determine if "anna" is a palindrome
+      And I determine if "qwerty" is a palindrome
+#      And I am looking for the largest element in an array
 #      And I reverse a string
 #      And I reverse words in a sentence
 #      And I sort an array
 
 #      And I check if there are duplicates in an array
-#      And I determine if "civic" is a palindrome
-#      And I determine if "anna" is a palindrome
-#      And I determine if "qwerty" is a palindrome
 #      And I find the max number in array
-      And I find two max numbers in array
+#      And I find two max numbers in array
 #      And I find the min number in array
+#      And I find the max number in the file
+#      And I find the sum of numbers in the file
 #      ???And I find if any two elements of an array result in sum
 
 #      And I find if 11 is a prime number
 #      And I find if 12 is a prime number
 #      And I find factorial of 5
+#      And I find factorial of 1
+#      And I find factorial of 0
+#      And I check whether "Z" is a vowel or not
+#      And I check whether "a" is a vowel or not
+
+
+
+      @java2
+      Scenario: Classes
+        Given I work with classes
 
 
 

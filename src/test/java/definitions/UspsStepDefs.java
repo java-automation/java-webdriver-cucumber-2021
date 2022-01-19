@@ -6,10 +6,8 @@ import io.cucumber.java.en.When;
 import io.cucumber.java.en_old.Ac;
 import net.bytebuddy.asm.Advice;
 import org.assertj.core.api.Assertions;
-import org.openqa.selenium.By;
-import org.openqa.selenium.Keys;
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
+import org.assertj.core.data.Percentage;
+import org.openqa.selenium.*;
 import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.FluentWait;
@@ -17,10 +15,10 @@ import org.openqa.selenium.support.ui.Select;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
-import static support.TestContext.getDriver;
-
+import static support.TestContext.*;
 
 
 public class UspsStepDefs {
@@ -191,28 +189,40 @@ public class UspsStepDefs {
 
     @When("I go to {string} under {string}")
     public void iGoToUnder(String link, String tab) {
-        WebElement businessMenu = getDriver().findElement(By.xpath("//a[@class='menuitem'][contains(text(), '" + tab + "')]"));
-        new Actions(getDriver()).moveToElement(businessMenu).perform(); ////hover the mouse on business tab
+        WebElement tabMenu = getDriver().findElement(By.xpath("//a[@class='menuitem'][contains(text(), '" + tab + "')]"));
+        new Actions(getDriver()).moveToElement(tabMenu).perform(); ////hover the mouse on business tab
 
         getDriver().findElement(By.xpath("//a[text()='" + link + "']")).click();
+
+        //OR variant 2 (немного другая компановка)
+//        WebElement menuTab = getDriver().findElement(By.xpath("//a[@class='menuitem'][contains(text(), '" + tab + "')]")); //находим расположение tab
+//        WebElement linkUnderMenu = getDriver().findElement(By.xpath("//a[text()='" + link + "']")); //накоджим расположение link в меню tab
+//
+//        new Actions(getDriver()).moveToElement(menuTab).click(linkUnderMenu).perform(); //наводим мышь на tab, затем кликаем на link
     }
 
     @And("I search for {string}")
-    public void iSearchFor(String address) throws InterruptedException {
+    public void iSearchFor(String address) {
         //Variant 1:
 //        getDriver().findElement(By.xpath("//input[@id='cityOrZipCode']")).sendKeys(address);
-//        getDriver().findElement(By.xpath("//a[@class='btn-primary eddm-search-btn']")).click();
+//        getDriver().findElement(By.xpath("//a[contains(@class, 'eddm-search-btn')]")).click();
 
         //Variant 2:
-        WebElement searchField = getDriver().findElement(By.xpath("//input[@id='cityOrZipCode']"));
-        searchField.click();
-        new Actions(getDriver()).moveToElement(searchField).sendKeys(address).sendKeys(Keys.ENTER).perform();
+        WebElement searchField = getDriver().findElement(By.xpath("//input[@id='cityOrZipCode']")); //обозначаем поле поиска
+        new Actions(getDriver()).moveToElement(searchField).click(searchField).sendKeys(address).sendKeys(Keys.ENTER).perform(); //наводим мышь на поле, кликаем на него, вставляем текст(address), нажимаем enter
+
+        //Variant 3:
+//        getDriver().findElement(By.id("cityOrZipCode")).sendKeys(address);
+//        getDriver().findElement(By.xpath("//a[contains(@class, 'eddm-search-btn')]")).click();
+//        getDriver().findElement(By.cssSelector(".eddm-search-btn")).click(); //СSS (то же самое, что и строчкой выше)
+
     }
 
     @And("I choose view as {string} on the map")
     public void iChooseViewAsOnTheMap(String viewOption) throws InterruptedException {
         WebElement spinner = getDriver().findElement(By.xpath("//div[@class='white-spinner-container']")); //обозначаем spinner
         WebDriverWait wait = new WebDriverWait(getDriver(), 10); //обозначаем wait
+        wait.until(ExpectedConditions.visibilityOf(spinner)); //ждем, пока исчезнет spinner
         wait.until(ExpectedConditions.invisibilityOf(spinner)); //ждем, пока исчезнет spinner
 
         //getDriver().findElement(By.xpath("//a[@value='table-tab-list-view']")).click(); //нажимает на нужную кнопку после того, как спиннер исчез
@@ -231,24 +241,32 @@ public class UspsStepDefs {
     @And("I close modal window")
     public void iCloseModalWindow() {
         WebDriverWait wait = new WebDriverWait(getDriver(), 3);
-        wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//a[@id='closeAndUpdateTotals']")));
+        wait.until(ExpectedConditions.elementToBeClickable(By.xpath("//a[@id='closeAndUpdateTotals']"))); //element to be clickable
         getDriver().findElement(By.xpath("//a[@id='closeAndUpdateTotals']")).click();
     }
 
     @Then("I verify that summary of all rows of Cost column is equal Approximate Cost in Order Summary")
     public void iVerifyThatSummaryOfAllRowsOfCostColumnIsEqualApproximateCostInOrderSummary() {
-//        WebElement approximateCost = getDriver().findElement(By.xpath("//p[@id='approximateCost']")); //обозначаем approximate cost element
-//        approximateCost.getText();
-//
-//        String[] costArray = new String[];
-//        int i = 0;
-//
-//        for (String el : costArray) {
-//            costArray[i] = getDriver().findElement(By.xpath("")).getText();
-//            i++;
-//        }
+        String totalRoutesText = getDriver().findElement(By.xpath("//p[@id='totalRoutesSelected']")).getText(); //берем строку с числом как текст
+        int totalRoutes = Integer.parseInt(totalRoutesText); //превращаем страку с числом в int формат
 
+        List<WebElement> costElements = getDriver().findElements(By.xpath("//table[contains(@class, 'target-audience-table')]//td[9]")); //выбираем xpath сразу ко всему столбцу (9 по счету) и загоняем их в List
+        Assertions.assertThat(costElements.size()).isEqualTo(totalRoutes); //убеждаемся, что количество элементов в List совпадает с числом totalRoutes
 
+        WebDriverWait wait = new WebDriverWait(getDriver(), 5); //инишиируем wait для будущей loop
+        double totalCostSum = 0;
+        for (WebElement costElement : costElements) {
+            wait.until(webDriver -> !costElement.getText().isEmpty()); //ждем, пока он не empty (поставили ! в начале)
+        // параметр Webdriver driver -> while(true) (это для строки выше)
+            double costElementDouble = Double.parseDouble(costElement.getText().replace("$", "")); //переводим текстовый формат в double и убираем значок $, чтобы осталось голое число
+            totalCostSum += costElementDouble; //суммируем все сосканированные числа
+        }
+
+        String approximateCostText = getDriver().findElement(By.xpath("//p[@id='approximateCost']")).getText().replace("$", ""); //обозначаем approximate cost element и сразу убираем $
+        double approximateCostInt = Double.parseDouble(approximateCostText); //переводим текст в double формат
+        Assertions.assertThat(approximateCostInt).isCloseTo(totalCostSum, Percentage.withPercentage(1)); //сравниваем указанное число на странице с рассчитанной суммой (используем isCloseTo, потому что приблизительно сравниваем, где (1) - это допущение пограшности в 1%)
+        System.out.println("Approximate cost: " + approximateCostInt);
+        System.out.println("Cost calculated: " + totalCostSum);
     }
 
     @And("I perform {string} help search")
@@ -300,6 +318,183 @@ public class UspsStepDefs {
         String resultBlock = getDriver().findElement(By.xpath("//p[@id='detailTollFree']")).getText();
         //div[@class='col-md-4 col-sm-4 col-xs-12 location-address-phone']
         Assertions.assertThat(resultBlock).contains(phoneNumber);
+    }
+
+
+
+    //UPS
+    @And("I go to Create a Shipment")
+    public void iGoToCreateAShipment() {
+        getDriver().findElement(By.xpath("//a[@id='tabs_0_tab_2']/span")).click();
+    }
+    Map<String, String> upsUser = getDataUPS("upsUser");
+
+    @When("I fill out origin shipment fields")
+    public void iFillOutOriginShipmentFields() throws InterruptedException {
+        getDriver().findElement(By.xpath("//select[@name='cac_country']/option[contains(text(), '" + upsUser.get("country") + "')]"));
+        getDriver().findElement(By.xpath("//input[@name='cac_companyOrName']")).sendKeys(upsUser.get("fullname"));
+
+//        WebElement zip = getDriver().findElement(By.xpath("//input[@name='cac_postalCode']"));
+//        WebDriverWait wait = new WebDriverWait(getDriver(), 3);
+//        wait.until(ExpectedConditions.invisibilityOf(zip));
+//        zip.sendKeys(upsUser.get("zip"));
+//        getDriver().findElement(By.xpath("//input[@name='cac_city']")).sendKeys(upsUser.get("city"));
+//        getDriver().findElement(By.xpath("//select[@name='cac_state']/option[contains(text(), '" + upsUser.get("state") +"')]"));
+
+        getDriver().findElement(By.xpath("//input[@name='cac_email']")).sendKeys(upsUser.get("email"));
+        getDriver().findElement(By.xpath("//input[@name='cac_phone']")).sendKeys(upsUser.get("phone"));
+
+        getDriver().findElement(By.xpath("//input[@name='cac_singleLineAddress']")).sendKeys(upsUser.get("address"));
+        Thread.sleep(1000);
+        getDriver().findElement(By.xpath("//input[@name='cac_singleLineAddress']")).sendKeys(Keys.ENTER);
+    }
+
+    @And("I submit the shipment form")
+    public void iSubmitTheShipmentForm() throws InterruptedException {
+        //getDriver().findElement(By.xpath("//button[@id='nbsBackForwardNavigationContinueButton']")).click();
+        Thread.sleep(1000);
+        //Тк нам мешает баннер, мы прибегаем к Java Script:
+        WebElement element = getDriver().findElement(By.xpath("//button[@id='nbsBackForwardNavigationContinueButton']"));
+        JavascriptExecutor executor = (JavascriptExecutor)getDriver();
+        executor.executeScript("arguments[0].click();", element);
+    }
+
+    @And("I close the cookie window")
+    public void iCloseTheCookieWindow() {
+        WebElement cookieWindow = getDriver().findElement(By.xpath("//div[@role='alert']"));
+        if (cookieWindow.isDisplayed()) {
+                getDriver().findElement(By.xpath("//div[@role='alert']/button/span")).click();
+        }
+    }
+
+    @Then("I verify origin shipment fields submitted")
+    public void iVerifyOriginShipmentFieldsSubmitted() {
+        WebDriverWait wait = new WebDriverWait(getDriver(), 3);
+        wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//div[@id='origin_showSummaryAddress']")));
+        String block = getDriver().findElement(By.xpath("//div[@id='origin_showSummaryAddress']")).getText();
+        Assertions.assertThat(block).contains(upsUser.get("fullname"));
+        Assertions.assertThat(block).contains(upsUser.get("address"));
+        Assertions.assertThat(block).contains(upsUser.get("email"));
+        Assertions.assertThat(block).contains(upsUser.get("phone"));
+    }
+
+    @When("I fill out destination shipment fields")
+    public void iFillOutDestinationShipmentFields() throws InterruptedException {
+        getDriver().findElement(By.xpath("//input[@name='cac_companyOrName']")).sendKeys(upsUser.get("fullnameDestination"));
+        getDriver().findElement(By.xpath("//input[@name='cac_singleLineAddress']")).sendKeys(upsUser.get("addressDestination"));
+        Thread.sleep(1000);
+        getDriver().findElement(By.xpath("//input[@name='cac_singleLineAddress']")).sendKeys(Keys.ENTER);
+    }
+
+    @And("I {string} residential address")
+    public void iResidentialAddress(String conformation) {
+        //div[@class='modal-content']
+        WebDriverWait wait = new WebDriverWait(getDriver(), 3);
+        wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//button[@id='nbsAddressClassificationContinue']")));
+        switch (conformation) {
+            case "confirm":
+                getDriver().findElement(By.xpath("//common-switch[@controlid='vm.residentialAddressControlId']/label/span")).click();
+                break;
+            case "dismiss":
+                break;
+            default:
+                throw new Error("Unknown action: " + conformation);
+        }
+        getDriver().findElement(By.xpath("//button[@id='nbsAddressClassificationContinue']")).click(); //button continue
+    }
+
+    @And("I set {string} type and weight")
+    public void iSetTypeAndWeight(String type) {
+        //select[@id='nbsPackagePackagingTypeDropdown0']/option[contains(text(), 'Packaging')]
+        getDriver().findElement(By.xpath("//input[@id='nbsPackagePackageWeightField0']")).click();
+        getDriver().findElement(By.xpath("//input[@id='nbsPackagePackageWeightField0']")).sendKeys(upsUser.get("weight"));
+        getDriver().findElement(By.xpath("//select[@id='nbsPackagePackagingTypeDropdown0']/option[contains(text(), '" + type + "')]")).click();
+    }
+
+    @Then("I verify {string} appear")
+    public void iVerifyAppear(String text) {
+        WebDriverWait wait = new WebDriverWait(getDriver(), 3);
+        wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//span[@id='nbsBalanceBarTotalCharges']")));
+        String totalCharges = getDriver().findElement(By.xpath("//span[@id='nbsBalanceBarTotalCharges']")).getText();
+        Assertions.assertThat(totalCharges).containsIgnoringCase(text);
+    }
+
+    @And("I select {string} delivery option")
+    public void iSelectDeliveryOption(String option) {
+       getDriver().findElement(By.xpath("//div[@id='" + option + "']")).click();
+    }
+
+
+    @And("I set description and check {string} type if available")
+    public void iSetDescriptionAndCheckTypeIfAvailable(String deliveryType) {
+        WebDriverWait wait = new WebDriverWait(getDriver(), 3);
+        wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//input[@id='nbsShipmentDescription']")));
+        getDriver().findElement(By.xpath("//input[@id='nbsShipmentDescription']")).sendKeys(upsUser.get("description"));
+    }
+
+    @And("I check {string}")
+    public void iCheck(String deliveryOption) throws InterruptedException {
+        String initialTotalCharges = getDriver().findElement(By.xpath("//span[@id='nbsBalanceBarTotalCharges']")).getText(); //изначальная total charges
+
+        //getDriver().findElement(By.xpath("//label/div/strong[contains(text(), 'Deliver only to receiver')]")).click();
+        //getDriver().findElement(By.xpath("//label[@for='nbsDirectDeliveryOnlyOptionBaseOptionSwitch']")).click();
+        WebElement element = getDriver().findElement(By.xpath("//label[@for='nbsDirectDeliveryOnlyOptionBaseOptionSwitch']"));
+        JavascriptExecutor executor = (JavascriptExecutor)getDriver();
+        executor.executeScript("arguments[0].click();", element);
+
+        Thread.sleep(2000);
+        String finalTotalCharges = getDriver().findElement(By.xpath("//span[@id='nbsBalanceBarTotalCharges']")).getText();
+        Assertions.assertThat(initialTotalCharges).isNotEqualTo(finalTotalCharges);
+    }
+
+    @Then("I verify total charges changed")
+    public void iVerifyTotalChargesChanged() {
+       //в предыдущем методе
+    }
+
+    @And("I select {string} payment type")
+    public void iSelectPaymentType(String paymentType) {
+        getDriver().findElement(By.xpath("//label/span[contains(text(), '" + paymentType + "')]")).click();
+    }
+
+    @And("I submit the shipment form to review")
+    public void iSubmitTheShipmentFormToReview() {
+        WebElement element = getDriver().findElement(By.xpath("//button[@id='nbsBackForwardNavigationReviewPrimaryButton']"));
+        JavascriptExecutor executor = (JavascriptExecutor)getDriver();
+        executor.executeScript("arguments[0].click();", element);
+    }
+
+    @Then("I review all recorded details on the review page")
+    public void iReviewAllRecordedDetailsOnTheReviewPage() {
+//        WebDriverWait wait = new WebDriverWait(getDriver(), 10);
+//        wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//div[@id='origin_showSummaryAddress']")));
+
+        String info = getDriver().findElement(By.xpath("//div[@id='origin_showSummaryAddress']")).getText();
+        Assertions.assertThat(info).contains(upsUser.get("fullname"));
+        String info2 = getDriver().findElement(By.xpath("//div[@id='destination_showSummaryAddress']")).getText();
+        Assertions.assertThat(info2).contains(upsUser.get("fullnameDestination"));
+    }
+
+    @And("I cancel the shipment form")
+    public void iCancelTheShipmentForm() {
+        WebElement element = getDriver().findElement(By.xpath("//button[@id='nbsBackForwardNavigationCancelShipmentButton']"));
+        JavascriptExecutor executor = (JavascriptExecutor)getDriver();
+        executor.executeScript("arguments[0].click();", element);
+        //getDriver().findElement(By.xpath("//button[@id='nbsBackForwardNavigationCancelShipmentButton']")).click();
+        //div[@class='modal-content'] - pop up window
+        getDriver().findElement(By.xpath("//button[@id='nbsCancelShipmentWarningYes']")).click(); //yes
+
+    }
+
+    @Then("I verify shipment form is reset")
+    public void iVerifyShipmentFormIsReset() {
+        WebDriverWait wait = new WebDriverWait(getDriver(), 7);
+        wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//div[@id='iw_placeholder1473252365894']"))); //block
+
+        getDriver().findElement(By.xpath("//input[@name='cac_companyOrName']")).getText().isEmpty(); //name field
+        getDriver().findElement(By.xpath("//input[@name='cac_singleLineAddress']")).getText().isEmpty(); //address field
+        getDriver().findElement(By.xpath("//input[@name='cac_email']")).getText().isEmpty(); //email field
+        getDriver().findElement(By.xpath("//input[@name='cac_phone']")).getText().isEmpty(); //email field
     }
 }
 

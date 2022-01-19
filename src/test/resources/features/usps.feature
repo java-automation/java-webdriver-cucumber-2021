@@ -49,7 +49,7 @@
         And I choose view as "Table" on the map
         When I select all in the table
         And I close modal window
-#        Then I verify that summary of all rows of Cost column is equal Approximate Cost in Order Summary
+        Then I verify that summary of all rows of Cost column is equal Approximate Cost in Order Summary
 
       @usps5
       Scenario: Quadcopters delivery
@@ -64,6 +64,39 @@
         When I navigate to "Locations" heading link
         And I search for location "4970 El Camino Real 110, Los Altos, CA"
         Then I verify closest location phone number is "800-275-8777"
+
+
+
+      @ups
+      Scenario: E2E UPS Scenario
+        Given I go to "ups" page
+        And I go to Create a Shipment
+        And I wait for 2 sec
+        And I close the cookie window
+        When I fill out origin shipment fields
+        And I wait for 2 sec
+        And I submit the shipment form
+        Then I verify origin shipment fields submitted
+        When I fill out destination shipment fields
+        When I submit the shipment form
+        And I "confirm" residential address
+        And I wait for 2 sec
+        And I set "Packaging" type and weight
+        When I submit the shipment form
+        Then I verify "total charges" appear
+        And I select "Cheapest" delivery option
+        And I submit the shipment form
+        And I set description and check "Saturday Delivery" type if available
+        And I check "Deliver only to receiver address"
+        Then I verify total charges changed
+        When I submit the shipment form
+        And I wait for 2 sec
+        And I select "PayPal" payment type
+        And I submit the shipment form to review
+        And I wait for 10 sec
+        Then I review all recorded details on the review page
+        And I cancel the shipment form
+        Then I verify shipment form is reset
 
 
 

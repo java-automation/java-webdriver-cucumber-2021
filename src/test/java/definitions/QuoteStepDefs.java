@@ -7,7 +7,9 @@ import io.cucumber.java.en.When;
 import org.assertj.core.api.Assertions;
 import org.junit.Assert;
 import org.openqa.selenium.By;
+import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.interactions.Actions;
 
 import java.io.FileNotFoundException;
 import java.util.Map;
@@ -123,8 +125,15 @@ public class QuoteStepDefs {
 
         //Переключаемся обратно из frame в обычный режим:
         getDriver().switchTo().defaultContent();
-
-
-
     }
+
+    @And("I do multi select of {string}, {string} and {string}")
+    public void iDoMultiSelectOfAnd(String markOne, String markTwo, String markTree) {
+        WebElement markFirst = getDriver().findElement(By.xpath("//select[@name='carMake']//*[@value='" + markOne + "']"));
+        WebElement markSecond = getDriver().findElement(By.xpath("//select[@name='carMake']//*[@value='" + markTwo + "']"));
+        WebElement markThird = getDriver().findElement(By.xpath("//select[@name='carMake']//*[@value='" + markTree + "']"));
+
+        new Actions(getDriver()).moveToElement(markFirst).clickAndHold().moveToElement(markSecond).moveToElement(markThird).release().perform();
+    }
+
 }

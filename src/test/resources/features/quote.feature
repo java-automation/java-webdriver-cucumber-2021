@@ -6,9 +6,10 @@ Feature: Quote Feature
     Given I go to "quote" page
     And I print logs to the console
     When I fill out the required fields
+    And I do multi select of "Ford", "Toyota" and "BMW"
     And I wait for 1 sec
     And I submit the page
-    And I wait for 1 sec
+    And I wait for 5 sec
     Then I verity the required fields
 
   @quote2

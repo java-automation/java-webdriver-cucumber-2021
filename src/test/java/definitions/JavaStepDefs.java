@@ -2,10 +2,17 @@ package definitions;
 
 import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
+import org.assertj.core.api.Assertions;
+import pages.Animal;
+import pages.Cat;
+import pages.Dog;
 
+import java.io.File;
+import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Scanner;
 
 public class JavaStepDefs {
 
@@ -57,7 +64,7 @@ public class JavaStepDefs {
     }
 
 
-    @Given("I work with numbers {int} and {int}")
+    @Given("I compare numbers {int} and {int}")
     public void iInteractWithNumbersAnd(int num1, int num2) {
         System.out.println("Number 1: " + num1);
         System.out.println("Number 2: " + num2);
@@ -93,10 +100,10 @@ public class JavaStepDefs {
         }
     }
 
-    @And("I work with loops")
-    public void iWorkWithLoops() {
-        for (int i = 0; i < 10; i++) {
-            System.out.println("Mysh");
+    @And("I repeat the word {string} {int} times with the help of loops")
+    public void iRepeatTheWordTimesWithTheHelpOfLoops(String word, int n) {
+        for (int i = 0; i < n; i++) {
+            System.out.println(word);
         }
     }
 
@@ -202,10 +209,17 @@ public class JavaStepDefs {
 
     @And("I print all even numbers from integer array")
     public void iPrintAllEvenNumbersFromIntegerArray() {
-        int[] array = {2, 3, 7, 9, 12, 22, 49};
+        int[] array = {2, 3, 7, 9, 12, 22, 49, 14};
         for(int i = 0; i < array.length; i++) {
             if (array[i] % 2 == 0)
                 System.out.print(array[i] + " ");
+        }
+        System.out.println();
+        //OR
+        for (int el : array) {
+            if (el%2==0) {
+                System.out.print(el + " ");
+            }
         }
     }
 
@@ -249,22 +263,15 @@ public class JavaStepDefs {
             System.out.println("The array doesn't contain " + arg);
     }
 
-    @And("I work with java")
-    public void iWorkWithJava() {
-        int i = 3;
-        int[] array = {2, 3, 7, 81, 11, 22, 24};
-        Arrays.stream(array).sorted();
-
-    }
-
     @Given("I swap two variables")
     public void iSwapTwoVariables() {
         int[] array = {2, 4, 7, 9, 22};
+        System.out.println("Original array: " + Arrays.toString(array));
         int a = array[0];
         int b = array[4];
         array[0] = b;
         array[4] = a;
-        System.out.println(Arrays.toString(array));
+        System.out.println("Result: " + Arrays.toString(array));
 
         int num1 = 1;
         int num2 = 2;
@@ -274,11 +281,12 @@ public class JavaStepDefs {
         System.out.println("Swap method: num1: " + num1 + ", num2: " + num2);
 
         int[] array1 = {5, 2, 9, 7, 3};
+        System.out.println("Original array1: " + Arrays.toString(array1));
         //swap 3rd and 5th
         int temp1 = array1[2]; //3rd element = 9
         array1[2] = array1[4]; //put 3 from 5th element into 3rd element
         array1[4] = temp1; //put temp 9 into 5th element
-        System.out.println(Arrays.toString(array1));
+        System.out.println("Result1: " + Arrays.toString(array1));
     }
 
     @And("I convert a string {string} into int")
@@ -313,20 +321,10 @@ public class JavaStepDefs {
             System.out.println(n + "is not divisible by 3 nor 4");
     }
 
-    @And("I am looking for the largest element in an array")
-    public void iAmLookingForTheLargestElementInAnArray() {
-        int[] array = {3, 12, 6, 21, 1, 4, 5};
-        int theLargest = 0;
-        for (int i = 0; i < array.length; i++) {
-            if (array[i]>theLargest){
-                theLargest = array[i];
-            }
-        }
-        System.out.println(theLargest);
-    }
-
     @And("I am playing a FizzBuzz game")
     public void iAmPlayingAFizzBuzzGame() {
+        //Print integers 1 to N, but print “Fizz” if an integer is divisible by 3, “Buzz” if an integer is divisible by 5,
+        //and “FizzBuzz” if an integer is divisible by both 3 and 5.
         int n = 20;
         for (int i = 1; i<= n; i++) {
             if (i%3==0 && i%5==0)
@@ -338,6 +336,18 @@ public class JavaStepDefs {
             else
                 System.out.print(i + " ");
         }
+    }
+
+    @And("I am looking for the largest element in an array")
+    public void iAmLookingForTheLargestElementInAnArray() {
+        int[] array = {3, 12, 6, 21, 1, 4, 5};
+        int theLargest = Integer.MIN_VALUE;
+        for (int i = 0; i < array.length; i++) {
+            if (array[i]>theLargest){
+                theLargest = array[i];
+            }
+        }
+        System.out.println(theLargest);
     }
 
     @And("I reverse a string")
@@ -366,13 +376,16 @@ public class JavaStepDefs {
     @And("I reverse words in a sentence")
     public void iReverseWordsInASentence() {
         String sentenseFirst = "I love Webdriver";
+        System.out.println("Initial sentense: " + sentenseFirst);
         String[] sentenseArray = sentenseFirst.split(" ");
+        System.out.println("Number of words in the sentense: " + sentenseArray.length);
         System.out.print("The result: ");
         for (int i = sentenseArray.length-1; i >=0; i--){
             System.out.print(sentenseArray[i] + " ");
         }
 
         //OR
+        System.out.println(); //чтобы не сливались строки между двумя вариантами
         System.out.println(); //чтобы не сливались строки между двумя вариантами
 
         String sentenceSecond[] = "now I know it".split(" ");
@@ -381,7 +394,6 @@ public class JavaStepDefs {
             result += sentenceSecond[i] + " ";
 
         System.out.print("The result: " + result);
-
     }
 
     @And("I sort an array")
@@ -400,32 +412,45 @@ public class JavaStepDefs {
             }
         }
         System.out.print(Arrays.toString(arr));
+        System.out.println();
+        //OR
+        int[] array = {4, 3, 1 ,5, 8, 4};
+        System.out.println("Initial array: " + Arrays.toString(array));
+        Arrays.sort(array);
+        System.out.println("Sorted array: " + Arrays.toString(array));
     }
 
     @And("I check if there are duplicates in an array")
     public void iCheckIfThereAreDuplicatesInAnArray() {
-        int[] arr = {4, 3, 1 ,5, 8, 4};
-        System.out.println("The original array: " + Arrays.toString(arr));
+        int[] array = {4, 3, 1 ,5, 8, 4};
+        boolean doublePresence = false;
+        System.out.println("The original array: " + Arrays.toString(array));
 
-        for (int i = 0; i < arr.length - 1; i++) {
-            for (int j = i + 1; j < arr.length; j++){
-                if (arr[i]==arr[j]) {
-                    System.out.println("Found a double: " + arr[i]);
+        for (int i = 0; i < array.length - 1; i++) {
+            for (int j = i + 1; j < array.length; j++){
+                if (array[i]==array[j]) {
+                    System.out.println("Found a double: " + array[i]);
+                    doublePresence = true;
                 }
             }
+        }
+        if (!doublePresence) {
+            System.out.println("No doubles in the array");
         }
     }
 
     @And("I determine if {string} is a palindrome")
     public void iDetermineIfIsAPalindrome(String word) {
-        String result = "";
-        for (int i = word.length() - 1; i >= 0; i--) {
-            result += word.charAt(i);
+        System.out.println("The word: " + word);
+        String reversedWord = ""; //просто обозначаем как пустую
+        for (int i = word.length()-1; i >= 0; i--) { //идем в обратную сторону
+            reversedWord+=word.charAt(i); //добавляем к пустой строке по одной букве в обратном порядке, чтобы получилось reversed word
         }
-        if (word.equals(result))
+        if (reversedWord.equals(word)) { //если перевернутое слово равно оригинальному, значит слово palindrome
             System.out.println(word + " is a palindrome");
-        else
+        } else {
             System.out.println(word + " is not a palindrome");
+        }
     }
 
     @And("I find the max number in array")
@@ -534,7 +559,7 @@ public class JavaStepDefs {
     public void iFindIfAIsAPrime(int number) {
         boolean prime = true;
 
-        for (int i = 2; i < number; i++) { //for non-prime number. We are making sure that out number is not divided by any number between 2 and itself.
+        for (int i = 2; i < number; i++) { //for non-prime number. We are making sure that out number is not divided by any number between 1 (not included) and itself (not included).
             if (number%i==0) {
                 prime = false;
                 break;
@@ -544,17 +569,162 @@ public class JavaStepDefs {
             System.out.println(number + " is a prime number");
         else
             System.out.println(number + " is not a prime number");
+
+
+        //OR variant 2
+        boolean notPrime = false; //not prime = false это prime (указываем по умолчанию)
+
+        for (int i = 2; i < number; i++) {
+            if (number%i==0) {
+                System.out.println(number + " is not a prime number");
+                notPrime = true;
+                break;
+            }
+        }
+        if (!notPrime) {
+            System.out.println(number + " is a prime number");
+        }
+
     }
 
     @And("I find factorial of {int}")
     public void iFindFactorialOf(int number) {
-        int factorial = 1;
+        int factorial = 1; // плюс, благодаря этой строчке, если у нас будет 0!, то он тоже будет равен 1 (по умолчанию)
         for (int i = 1; i <= number; i++) {
             factorial *= i;
         }
         System.out.println("The factorial of " + number + " is " + factorial);
+    }
 
+    @And("I find the max number in the file")
+    public void iFindTheMaxNumberInTheFile() {
+        File file = new File("/Users/alinaalinina/Downloads/dataset_91007.txt");
 
+        int max = Integer.MIN_VALUE;
+        List<Integer> list = new ArrayList<>();
+
+        try (Scanner scanner = new Scanner(file)) {
+            while (scanner.hasNext()) {
+                list.add(scanner.nextInt());
+            }
+        } catch (FileNotFoundException e) { //обязательное условие по умолчанию
+            System.out.println("No file found");
+        }
+
+        for (int i = 0; i < list.size(); i++) {
+            if (list.get(i)>max) {
+                max = list.get(i);
+            }
+        }
+        System.out.println(max);
+    }
+
+    @And("I find the sum of numbers in the file")
+    public void iFindTheSumOfNumbersInTheFile() {
+        File file = new File("/Users/alinaalinina/Downloads/dataset_91033.txt");
+        int sum = 0;
+
+        try (Scanner scanner = new Scanner(file)) {
+            while (scanner.hasNext()) {
+//                int n = scanner.nextInt();
+//                sum+=n;
+                //OR
+                sum+= scanner.nextInt(); //суммируем каждый новый отсканированный элемент (объединили две верхние строки в одну)
+            }
+        } catch (FileNotFoundException e) { //обязательное условие по умолчанию
+            System.out.println("No file found");
+        }
+        System.out.println(sum);
+    }
+
+    @And("I am playing a Fibonacci game")
+    public void iAmPlayingAFibonacciGame() {
+        //The Fibonacci series is a series of elements where, the previous two elements
+        // are added to get the next element, starting with 0 and 1.
+        int n = 10;
+        int num1 = 0;
+        int num2 = 1;
+
+        for (int i = 0; i <= n; i++) {
+            System.out.print(num1 + " ");
+            int num3 = num1 + num2;
+            num1 = num2;
+            num2 = num3;
+        }
+    }
+
+    @And("I check whether {string} is a vowel or not")
+    public void iCheckWhetherIsAVowelOrNot(String letterStr) {
+        char letter= letterStr.charAt(0); //меняем формат буквы из String в char
+        char[] array = {'A', 'a', 'E', 'e', 'I', 'i', 'O', 'o', 'U', 'u'}; //vowel letters
+        boolean vowel = false;
+
+        for (char el : array) { //берем каждый элемент array of vowels для сравнения с данной буквой
+            if (letter==el) {
+                System.out.println(letter + " is a vowel"); //если хотя бы с одним элементом array совпадает, значит vowel
+                vowel = true;
+                break; //тк хотя бы одного совпадения достаточно
+            }
+        }
+        if(!vowel) {
+            System.out.println(letter + " is not a vowel");
+        }
+    }
+
+    @Given("I work with classes")
+    public void iWorkWithClasses() {
+        Animal animal = new Animal();
+        animal.speak();
+
+        System.out.println( );
+
+        Animal cat = new Cat("Tom"); //=Cat значит методы будут вызываться оттуда
+        cat.walk();
+        cat.sleep();
+        cat.speak();
+        cat.eat("fish");
+
+        Animal secondCat = new Cat(); //nameless also acceptable because we have a second constructor without parameter
+        secondCat.walk();
+        secondCat.sleep();
+        secondCat.speak();
+        secondCat.eat("fish");
+
+        //cat.name = "Jerry"; //больше не можем использовать такую конструкцию
+//        cat.setName("Jerry"); //should throw an error (we did it on purpose in setName() method in Cat.java)
+        cat.setName("Frank"); //it is acceptable
+        cat.sleep();
+
+        //System.out.println(cat.name); //не можем напечатать name, тк оно private
+        System.out.println("Cat's name is " + cat.getName()); //так можем (с помощью метода getName() в Cat.java файле) (it's read only)
+        //тк мы выше указали имя Frank, то и выведется сюда оно
+        System.out.println();
+
+        Animal dog = new Dog("Rex");
+        dog.eat("bones");
+        dog.speak();
+        dog.setName("Sharik");
+        dog.sleep();
+        dog.walk();
+
+        Animal secondDog = new Dog("Max");
+//        secondDog.say();
+
+        System.out.println();
+
+        List<Animal> animals = new ArrayList<>(); //создаем лист из созданных выше котов (объектов) - cat и secondCat
+        animals.add(cat);
+        animals.add(secondCat);
+        printAnimalNames(animals); //вызываем доп метод
+    }
+
+    void printAnimalNames(List<Animal> animals) {
+        System.out.println("All animal names: ");
+        for (Animal animal : animals) {
+            System.out.println(animal.getName());
+            animal.sleep();
+            animal.speak();
+        }
     }
 }
 
