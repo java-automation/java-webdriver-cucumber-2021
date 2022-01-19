@@ -1,5 +1,6 @@
 package pages;
 
+import definitions.HelperStepDefs;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
@@ -9,9 +10,10 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.util.Map;
 
+import static org.junit.Assert.assertEquals;
 import static support.TestContext.getDriver;
 
-public class QuoteForm {
+public class QuoteForm extends HelperStepDefs {
 
     //constructor
     public QuoteForm() {
@@ -33,6 +35,7 @@ public class QuoteForm {
     public static final String SAVE_NAME_BUTTON_XPATH = "//span[text()='Save']";
     public static final String CONFIRM_PASSWORD_XPATH = "//input[@name='confirmPassword']";
     public static final String SUBMIT_BUTTON = "//button[@id='formSubmit']";
+    public static final String ERRORS_XPATH = "//label[@class='error']";
 
     @FindBy(xpath = USERNAME_XPATH)
     private WebElement username;
@@ -64,7 +67,9 @@ public class QuoteForm {
     }
 
     public void fillUsername(String value) {
+        username.clear();
         username.sendKeys(value);
+        assertEquals(getDriver().findElement(By.xpath(USERNAME_XPATH)).getAttribute("value"), value);
     }
 
     public void fillName(Map<String, String> user) {
@@ -78,12 +83,42 @@ public class QuoteForm {
         saveNameButton.click();
     }
 
+    public void fillName(String first, String middle, String last) {
+        name.click();
+        if ((first != null) && (!first.equals(""))) {
+            firstName.clear();
+            firstName.sendKeys(first);
+        }
+        if ((middle != null) && (!middle.equals(""))) {
+            middleName.clear();
+            middleName.sendKeys(middle);
+        }
+        if ((last != null) && (!last.equals(""))) {
+            lastName.clear();
+            lastName.sendKeys(last);
+        }
+        saveNameButton.click();
+    }
+
     public void fillEmail(String value) {
+        email.clear();
         email.sendKeys(value);
+        assertEquals(getDriver().findElement(By.xpath(EMAIL_XPATH)).getAttribute("value"), value);
+
     }
 
     public void fillPassword(String value) {
         password.sendKeys(value);
+        confirmPassword.sendKeys(value);
+    }
+
+    public void fillOutOnlyPasswordField(String value) {
+        password.clear();
+        password.sendKeys(value);
+    }
+
+    public void fillOutOnlyConfirmPasswordField(String value) {
+        confirmPassword.clear();
         confirmPassword.sendKeys(value);
     }
 
@@ -101,6 +136,21 @@ public class QuoteForm {
 
     public void submit() {
         submitButton.click();
-        wait.until(ExpectedConditions.visibilityOfAllElementsLocatedBy(By.xpath(QUOTE_PAGE_RESULT_XPATH)));
+        if (!isPresent(By.xpath(ERRORS_XPATH))) {
+            wait.until(ExpectedConditions.visibilityOfAllElementsLocatedBy(By.xpath(QUOTE_PAGE_RESULT_XPATH)));
+        } else
+            wait.until(ExpectedConditions.presenceOfAllElementsLocatedBy(By.xpath(ERRORS_XPATH)));
+    }
+
+    public void assertFieldValue(String field, String value) {
+        switch (field) {
+            case "name": {
+                assertEquals(name.getAttribute("value"), value);
+                break;
+            }
+            default: {
+                throw new Error("Unknown field to verify!");
+            }
+        }
     }
 }

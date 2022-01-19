@@ -39,6 +39,7 @@ public class HelperStepDefs {
         menuItemList.forEach(el -> menuItemAttributes.add(el.getAttribute(attributeName)));
         return menuItemList.get(menuItemAttributes.indexOf(attributeValue));
     }
+
     static WebElement getWebElementFromListByPartOfAttributeValue(String xpath, String attributeName, String partOfAttributeValue) {
         List<WebElement> menuItemList = getDriver().findElements(By.xpath(xpath));
         List<String> menuItemAttributes = new ArrayList<>();
@@ -46,7 +47,7 @@ public class HelperStepDefs {
             menuItemAttributes.add(el.getAttribute(attributeName));
             System.out.println(el.getAttribute(attributeName));
         });
-        String attributeValue = menuItemAttributes.stream().filter(el->el.contains(partOfAttributeValue)).collect(Collectors.toList()).get(0);
+        String attributeValue = menuItemAttributes.stream().filter(el -> el.contains(partOfAttributeValue)).collect(Collectors.toList()).get(0);
         System.out.println("attributeValue = " + attributeValue);
         return menuItemList.get(menuItemAttributes.indexOf(attributeValue));
     }
@@ -56,8 +57,13 @@ public class HelperStepDefs {
         click(xpath);
         list.selectByValue(value);
     }
+
     public static void setSize(int width, int height) {
         Dimension dimension = new Dimension(width, height);
         getDriver().manage().window().setSize(dimension);
+    }
+
+    public boolean isPresent(By locator) {
+        return getDriver().findElements(locator).size() > 0;
     }
 }
