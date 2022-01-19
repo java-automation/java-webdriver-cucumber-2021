@@ -6,6 +6,7 @@ import org.openqa.selenium.support.PageFactory;
 import org.openqa.selenium.support.ui.Select;
 
 import java.util.List;
+import java.util.Optional;
 
 import static support.TestContext.getDriver;
 
@@ -230,18 +231,19 @@ public class QuoteForm {
     }
 
     public boolean isErrorMessageVisible(String fieldName) {
-        WebElement errorMessageElement = getErrorMessageElement(fieldName);
-        return (errorMessageElement != null) && errorMessageElement.isDisplayed();
+        return getErrorMessageElement(fieldName)
+                .filter(WebElement::isDisplayed)
+                .isPresent();
     }
 
     public String getErrorMessage(String fieldName) {
-        WebElement errorMessageElement = getErrorMessageElement(fieldName);
-        if ((errorMessageElement == null) || !errorMessageElement.isDisplayed())
-            throw new Error("Message element does not exist or is not visible!");
-        return errorMessageElement.getText();
+        return getErrorMessageElement(fieldName)
+                .filter(WebElement::isDisplayed)
+                .orElseThrow(() -> new Error("Message element does not exist or is not visible!"))
+                .getText();
     }
 
-    private WebElement getErrorMessageElement(String fieldName) {
+    private Optional<WebElement> getErrorMessageElement(String fieldName) {
         List<WebElement> list = switch (fieldName) {
             case "username" -> usernameError;
             case "email" -> emailError;
@@ -250,6 +252,6 @@ public class QuoteForm {
             case "agreedToPrivacyPolicy" -> privacyPolicyError;
             default -> throw new Error("Unknown field name reference: " + fieldName);
         };
-        return list.size() > 0 ? list.get(0) : null;
+        return list.stream().findFirst();
     }
 }
