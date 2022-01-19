@@ -22,19 +22,19 @@ public class QuoteForm {
     @FindBy (xpath = "//input[@name='username']") // lazy instantiation
     private WebElement username;
 
-    @FindBy (id = "//label[@id='username-error']")
+    @FindBy (id = "username-error")
     private List<WebElement> usernameError;                                 // Username Error
 
     @FindBy (xpath = "//input[@name='email']") // lazy instantiation
     private WebElement email;
 
-    @FindBy (id = "//label[@id='email-error']")                             // Email Error
+    @FindBy (id = "email-error")                             // Email Error
     private List<WebElement> emailError;
 
     @FindBy (xpath = "//input[@name='password']") // lazy instantiation
     private WebElement password;
 
-    @FindBy (id = "//label[@id='password-error']")
+    @FindBy (id = "password-error")
     private List<WebElement> passwordError;                                 // Password Error
 
     @FindBy (xpath = "//input[@name='confirmPassword']") // lazy instantiation
@@ -43,7 +43,7 @@ public class QuoteForm {
     @FindBy (xpath = "//input[@id='name']") // lazy instantiation
     private WebElement name;
 
-    @FindBy (id = "//label[@id='name-error']")
+    @FindBy (id = "name-error")
     private List<WebElement> nameError;                                     // Name Error
 
     //name dialogue
