@@ -216,3 +216,9 @@ Feature: Java experiments
   Scenario: Substring in collection of words
     And I find what words have "r" in their name
       | January | February | March | April | May | June | July | August | September | October | November | December |
+
+  @java40
+  Scenario: Roman numbers
+    And I convert 2381 to Roman number
+    And I convert "MCDLXII" to decimal
+    And I calculate sum of "CDXCVII" and "DXIX"

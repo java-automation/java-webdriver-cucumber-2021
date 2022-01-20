@@ -287,7 +287,7 @@ public class JavaStepDefs {
     private BigInteger fibonacciNumberBigIntArray(int elNum) {
         if (elNum <= 1) return new BigInteger(String.valueOf(elNum));
 
-        BigInteger[] fibSeq = new BigInteger[] {new BigInteger(String.valueOf(0)), new BigInteger(String.valueOf(1))};
+        BigInteger[] fibSeq = new BigInteger[]{new BigInteger(String.valueOf(0)), new BigInteger(String.valueOf(1))};
         for (int i = 2; i <= elNum; ++i) {
             BigInteger newFibNum = fibSeq[0].add(fibSeq[1]);
             fibSeq[0] = fibSeq[1];
@@ -299,7 +299,7 @@ public class JavaStepDefs {
     private long fibonacciNumberArray(int elNum) {
         if (elNum <= 1) return elNum;
 
-        long[] fibSeq = new long[] {0, 1};
+        long[] fibSeq = new long[]{0, 1};
         for (int i = 2; i <= elNum; ++i) {
             long newFibNum = fibSeq[0] + fibSeq[1];
             fibSeq[0] = fibSeq[1];
@@ -818,12 +818,12 @@ public class JavaStepDefs {
             if (arr[j] > arr[max2Ind]) max2Ind = j;
         }
 
-        return new int[] {arr[max1Ind], arr[max2Ind]};
+        return new int[]{arr[max1Ind], arr[max2Ind]};
     }
 
     private int[] getTwoLargestElementsWithSort(int[] arr) {
         sortUsingInsertionSort(arr);
-        return new int[] {arr[arr.length - 1] , arr[arr.length - 2]};
+        return new int[]{arr[arr.length - 1], arr[arr.length - 2]};
     }
 
     private int[] getTwoLargestElementsWithOneLoop(int[] arr) {
@@ -847,7 +847,7 @@ public class JavaStepDefs {
                 }
             }
         }
-        return new int[] {max1, max2};
+        return new int[]{max1, max2};
     }
 
     @And("I check if given array has duplicates, print if found.")
@@ -895,8 +895,8 @@ public class JavaStepDefs {
     private int getReversedNumberUsingStrings(int num) {
         String negativeSign = "";
         if (num < 0) {
-             negativeSign = "-";
-             num = -num;
+            negativeSign = "-";
+            num = -num;
         }
         return Integer.parseInt(negativeSign + getReversedStringWithStringBuilder(String.valueOf(num)));
     }
@@ -934,7 +934,7 @@ public class JavaStepDefs {
         Map<Integer, Integer> map = new HashMap<>();
         for (int i = 0; i < arr.length; ++i) {
             int element = arr[i];
-            if (map.containsKey(element)) return new int[] {map.get(element), i};
+            if (map.containsKey(element)) return new int[]{map.get(element), i};
             else map.put(target - element, i);
         }
         throw new Error("No solution for this target: " + target);
@@ -1097,7 +1097,7 @@ public class JavaStepDefs {
         frog.walk();
         frog.speak();
         frog.eat("fly");
-        frog.birthday(new Animal[] {cat, anotherCat, dog, new Cat ("Nefertiti"), new Dog("Mike", 2), new Frog()});
+        frog.birthday(new Animal[]{cat, anotherCat, dog, new Cat("Nefertiti"), new Dog("Mike", 2), new Frog()});
         frog.sleep();
         System.out.println();
     }
@@ -1110,7 +1110,7 @@ public class JavaStepDefs {
 
     private void printFromNumToOne(int num) {
         System.out.print(num + " ");
-        if (num == 1)  {
+        if (num == 1) {
             System.out.println();
             return;
         }
@@ -1208,5 +1208,104 @@ public class JavaStepDefs {
         System.out.println("---");
         System.out.println("Total entries: " + collection.size());
         System.out.println("Matches: " + matchCounter);
+    }
+
+    @And("I convert {int} to Roman number")
+    public void iConvertToRomanNumber(int num) {
+        if (num < 0 || num > 3999) throw new Error("Not a whole number in [0, 3999] range!");
+
+        System.out.println("Roman number for " + num + " 'digit by digit': " + convertDecimalToRomanUsingDigitOrder(num));
+        System.out.println("Roman number for " + num + " 'with subtraction': " + convertDecimalToRomanUsingPredefinedValuesSubtraction(num));
+    }
+
+    private String convertDecimalToRomanUsingPredefinedValuesSubtraction(int num) {
+        if (num == 0) return "nulla";
+
+        final String[] romanNumerals = {"I", "IV", "V", "IX", "X", "XL", "L", "XC", "C", "CD", "D", "CM", "M"};
+        final int[]    values       = { 1,   4,    5,   9,    10,  40,   50,  90,  100,  400, 500,  900, 1000};
+        int i = 12;
+        String result = "";
+
+        while (i >= 0) {
+            if (num >= values[i]) {
+                num -= values[i];
+                result = result.concat(romanNumerals[i]);
+            } else i--;
+        }
+        return result;
+    }
+
+    private String convertDecimalToRomanUsingDigitOrder(int num) {
+        if (num == 0) return "nulla";
+
+        final String[] romanSymbols = {"I", "V", "X", "L", "C", "D", "M"};
+        int groupIndex = 0;
+        String prefix;
+        String highSymbol = "";
+        String result = "";
+        int digit, mod;
+
+        for (int digitOrderNumber = 1; num / digitOrderNumber > 0; digitOrderNumber *= 10) {
+            digit = (num / digitOrderNumber) % 10;
+            if (digit >= 5) {
+                prefix = romanSymbols[groupIndex + 1];
+                highSymbol = romanSymbols[groupIndex + 2];
+            } else {
+                prefix = "";
+                if (groupIndex <= 4) highSymbol = romanSymbols[groupIndex + 1];
+            }
+            mod = digit % 5;
+            if (mod  == 4) result = (romanSymbols[groupIndex] + highSymbol).concat(result);
+            else result = (prefix + romanSymbols[groupIndex].repeat(mod)).concat(result);
+            groupIndex += 2;
+        }
+        return result;
+    }
+
+    @And("I convert {string} to decimal")
+    public void iConvertToDecimal(String romanNum) {
+         if (!(romanNum.matches("^M{0,3}(CM|CD|D?C{0,3})(XC|XL|L?X{0,3})(IX|IV|V?I{0,3})$")))
+             throw new Error("Invalid roman number: " + romanNum);
+
+        System.out.println("Decimal number for " + romanNum + ": " + convertRomanToDecimal(romanNum));
+    }
+
+    private int convertRomanToDecimal(String romanNum) {
+        int result = getRomanSymbolValue(romanNum.charAt(0));
+        int leftValue, rightValue;
+        for (int i = 1; i < romanNum.length(); i++) {
+            leftValue = getRomanSymbolValue(romanNum.charAt(i - 1));
+            rightValue = getRomanSymbolValue(romanNum.charAt(i));
+            if (rightValue > leftValue) result -= 2 * leftValue;
+            result += rightValue;
+        }
+        return result;
+    }
+
+    private int getRomanSymbolValue(char romanSymbol) {
+        return switch (romanSymbol) {
+            case 'I' -> 1;
+            case 'V' -> 5;
+            case 'X' -> 10;
+            case 'L' -> 50;
+            case 'C' -> 100;
+            case 'D' -> 500;
+            case 'M' -> 1000;
+            default -> 0;
+        };
+    }
+
+    @And("I calculate sum of {string} and {string}")
+    public void iCalculateSumOfAnd(String romanNum1, String romanNum2) {
+        String regexRoman = "^M{0,3}(CM|CD|D?C{0,3})(XC|XL|L?X{0,3})(IX|IV|V?I{0,3})$";
+        if (!(romanNum1.matches(regexRoman) && (romanNum2.matches(regexRoman))))
+            throw new Error("Invalid roman numbers: " + romanNum1 + " " + romanNum2);
+
+        int decimal1 = convertRomanToDecimal(romanNum1);
+        int decimal2 = convertRomanToDecimal(romanNum2);
+        int decimalSum = decimal1 + decimal2;
+        System.out.println(decimal1 + " + " + decimal2 + " = " + decimalSum);
+        if (decimalSum > 3999) throw new Error("Numbers are too big to add in Roman (sum > 3999)!");
+        System.out.println("Sum of " + romanNum1 + " and " + romanNum2 + " is " + convertDecimalToRomanUsingPredefinedValuesSubtraction(decimalSum));
     }
 }
