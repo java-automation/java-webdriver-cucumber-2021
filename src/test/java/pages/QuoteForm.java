@@ -143,9 +143,43 @@ public class QuoteForm {
         username.sendKeys(value);
     }
 
+    public boolean isUsernameErrorVisible() {
+        return usernameError
+                .stream()
+                .findFirst()
+                .filter(WebElement::isDisplayed)
+                .isPresent();
+    }
+
+    public String getUsernameErrorText() {
+        return usernameError
+                .stream()
+                .findFirst()
+                .filter(WebElement::isDisplayed)
+                .orElseThrow(() -> new Error("Username error element does not exist or is not visible!"))
+                .getText();
+    }
+
     public void fillEmail(String value) {
         email.clear();
         email.sendKeys(value);
+    }
+
+    public boolean isEmailErrorVisible() {
+        return emailError
+                .stream()
+                .findFirst()
+                .filter(WebElement::isDisplayed)
+                .isPresent();
+    }
+
+    public String getEmailErrorText() {
+        return emailError
+                .stream()
+                .findFirst()
+                .filter(WebElement::isDisplayed)
+                .orElseThrow(() -> new Error("Email error element does not exist or is not visible!"))
+                .getText();
     }
 
     public void fillPasswords(String value) {
@@ -160,9 +194,43 @@ public class QuoteForm {
         password.sendKeys(value);
     }
 
+    public boolean isPasswordErrorVisible() {
+        return passwordError
+                .stream()
+                .findFirst()
+                .filter(WebElement::isDisplayed)
+                .isPresent();
+    }
+
+    public String getPasswordErrorText() {
+        return passwordError
+                .stream()
+                .findFirst()
+                .filter(WebElement::isDisplayed)
+                .orElseThrow(() -> new Error("Password error element does not exist or is not visible!"))
+                .getText();
+    }
+
     public void fillConfirmPassword(String value) {
         confirmPassword.clear();
         confirmPassword.sendKeys(value);
+    }
+
+    public boolean isConfirmPasswordErrorVisible() {
+        return confirmPasswordError
+                .stream()
+                .findFirst()
+                .filter(WebElement::isDisplayed)
+                .isPresent();
+    }
+
+    public String getConfirmPasswordErrorText() {
+        return confirmPasswordError
+                .stream()
+                .findFirst()
+                .filter(WebElement::isDisplayed)
+                .orElseThrow(() -> new Error("Confirm password error element does not exist or is not visible!"))
+                .getText();
     }
 
     public void fillName(String firstNameValue, String middleNameValue, String lastNameValue) {
@@ -177,12 +245,46 @@ public class QuoteForm {
         return name.getAttribute("value");
     }
 
+    public boolean isNameErrorVisible() {
+        return nameError
+                .stream()
+                .findFirst()
+                .filter(WebElement::isDisplayed)
+                .isPresent();
+    }
+
+    public String getNameErrorText() {
+        return nameError
+                .stream()
+                .findFirst()
+                .filter(WebElement::isDisplayed)
+                .orElseThrow(() -> new Error("Name error element does not exist or is not visible!"))
+                .getText();
+    }
+
     public void acceptPrivacyPolicy() {
         if (!privacyPolicy.isSelected()) privacyPolicy.click();
     }
 
     public void declinePrivacyPolicy() {
         if (privacyPolicy.isSelected()) privacyPolicy.click();
+    }
+
+    public boolean isPrivacyPolicyErrorVisible() {
+        return privacyPolicyError
+                .stream()
+                .findFirst()
+                .filter(WebElement::isDisplayed)
+                .isPresent();
+    }
+
+    public String getPrivacyPolicyErrorText() {
+        return privacyPolicyError
+                .stream()
+                .findFirst()
+                .filter(WebElement::isDisplayed)
+                .orElseThrow(() -> new Error("Privacy policy error element does not exist or is not visible!"))
+                .getText();
     }
 
     public void submit() {
@@ -249,31 +351,5 @@ public class QuoteForm {
 
     public void attachFile(String filePath) {
         attachmentButton.sendKeys(filePath);
-    }
-
-    public boolean isErrorMessageVisible(String elementName) {
-        return getErrorMessageElement(elementName)
-                .filter(WebElement::isDisplayed)
-                .isPresent();
-    }
-
-    public String getErrorMessage(String elementName) {
-        return getErrorMessageElement(elementName)
-                .filter(WebElement::isDisplayed)
-                .orElseThrow(() -> new Error("Message element does not exist or is not visible!"))
-                .getText();
-    }
-
-    private Optional<WebElement> getErrorMessageElement(String elementName) {
-        List<WebElement> list = switch (elementName) {
-            case "username" -> usernameError;
-            case "email" -> emailError;
-            case "password" -> passwordError;
-            case "confirmPassword" -> confirmPasswordError;
-            case "name" -> nameError;
-            case "agreedToPrivacyPolicy" -> privacyPolicyError;
-            default -> throw new Error("Unknown field name reference: " + elementName);
-        };
-        return list.stream().findFirst();
     }
 }

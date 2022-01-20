@@ -121,12 +121,30 @@ public class QuoteOOPStepDefs {
 
     @Then("I don't see {string} error message")
     public void iDonTSeeErrorMessage(String elementName) {
-        assertThat(form.isErrorMessageVisible(elementName)).isFalse();
+        boolean isErrorVisible = switch (elementName) {
+            case "username" -> form.isUsernameErrorVisible();
+            case "email" -> form.isEmailErrorVisible();
+            case "password" -> form.isPasswordErrorVisible();
+            case "confirmPassword" -> form.isConfirmPasswordErrorVisible();
+            case "name" -> form.isNameErrorVisible();
+            case "agreedToPrivacyPolicy" -> form.isPrivacyPolicyErrorVisible();
+            default -> throw new Error("Unknown error message element reference: " + elementName);
+        };
+        assertThat(isErrorVisible).isFalse();
     }
 
     @Then("I see {string} error message {string}")
     public void iSeeErrorMessage(String elementName, String message) {
-        assertThat(form.getErrorMessage(elementName)).isEqualTo(message);
+        String errorMessage = switch (elementName) {
+            case "username" -> form.getUsernameErrorText();
+            case "email" -> form.getEmailErrorText();
+            case "password" -> form.getPasswordErrorText();
+            case "confirmPassword" -> form.getConfirmPasswordErrorText();
+            case "name" -> form.getNameErrorText();
+            case "agreedToPrivacyPolicy" -> form.getPrivacyPolicyErrorText();
+            default -> throw new Error("Unknown error message element reference: " + elementName);
+        };
+        assertThat(errorMessage).isEqualTo(message);
     }
 
     @When("I fill out {string} field with {string}")
