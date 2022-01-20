@@ -1,5 +1,6 @@
 package pages;
 
+import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
@@ -18,22 +19,35 @@ public class QuoteForm {
 
     @FindBy(xpath = "//input[@name='username']")
     private WebElement username;
+    @FindBy(xpath = "//input[@name='username']/following-sibling::label[@class='error']")
+    private WebElement usernameError;
 
     @FindBy(xpath = "//input[@name='email']")
     private WebElement email;
+    @FindBy(xpath = "//input[@name='email']/following-sibling::label[@class='error']")
+    private WebElement emailError;
 
     @FindBy(xpath = "//input[@name='password']")
     private WebElement password;
+    @FindBy(xpath = "//input[@name='password']/following-sibling::label[@class='error']")
+    private WebElement passwordError;
 
     @FindBy(xpath = "//input[@name='confirmPassword']")
     private WebElement confirmPassword;
+    @FindBy(xpath = "//input[@name='confirmPassword']/following-sibling::label[@class='error']")
+    private WebElement confirmPasswordError;
 
     @FindBy(xpath = "//input[@id='name']")
     private WebElement name;
+    @FindBy(xpath = "//input[@id='name']/following-sibling::label[@class='error']")
+    private WebElement nameError;
 
     // name dialog
     @FindBy(xpath = "//input[@id='firstName']")
     private WebElement firstName;
+
+    @FindBy(xpath = "//input[@id='middleName']")
+    private WebElement middleName;
 
     @FindBy(xpath = "//input[@id='lastName']")
     private WebElement lastName;
@@ -43,6 +57,8 @@ public class QuoteForm {
 
     @FindBy(xpath = "//input[@name='agreedToPrivacyPolicy']")
     private WebElement privacyPolicy;
+    @FindBy(xpath = "//input[@name='agreedToPrivacyPolicy']/following-sibling::label[@class='error']")
+    private WebElement privacyPolicyError;
 
     @FindBy(id = "formSubmit")
     private WebElement submitButton;
@@ -60,16 +76,31 @@ public class QuoteForm {
         email.sendKeys(value);
     }
 
+    public void fillPasswordField(String value) {
+        password.clear();
+        password.sendKeys(value);
+    }
+
+    public void fillConfirmPasswordField(String value) {
+        confirmPassword.clear();
+        confirmPassword.sendKeys(value);
+    }
+
     public void fillPasswordFields(String value) {
         password.sendKeys(value);
         confirmPassword.sendKeys(value);
     }
 
-    public void fillName(String firstNameValue, String lastNameValue) {
+    public void fillName(String firstNameValue, String middleNameValue, String lastNameValue) {
         name.click();
         firstName.sendKeys(firstNameValue);
+        middleName.sendKeys((middleNameValue));
         lastName.sendKeys(lastNameValue);
         save.click();
+    }
+
+    public String getNameFieldContents() {
+        return name.getAttribute("value");
     }
 
     public void acceptPrivacyPolicy() {
@@ -86,5 +117,28 @@ public class QuoteForm {
 
     public void submit() {
         submitButton.click();
+    }
+
+    public boolean isErrorMessageVisible(String sField, String sMessage) throws NoSuchElementException {
+        try {
+            switch (sField) {
+                case "username":
+                    return usernameError.isDisplayed() && usernameError.getText().contains(sMessage);
+                case "email":
+                    return emailError.isDisplayed() && emailError.getText().contains(sMessage);
+                case "password":
+                    return passwordError.isDisplayed() && passwordError.getText().contains(sMessage);
+                case "confirmPassword":
+                    return confirmPasswordError.isDisplayed() && confirmPasswordError.getText().contains(sMessage);
+                case "name":
+                    return nameError.isDisplayed() && nameError.getText().contains(sMessage);
+                case "agreedToPrivacyPolicy":
+                    return privacyPolicyError.isDisplayed() && privacyPolicyError.getText().contains(sMessage);
+                default:
+                    return false;
+            }
+        } catch (NoSuchElementException e) {
+            return false;
+        }
     }
 }
