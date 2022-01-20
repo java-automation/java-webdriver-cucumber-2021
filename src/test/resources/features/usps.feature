@@ -28,12 +28,22 @@
       Then I validate that Sign In is required
 
 
+    Scenario: Quadcopters delivery
+      Given I go to "usps" page
+      When I go to "Help" tab
+      And I perform "Quadcopters delivery" help search
+      Then I verify that no results of "Quadcopters delivery" available in help search
+
+
+
+
+
     Scenario: Every door direct mail
       Given I go to "usps" page
       When I go to "Every Door Direct Mail" under "Business"
       And I search for "4970 El Camino Real, Los Altos, CA 94022"
       And I choose view as "Table" on the map
       When I select all in the table
-      And I wait for 4 sec
       And I close modal window
+      And I wait for 5 sec
       Then I verify that summary of all rows of Cost column is equal Approximate Cost in Order Summary

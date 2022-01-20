@@ -87,12 +87,18 @@
     Scenario: Home Work for day 7
 #      Given a function that swaps two array elements
 #      And is the number divisible by 3 and 4
-#      And a function to find the largest element in an array
-      And a function that reverses words in a sentence
+      And a function to find the largest element in an array
+#      And a function that reverses words in a sentence
 #      And FizzBuzz challenge
+
+    Scenario: Session 01/19
+      Given Convert integer to Roman
+      And Convert Roman to Integer
+
 
 
   Scenario:
     Given I work with classes
 #    And I work with classes Dog
 #  And Print animal names
+

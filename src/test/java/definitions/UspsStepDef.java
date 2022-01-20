@@ -5,6 +5,7 @@ import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 import io.cucumber.java.eo.Se;
+import org.assertj.core.data.Percentage;
 import org.openqa.selenium.By;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebElement;
@@ -18,11 +19,15 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 
 import javax.swing.*;
 
+import java.text.NumberFormat;
+import java.text.ParseException;
 import java.util.List;
+import java.util.Locale;
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.InstanceOfAssertFactories.DOUBLE;
 import static org.openqa.selenium.support.ui.ExpectedConditions.*;
 import static support.TestContext.getDriver;
 
@@ -132,7 +137,7 @@ public class UspsStepDef {
 
     @And("I click {string} button")
     public void iClickButton(String button) {
-        getDriver().findElement(By.xpath("//*[text()='"+button+" ']")).click();
+        getDriver().findElement(By.xpath("//*[text()='"+button+"']")).click();
     }
 
     @Then("I validate that Sign In is required")
@@ -185,10 +190,81 @@ public class UspsStepDef {
     public void iChooseViewAsOnTheMap(String viewAs) {
         getDriver().findElement(By.cssSelector(".table-view-icon")).click();
 
+
     }
+
+    ////div[@id='searchProcessing']/div[@class='white-spinner-container']
+    ////td[last()-1]
 
     @When("I select all in the table")
     public void iSelectAllInTheTable() {
         getDriver().findElement(By.xpath("//input[@id='select-all-checkboxes']/..")).click();
+
+    }
+
+    public void spinnerOnOff(){
+        WebElement spinner = getDriver().findElement(By.id("searchProcessing"));
+        WebDriverWait wait = new WebDriverWait(getDriver(),8);
+        wait.until(ExpectedConditions.visibilityOf(spinner));
+        wait.until(ExpectedConditions.invisibilityOf(spinner));
+    }
+
+    @And("I close modal window")
+    public void iCloseModalWindow() throws InterruptedException {
+        WebDriverWait wait = new WebDriverWait(getDriver(),2);
+        WebElement closeButton = getDriver().findElement(By.xpath("//a[@id='closeAndUpdateTotals']"));
+        wait.until(ExpectedConditions.visibilityOf(closeButton));
+        closeButton.click();
+    }
+
+    @Then("I verify that summary of all rows of Cost column is equal Approximate Cost in Order Summary")
+    public void iVerifyThatSummaryOfAllRowsOfCostColumnIsEqualApproximateCostInOrderSummary() throws InterruptedException, ParseException {
+        Locale locale = new Locale("en", "US");
+        NumberFormat formatter = NumberFormat.getCurrencyInstance(locale);
+        WebDriverWait wait = new WebDriverWait(getDriver(), 5);
+        String totalRoutesText = getDriver().findElement(By.id("totalRoutesSelected")).getText();
+        int totalRoutes = Integer.parseInt(totalRoutesText);
+        List<WebElement> costElements = getDriver().findElements(By.xpath("//table[contains(@class, 'target-audience-table')]//td[9]"));
+        assertThat(costElements.size()).isEqualTo(totalRoutes);
+
+        double totalCostSum = 0;
+        for (WebElement costElement : costElements) {
+            wait.until(driver -> !costElement.getText().isEmpty());
+            double costElementDouble = formatter.parse(costElement.getText()).doubleValue();
+            totalCostSum = totalCostSum + costElementDouble;
+        }
+        System.out.println("Total calculated: " + totalCostSum);
+        String approximateCostString = getDriver().findElement(By.id("approximateCost")).getText();
+        double approximateCost = formatter.parse(approximateCostString).doubleValue();
+        System.out.println("Approximate cost: " + approximateCost);
+        assertThat(approximateCost).isCloseTo(totalCostSum, Percentage.withPercentage(0.5));
+    }
+
+    @When("I go to {string} tab")
+    public void iGoToTab(String page) throws InterruptedException {
+        Actions action = new Actions(getDriver());
+        WebElement search = getDriver().findElement(By.xpath("(//a[@id='navsearch']/../a)[2]"));
+        action.moveToElement(search).perform();
+
+    }
+
+    @And("I perform {string} help search")
+    public void iPerformHelpSearch(String searchText) throws InterruptedException {
+        Actions action = new Actions(getDriver());
+        getDriver().findElement(By.xpath("//input[@id='global-header--search-track-search']")).sendKeys(searchText);
+        action.sendKeys(Keys.ENTER).perform();
+
+    }
+
+    @Then("I verify that no results of {string} available in help search")
+    public void iVerifyThatNoResultsOfAvailableInHelpSearch(String searchText) {
+
+        String actualSearchText = getDriver().findElement(By.xpath("//div[@class='col-12  form-group not-found-error']/p")).getText();
+        String expectedSearch = "Sorry, we could not find any results for your search term " + "\""+ searchText +"\"";
+
+        assertThat(expectedSearch).isEqualTo(actualSearchText);
+
+
+
     }
 }

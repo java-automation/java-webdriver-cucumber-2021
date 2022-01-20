@@ -141,6 +141,7 @@ public class JavaStepDef {
             case "google" -> getDriver().get("https://google.com");
             case "quote" -> getDriver().get("https://skryabin.com/market/quote.html");
             case "usps" -> getDriver().get("https://www.usps.com/");
+            case "calculator" -> getDriver().get("https://www.calculator.net/");
             default -> System.out.println("Unsupported page: " + page);
         }
     }
@@ -383,7 +384,7 @@ public class JavaStepDef {
         int[] arr = {1, 2, 3, 4, 5, 6, 7, 76, 77, 75, 90};
         for (int i = 0; i < arr.length; i++) {
             if (arr[i] % 2 == 0) {
-                System.out.print(arr[i]+ " ");
+                System.out.print(arr[i] + " ");
             }
         }
     }
@@ -610,8 +611,8 @@ public class JavaStepDef {
         boolean isSorted = false;
         while (!isSorted) {
             isSorted = true;
-            for (int i = 0; i < arr.length-1; i++) {
-                if (arr[i] < arr[i +1 ]) {
+            for (int i = 0; i < arr.length - 1; i++) {
+                if (arr[i] < arr[i + 1]) {
                     int temp = arr[i];
                     arr[i] = arr[i + 1];
                     arr[i + 1] = temp;
@@ -671,51 +672,51 @@ public class JavaStepDef {
     @And("prints multiplication table of numbers practice")
     public void printsMultiplicationTableOfNumbersPractice() {
         int n = 12;
-        for (int y = 1; y<= n; y++){
-            for (int x = 1; x<= n;x++ ){
-                System.out.print(x * y +"\t");
+        for (int y = 1; y <= n; y++) {
+            for (int x = 1; x <= n; x++) {
+                System.out.print(x * y + "\t");
             }
-                System.out.println();
+            System.out.println();
         }
     }
 
     @And("combines two array by alternating taking elements practice")
     public void combinesTwoArrayByAlternatingTakingElementsPractice() {
-    int[] arr1 = {0,5,8};
-    int[] arr2 = {1,2,3};
+        int[] arr1 = {0, 5, 8};
+        int[] arr2 = {1, 2, 3};
 
-    int len = arr1.length + arr2.length;
-    int[] res = new int[len];
+        int len = arr1.length + arr2.length;
+        int[] res = new int[len];
 
-    int i= 0;
-    int j = 0;
+        int i = 0;
+        int j = 0;
 
-    for (int k= 0; k<len; k= k+2){
-        res[k] = arr1[i++];
-        res[k+1] = arr2[j++];
+        for (int k = 0; k < len; k = k + 2) {
+            res[k] = arr1[i++];
+            res[k + 1] = arr2[j++];
 
-    }
-       System.out.println(Arrays.toString(res));
+        }
+        System.out.println(Arrays.toString(res));
     }
 
     @And("combines two array by alternating taking elements practice Diff length arr")
     public void combinesTwoArrayByAlternatingTakingElementsPracticeDiffLengthArr() {
-        int [] arr1 = {0,5,8,2,1,4,5};
-        int [] arr2 = {1,2,3,4,1};
+        int[] arr1 = {0, 5, 8, 2, 1, 4, 5};
+        int[] arr2 = {1, 2, 3, 4, 1};
 
         int len1 = arr1.length;
         int len2 = arr2.length;
-        int[] result = new int[len1+len2];
+        int[] result = new int[len1 + len2];
         int i = 0;
         int j = 0;
         int k = 0;
 
-        while((i<len1) && (j<len2)) {
-            result[k++]= arr1[i++];
-            result[k++]= arr2[j++];
+        while ((i < len1) && (j < len2)) {
+            result[k++] = arr1[i++];
+            result[k++] = arr2[j++];
         }
-        while (i<len1) result[k++] = arr1[i++];
-        while (j<len2) result[k++] = arr2[j++];
+        while (i < len1) result[k++] = arr1[i++];
+        while (j < len2) result[k++] = arr2[j++];
         System.out.println(Arrays.toString(result));
     }
 
@@ -739,10 +740,9 @@ public class JavaStepDef {
     }
 
 
-
     @And("work with sets")
     public void workWithSets() {
-        List<String>  sList = new ArrayList<>();
+        List<String> sList = new ArrayList<>();
         sList.add("a");
         sList.add("b");
         sList.add("b");
@@ -768,7 +768,7 @@ public class JavaStepDef {
 
     @Given("a function that swaps two array elements")
     public void aFunctionThatSwapsTwoArrayElements() {
-        int[] arr = {5,2,9,7,3};
+        int[] arr = {5, 2, 9, 7, 3};
         System.out.println("Array before the swap " + Arrays.toString(arr));
         for (int k = 0; k < arr.length; k++) {
             toSwap(arr, 2, 4);
@@ -778,7 +778,8 @@ public class JavaStepDef {
 //        arr[4] = temp;
         System.out.println("Array After the swap " + Arrays.toString(arr));
     }
-     public void toSwap(int[] arr, int i, int j){
+
+    public void toSwap(int[] arr, int i, int j) {
         int temp = arr[i];
         arr[i] = arr[j];
         arr[j] = temp;
@@ -786,36 +787,52 @@ public class JavaStepDef {
 //         i = j;
 //         j = temp;
     }
+
     @And("is the number divisible by {int} and {int}")
     public void isTheNumberDivisibleByAnd(int arg0, int arg1) {
         int num = 444;
-        if (num%3 == 0 && num%4 ==0){
-            System.out.println("Number "+ num + " is divisible by 3 and 4 ");
-        } else if (num%3 == 0){
-            System.out.println("Number "+ num + " is divisible by 3");
-        }else if (num%4 == 0) {
-            System.out.println("Number "+ num + " is divisible by 4");
+        if (num % 3 == 0 && num % 4 == 0) {
+            System.out.println("Number " + num + " is divisible by 3 and 4 ");
+        } else if (num % 3 == 0) {
+            System.out.println("Number " + num + " is divisible by 3");
+        } else if (num % 4 == 0) {
+            System.out.println("Number " + num + " is divisible by 4");
         } else {
-            System.out.println("Number "+ num + " is not divisible by 3 or 4 ");
+            System.out.println("Number " + num + " is not divisible by 3 or 4 ");
         }
 
     }
 
     @And("a function to find the largest element in an array")
     public void aFunctionToFindTheLargestElementInAnArray() {
-        int[] arr = {11,2,3,1,5,10,4,6};
+        int[] arr = {11, 2, 3, 1, 5, 10, 4, 6};
 
-        for (int i = 1; i < arr.length; i++){
-            if (arr[i] < arr[i-1]){
-               int temp = arr[i];
-               arr[i] = arr[i-1];
-               arr[i-1] = temp;
+        for (int i = 1; i < arr.length; i++) {
+            if (arr[i] < arr[i - 1]) {
+                int temp = arr[i];
+                arr[i] = arr[i - 1];
+                arr[i - 1] = temp;
             }
         }
-        int largest = arr[arr.length-1];
+        int largest = arr[arr.length - 1];
         System.out.println(largest);
 
+        /*****
+         OR BETTER
+         int[] arr = {11,2,3,1,5,10,4,6};
+         int findMaxNum(int[] arr){
+         int max = arr[0];
+         for (int i = 1; i < arr.length; i++ ){
+         if (max < arr[i]){
+         max = arr[i];
+         }
+         }
+         return max;
+         }
+         *****/
+
     }
+
 
     @And("a function that reverses words in a sentence")
     public void aFunctionThatReversesWordsInASentence() {
@@ -828,10 +845,9 @@ public class JavaStepDef {
     }
 
 
-
-    void printReversed(String str){
+    void printReversed(String str) {
         System.out.println("Print Reversed " + str);
-        for (int i = str.length() - 1; i >= 0 ; i--){
+        for (int i = str.length() - 1; i >= 0; i--) {
             System.out.print(str.charAt(i));
         }
     }
@@ -842,41 +858,40 @@ public class JavaStepDef {
         for (int i = str.length() - 1; i >= 0; i--) {
             reversed = reversed + str.charAt(i);
         }
-                return reversed;
+        return reversed;
     }
-
 
 
     @And("FizzBuzz challenge")
     public void fizzbuzzChallenge() {
-    fizzBuzzTwo(20);
+        fizzBuzzTwo(20);
     }
 
 
-    void fizzBuzzTwo(int num){
-    for (int i = 1; i <= num; i++){
-        if (i % 15 == 0){
-            System.out.print("FizzBuzz ");
-        }else if (i % 3 ==0){
-            System.out.print("Fizz ");
-        }else if (i % 5 ==0){
-            System.out.print("Buzz ");
-        } else {
-            System.out.print( i + " ");
+    void fizzBuzzTwo(int num) {
+        for (int i = 1; i <= num; i++) {
+            if (i % 15 == 0) {
+                System.out.print("FizzBuzz ");
+            } else if (i % 3 == 0) {
+                System.out.print("Fizz ");
+            } else if (i % 5 == 0) {
+                System.out.print("Buzz ");
+            } else {
+                System.out.print(i + " ");
+            }
         }
-    }
     }
 
     @And("combines two array by alternating taking elements Lists")
     public void combinesTwoArrayByAlternatingTakingElementsLists() {
-        List<Integer> list1 = List.of(1,3,5,2,2,4,4,5);
-        List<Integer> list2 = List.of(2,4,6,7,8);
+        List<Integer> list1 = List.of(1, 3, 5, 2, 2, 4, 4, 5);
+        List<Integer> list2 = List.of(2, 4, 6, 7, 8);
         List<Integer> result = new ArrayList<>();
 
         ListIterator<Integer> itr1 = list1.listIterator();
         ListIterator<Integer> itr2 = list2.listIterator();
 
-        while (itr1.hasNext() && itr2.hasNext()){
+        while (itr1.hasNext() && itr2.hasNext()) {
             result.add(itr1.next());
             result.add(itr2.next());
         }
@@ -887,8 +902,8 @@ public class JavaStepDef {
 
     }
 
-    void revString (String str){
-        for (int i = str.length() - 1; i>= 0; i--){
+    void revString(String str) {
+        for (int i = str.length() - 1; i >= 0; i--) {
             System.out.print(str.charAt(i));
         }
     }
@@ -924,10 +939,10 @@ public class JavaStepDef {
         printAnimalNames(animals);
     }
 
-    void printAnimalNames(List<Animal> animals){
+    void printAnimalNames(List<Animal> animals) {
         System.out.println();
         System.out.println("All animals name>>>");
-        for (Animal animal: animals ){
+        for (Animal animal : animals) {
             System.out.println(animal.getName());
             animal.sleep();
             animal.speak();
@@ -944,7 +959,67 @@ public class JavaStepDef {
     }
 
 
+    @Given("Convert integer to Roman")
+    public void convertIntegerToRoman() {
+        //13-> 'XIII'
+        //1994 ->MCMXCIV
 
+        String res = intToRoman(13);
+        System.out.println("res " + res);
+    }
 
+    private String intToRoman(int num) {
+        int[] values = {1000, 900, 500, 400, 100, 90, 50, 40, 10, 9, 5, 4, 1};
+        String[] roman = {"M", "CM", "D", "CD", "C", "XC", "L", "XL", "X", "IX", "V", "IV", "I"};
+
+        String res = "";
+
+        for (int i = 0; i < values.length; ) {
+            if (num >= values[i]) {
+                // num = 2000, cur value = 1000
+                res = res + roman[i];
+                num -= values[i];
+            } else {
+                i++;
+            }
+        }
+        return res;
+    }
+
+    @And("Convert Roman to Integer")
+    public void convertRomanToInteger() {
+        //'XIII'-> 13
+        // MCMXCIV -> 1994
+        int res = romanToInt("IV");
+
+    }
+
+    private int romanToInt(String str) {
+        char prev = str.charAt(0); //  'I'
+        int res = 0;
+        switch (prev) {
+            case 'I':
+                res += 1;
+                break;
+            case 'V':
+                res += 5;
+                break;
+        }
+
+        for (int i = 1; i < str.charAt(i); i++) {
+            char curr = str.charAt(i);
+        }
+        return 0;
+    }
+
+    private int getValue(char prev) {
+        switch (prev) {
+            case 'I':
+                return 1;
+            case 'V':
+                return 5;
+        }
+         return 0;
+    }
 }
 
