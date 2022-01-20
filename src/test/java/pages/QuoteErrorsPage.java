@@ -1,12 +1,12 @@
 package pages;
 
 import definitions.HelperStepDefs;
-import org.junit.Assert;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
 
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static support.TestContext.getDriver;
 
@@ -55,45 +55,27 @@ public class QuoteErrorsPage extends HelperStepDefs {
     public void iDonTSeeErrorMessage(String requiredFieldName) {
         switch (requiredFieldName) {
             case "username": {
-                if (isPresent(By.xpath(USERNAME_ERROR_XPATH))) {
-                    assertFalse(getDriver().findElement(By.xpath(USERNAME_ERROR_XPATH)).isDisplayed());
-                } else
-                    assertFalse(isPresent(By.xpath(USERNAME_ERROR_XPATH)));
+                assertFalse(isVisible(By.xpath(USERNAME_ERROR_XPATH)));
                 break;
             }
             case "email": {
-                if (isPresent(By.xpath(EMAIL_ERROR_XPATH))) {
-                    assertFalse(getDriver().findElement(By.xpath(EMAIL_ERROR_XPATH)).isDisplayed());
-                } else
-                    assertFalse(isPresent(By.xpath(EMAIL_ERROR_XPATH)));
+                assertFalse(isVisible(By.xpath(EMAIL_ERROR_XPATH)));
                 break;
             }
             case "password": {
-                if (isPresent(By.xpath(PASSWORD_ERROR_XPATH))) {
-                    assertFalse(getDriver().findElement(By.xpath(PASSWORD_ERROR_XPATH)).isDisplayed());
-                } else
-                    assertFalse(isPresent(By.xpath(PASSWORD_ERROR_XPATH)));
+                assertFalse(isVisible(By.xpath(PASSWORD_ERROR_XPATH)));
                 break;
             }
             case "confirmPassword": {
-                if (isPresent(By.xpath(CONFIRM_PASSWORD_ERROR_XPATH))) {
-                    assertFalse(getDriver().findElement(By.xpath(CONFIRM_PASSWORD_ERROR_XPATH)).isDisplayed());
-                } else
-                    assertFalse(isPresent(By.xpath(CONFIRM_PASSWORD_ERROR_XPATH)));
+                assertFalse(isVisible(By.xpath(CONFIRM_PASSWORD_ERROR_XPATH)));
                 break;
             }
             case "name": {
-                if (isPresent(By.xpath(NAME_ERROR_XPATH))) {
-                    assertFalse(getDriver().findElement(By.xpath(NAME_ERROR_XPATH)).isDisplayed());
-                } else
-                    assertFalse(isPresent(By.xpath(NAME_ERROR_XPATH)));
+                assertFalse(isVisible(By.xpath(NAME_ERROR_XPATH)));
                 break;
             }
             case "agreedToPrivacyPolicy": {
-                if (isPresent(By.xpath(PRIVACY_POLICY_ERROR_XPATH))) {
-                    assertFalse(getDriver().findElement(By.xpath(PRIVACY_POLICY_ERROR_XPATH)).isDisplayed());
-                } else
-                    assertFalse(isPresent(By.xpath(PRIVACY_POLICY_ERROR_XPATH)));
+                assertFalse(isVisible(By.xpath(PRIVACY_POLICY_ERROR_XPATH)));
                 break;
             }
             default: {
@@ -105,27 +87,27 @@ public class QuoteErrorsPage extends HelperStepDefs {
     public void iSeeErrorMessage(String requiredFieldName, String message) {
         switch (requiredFieldName) {
             case "agreedToPrivacyPolicy": {
-                Assert.assertEquals(privacyPolicy.getText(), message);
+                assertEquals(privacyPolicy.getText(), message);
                 break;
             }
             case "username": {
-                Assert.assertEquals(username.getText(), message);
+                assertEquals(username.getText(), message);
                 break;
             }
             case "email": {
-                Assert.assertEquals(email.getText(), message);
+                assertEquals(email.getText(), message);
                 break;
             }
             case "password": {
-                Assert.assertEquals(passwordEmpty.getText(), message);
+                assertEquals(passwordEmpty.getText(), message);
                 break;
             }
             case "name": {
-                Assert.assertEquals(name.getText(), message);
+                assertEquals(name.getText(), message);
                 break;
             }
             case "confirmPassword": {
-                Assert.assertEquals(confirmPassword.getText(), message);
+                assertEquals(confirmPassword.getText(), message);
                 break;
             }
             default: {

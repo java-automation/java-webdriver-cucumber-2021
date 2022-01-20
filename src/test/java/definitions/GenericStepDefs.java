@@ -13,6 +13,7 @@ import static support.TestContext.getDriver;
 public class GenericStepDefs {
     @Given("I go to {string} page")
     public void iGoToPage(String page) {
+        getDriver().manage().window().maximize();
         switch (page) {
             case "quote":
                 getDriver().get("https://skryabin.com/market/quote.html");
@@ -31,6 +32,9 @@ public class GenericStepDefs {
                 break;
             case "calculator":
                 getDriver().get("http://www.calculator.net/");
+                break;
+            case "ups":
+                getDriver().get("https://www.ups.com/us/en/Home.page?");
                 break;
             default:
                 throw new Error("Unsupported page: " + page);

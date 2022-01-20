@@ -66,4 +66,10 @@ public class HelperStepDefs {
     public boolean isPresent(By locator) {
         return getDriver().findElements(locator).size() > 0;
     }
+
+    public boolean isVisible(By locator) {
+        if (getDriver().findElements(locator).size() > 0) {
+            return getDriver().findElement(locator).isDisplayed();
+        } else return false;
+    }
 }
