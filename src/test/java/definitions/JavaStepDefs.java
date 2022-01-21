@@ -996,9 +996,14 @@ public class JavaStepDefs {
     }
 
     private boolean isPrimeNumber(int num) {
-        for (int i = 2; i * i <= num; ++i) {
+        if ((num != 2) && (num % 2 == 0)) {
+            System.out.println("Found divisor: 2");
+            return false;
+        }
+
+        for (int i = 3; i * i <= num; i+=2) {
             if (num % i == 0) {
-                System.out.println("Found divisor: " + i + " ");
+                System.out.println("Found divisor: " + i);
                 return false;
             }
         }
@@ -1222,7 +1227,7 @@ public class JavaStepDefs {
         if (num == 0) return "nulla";
 
         final String[] romanNumerals = {"I", "IV", "V", "IX", "X", "XL", "L", "XC", "C", "CD", "D", "CM", "M"};
-        final int[]    values       = { 1,   4,    5,   9,    10,  40,   50,  90,  100,  400, 500,  900, 1000};
+        final int[]    values        = { 1,   4,    5,   9,    10,  40,   50,  90,  100,  400, 500,  900, 1000};
         int i = 12;
         String result = "";
 
@@ -1271,13 +1276,14 @@ public class JavaStepDefs {
     }
 
     private int convertRomanToDecimal(String romanNum) {
-        int result = getRomanSymbolValue(romanNum.charAt(0));
-        int leftValue, rightValue;
+        int rightValue;
+        int leftValue = getRomanSymbolValue(romanNum.charAt(0));
+        int result = leftValue;
         for (int i = 1; i < romanNum.length(); i++) {
-            leftValue = getRomanSymbolValue(romanNum.charAt(i - 1));
             rightValue = getRomanSymbolValue(romanNum.charAt(i));
             if (rightValue > leftValue) result -= 2 * leftValue;
             result += rightValue;
+            leftValue = rightValue;
         }
         return result;
     }
