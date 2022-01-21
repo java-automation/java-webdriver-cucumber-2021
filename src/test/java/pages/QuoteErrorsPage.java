@@ -1,7 +1,6 @@
 package pages;
 
 import definitions.HelperStepDefs;
-import org.assertj.core.api.Assertions;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
@@ -56,7 +55,6 @@ public class QuoteErrorsPage extends HelperStepDefs {
     public void iDonTSeeErrorMessage(String requiredFieldName) {
         switch (requiredFieldName) {
             case "username": {
-                Assertions.assertThat(getDriver().findElements(By.xpath("//label[@id='username-error']"))).hasSize(0);
                 assertFalse(isVisible(By.xpath(USERNAME_ERROR_XPATH)));
                 break;
             }
