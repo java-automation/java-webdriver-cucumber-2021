@@ -1,5 +1,14 @@
-username: rroe
+username: Rroe
 email: rroe@exaple.com
 password: password
 firstName: Richard
 lastName: Roe
+street: 1100 Congress Ave
+city: Austin
+zipcode: 78701
+state: TX
+address: 1100 Congress Ave, Austin, TX, 78701
+organization: Texas Capitol
+phone: (512) 463-4630
+country: United States
+

@@ -4,3 +4,11 @@ password: welcome
 firstName: John
 middleName: Jonny
 lastName: Doe
+street: 611 Walker St
+city: Houston
+zipcode: 77002
+state: TX
+address: Bob Lanier Public Works Building, 611 Walker St, Houston, TX 77002
+organization: Houston City Administration
+phone: (713) 837-9534
+country: United States
