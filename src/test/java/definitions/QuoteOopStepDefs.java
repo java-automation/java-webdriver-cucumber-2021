@@ -140,7 +140,11 @@ public class QuoteOopStepDefs {
                 Assertions.assertThat(getDriver().findElements(By.xpath("//label[@id='agreedToPrivacyPolicy-error']")).equals(errorText));
                 break;
             }
+            case "confirmPassword": {
 
+                Assertions.assertThat(getDriver().findElements(By.xpath("//label[@id='confirmPassword-error']")).equals(errorText));
+                break;
+            }
 
             default: {
                 throw new Error(" Not Found ");
@@ -171,6 +175,10 @@ public class QuoteOopStepDefs {
 
       //  getDriver().findElement(By.xpath("//input[@name='username']")).sendKeys(value);
 
+//        if (!field.isBlank()) {
+//            getDriver().findElement(By.name(field)).clear();
+//        }
+
         getDriver().findElement(By.name(field)).sendKeys(value);
 
 
@@ -178,4 +186,57 @@ public class QuoteOopStepDefs {
    }
 
 
+    @Given("I open {string} page")
+    public void iOpenPage(String url) {
+
+        getDriver().get(url);
+    }
+
+    //Home_work_01_19_22/6
+
+    @When("I fill out name field with first name {string} and last name {string}")
+    public void iFillOutNameFieldWithFirstNameAndLastName(String firstName, String lastName) throws InterruptedException {
+
+        getDriver().findElement(By.xpath("//input[@id='name']")).click();
+
+
+       getDriver().findElement(By.xpath("//input[@id='firstName']")).sendKeys(firstName);
+
+       getDriver().findElement(By.xpath("//input[@id='lastName']")).sendKeys(lastName);
+
+        Thread.sleep(2000);
+
+        getDriver().findElement(By.xpath("//button[@class='ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only']")).click();
+
+    }
+
+
+    @Then("I verify {string} field value {string}")
+    public void iVerifyFieldValue(String nameOfTheField, String actualName) throws InterruptedException {
+
+        getDriver().findElements(By.name(nameOfTheField)).equals(actualName);
+
+        getDriver().findElement(By.xpath("//input[@id='name']")).click();
+
+        Thread.sleep(3000);
+
+
+    }
+
+    @When("I fill out name field with first name {string}, middle name {string}, last name {string}")
+    public void iFillOutNameFieldWithFirstNameMiddleNameLastName(String firstName, String middleName, String lastName) throws InterruptedException {
+
+        getDriver().findElement(By.xpath("//input[@id='firstName']")).sendKeys(firstName);
+
+        getDriver().findElement(By.xpath("//input[@id='middleName']")).sendKeys(middleName);
+
+        getDriver().findElement(By.xpath("//input[@id='lastName']")).sendKeys(lastName);
+
+
+        Thread.sleep(3000);
+
+        getDriver().findElement(By.xpath("//button[@class='ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only']")).click();
+
+
+    }
 }
