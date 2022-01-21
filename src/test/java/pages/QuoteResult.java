@@ -3,73 +3,84 @@ package pages;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 
-public class QuoteResults extends QuoteForm {
+public class QuoteResult extends QuotePage {
 
-    private final String resultsFrame = "//*[@id='quotePageResult']";
+    public QuoteResult() {
+        setURL("https://skryabin.com/market/quote.html");
+        setTitle("Get a Quote");
+    }
 
+    private final String resultContainerXPath = "//*[@id='quotePageResult']";
+
+
+    @FindBy(xpath = resultContainerXPath)
+    private WebElement resultContainer;
 
     // +++ REQUIRED +++
-    @FindBy(xpath = resultsFrame + "//*[@name='username']")
+    @FindBy(xpath = resultContainerXPath + "//*[@name='username']")
     private WebElement username;
 
-    @FindBy(xpath = resultsFrame + "//*[@name='email']")
+    @FindBy(xpath = resultContainerXPath + "//*[@name='email']")
     private WebElement email;
 
-    @FindBy(xpath = resultsFrame + "//*[@name='password']")
+    @FindBy(xpath = resultContainerXPath + "//*[@name='password']")
     private WebElement password;
 
-    @FindBy(xpath = resultsFrame + "//*[@name='name']")
+    @FindBy(xpath = resultContainerXPath + "//*[@name='name']")
     private WebElement name;
 
-    @FindBy(xpath = resultsFrame + "//*[@name='firstName']")
+    @FindBy(xpath = resultContainerXPath + "//*[@name='firstName']")
     private WebElement firstName;
 
-    @FindBy(xpath = resultsFrame + "//*[@name='middleName']")
+    @FindBy(xpath = resultContainerXPath + "//*[@name='middleName']")
     private WebElement middleName;
 
-    @FindBy(xpath = resultsFrame + "//*[@name='lastName']")
+    @FindBy(xpath = resultContainerXPath + "//*[@name='lastName']")
     private WebElement lastName;
 
-    @FindBy(xpath = resultsFrame + "//*[@name='agreedToPrivacyPolicy']")
+    @FindBy(xpath = resultContainerXPath + "//*[@name='agreedToPrivacyPolicy']")
     private WebElement privacyPolicy;
 
-    @FindBy(xpath = resultsFrame + "//button[@id='return']")
+    @FindBy(xpath = resultContainerXPath + "//button[@id='return']")
     private WebElement returnButton;
 
     // +++ OPTIONAL +++
-    @FindBy(xpath = resultsFrame + "//*[@name='phone']")
+    @FindBy(xpath = resultContainerXPath + "//*[@name='phone']")
     private WebElement phone;
 
-    @FindBy(xpath = resultsFrame + "//*[@name='dateOfBirth']")
+    @FindBy(xpath = resultContainerXPath + "//*[@name='dateOfBirth']")
     private WebElement dateOfBirth;
 
-    @FindBy(xpath = resultsFrame + "//*[@name='countryOfOrigin']")
+    @FindBy(xpath = resultContainerXPath + "//*[@name='countryOfOrigin']")
     private WebElement country;
 
-    @FindBy(xpath = resultsFrame + "//*[@name='gender']")
+    @FindBy(xpath = resultContainerXPath + "//*[@name='gender']")
     private WebElement gender;
 
-    @FindBy(xpath = resultsFrame + "//*[@name='allowedToContact']")
+    @FindBy(xpath = resultContainerXPath + "//*[@name='allowedToContact']")
     private WebElement allowedToContact;
 
-    @FindBy(xpath = resultsFrame + "//*[@name='address']")
+    @FindBy(xpath = resultContainerXPath + "//*[@name='address']")
     private WebElement address;
 
-    @FindBy(xpath = resultsFrame + "//*[@name='carMake']")
+    @FindBy(xpath = resultContainerXPath + "//*[@name='carMake']")
     private WebElement carMake;
 
-    @FindBy(xpath = resultsFrame + "//*[@name='contactPersonName']")
+    @FindBy(xpath = resultContainerXPath + "//*[@name='contactPersonName']")
     private WebElement contactName;
 
-    @FindBy(xpath = resultsFrame + "//*[@name='contactPersonPhone']")
+    @FindBy(xpath = resultContainerXPath + "//*[@name='contactPersonPhone']")
     private WebElement contactPhone;
 
-    @FindBy(xpath = resultsFrame + "//*[@name='thirdPartyAgreement']")
+    @FindBy(xpath = resultContainerXPath + "//*[@name='thirdPartyAgreement']")
     private WebElement thirdPartyAgreement;
 
-    @FindBy(xpath = resultsFrame + "//*[@name='attachmentName']")
+    @FindBy(xpath = resultContainerXPath + "//*[@name='attachmentName']")
     private WebElement attachment;
 
+    public String getResultContainerText() {
+        return resultContainer.getText();
+    }
 
     public String getUsername() {
         return username.getText();
@@ -83,7 +94,6 @@ public class QuoteResults extends QuoteForm {
         return password.getText();
     }
 
-    @Override
     public String getName() {
         return name.getText();
     }
@@ -100,8 +110,8 @@ public class QuoteResults extends QuoteForm {
         return lastName.getText();
     }
 
-    public String getPrivacyPolicy() {
-        return privacyPolicy.getText();
+    public boolean isAcceptedPrivacyPolicy() {
+        return Boolean.parseBoolean(privacyPolicy.getText());
     }
 
     public void returnToQuoteForm() {
@@ -124,8 +134,8 @@ public class QuoteResults extends QuoteForm {
         return gender.getText();
     }
 
-    public String getAllowedToContact() {
-        return allowedToContact.getText();
+    public boolean isAllowedToContact() {
+        return Boolean.parseBoolean(allowedToContact.getText());
     }
 
     public String getAddress() {

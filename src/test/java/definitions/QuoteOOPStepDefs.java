@@ -5,7 +5,7 @@ import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 import pages.QuoteForm;
-import pages.QuoteResults;
+import pages.QuoteResult;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
@@ -17,7 +17,7 @@ import static support.TestContext.getData;
 public class QuoteOOPStepDefs {
 
     private final QuoteForm form = new QuoteForm();
-    private final QuoteResults results = new QuoteResults();
+    private final QuoteResult results = new QuoteResult();
 
     private Map<String, String> user;
     private boolean isCompleteForm;
@@ -35,11 +35,17 @@ public class QuoteOOPStepDefs {
         form.fillEmail(user.get("email"));
         form.fillPasswords(user.get("password"));
 
+        //middle name is optional and can be empty/null
         String firstName = user.get("firstName");
-        String middleName = user.get("middleName");
         String lastName = user.get("lastName");
-        form.fillName(firstName, middleName, lastName);
-        assertThat(form.getName()).isEqualTo(firstName + " " + middleName + " " + lastName);
+        String middleName = user.get("middleName");
+        if (middleName == null || middleName.isEmpty()) {
+            form.fillName(firstName, lastName);
+            assertThat(form.getName()).isEqualTo(firstName + " " + lastName);
+        } else {
+            form.fillName(firstName, middleName, lastName);
+            assertThat(form.getName()).isEqualTo(firstName + " " + middleName + " " + lastName);
+        }
 
         form.acceptPrivacyPolicy();
 
@@ -81,26 +87,32 @@ public class QuoteOOPStepDefs {
     public void iVerifyThatSubmittedFieldsGotSavedCorrectlyOOP() {
         assertThat(results.getUsername()).isEqualTo(user.get("username"));
         assertThat(results.getEmail()).isEqualTo(user.get("email"));
+
+        assertThat(results.getResultContainerText()).doesNotContain(user.get("password"));
         assertThat(results.getPassword()).isEqualTo("[entered]");
 
+        //middle name is optional and can be empty/null
         String firstName = user.get("firstName");
-        String middleName = user.get("middleName");
         String lastName = user.get("lastName");
-        //middle name is optional, but first & last are required
-        String fullName = middleName.isEmpty() ? firstName + " " + lastName : firstName + " " + middleName + " " + lastName;
-        assertThat(results.getName()).isEqualTo(fullName);
         assertThat(results.getFirstName()).isEqualTo(firstName);
-        assertThat(results.getMiddleName()).isEqualTo(middleName);
         assertThat(results.getLastName()).isEqualTo(lastName);
 
-        assertThat(results.getPrivacyPolicy()).isEqualTo("true");
+        String middleName = user.get("middleName");
+        if (middleName == null || middleName.isEmpty()) {
+            assertThat(form.getName()).isEqualTo(firstName + " " + lastName);
+        } else {
+            assertThat(form.getName()).isEqualTo(firstName + " " + middleName + " " + lastName);
+            assertThat(results.getMiddleName()).isEqualTo(middleName);
+        }
+
+        assertThat(results.isAcceptedPrivacyPolicy()).isTrue();
 
         if (isCompleteForm) {
             assertThat(results.getPhone()).isEqualTo(user.get("phone"));
             assertThat(results.getDateOfBirth()).isEqualTo(user.get("dateOfBirth"));
             assertThat(results.getCountry()).isEqualTo(user.get("countryOfOrigin"));
             assertThat(results.getGender()).isEqualTo(user.get("gender"));
-            assertThat(results.getAllowedToContact()).isEqualTo(user.get("allowedToContact"));
+            assertThat(results.isAllowedToContact()).isEqualTo(Boolean.parseBoolean(user.get("allowedToContact")));
             assertThat(results.getAddress()).isEqualTo(user.get("address"));
             assertThat(results.getCarMake()).isEqualTo(user.get("carMake"));
             assertThat(results.getContactName()).isEqualTo(user.get("contactName"));
