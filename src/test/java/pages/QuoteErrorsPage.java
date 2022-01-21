@@ -1,7 +1,6 @@
 package pages;
 
 import definitions.HelperStepDefs;
-import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindAll;
 import org.openqa.selenium.support.FindBy;
@@ -62,34 +61,76 @@ public class QuoteErrorsPage extends HelperStepDefs {
         return listUserNameError;
     }
 
+    @FindAll({@FindBy(xpath = EMAIL_ERROR_XPATH)})
+    private List<WebElement> listEmailError;
+
+    public List<WebElement> getListEmailError() {
+        return listEmailError;
+    }
+
+    @FindAll({@FindBy(xpath = PASSWORD_ERROR_XPATH)})
+    private List<WebElement> listPasswordError;
+
+    public List<WebElement> getListPasswordError() {
+        return listPasswordError;
+    }
+
+    @FindAll({@FindBy(xpath = CONFIRM_PASSWORD_ERROR_XPATH)})
+    private List<WebElement> listConfirmPasswordError;
+
+    public List<WebElement> getListConfirmPasswordError() {
+        return listConfirmPasswordError;
+    }
+
+
+    @FindAll({@FindBy(xpath = NAME_ERROR_XPATH)})
+    private List<WebElement> listNameError;
+
+    public List<WebElement> getListNameError() {
+        return listNameError;
+    }
+
+    @FindAll({@FindBy(xpath = PRIVACY_POLICY_ERROR_XPATH)})
+    private List<WebElement> listPrivacyPolicyError;
+
+    public List<WebElement> getPrivacyPolicyError() {
+        return listPrivacyPolicyError;
+    }
+
     public boolean isPresent(List<WebElement> list) {
         return list.size() > 0;
+    }
+
+    public boolean isElementVisible(List<WebElement> list) {
+        if (isPresent(list)) {
+            return list.get(0).isDisplayed();
+        } else return false;
     }
 
     public void iDonTSeeErrorMessage(String requiredFieldName) {
         switch (requiredFieldName) {
             case "username": {
-                assertFalse(isVisible(By.xpath(USERNAME_ERROR_XPATH)));
+                assertFalse(isElementVisible(listUserNameError));
                 break;
             }
             case "email": {
-                assertFalse(isVisible(By.xpath(EMAIL_ERROR_XPATH)));
+                assertFalse(isElementVisible(listEmailError));
                 break;
             }
             case "password": {
-                assertFalse(isVisible(By.xpath(PASSWORD_ERROR_XPATH)));
+                assertFalse(isElementVisible(listPasswordError));
                 break;
             }
             case "confirmPassword": {
-                assertFalse(isVisible(By.xpath(CONFIRM_PASSWORD_ERROR_XPATH)));
+                assertFalse(isElementVisible(listConfirmPasswordError));
                 break;
             }
             case "name": {
-                assertFalse(isVisible(By.xpath(NAME_ERROR_XPATH)));
+                assertFalse(isElementVisible(listNameError));
                 break;
             }
             case "agreedToPrivacyPolicy": {
-                assertFalse(isVisible(By.xpath(PRIVACY_POLICY_ERROR_XPATH)));
+                assertFalse(isElementVisible(listPrivacyPolicyError));
                 break;
             }
             default: {
