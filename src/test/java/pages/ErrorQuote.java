@@ -6,13 +6,37 @@ import org.openqa.selenium.support.PageFactory;
 
 import static support.TestContext.getDriver;
 
-public class QuoteForm {
+public class ErrorQuote {
 
-    //constructor
-    public QuoteForm(){
+    public ErrorQuote(){
+
         PageFactory.initElements(getDriver(),this);
     }
 
+
+    //Fields for error
+
+
+    @FindBy(xpath = "//label[@id='username-error']")
+    private WebElement usernameError;
+
+
+    @FindBy(xpath = "//label[@id='email-error']")
+    private WebElement emailError;
+
+    @FindBy(xpath = "//label[@id='password-error']")
+    private WebElement passwordError;
+
+    @FindBy(xpath = "//label[@id='confirmPassword-error']")
+    private WebElement confirmPasswordError;
+
+    @FindBy(xpath = "//label[@id='name-error']")
+    private WebElement nameError;
+
+    @FindBy(xpath = "//label[@id='agreedToPrivacyPolicy-error']")
+    private WebElement privacyPolicyError;
+
+//fields for fields
 
 
     //fields
@@ -51,52 +75,33 @@ public class QuoteForm {
     @FindBy(id = "formSubmit")
     private WebElement submitButton;
 
-    //methods
-    public void open() {
-        getDriver().get(url);
+
+//methods
+
+    public void seeUsernameError(String value) {
+        usernameError.sendKeys(value);
     }
 
-    public void fillUsername(String value) {
-        username.sendKeys(value);
+    public void seeEmailError(String value) {
+
+        emailError.sendKeys(value);
     }
 
-    public void fillEmail(String value) {
-
-        email.sendKeys(value);
-    }
-
-    public void fillPasswordFields(String value) {
-        password.sendKeys(value);
-        confirmPassword.sendKeys(value);
-
-    }
-
-    public void fillName(String firstNameValue, String lastNameValue) {
-        name.click();
-        firstName.sendKeys(firstNameValue);
-        lastName.sendKeys(lastNameValue);
-        save.click();
+    public void seePasswordFieldError(String value) {
+        passwordError.sendKeys(value);
+        confirmPasswordError.sendKeys(value);
 
     }
 
-    public void acceptPrivacyPolicy(){
+    public void seeNameError(String value) {
+        nameError.sendKeys(value);
 
-        if(!privacyPolicy.isSelected()){
-            privacyPolicy.click();
+    }
+
+    public void seeAcceptPrivacyPolicyError(){
+            privacyPolicyError.sendKeys(privacyPolicyError.getCssValue("- Must check!"));
         }
-    }
 
-    public void declinePrivacyPolicy(){
-        if(privacyPolicy.isSelected()){
-            privacyPolicy.click();
+
+
         }
-    }
-
-    public void submit(){
-
-        submitButton.click();
-    }
-
-
-}
-
