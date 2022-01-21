@@ -70,4 +70,8 @@ public class QuoteOopStepDefs {
     public void iSeeErrorMessage(String fieldName, String message) {
         assertThat(form.getErrorMessage(fieldName)).isEqualTo(message);
     }
+
+    @When("I fill out {string} field with {string}")
+    public void iFillOutFieldWith(String field, String text) {
+    }
 }

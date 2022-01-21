@@ -27,7 +27,6 @@
 
     @quote4
     Scenario: Market username test
-      Given I open "quote" page
       When I fill out "username" field with "a"
       And I submit the page
       Then I see "username" error message "Please enter at least 2 characters."
