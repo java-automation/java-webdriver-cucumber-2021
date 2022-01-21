@@ -60,6 +60,7 @@ public class GenericStepDefs {
             case "usps" -> getDriver().get("https://usps.com");
             case "converter" -> getDriver().get("https://www.unitconverters.net/");
             case "calculator" -> getDriver().get("http://www.calculator.net/");
+            case "ups" -> getDriver().get("https://www.ups.com/us/en/Home.page");
             default -> System.out.println("Unsupported page: " + page);
         }
     }
