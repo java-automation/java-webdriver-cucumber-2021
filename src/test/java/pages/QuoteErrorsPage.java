@@ -3,8 +3,11 @@ package pages;
 import definitions.HelperStepDefs;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.support.FindAll;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
+
+import java.util.List;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
@@ -51,6 +54,17 @@ public class QuoteErrorsPage extends HelperStepDefs {
     private WebElement name;
     @FindBy(xpath = PRIVACY_POLICY_ERROR_XPATH)
     private WebElement privacyPolicy;
+
+    @FindAll({@FindBy(xpath = USERNAME_ERROR_XPATH)})
+    private List<WebElement> listUserNameError;
+
+    public List<WebElement> getListUserNameError() {
+        return listUserNameError;
+    }
+
+    public boolean isPresent(List<WebElement> list) {
+        return list.size() > 0;
+    }
 
     public void iDonTSeeErrorMessage(String requiredFieldName) {
         switch (requiredFieldName) {
