@@ -1,6 +1,7 @@
 package definitions;
 
 import io.cucumber.java.en.And;
+import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 import io.cucumber.java.en_old.Ac;
@@ -206,7 +207,10 @@ public class UspsStepDefs {
 
     @And("I close modal window")
     public void iCloseModalWindow() {
-
+        WebElement closeModal = getDriver().findElement(By.
+                xpath("//div[@id='drop-off-location-modal']//a[@class='close']"));
+        new WebDriverWait(getDriver(),5).until(elementToBeClickable(closeModal));
+        closeModal.click();
     }
 
     @Then("I verify that summary of all rows of Cost column is equal Approximate Cost in Order Summary")
@@ -251,4 +255,53 @@ public class UspsStepDefs {
         String totalPrice = getDriver().findElement(By.xpath("//div[@id='total']")).getText();
         assertThat(price).isEqualTo(totalPrice);
     }
+
+    @When("I go to {string} tab")
+    public void iGoToTab(String menuItem) {
+        getDriver().findElement(By.xpath("//a[@class='menuitem'][contains(text(),'" +menuItem +"')]")).click();
+    }
+
+    @And("I perform {string} help search")
+    public void iPerformHelpSearch(String serchText) {
+        getDriver().findElement(By.xpath("//input[contains(@class,'search-field')]")).
+                sendKeys(serchText + Keys.ENTER); // search text with hit Enter
+    }
+
+    @Then("I verify that no results of {string} available in help search")
+    public void iVerifyThatNoResultsOfAvailableInHelpSearch(String textExpectedResult) {
+        WebDriverWait wait = new WebDriverWait(getDriver(),10);
+
+        By  element =By.xpath("//ul[@class='slds-has-dividers--bottom']");
+        wait.until(visibilityOfElementLocated(element));
+
+        WebElement resultList =getDriver().findElement(By.xpath("//ul[@class='slds-has-dividers--bottom']"));
+        String actualResult = resultList.getText();
+        assertThat(actualResult).doesNotContain(textExpectedResult);
+    }
+
+    @When("I navigate to {string} heading link")
+    public void iNavigateToHeadingLink(String headingMenu) {
+        getDriver().findElement(By.
+                xpath("//a[@id='link-locator'][text()='" +headingMenu +"']")).click();
+    }
+
+    @And("I search for location {string}")
+    public void iSearchForLocation(String locationAddress) {
+        getDriver().findElement(By.id("city-state-input")).sendKeys(locationAddress);
+        getDriver().findElement(By.xpath("//a[@id='searchLocations']")).click();
+
+    }
+
+    @Then("I verify closest location phone number is {string}")
+    public void iVerifyClosestLocationPhoneNumberIs(String phone)  {
+
+        By searchResults = By.xpath("//div[@id='searchResultMap']//div[@class='esri-view-surface']");
+        WebDriverWait wait = new WebDriverWait(getDriver(),5);
+        wait.until(presenceOfElementLocated(searchResults));
+        getDriver().findElement(By.
+                xpath("//div[@id='resultBox']/div[1]")).click();
+
+        assertThat(getDriver().findElement(By.xpath("//p[@id='detailTollFree']")).getText()).contains(phone);
+    }
+
 }
