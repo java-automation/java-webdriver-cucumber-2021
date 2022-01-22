@@ -4,11 +4,9 @@ import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
-import org.openqa.selenium.Keys;
 import pages.UpsHome;
 import pages.UpsShip;
 
-import java.util.Arrays;
 import java.util.Map;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -34,12 +32,11 @@ public class UpsStepDefs {
     }
 
     @When("I fill out origin shipment fields with {string} profile")
-    public void iFillOutOriginShipmentFields(String profileReference) throws InterruptedException {
+    public void iFillOutOriginShipmentFields(String profileReference) {
         origin = getData(profileReference.toLowerCase().replace(" ", ""));
 
         String country = origin.get("country");
         shipPage.selectOriginCountry(country);
-        //Thread.sleep(1000);
         shipPage.fillOriginName(origin.get("name"));
 
         //some countries have only one address line, some require three - need to wait for refresh of appropriate one
@@ -60,11 +57,11 @@ public class UpsStepDefs {
         shipPage.fillOriginPhone(origin.get("phone"));
     }
 
-    private void verifyAddressArtifacts(String address, String city, String postalCode, String processedOriginAddress) {
+    private void verifyAddressArtifacts(String address, String city, String postalCode, String actualAddress) {
         for (String token : address.split(" ")) {
-            assertThat(processedOriginAddress).contains(token);
+            assertThat(actualAddress).contains(token);
         }
-        assertThat(processedOriginAddress).contains(city, postalCode);
+        assertThat(actualAddress).contains(city, postalCode);
     }
 
     private boolean isSingleLineAddressCountry(String country) {

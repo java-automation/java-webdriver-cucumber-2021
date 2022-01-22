@@ -8,7 +8,7 @@ Feature: UPS end to end scenarios
   #valid profiles: "Mary Johansson"/"Richard Blank"
   Scenario: E2E UPS Scenario
     When I go to Create a Shipment
-    *    I fill out origin shipment fields with "Richard Blank" profile
+    *    I fill out origin shipment fields with "Mary Johansson" profile
     And I wait for 5 sec
     *    I submit the shipment form
     Then I verify origin shipment fields submitted

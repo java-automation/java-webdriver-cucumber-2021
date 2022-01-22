@@ -1,10 +1,11 @@
 package pages;
 
-import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.Select;
+
+import java.util.List;
 
 public class UpsShip extends UpsPage {
 
@@ -23,10 +24,10 @@ public class UpsShip extends UpsPage {
     private WebElement originName;
 
     @FindBy(id = "origin-cac_singleLineAddress")
-    private WebElement originAddress;
+    private List<WebElement> originAddress;
 
     @FindBy(id = "origin-cac_addressLine1")
-    private WebElement originAddress1;
+    private List<WebElement> originAddress1;
 
     @FindBy(id = "origin-cac_postalCode")
     private WebElement originPostalCode;
@@ -70,16 +71,21 @@ public class UpsShip extends UpsPage {
     }
 
     public void fillOriginAddress(String address) {
-        originAddress.sendKeys(address);
+        sendKeysToCorrectOriginAddressField(originAddress1, originAddress, address);
         getWait().until(ExpectedConditions.visibilityOf(firstDropDownOptionOriginAddress)).click();
+    }
+
+    public void fillOriginAddress1(String address) {
+        sendKeysToCorrectOriginAddressField(originAddress, originAddress1, address);
+    }
+
+    private void sendKeysToCorrectOriginAddressField(List<WebElement> toBeInvisible, List<WebElement> toBeVisible, String address) {
+        getWait().until(driver -> toBeInvisible.stream().findFirst().isEmpty());
+        toBeVisible.stream().findFirst().ifPresent(element -> element.sendKeys(address));
     }
 
     public String getProcessedOriginAddress() {
         return getWait().until(ExpectedConditions.visibilityOf(processedOriginAddress)).getText();
-    }
-
-    public void fillOriginAddress1(String address) {
-        originAddress1.sendKeys(address);
     }
 
     public void fillOriginPostalCode(String code) {
