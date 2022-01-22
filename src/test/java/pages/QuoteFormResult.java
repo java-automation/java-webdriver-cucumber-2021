@@ -15,6 +15,13 @@ public class QuoteFormResult {
 
 
     //fields
+
+    @FindBy (id = "quotePageResul")
+    private WebElement resultContainer;
+
+    @FindBy (xpath = "//b[@name='password']")
+    private WebElement password;
+
     @FindBy(xpath = "//b[@name='firstName']") // lazy instantiation
     private WebElement firstName;
 
@@ -65,6 +72,19 @@ public class QuoteFormResult {
 
     public String getPhoneNumber() {
         return phoneNumber.getText();
+    }
+
+    public String getResultContainer() {
+        return resultContainer.getText();
+    }
+
+    public String getPassword() {
+        return password.getText();
+    }
+
+    public boolean isAgreedToPrivacyPolicy() {
+        return Boolean.parseBoolean( privacyPolicyResult.getText());
+
     }
 }
 

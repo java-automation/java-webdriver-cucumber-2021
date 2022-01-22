@@ -4,6 +4,7 @@ password: welcome
 confirmedpass: [entered]
 firstName: John
 lastName: Doe
+middleName: Adam
 name: John Doe
 contact name: Sharon
 policy: "true"

@@ -50,6 +50,9 @@ public class QuoteForm {
     @FindBy (xpath = "//input[@id='firstName']") // lazy instantiation
     private WebElement firstName;
 
+    @FindBy (xpath = "//input[@id='middleName']")
+    private WebElement middleName;
+
     @FindBy (xpath = "//input[@id='lastName']") // lazy instantiation
     private WebElement lastName;
 
@@ -84,6 +87,10 @@ public class QuoteForm {
         username.sendKeys(value);
     }
 
+    public void refreshPage() {
+        getDriver().navigate().refresh();
+    }
+
     public void fillEmail (String value) {
         email.sendKeys(value);
     }
@@ -93,9 +100,10 @@ public class QuoteForm {
         confirmPassword.sendKeys(value);
     }
 
-    public void fillName (String firstNameValue, String lastNameValue) {
+    public void fillName (String firstNameValue, String middleNameValue,String lastNameValue) {
         name.click();
         firstName.sendKeys(firstNameValue);
+        middleName.sendKeys(middleNameValue);
         lastName.sendKeys(lastNameValue);
         save.click();
 

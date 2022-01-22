@@ -30,7 +30,7 @@ public class QuoteOopStepDefs {
         form.fillUsername(user.get("username"));
         form.fillEmail(user.get("email"));
         form.fillPasswords(user.get("password"));
-        form.fillName(user.get("firstName"), user.get("lastName"));
+        form.fillName(user.get("firstName"), user.get("middleName"),user.get("lastName"));
         form.selectGender();
         form.fillPhoneNumber(user.get("phone"));
         form.contactPersonName(user.get("contact name"));
@@ -46,14 +46,25 @@ public class QuoteOopStepDefs {
     @Then("I verify {string} required fields oop")
     public void iVerifyTheRequiredFieldsOop(String userType) {
         Map <String, String> user = getData(userType);
+        String actualResult = formResults.getResultContainer();
+        String passwordText = formResults.getPassword();
+        boolean agreedToPrivacyPolicy = formResults.isAgreedToPrivacyPolicy();
+        assertThat(actualResult).contains(user.get("username"),
+                user.get("email"),
+                user.get("firstName"),
+                user.get("lastName"));
 
-        assertThat(formResults.getFirstNameResult()).isEqualTo(user.get("firstName"));
-        assertThat(formResults.getLastNameResult()).isEqualTo(user.get("lastName"));
-        assertThat(formResults.getEmailResult()).isEqualTo(user.get("email"));
-        assertThat(formResults.getFullName()).isEqualTo(user.get("name"));
-        assertThat(formResults.getGenderType()).isEqualTo(user.get("gender"));
-        assertThat(formResults.getPolicyResult()).isEqualTo(user.get("policy"));
-        assertThat(formResults.getPhoneNumber()).isEqualTo(user.get("phone"));
+        assertThat(passwordText).doesNotContain(user.get("password"));
+        assertThat(agreedToPrivacyPolicy).isTrue();
+
+
+//        assertThat(formResults.getFirstNameResult()).isEqualTo(user.get("firstName"));
+//        assertThat(formResults.getLastNameResult()).isEqualTo(user.get("lastName"));
+//        assertThat(formResults.getEmailResult()).isEqualTo(user.get("email"));
+//        assertThat(formResults.getFullName()).isEqualTo(user.get("name"));
+//        assertThat(formResults.getGenderType()).isEqualTo(user.get("gender"));
+//        assertThat(formResults.getPolicyResult()).isEqualTo(user.get("policy"));
+//        assertThat(formResults.getPhoneNumber()).isEqualTo(user.get("phone"));
 
 //        assertThat(formResults.getPrivacyPolicyResult()).isEqualTo(user.get("privacy policy"));
 
