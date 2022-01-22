@@ -13,7 +13,14 @@ public class UpsHome extends UpsPage {
     @FindBy(css = ".nav.jobs-list .widget-link-ship")
     private WebElement shipMenuButton;
 
+    @FindBy(css = ".implicit_privacy_prompt button")
+    private WebElement privacyPromptCloseButton;
+
     public void createShipment() {
         shipMenuButton.click();
+    }
+
+    public void closePrivacyPrompt() {
+        privacyPromptCloseButton.click();
     }
 }

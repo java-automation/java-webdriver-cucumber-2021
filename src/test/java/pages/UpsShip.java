@@ -1,11 +1,10 @@
 package pages;
 
+import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.Select;
-
-import static support.TestContext.getExecutor;
 
 public class UpsShip extends UpsPage {
 
@@ -41,6 +40,12 @@ public class UpsShip extends UpsPage {
     @FindBy(id = "origin-cac_phone")
     private WebElement originPhone;
 
+    @FindBy(css = ".dropdown-menu > .dropdown-item")
+    private WebElement firstDropDownOptionOriginAddress;
+
+    @FindBy(xpath = "//button[@id='origin-singleLineAddressEditButton']/preceding-sibling::p")
+    private WebElement processedOriginAddress;
+
     @FindBy(id = "nbsBackForwardNavigationContinueButton")
     private WebElement continueButton;
 
@@ -66,10 +71,15 @@ public class UpsShip extends UpsPage {
 
     public void fillOriginAddress(String address) {
         originAddress.sendKeys(address);
+        getWait().until(ExpectedConditions.visibilityOf(firstDropDownOptionOriginAddress)).click();
+    }
+
+    public String getProcessedOriginAddress() {
+        return getWait().until(ExpectedConditions.visibilityOf(processedOriginAddress)).getText();
     }
 
     public void fillOriginAddress1(String address) {
-        getWait().until(ExpectedConditions.elementToBeClickable(originAddress1)).sendKeys(address);
+        originAddress1.sendKeys(address);
     }
 
     public void fillOriginPostalCode(String code) {
