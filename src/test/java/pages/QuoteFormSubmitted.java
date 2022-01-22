@@ -9,11 +9,12 @@ import java.util.List;
 
 import static support.TestContext.getDriver;
 
-public class QuoteFormSubmitted {
+public class QuoteFormSubmitted extends Page {
 
     // constructor
     public QuoteFormSubmitted() {
-        PageFactory.initElements(getDriver(), this);
+        url  = "https://skryabin.com/market/result.html";
+        title = "Submitted Result";
     }
 
     @FindBy(name = "name")

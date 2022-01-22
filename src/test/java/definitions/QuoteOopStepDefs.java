@@ -4,7 +4,6 @@ import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
-import org.openqa.selenium.NoSuchElementException;
 import pages.QuoteForm;
 import pages.QuoteFormSubmitted;
 
@@ -15,27 +14,27 @@ import static support.TestContext.getData;
 
 public class QuoteOopStepDefs {
 
-    QuoteForm form = new QuoteForm();
+    QuoteForm formPage = new QuoteForm();
     QuoteFormSubmitted formSubmitted = new QuoteFormSubmitted();
 
     @Given("I go to {string} page oop")
     public void iGoToPageOop(String page) {
-        form.open();
+        formPage.open();
     }
 
     @When("I fill out {string} required fields oop")
     public void iFillOutRequiredFieldsOop(String userType) {
         Map<String, String> user = getData(userType);
-        form.fillUsername(user.get("username"));
-        form.fillEmail(user.get("email"));
-        form.fillPasswordFields(user.get("password"));
-        form.fillName(user.get("firstName"), "", user.get("lastName"));
-        form.acceptPrivacyPolicy();
+        formPage.fillUsername(user.get("username"));
+        formPage.fillEmail(user.get("email"));
+        formPage.fillPasswordFields(user.get("password"));
+        formPage.fillName(user.get("firstName"), "", user.get("lastName"));
+        formPage.acceptPrivacyPolicy();
     }
 
     @And("I submit the page oop")
     public void iSubmitThePageOop() {
-        form.submit();
+        formPage.submit();
     }
 
     @Then("I verify {string} required fields oop")
@@ -50,28 +49,28 @@ public class QuoteOopStepDefs {
 
     @Then("I don't see {string} error message")
     public void iDonTSeeErrorMessage(String sField) {
-        assertThat(form.isErrorMessageVisible(sField, "")).isFalse();
+        assertThat(formPage.isErrorMessageVisible(sField, "")).isFalse();
     }
 
     @Then("I see {string} error message {string}")
     public void iSeeErrorMessage(String sField, String sMessage) {
-        assertThat(form.isErrorMessageVisible(sField, sMessage)).isTrue();
+        assertThat(formPage.isErrorMessageVisible(sField, sMessage)).isTrue();
     }
 
     @When("I fill out {string} field with {string}")
     public void iFillOutFieldWith(String sField, String sValue) {
         switch (sField) {
             case "username":
-                form.fillUsername(sValue);
+                formPage.fillUsername(sValue);
                 break;
             case "email":
-                form.fillEmail(sValue);
+                formPage.fillEmail(sValue);
                 break;
             case "password":
-                form.fillPasswordField(sValue);
+                formPage.fillPasswordField(sValue);
                 break;
             case "confirmPassword":
-                form.fillConfirmPasswordField(sValue);
+                formPage.fillConfirmPasswordField(sValue);
                 break;
             default:
                 break;
@@ -80,14 +79,14 @@ public class QuoteOopStepDefs {
 
     @When("I fill out name field with first name {string} and last name {string}")
     public void iFillOutNameFieldWithFirstNameAndLastName(String sFirstName, String sLastName) {
-        form.fillName(sFirstName, "", sLastName);
+        formPage.fillName(sFirstName, "", sLastName);
     }
 
     @Then("I verify {string} field value {string}")
     public void iVerifyFieldValue(String sField, String sValue) {
         switch (sField) {
             case "name":
-                assertThat(form.getNameFieldContents().equals(sValue)).isTrue();
+                assertThat(formPage.getNameFieldContents().equals(sValue)).isTrue();
                 break;
             default:
                 break;
@@ -96,6 +95,6 @@ public class QuoteOopStepDefs {
 
     @When("I fill out name field with first name {string}, middle name {string}, last name {string}")
     public void iFillOutNameFieldWithFirstNameMiddleNameLastName(String sFirstName, String sMiddleName, String sLastName) {
-        form.fillName(sFirstName, sMiddleName, sLastName);
+        formPage.fillName(sFirstName, sMiddleName, sLastName);
     }
 }

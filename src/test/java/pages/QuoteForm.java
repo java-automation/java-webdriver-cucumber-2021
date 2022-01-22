@@ -7,15 +7,13 @@ import org.openqa.selenium.support.PageFactory;
 
 import static support.TestContext.getDriver;
 
-public class QuoteForm {
+public class QuoteForm extends Page {
 
     // constructor
     public QuoteForm() {
-        PageFactory.initElements(getDriver(), this);
+        url  = "https://skryabin.com/market/quote.html";
+        title = "Get a Quote";
     }
-
-    // fields
-    private String url  = "https://skryabin.com/market/quote.html";
 
     @FindBy(xpath = "//input[@name='username']")
     private WebElement username;
