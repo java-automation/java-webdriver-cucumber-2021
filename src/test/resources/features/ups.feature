@@ -5,17 +5,21 @@ Feature: UPS end to end scenarios
     Given I go to UPS page
 
   @ups
-  #valid profiles: "Mary Johansson"/"Richard Blank"
+  #valid US profiles: Richard Blank/Julie Harris
+  #valid non-US profiles: Mary Johansson
+  #residential address: confirm/deny
   Scenario: E2E UPS Scenario
     When I go to Create a Shipment
-    *    I fill out origin shipment fields with "Richard Blank" profile
-    *    I wait for 2 sec
+    *    I fill out origin shipment fields with "Julie Harris" profile
+    *    I wait for 1 sec
     *    I submit the shipment form
     Then I verify origin shipment fields submitted
-    *    I wait for 2 sec
-    When I fill out destination shipment fields with "Mary Johansson" profile
-    *    I "confirm" residential address
-    *    I wait for 2 sec
+    When I fill out destination shipment fields with "Richard Blank" profile
+    *    I "confirm" residential address for non-US country
+    *    I submit the shipment form
+    *    I "confirm" residential address for US
+    *    I wait for 1 sec
+
 #    And I set packaging type and weight
 #    When I submit the shipment form
 #    Then I verify total charges appear

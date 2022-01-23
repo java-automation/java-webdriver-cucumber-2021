@@ -5,6 +5,7 @@ import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.Select;
 
+import java.io.IOException;
 import java.util.List;
 
 public class UpsShip extends UpsPage {
@@ -23,7 +24,10 @@ public class UpsShip extends UpsPage {
     private WebElement originCountry;
 
     @FindBy(id = "origin-cac_companyOrName")
-    private WebElement originName;
+    private WebElement originCompanyOrName;
+
+    @FindBy(id = "origin-cac_contactName")
+    private WebElement originContactName;
 
     @FindBy(id = "origin-cac_singleLineAddress")
     private List<WebElement> originAddress;
@@ -46,6 +50,9 @@ public class UpsShip extends UpsPage {
     @FindBy(xpath = "//button[@id='origin-singleLineAddressEditButton']/preceding-sibling::p")
     private WebElement processedOriginAddress;
 
+    @FindBy(css = "input#origin-cac_classification+label")
+    private WebElement originIsResidentialNonUS;
+
     @FindBy(id = "origin_agentSummaryNameLine")
     private WebElement originSummaryName;
 
@@ -67,7 +74,10 @@ public class UpsShip extends UpsPage {
     private WebElement destinationCountry;
 
     @FindBy(id = "destination-cac_companyOrName")
-    private WebElement destinationName;
+    private WebElement destinationCompanyOrName;
+
+    @FindBy(id = "destination-cac_contactName")
+    private WebElement destinationContactName;
 
     @FindBy(id = "destination-cac_singleLineAddress")
     private List<WebElement> destinationAddress;
@@ -89,7 +99,24 @@ public class UpsShip extends UpsPage {
 
     @FindBy(xpath = "//button[@id='destination-singleLineAddressEditButton']/preceding-sibling::p")
     private WebElement processedDestinationAddress;
-    
+
+    @FindBy(css = "input#destination-cac_classification+label")
+    private WebElement destinationIsResidentialNonUS;
+
+    // modal isResidential
+
+    @FindBy(css = ".modal-dialog")
+    private List<WebElement> modalWindow;
+
+    @FindBy(css = ".ups-lever_switch_bg")
+    private WebElement modalSwitch;
+
+    @FindBy(css = ".ups-lever_switch_yes")
+    private WebElement modalYes;
+
+    @FindBy(id = "nbsAddressClassificationContinue")
+    private WebElement modalContinueButton;
+
     // common
     
     @FindBy(css = ".dropdown-menu > .dropdown-item")
@@ -97,11 +124,14 @@ public class UpsShip extends UpsPage {
     
     @FindBy(id = "nbsBackForwardNavigationContinueButton")
     private WebElement continueButton;
-    
+
+    @FindBy(css = "img[src*='ajax-loader']")
+    private List<WebElement> spinner;
     
     // origin
 
-    public void waitForOriginFormToLoad() {
+    public void waitForFirstLoad() {
+        waitForSpinnerToBeAbsent();
         getWait().until(ExpectedConditions.visibilityOf(originSection));
     }
     
@@ -109,8 +139,8 @@ public class UpsShip extends UpsPage {
         new Select(originCountry).selectByVisibleText(countryName);
     }
 
-    public void fillOriginName(String name) {
-        originName.sendKeys(name);
+    public void fillOriginCompanyOrName(String name) {
+        originCompanyOrName.sendKeys(name);
     }
 
     public void fillOriginAddress(String address) {
@@ -164,8 +194,12 @@ public class UpsShip extends UpsPage {
         new Select(destinationCountry).selectByVisibleText(countryName);
     }
 
-    public void fillDestinationName(String name) {
-        destinationName.sendKeys(name);
+    public void fillDestinationCompanyOrName(String name) {
+        destinationCompanyOrName.sendKeys(name);
+    }
+
+    public void fillDestinationContactName(String contact) {
+        destinationContactName.sendKeys(contact);
     }
 
     public void fillDestinationAddress(String address) {
@@ -196,11 +230,23 @@ public class UpsShip extends UpsPage {
     public void fillDestinationPhone(String phone) {
         destinationPhone.sendKeys(phone);
     }
+
+    public void confirmDestinationIsResidentialNonUS() {
+        if (!destinationIsResidentialNonUS.isSelected()) destinationIsResidentialNonUS.click();
+    }
+
+    public void denyDestinationIsResidentialNonUS() {
+        if (destinationIsResidentialNonUS.isSelected()) destinationIsResidentialNonUS.click();
+    }
     
     // common
 
     public void submitForm() {
+//        System.out.println(originEmail.getAttribute("value"));
+//        System.out.println(originPhone.getAttribute("value"));
+        waitForAjaxToComplete();
         continueButton.click();
+        waitForSpinnerToBeAbsent();
     }
     
     // utility
@@ -209,4 +255,42 @@ public class UpsShip extends UpsPage {
         getWait().until(driver -> toBeInvisible.stream().findFirst().isEmpty());
         toBeVisible.stream().findFirst().ifPresent(element -> element.sendKeys(address));
     }
+
+    //private static int i = 0;
+    private void waitForSpinnerToBeAbsent() {
+        if (modalWindow.stream().findFirst().isEmpty())
+            getWait().until(driver -> spinner.stream().findFirst().isEmpty());
+
+//        i++;
+//        File screenshotAfterSpinner = ((TakesScreenshot)getDriver()).getScreenshotAs(OutputType.FILE);
+//        FileUtils.copyFile(screenshotAfterSpinner, new File("submitClick" + i + ".jpg"));
+    }
+
+    public void confirmDestinationIsResidentialUS() {
+        if (!modalYes.isDisplayed()) {
+            modalSwitch.click();
+            getWait().until(ExpectedConditions.visibilityOf(modalYes));
+        }
+        modalContinueButton.click();
+    }
+
+    public void denyDestinationIsResidentialUS() {
+        if (modalYes.isDisplayed()) {
+            modalSwitch.click();
+            getWait().until(ExpectedConditions.invisibilityOf(modalYes));
+        }
+        modalContinueButton.click();
+    }
+
+//    public void printSelectOptionsWithResidentialStatus() throws InterruptedException {
+//        Select select = new Select(destinationCountry);
+//        List<WebElement> list = select.getOptions();
+//        for (int j = 1; j < 266; j++) {
+//            select.selectByIndex(j);
+//            Thread.sleep(500);
+//            System.out.println(list.get(j).getText());
+//            System.out.println(destinationAddress1.stream().findFirst().isPresent());
+//
+//        }
+//    }
 }
