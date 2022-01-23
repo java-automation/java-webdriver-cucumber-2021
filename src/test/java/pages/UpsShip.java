@@ -1,12 +1,15 @@
 package pages;
 
+import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.Select;
 
-import java.io.IOException;
 import java.util.List;
+
+import static support.TestContext.getDriver;
 
 public class UpsShip extends UpsPage {
 
@@ -116,6 +119,17 @@ public class UpsShip extends UpsPage {
 
     @FindBy(id = "nbsAddressClassificationContinue")
     private WebElement modalContinueButton;
+
+    // what
+
+    @FindBy(id = "nbsPackagePackagingTypeDropdown0")
+    private WebElement packageTypeSelect;
+
+    @FindBy(id = "nbsPackagePackageWeightField0")
+    private WebElement packageWeight;
+
+    @FindBy(xpath = "//input[@id='nbsPackagePackageWeightField0']/..//*[contains(@class,'ups-icon-check')]")
+    private List<WebElement> packageWeightCheckmark;
 
     // common
     
@@ -280,6 +294,16 @@ public class UpsShip extends UpsPage {
             getWait().until(ExpectedConditions.invisibilityOf(modalYes));
         }
         modalContinueButton.click();
+    }
+
+    public void selectPackagingType(String type) {
+        new Select(packageTypeSelect).selectByVisibleText(type);
+    }
+
+    public void fillPackageWeight(int weight) {
+        new Actions(getDriver()).click(packageWeight).sendKeys(String.valueOf(weight), Keys.ENTER).perform();
+        //packageWeight.sendKeys(String.valueOf(weight));
+        getWait().until(driver -> packageWeightCheckmark.stream().findFirst().isPresent());
     }
 
 //    public void printSelectOptionsWithResidentialStatus() throws InterruptedException {

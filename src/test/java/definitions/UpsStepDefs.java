@@ -148,6 +148,13 @@ public class UpsStepDefs {
         }
     }
 
+    @And("I set packaging type as {string} and weight as {int} lbs")
+    public void iSetPackagingTypeAsAndWeightAsLbs(String packageType, int weight) {
+        shipPage.selectPackagingType(packageType);
+        shipPage.fillPackageWeight(weight);
+        //shipPage.removeReferenceNumbers();
+    }
+
 //    @And("I do test step")
 //    public void iDoTestStep() throws InterruptedException {
 //        shipPage.printSelectOptionsWithResidentialStatus();
