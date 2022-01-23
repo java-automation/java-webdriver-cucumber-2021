@@ -22,13 +22,13 @@ public class UpsStepDefs {
     @Given("I go to UPS page")
     public void iGoToUPSPage() {
         homePage.open();
+        homePage.closePrivacyPrompt();
     }
 
     @And("I go to Create a Shipment")
     public void iGoToCreateAShipment() {
-        homePage.closePrivacyPrompt();
         homePage.createShipment();
-        shipPage.waitForPageLoad();
+        shipPage.waitForOriginFormToLoad();
     }
 
     @When("I fill out origin shipment fields with {string} profile")
@@ -92,5 +92,15 @@ public class UpsStepDefs {
             case "Finland" -> "FI";
             default -> throw new Error("Unknown country name: " + country);
         };
+    }
+
+    @When("I fill out destination shipment fields with {string} profile")
+    public void iFillOutDestinationShipmentFieldsWithProfile(String arg0) {
+        //dfgs
+    }
+
+    @And("I {string} residential address")
+    public void iResidentialAddress(String arg0) {
+
     }
 }

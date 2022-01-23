@@ -14,6 +14,8 @@ public class UpsShip extends UpsPage {
         setTitle("UPS Shipping");
     }
 
+    // origin
+    
     @FindBy(css = "origin .ups-section")
     private WebElement originSection;
 
@@ -41,14 +43,8 @@ public class UpsShip extends UpsPage {
     @FindBy(id = "origin-cac_phone")
     private WebElement originPhone;
 
-    @FindBy(css = ".dropdown-menu > .dropdown-item")
-    private WebElement firstDropDownOptionOriginAddress;
-
     @FindBy(xpath = "//button[@id='origin-singleLineAddressEditButton']/preceding-sibling::p")
     private WebElement processedOriginAddress;
-
-    @FindBy(id = "nbsBackForwardNavigationContinueButton")
-    private WebElement continueButton;
 
     @FindBy(id = "origin_agentSummaryNameLine")
     private WebElement originSummaryName;
@@ -61,7 +57,54 @@ public class UpsShip extends UpsPage {
 
     @FindBy(id = "origin_agentSummaryContactLine")
     private WebElement originSummaryContact;
+    
+    // destination
 
+    @FindBy(css = "destination .ups-section")
+    private WebElement destinationSection;
+
+    @FindBy(id = "destination-cac_country")
+    private WebElement destinationCountry;
+
+    @FindBy(id = "destination-cac_companyOrName")
+    private WebElement destinationName;
+
+    @FindBy(id = "destination-cac_singleLineAddress")
+    private List<WebElement> destinationAddress;
+
+    @FindBy(id = "destination-cac_addressLine1")
+    private List<WebElement> destinationAddress1;
+
+    @FindBy(id = "destination-cac_postalCode")
+    private WebElement destinationPostalCode;
+
+    @FindBy(id = "destination-cac_city")
+    private WebElement destinationCity;
+
+    @FindBy(id = "destination-cac_email")
+    private WebElement destinationEmail;
+
+    @FindBy(id = "destination-cac_phone")
+    private WebElement destinationPhone;
+
+    @FindBy(xpath = "//button[@id='destination-singleLineAddressEditButton']/preceding-sibling::p")
+    private WebElement processedDestinationAddress;
+    
+    // common
+    
+    @FindBy(css = ".dropdown-menu > .dropdown-item")
+    private WebElement firstDropDownAddress;
+    
+    @FindBy(id = "nbsBackForwardNavigationContinueButton")
+    private WebElement continueButton;
+    
+    
+    // origin
+
+    public void waitForOriginFormToLoad() {
+        getWait().until(ExpectedConditions.visibilityOf(originSection));
+    }
+    
     public void selectOriginCountry(String countryName) {
         new Select(originCountry).selectByVisibleText(countryName);
     }
@@ -71,17 +114,12 @@ public class UpsShip extends UpsPage {
     }
 
     public void fillOriginAddress(String address) {
-        sendKeysToCorrectOriginAddressField(originAddress1, originAddress, address);
-        getWait().until(ExpectedConditions.visibilityOf(firstDropDownOptionOriginAddress)).click();
+        sendKeysToCorrectAddressField(originAddress1, originAddress, address);
+        getWait().until(ExpectedConditions.visibilityOf(firstDropDownAddress)).click();
     }
 
     public void fillOriginAddress1(String address) {
-        sendKeysToCorrectOriginAddressField(originAddress, originAddress1, address);
-    }
-
-    private void sendKeysToCorrectOriginAddressField(List<WebElement> toBeInvisible, List<WebElement> toBeVisible, String address) {
-        getWait().until(driver -> toBeInvisible.stream().findFirst().isEmpty());
-        toBeVisible.stream().findFirst().ifPresent(element -> element.sendKeys(address));
+        sendKeysToCorrectAddressField(originAddress, originAddress1, address);
     }
 
     public String getProcessedOriginAddress() {
@@ -104,10 +142,6 @@ public class UpsShip extends UpsPage {
         originPhone.sendKeys(phone);
     }
 
-    public void submitForm() {
-        continueButton.click();
-    }
-
     public String getOriginSummaryName() {
         return originSummaryName.getText();
     }
@@ -123,8 +157,56 @@ public class UpsShip extends UpsPage {
     public String getOriginSummaryContact() {
         return originSummaryContact.getText();
     }
+    
+    // destination
 
-    public void waitForPageLoad() {
-        getWait().until(ExpectedConditions.visibilityOf(originSection));
+    public void selectDestinationCountry(String countryName) {
+        new Select(destinationCountry).selectByVisibleText(countryName);
+    }
+
+    public void fillDestinationName(String name) {
+        destinationName.sendKeys(name);
+    }
+
+    public void fillDestinationAddress(String address) {
+        sendKeysToCorrectAddressField(destinationAddress1, destinationAddress, address);
+        getWait().until(ExpectedConditions.visibilityOf(firstDropDownAddress)).click();
+    }
+
+    public void fillDestinationAddress1(String address) {
+        sendKeysToCorrectAddressField(destinationAddress, destinationAddress1, address);
+    }
+
+    public String getProcessedDestinationAddress() {
+        return getWait().until(ExpectedConditions.visibilityOf(processedDestinationAddress)).getText();
+    }
+
+    public void fillDestinationPostalCode(String code) {
+        destinationPostalCode.sendKeys(code);
+    }
+
+    public void fillDestinationCity(String city) {
+        destinationCity.sendKeys(city);
+    }
+
+    public void fillDestinationEmail(String email) {
+        destinationEmail.sendKeys(email);
+    }
+
+    public void fillDestinationPhone(String phone) {
+        destinationPhone.sendKeys(phone);
+    }
+    
+    // common
+
+    public void submitForm() {
+        continueButton.click();
+    }
+    
+    // utility
+
+    private void sendKeysToCorrectAddressField(List<WebElement> toBeInvisible, List<WebElement> toBeVisible, String address) {
+        getWait().until(driver -> toBeInvisible.stream().findFirst().isEmpty());
+        toBeVisible.stream().findFirst().ifPresent(element -> element.sendKeys(address));
     }
 }

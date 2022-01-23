@@ -4,7 +4,6 @@ import org.openqa.selenium.support.PageFactory;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 import static support.TestContext.getDriver;
-import static support.TestContext.getExecutor;
 
 public class UpsPage {
 
@@ -44,10 +43,5 @@ public class UpsPage {
 
     public WebDriverWait getWait() {
         return wait;
-    }
-
-    public void waitForAjax()
-    {
-        wait.until(driver -> getExecutor().executeScript("return (window.jQuery != null) && (jQuery.active == 0)"));
     }
 }
