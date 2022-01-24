@@ -94,7 +94,7 @@ public class QuoteForm {
         save.click();
     }
 
-    public void fillFullName(String firstNameValue, String lastNameValue, String middleNameValue) {
+    public void fillName(String firstNameValue, String middleNameValue, String lastNameValue) {
         name.click();
         firstName.sendKeys(firstNameValue);
         lastName.sendKeys(lastNameValue);

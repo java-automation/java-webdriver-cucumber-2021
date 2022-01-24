@@ -89,6 +89,7 @@ public class QuoteOopStepDefs {
 
     @When("I fill out name field with first name {string}, middle name {string}, last name {string}")
     public void iFillOutNameFieldWithFirstNameMiddleNameLastName(String firstName, String middleName, String lastName) {
-        form.fillFullName(firstName, lastName, middleName);
+        form.fillName(firstName, middleName, lastName);
     }
+
 }
