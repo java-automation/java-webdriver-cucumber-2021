@@ -1,9 +1,13 @@
 {
   username: "eckimsey",
-  email: "casianolga@gmail.com",
+  email: "ekimsey@gmail.com",
   password: "testpass123",
   firstname: "Eric",
   lastname: "Kimsey",
   count: 5,
-  number: "6"
+  number: "6",
+  fullName: "Eric Kimsey",
+  companyName: "Southern roots",
+  address: "205 W Main St, Magnolia, AR 71753",
+  phone: "+18702347632"
 }
