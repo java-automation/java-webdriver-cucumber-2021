@@ -4,14 +4,15 @@ import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
-import org.assertj.core.api.Assertions;
 import org.openqa.selenium.By;
 import pages.ErrorQuote;
 import pages.QuoteForm;
-import pages.QuoteSubmittedPage;
+import pages.QuoteResult;
+
 
 import java.util.Map;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static support.TestContext.getData;
 import static support.TestContext.getDriver;
 
@@ -19,9 +20,9 @@ public class QuoteOopStepDefs {
 
     QuoteForm form = new QuoteForm();
 
-    QuoteSubmittedPage page = new QuoteSubmittedPage();
-
     ErrorQuote error = new ErrorQuote();
+
+    QuoteResult resultPage = new QuoteResult();
 
 
     @Given("I go to {string} page oop")
@@ -40,8 +41,8 @@ public class QuoteOopStepDefs {
         form.fillName(user.get("firstName"), user.get("lastName"));
         form.acceptPrivacyPolicy();
 
-
     }
+
 
     @And("I submit the page oop")
     public void iSubmitThePageOop() {
@@ -50,18 +51,23 @@ public class QuoteOopStepDefs {
     }
 
     @Then("I verify {string} required fields oop")
-    public void iVerifyRequiredFieldsOop(String application) {
-        System.out.println(application);
+    public void iVerifyRequiredFieldsOop(String userType) {
 
-        page.verifyUsernameIsDisplayed();
-        page.verifyFirstNameIsDisplayed();
-        page.verifyLastNameIsDisplayed();
-        page.verifyEmailIsDisplayed();
-        page.verifyPrivacyPolicyIsDisplayed();
-        page.verifyNameIsDisplayed();
-
-
+        Map<String,String> user = getData(userType);
+        String actualResult = resultPage.getResultContainerText();
+        String passwordText = resultPage.getPasswordText();
+        boolean agreedToPrivacyPolicy = resultPage.isAgreedToPrivacyPolicy();
+        assertThat(actualResult).contains(
+                user.get("username"),
+                user.get("email"),
+                user.get("firstName"),
+                user.get("middleName"),
+                user.get("lastName")
+        );
+        assertThat(passwordText).doesNotContain(user.get("password"));
+        assertThat(agreedToPrivacyPolicy).isTrue();
     }
+
 
     //Home_work_01_19_22/1
 
@@ -72,30 +78,30 @@ public class QuoteOopStepDefs {
 
             case "username": {
                 // getDriver().findElements(By.xpath("//label[@id='username-error']")).size();
-                Assertions.assertThat(getDriver().findElements(By.xpath("//label[@id='username-error']")).size()).isEqualTo(0);
+                assertThat(getDriver().findElements(By.xpath("//label[@id='username-error']")).size()).isEqualTo(0);
                 break;
             }
 
             case "email": {
 
-                Assertions.assertThat(getDriver().findElements(By.xpath("/label[@id='email-error']")).size()).isEqualTo(0);
+                assertThat(getDriver().findElements(By.xpath("/label[@id='email-error']")).size()).isEqualTo(0);
                 break;
             }
 
             case "password": {
 
-                Assertions.assertThat(getDriver().findElements(By.xpath("//label[@id='password-error']")).size()).isEqualTo(0);
+                assertThat(getDriver().findElements(By.xpath("//label[@id='password-error']")).size()).isEqualTo(0);
                 break;
             }
             case "name": {
 
-                Assertions.assertThat(getDriver().findElements(By.xpath("//label[@id='name-error']")).size()).isEqualTo(0);
+                assertThat(getDriver().findElements(By.xpath("//label[@id='name-error']")).size()).isEqualTo(0);
                 break;
             }
 
             case "agreedToPrivacyPolicy": {
 
-                Assertions.assertThat(getDriver().findElements(By.xpath("//label[@id='agreedToPrivacyPolicy-error']")).size()).isEqualTo(0);
+                assertThat(getDriver().findElements(By.xpath("//label[@id='agreedToPrivacyPolicy-error']")).size()).isEqualTo(0);
                 break;
             }
 
@@ -114,35 +120,35 @@ public class QuoteOopStepDefs {
 
             case "username": {
 
-                Assertions.assertThat(getDriver().findElements(By.xpath("//label[@id='username-error']")).equals(errorText));
+                assertThat(getDriver().findElements(By.xpath("//label[@id='username-error']")).equals(errorText));
                 break;
             }
 
             case "email": {
 
-                Assertions.assertThat(getDriver().findElements(By.xpath("//label[@id='email-error']")).equals(errorText));
+                assertThat(getDriver().findElements(By.xpath("//label[@id='email-error']")).equals(errorText));
                 break;
             }
 
             case "password": {
 
-                Assertions.assertThat(getDriver().findElements(By.xpath("//label[@id='password-error']")).equals(errorText));
+                assertThat(getDriver().findElements(By.xpath("//label[@id='password-error']")).equals(errorText));
                 break;
             }
             case "name": {
 
-                Assertions.assertThat(getDriver().findElements(By.xpath("//label[@id='name-error']")).equals(errorText));
+                assertThat(getDriver().findElements(By.xpath("//label[@id='name-error']")).equals(errorText));
                 break;
             }
 
             case "agreedToPrivacyPolicy": {
 
-                Assertions.assertThat(getDriver().findElements(By.xpath("//label[@id='agreedToPrivacyPolicy-error']")).equals(errorText));
+                assertThat(getDriver().findElements(By.xpath("//label[@id='agreedToPrivacyPolicy-error']")).equals(errorText));
                 break;
             }
             case "confirmPassword": {
 
-                Assertions.assertThat(getDriver().findElements(By.xpath("//label[@id='confirmPassword-error']")).equals(errorText));
+                assertThat(getDriver().findElements(By.xpath("//label[@id='confirmPassword-error']")).equals(errorText));
                 break;
             }
 
