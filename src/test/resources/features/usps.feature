@@ -1,5 +1,5 @@
 @usps
-  Feature: Usps scenarios
+  Feature: USPS scenarios
 
     @usps1
     Scenario: Validate zip code for address
