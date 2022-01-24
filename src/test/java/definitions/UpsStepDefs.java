@@ -147,10 +147,15 @@ public class UpsStepDefs {
         }
     }
 
-    @And("I set packaging type as {string} and weight as {int} lbs")
-    public void iSetPackagingTypeAsAndWeightAsLbs(String packageType, int weight) {
+    @And("I set packaging type as {string} and weight as {int} units")
+    public void iSetPackagingTypeAsAndWeightAsUnits(String packageType, int weight) {
         shipPage.selectPackagingType(packageType);
         shipPage.fillPackageWeight(weight);
+    }
+
+    @Then("I verify total charges appear")
+    public void iVerifyTotalChargesAppear() {
+        assertThat(shipPage.isTotalChargesVisible()).isTrue();
     }
 
 //    @And("I do test step")

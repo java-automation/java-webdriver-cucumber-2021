@@ -2,7 +2,8 @@ package pages;
 
 import org.openqa.selenium.html5.LocalStorage;
 import org.openqa.selenium.html5.WebStorage;
-import org.openqa.selenium.remote.Augmenter;
+import org.openqa.selenium.logging.LogEntries;
+import org.openqa.selenium.logging.LogType;
 import org.openqa.selenium.support.PageFactory;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
@@ -19,8 +20,8 @@ public class UpsPage {
 
     public UpsPage() {
         PageFactory.initElements(getDriver(), this);
-        wait = new WebDriverWait(getDriver(), 3);
-        localStorage = ((WebStorage) new Augmenter().augment(getDriver())).getLocalStorage();
+        wait = new WebDriverWait(getDriver(), 5);
+        localStorage = ((WebStorage) getDriver()).getLocalStorage();
     }
 
     public void open() {
@@ -58,5 +59,9 @@ public class UpsPage {
 
     public LocalStorage getLocalStorage() {
         return localStorage;
+    }
+
+    public LogEntries getLogs() {
+        return getDriver().manage().logs().get(LogType.PERFORMANCE);
     }
 }

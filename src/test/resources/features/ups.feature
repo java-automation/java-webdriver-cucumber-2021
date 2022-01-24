@@ -8,6 +8,7 @@ Feature: UPS end to end scenarios
   #valid US profiles: Richard Blank/Julie Harris
   #valid non-US profiles: Mary Johansson
   #residential address: confirm/deny
+  #packagin type: "UPS Express Box" from outside US, 3 sizes available in US " - Small", " - Medium", " - Large"
   Scenario: E2E UPS Scenario
     When I go to Create a Shipment
     *    I fill out origin shipment fields with "Julie Harris" profile
@@ -17,12 +18,11 @@ Feature: UPS end to end scenarios
     *    I "confirm" residential address for non-US country
     *    I submit the shipment form
     *    I "confirm" residential address for US
-    *    I set packaging type as "UPS Express Box - Small" and weight as 2 lbs
-    *    I wait for 1 sec
+    *    I set packaging type as "UPS Express Box - Medium" and weight as 2 units
     *    I submit the shipment form
-    *    I wait for 1 sec
+    Then I verify total charges appear
+    And  I wait for 1 sec
 
-#    Then I verify total charges appear
 #    And I select cheapest delivery option
 #    And I submit the shipment form
 #    And I set description and check Saturday Delivery type if available

@@ -49,9 +49,6 @@ public class UpsShip extends UpsPage {
     @FindBy(xpath = "//button[@id='origin-singleLineAddressEditButton']/preceding-sibling::p")
     private WebElement processedOriginAddress;
 
-    @FindBy(css = "input#origin-cac_classification+label")
-    private WebElement originIsResidentialNonUS;
-
     @FindBy(id = "origin_agentSummaryNameLine")
     private WebElement originSummaryName;
 
@@ -90,9 +87,6 @@ public class UpsShip extends UpsPage {
     @FindBy(id = "destination-cac_city")
     private WebElement destinationCity;
 
-    @FindBy(id = "destination-cac_email")
-    private WebElement destinationEmail;
-
     @FindBy(id = "destination-cac_phone")
     private WebElement destinationPhone;
 
@@ -124,8 +118,10 @@ public class UpsShip extends UpsPage {
     @FindBy(id = "nbsPackagePackageWeightField0")
     private WebElement packageWeight;
 
-    @FindBy(xpath = "//input[@id='nbsPackagePackageWeightField0']/..//*[contains(@class,'ups-icon-check')]")
-    private List<WebElement> packageWeightCheckmark;
+    // how
+
+    @FindBy(id = "nbsBalanceBarTotalCharges")
+    private WebElement totalCharges;
 
     // common
 
@@ -233,10 +229,6 @@ public class UpsShip extends UpsPage {
         destinationCity.sendKeys(city);
     }
 
-    public void fillDestinationEmail(String email) {
-        destinationEmail.sendKeys(email);
-    }
-
     public void fillDestinationPhone(String phone) {
         destinationPhone.sendKeys(phone);
     }
@@ -254,10 +246,10 @@ public class UpsShip extends UpsPage {
     public void submitForm() {
         waitForLocalStorageUpdate();
         continueButton.click();
-        waitForSpinnerToBeAbsent();
     }
 
     public void confirmDestinationIsResidentialUS() {
+        getWait().until(driver -> modalWindow.stream().findFirst().isPresent());
         if (!modalYes.isDisplayed()) {
             modalSwitch.click();
             getWait().until(ExpectedConditions.visibilityOf(modalYes));
@@ -266,6 +258,7 @@ public class UpsShip extends UpsPage {
     }
 
     public void denyDestinationIsResidentialUS() {
+        getWait().until(driver -> modalWindow.stream().findFirst().isPresent());
         if (modalYes.isDisplayed()) {
             modalSwitch.click();
             getWait().until(ExpectedConditions.invisibilityOf(modalYes));
@@ -275,11 +268,30 @@ public class UpsShip extends UpsPage {
 
     public void selectPackagingType(String type) {
         new Select(packageTypeSelect).selectByVisibleText(type);
+        waitForLocalStorageUpdate();
+        getWait().until(log -> getLogs()
+                .getAll()
+                .stream()
+                .filter(entry -> entry.getMessage().contains("https://www.ups.com/ship/api/LookupAndValidation/GetOptionsAvailability"))
+                .filter(entry -> entry.getMessage().contains("application/json"))
+                //.filter(entry -> entry.getMessage().contains("\"status\": 200"))
+                .toList().size() > 0);
     }
 
     public void fillPackageWeight(int weight) {
         packageWeight.sendKeys(String.valueOf(weight));
-        getWait().until(driver -> packageWeightCheckmark.stream().findFirst().isPresent());
+        waitForLocalStorageUpdate();
+        getWait().until(log -> getLogs()
+                .getAll()
+                .stream()
+                .filter(entry -> entry.getMessage().contains("https://www.ups.com/ship/api/RatingAndProcessing/RateShipmentForAllServices"))
+                .filter(entry -> entry.getMessage().contains("application/json"))
+                //.filter(entry -> entry.getMessage().contains("\"status\": 200"))
+                .toList().size() > 0);
+    }
+
+    public boolean isTotalChargesVisible() {
+        return totalCharges.isDisplayed();
     }
 
     // utility

@@ -10,6 +10,8 @@ import org.openqa.selenium.firefox.FirefoxBinary;
 import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.firefox.FirefoxOptions;
 import org.openqa.selenium.ie.InternetExplorerDriver;
+import org.openqa.selenium.logging.LogType;
+import org.openqa.selenium.logging.LoggingPreferences;
 import org.openqa.selenium.remote.DesiredCapabilities;
 import org.openqa.selenium.remote.LocalFileDetector;
 import org.openqa.selenium.remote.RemoteWebDriver;
@@ -24,6 +26,7 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.logging.Level;
 
 public class TestContext {
 
@@ -77,7 +80,15 @@ public class TestContext {
                     chromeOptions.addExtensions(chroPathFile);
                     chromeOptions.addArguments("--start-maximized");
                     chromeOptions.setExperimentalOption("prefs", chromePreferences);
-                    System.setProperty(ChromeDriverService.CHROME_DRIVER_SILENT_OUTPUT_PROPERTY, "true");
+
+                    //logging for network
+                    LoggingPreferences logPrefs = new LoggingPreferences();
+                    logPrefs.enable(LogType.PERFORMANCE, Level.ALL);
+                    chromeOptions.setCapability("goog:loggingPrefs", logPrefs);
+                    System.setProperty(ChromeDriverService.CHROME_DRIVER_LOG_PROPERTY, System.getProperty("user.dir") + "/target/performance.log");
+                    System.setProperty(ChromeDriverService.CHROME_DRIVER_VERBOSE_LOG_PROPERTY, "true");
+                    //System.setProperty(ChromeDriverService.CHROME_DRIVER_SILENT_OUTPUT_PROPERTY, "true");
+
                     if (isHeadless) {
                         chromeOptions.setHeadless(true);
                         chromeOptions.addArguments("--window-size=" + size.getWidth() + "," + size.getWidth());
