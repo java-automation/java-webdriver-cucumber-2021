@@ -37,7 +37,7 @@ public class QuoteOopStepDef {
         form.fillUsername(user.get("username"));
         form.fillEmail(user.get("email"));
         form.fillPassword(user.get("password"));
-        form.fillFirstAndLastName(user.get("firstName"), user.get("lastName"));
+        form.fillName(user.get("firstName"), user.get("lastName"));
         form.acceptPrivacyPolicy();
 
     }
@@ -102,7 +102,7 @@ public class QuoteOopStepDef {
 
     @When("I fill out name field with first name {string} and last name {string}")
     public void iFillOutNameFieldWithFirstNameAndLastName(String firstName, String lastName) {
-        form.fillFirstAndLastName(firstName,lastName);
+        form.fillName(firstName,lastName);
     }
 
 
@@ -113,7 +113,7 @@ public class QuoteOopStepDef {
 
     @When("I fill out name field with first name {string}, middle name {string}, last name {string}")
     public void iFillOutNameFieldWithFirstNameMiddleNameLastName(String firstName, String middleName, String lastName) {
-        form.fillFirstMiddleLastName(firstName,middleName,lastName);
+        form.fillName(firstName,middleName,lastName);
     }
 
     @Then("I don't see {string} error message OOP")

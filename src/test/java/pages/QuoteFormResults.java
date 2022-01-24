@@ -6,11 +6,12 @@ import org.openqa.selenium.support.PageFactory;
 
 import static support.TestContext.getDriver;
 
-public class QuoteFormResults {
+public class QuoteFormResults extends Page {
 
     //constructor
-    public QuoteFormResults(){
+    public QuoteFormResults() {
         PageFactory.initElements(getDriver(), this);
+
     }
 
     @FindBy(xpath = "//b[@name='firstName']")
@@ -50,42 +51,52 @@ public class QuoteFormResults {
     private WebElement gender;
 
 
-
-    public String getFirstNameResult(){
+    public String getFirstNameResult() {
         return firstNameResult.getText();
     }
 
-    public String getLastNameResult(){
+    public String getLastNameResult() {
         return lastNameResult.getText();
     }
 
-    public String getFullName(){
+    public String getFullName() {
         return fullName.getText();
     }
 
-    public String getEmailResult(){
+    public String getEmailResult() {
         return emailResult.getText();
     }
 
-    public String getPrivacyPolicyResult(){
+    public boolean isAgreedToPrivacyPolicy() {
+        return Boolean.parseBoolean(privacyPolicyResult.getText());
+    }
+
+    public String getPrivacyPolicyResult() {
         return privacyPolicyResult.getText();
     }
 
-    public String getUserNameResult(){
+    public String getUserNameResult() {
         return userNameResult.getText();
     }
-    public String getDateOfBirth (){ return dateOfBirthResult.getText();}
-    public String getCountryOfOrigin (){ return countryOfOriginResult.getText();}
 
-    public String getAddress(){
+    public String getDateOfBirth() {
+        return dateOfBirthResult.getText();
+    }
+
+    public String getCountryOfOrigin() {
+        return countryOfOriginResult.getText();
+    }
+
+    public String getAddress() {
         return addressResult.getText();
     }
-    public String getPhoneResult(){
-      return  phoneResult.getText();
+
+    public String getPhoneResult() {
+        return phoneResult.getText();
     }
 
 
-    public String getGender(){
+    public String getGender() {
         return gender.getText();
     }
 

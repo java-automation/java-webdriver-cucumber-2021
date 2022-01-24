@@ -11,21 +11,21 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 import static org.assertj.core.api.Assertions.assertThat;
 import static support.TestContext.getDriver;
 
-public class QuoteForm {
+public class QuoteForm extends Page {
 
     //constructor
-    public QuoteForm(){
-        PageFactory.initElements(getDriver(),this);
+    public QuoteForm() {
+        PageFactory.initElements(getDriver(), this);
+        url = "https://skryabin.com/market/quote.html";
+        title = "Get a Quote";
     }
 
 
-
     //fields
-   private String url = "https://skryabin.com/market/quote.html";
 
 
-   @FindBy(xpath = "//input[@name='username']")
-   private WebElement username;
+    @FindBy(xpath = "//input[@name='username']")
+    private WebElement username;
 
     @FindBy(xpath = "//label[@id='username-error']")
     private WebElement usernameError;
@@ -91,7 +91,7 @@ public class QuoteForm {
     private WebElement thirdPartyAgreement;
 
     //methods
-    public void open(String page){
+    public void open(String page) {
 
         switch (page) {
             case "quote" -> getDriver().get("https://skryabin.com/market/quote.html");
@@ -105,10 +105,11 @@ public class QuoteForm {
         username.sendKeys(value);
     }
 
-    public void fillEmail(String value){
-       email.sendKeys(value);
+    public void fillEmail(String value) {
+        email.sendKeys(value);
     }
-    public void fillPassword(String value){
+
+    public void fillPassword(String value) {
         password.sendKeys(value);
         confirmPassword.sendKeys(value);
     }
@@ -117,57 +118,60 @@ public class QuoteForm {
         name.click();
         firstName.sendKeys(firstNameValue);
         lastName.sendKeys(lastNameValue);
+
+    }
+
+    public void fillName(String firstNameValue, String lastNameValue) {
+        fillFirstAndLastName(firstNameValue,lastNameValue);
         save.click();
 
     }
 
-    public void fillFirstMiddleLastName(String firstNameValue, String middleNameValue, String lastNameValue){
-        name.click();
-        firstName.sendKeys(firstNameValue);
+    public void fillName(String firstNameValue, String middleNameValue, String lastNameValue) {
+        fillFirstAndLastName(firstNameValue,lastNameValue);
         middleName.sendKeys(middleNameValue);
-        lastName.sendKeys(lastNameValue);
         save.click();
     }
 
-    public void acceptPrivacyPolicy(){
+    public void acceptPrivacyPolicy() {
         if (!privacyPolicy.isSelected()) {
             privacyPolicy.click();
         }
     }
 
-    public void declinePrivacyPolicy(){
-        if(privacyPolicy.isSelected()){
+    public void declinePrivacyPolicy() {
+        if (privacyPolicy.isSelected()) {
             privacyPolicy.click();
         }
     }
 
-    public void fillCountryOfOrigin(String value){
+    public void fillCountryOfOrigin(String value) {
         Select selectCountry = new Select(country);
         selectCountry.selectByValue(value);
     }
 
-    public void fillPhone(String value){
+    public void fillPhone(String value) {
         phone.sendKeys(value);
     }
 
-    public void fillGender(){
+    public void fillGender() {
         genderMale.click();
     }
 
-    public void fillAddress(String value){
+    public void fillAddress(String value) {
         address.sendKeys(value);
     }
 
-    public void selectAllowToContact(){
+    public void selectAllowToContact() {
         allowToContact.click();
     }
 
-    public void selectAgreement(){
+    public void selectAgreement() {
         thirdPartyAgreement.click();
         getDriver().switchTo().alert().accept();
     }
 
-    public void fillDateOfBirth(){
+    public void fillDateOfBirth() {
         dateOfBirthField.click();
 
         year.click();
@@ -189,25 +193,26 @@ public class QuoteForm {
 
     }
 
-    public void submit(){
+    public void submit() {
         submitButton.click();
     }
 
-    public WebElement fieldErrorText(String field){
-     return    getDriver().findElement(By.xpath("//label[@id='"+field+"-error']"));
+    public WebElement fieldErrorText(String field) {
+        return getDriver().findElement(By.xpath("//label[@id='" + field + "-error']"));
 
     }
 
-    public void filloutField(String field, String text){
-        getDriver().findElement(By.xpath("//input[@name='"+ field +"']")).sendKeys(text);
+    public void filloutField(String field, String text) {
+        getDriver().findElement(By.xpath("//input[@name='" + field + "']")).sendKeys(text);
     }
-    public WebElement field(String field){
-        return getDriver().findElement(By.xpath("//input[@name='"+ field +"']"));
+
+    public WebElement field(String field) {
+        return getDriver().findElement(By.xpath("//input[@name='" + field + "']"));
     }
 
 
-    public void errorNotPresent(String errorReference){
-        switch (errorReference){
+    public void errorNotPresent(String errorReference) {
+        switch (errorReference) {
             case "username" -> checkErrorNotThere(usernameError);
             default -> throw new Error("unknown reference");
 

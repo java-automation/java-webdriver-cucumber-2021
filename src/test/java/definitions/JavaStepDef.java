@@ -142,6 +142,7 @@ public class JavaStepDef {
             case "quote" -> getDriver().get("https://skryabin.com/market/quote.html");
             case "usps" -> getDriver().get("https://www.usps.com/");
             case "calculator" -> getDriver().get("https://www.calculator.net/");
+            case "ups" -> getDriver().get("https://www.ups.com/us/en/Home.page");
             default -> System.out.println("Unsupported page: " + page);
         }
     }
