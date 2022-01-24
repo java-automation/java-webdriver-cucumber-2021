@@ -69,6 +69,7 @@ public class TestContext {
                     chromePreferences.put("download.default_directory", System.getProperty("user.dir") + "/src/test/resources/downloads");
                     chromePreferences.put("safebrowsing.enabled", false);
                     chromePreferences.put("profile.block_third_party_cookies", true);
+                   // chromePreferences.put("profile.default_content_setting_values.cookies", 2); //block All cookies
                     chromePreferences.put("plugins.always_open_pdf_externally", true);
                     chromePreferences.put("plugins.plugins_disabled", new ArrayList<String>() {{
                         add("Chrome PDF Viewer");
