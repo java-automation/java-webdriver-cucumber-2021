@@ -1,19 +1,25 @@
 package pages;
 
+import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
 import org.openqa.selenium.support.ui.Select;
+import org.openqa.selenium.support.ui.WebDriverWait;
 
 import static support.TestContext.getDriver;
 
 public class UpsShipmentOriginSection {
-// https://www.ups.com/ship/guided/origin?loc=en_US
-// https://www.ups.com/ship/guided/origin?tx=63090532541409287&loc=en_US
 
     public UpsShipmentOriginSection() {
         PageFactory.initElements(getDriver(), this);
     }
+
+    private WebDriverWait wait = new WebDriverWait(getDriver(),10,200);
+
+    @FindBy(xpath = "//origin")
+    private WebElement originFormWrapper;
 
     @FindBy(xpath = "//select[@name='cac_country']")
     private WebElement country;
@@ -27,7 +33,16 @@ public class UpsShipmentOriginSection {
     @FindBy(name = "cac_singleLineAddress")
     private WebElement singleLineAddress;
 
-    @FindBy(id = "origin-singleLineAddressEditButton")
+    @FindBy(xpath = "//input[@name='cac_singleLineAddress']/following-sibling::ngb-typeahead-window")
+    private WebElement addressPredictionsList;
+
+    @FindBy(xpath = "//input[@name='cac_singleLineAddress']/following-sibling::ngb-typeahead-window//button")
+    private WebElement addressPredictionsListItem;
+
+    @FindBy(xpath = "//button[contains(@id,'singleLineAddressEditButton')]/preceding-sibling::p")
+    private WebElement singleLineAddressProcessed;
+
+    @FindBy(xpath = "//button[contains(@id,'singleLineAddressEditButton')]")
     private WebElement addressEditButton;
 
     @FindBy(name = "cac_addressLine1")
@@ -61,21 +76,32 @@ public class UpsShipmentOriginSection {
     private WebElement sendStatusUpdates;
 
     @FindBy(name = "returnSwitch")
-    private WebElement returnSwitch; // Use a different return address?
+    private WebElement returnSwitch;
 
     // methods
     public void fillOutOrigin(String country, String name, String address1, String city, String state,
-                              String zipCode, String email, String phone) {
+                              String zipCode, String email, String phone, String type) {
         new Select(this.country).selectByVisibleText(country);
         companyOrName.sendKeys(name);
-        // addressEditButton.sendKeys(address);
-        addressEditButton.click();
-        addressLine1.sendKeys(address1);
-        this.zipCode.sendKeys(zipCode);
-        this.city.sendKeys(city);
-        new Select(this.state).selectByValue(state);
         this.email.sendKeys(email);
         this.phone.sendKeys(phone);
+        if (type.equals("residential") || address1.length()+city.length()+state.length()+zipCode.length()+2 <= 35) {
+            singleLineAddress.sendKeys(String.join(",", address1, city, state) + " " + zipCode);
+            wait.until(driver -> addressPredictionsListItem.isDisplayed());
+            new Actions(getDriver()).sendKeys(Keys.RETURN).perform();
+            wait.until(driver -> singleLineAddressProcessed.isDisplayed());
+        } else {
+            addressEditButton.click();
+            addressLine1.sendKeys(address1);
+            this.zipCode.sendKeys(zipCode);
+            this.city.sendKeys(city);
+            new Select(this.state).selectByValue(state);
+            wait.until(driver -> this.city.getAttribute("value").equals(city.toUpperCase()));
+        }
+    }
+
+    public boolean isSwitchedTo() {
+        return country.isDisplayed();
     }
 
 }

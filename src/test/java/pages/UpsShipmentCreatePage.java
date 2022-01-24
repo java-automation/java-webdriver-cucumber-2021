@@ -13,13 +13,15 @@ public class UpsShipmentCreatePage {
 
     private UpsShipmentOriginSection shipmentOriginSection;
     private UpsShipmentDestSection shipmentDestSection;
+    private UpsShipmentPackageKindSection shipmentPackageKindSection;
 
-    private WebDriverWait wait = new WebDriverWait(getDriver(),2,200);
+    private WebDriverWait wait = new WebDriverWait(getDriver(),10,200);
 
     public UpsShipmentCreatePage() {
         PageFactory.initElements(getDriver(),this);
         shipmentOriginSection = new UpsShipmentOriginSection();
         shipmentDestSection = new UpsShipmentDestSection();
+        shipmentPackageKindSection = new UpsShipmentPackageKindSection();
     }
 
     @FindBy(id = "nbsBackForwardNavigationContinueButton")
@@ -30,8 +32,10 @@ public class UpsShipmentCreatePage {
 
     // methods
     public void fillOutOrigin(Map<String,String> origin) {
+        wait.until(driver -> shipmentOriginSection.isSwitchedTo());
         shipmentOriginSection.fillOutOrigin(origin.get("country"),origin.get("name"),origin.get("address1"),
-                 origin.get("city"),origin.get("state"),origin.get("zipCode"),origin.get("email"),origin.get("phone"));
+                                            origin.get("city"),origin.get("state"),origin.get("zipCode"),
+                                            origin.get("email"),origin.get("phone"),origin.get("type"));
     }
 
     public void submitShipmentForm() {
@@ -41,5 +45,20 @@ public class UpsShipmentCreatePage {
     public void verifyOriginSubmitted(Map<String,String> origin) {
         wait.until(driver -> shipmentDestSection.isSwitchedTo());
         shipmentDestSection.verifyOrigin(origin);
+    }
+
+    public void fillOutDestination(Map<String,String> origin) {
+        wait.until(driver -> shipmentDestSection.isSwitchedTo());
+        shipmentDestSection.fillOutOrigin(origin.get("country"), origin.get("name"), origin.get("address1"),
+                origin.get("city"), origin.get("state"), origin.get("zipCode"),
+                origin.get("email"), origin.get("phone"), origin.get("type"));
+    }
+
+    public void confirmResidential() {
+        shipmentDestSection.confirmResidential();
+    }
+
+    public void setPackageTypeAndWeight(String type, String weight) {
+        shipmentPackageKindSection.setPackageTypeAndWeight(type, weight);
     }
 }

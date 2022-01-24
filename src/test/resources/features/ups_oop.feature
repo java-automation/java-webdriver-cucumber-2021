@@ -11,7 +11,7 @@ Feature:
     When I fill out destination shipment fields
     When I submit the shipment form
     And I "confirm" residential address
-    And I set packaging type and weight
+    And I set packaging type "UPS Tube" and weight "1.1" lbs
     When I submit the shipment form
     Then I verify total charges appear
     And I select cheapest delivery option
