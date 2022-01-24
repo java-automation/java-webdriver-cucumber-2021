@@ -8,6 +8,8 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.Select;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
+import java.util.List;
+
 import static org.assertj.core.api.Assertions.assertThat;
 import static support.TestContext.getDriver;
 
@@ -15,7 +17,7 @@ public class QuoteForm extends Page {
 
     //constructor
     public QuoteForm() {
-        PageFactory.initElements(getDriver(), this);
+
         url = "https://skryabin.com/market/quote.html";
         title = "Get a Quote";
     }
@@ -26,21 +28,32 @@ public class QuoteForm extends Page {
 
     @FindBy(xpath = "//input[@name='username']")
     private WebElement username;
-
     @FindBy(xpath = "//label[@id='username-error']")
-    private WebElement usernameError;
+    private List<WebElement> usernameError;
 
     @FindBy(xpath = "//input[@name='email']")
     private WebElement email;
+    @FindBy(xpath = "//label[@id='email-error']")
+    private List<WebElement> emailError;
 
     @FindBy(xpath = "//input[@name='password']")
     private WebElement password;
+    @FindBy(xpath = "//label[@id='password-error']")
+    private List<WebElement> passwordError;
+
 
     @FindBy(xpath = "//input[@name='confirmPassword']")
     private WebElement confirmPassword;
 
     @FindBy(xpath = "//input[@id='name']")
     private WebElement name;
+    @FindBy(xpath = "//label[@id='name-error']")
+    private List<WebElement> nameError;
+
+    @FindBy(xpath = "//input[@name='agreedToPrivacyPolicy']")
+    private WebElement privacyPolicy;
+    @FindBy(xpath = " //label[@id='agreedToPrivacyPolicy-error']")
+    private List<WebElement> privacyPolicyError;
 
     @FindBy(xpath = "//input[@id='firstName']")
     private WebElement firstName;
@@ -55,8 +68,6 @@ public class QuoteForm extends Page {
     @FindBy(xpath = "//span[text()='Save']")
     private WebElement save;
 
-    @FindBy(xpath = "//input[@name='agreedToPrivacyPolicy']")
-    private WebElement privacyPolicy;
 
     @FindBy(id = "formSubmit")
     private WebElement submitButton;
@@ -96,7 +107,6 @@ public class QuoteForm extends Page {
         switch (page) {
             case "quote" -> getDriver().get("https://skryabin.com/market/quote.html");
             case "google" -> getDriver().get("https://google.com");
-            case "etonline" -> getDriver().get("https://www.etonline.com/");
         }
 
     }
@@ -114,7 +124,7 @@ public class QuoteForm extends Page {
         confirmPassword.sendKeys(value);
     }
 
-    public void fillFirstAndLastName(String firstNameValue, String lastNameValue){
+    public void fillFirstAndLastName(String firstNameValue, String lastNameValue) {
         name.click();
         firstName.sendKeys(firstNameValue);
         lastName.sendKeys(lastNameValue);
@@ -122,13 +132,13 @@ public class QuoteForm extends Page {
     }
 
     public void fillName(String firstNameValue, String lastNameValue) {
-        fillFirstAndLastName(firstNameValue,lastNameValue);
+        fillFirstAndLastName(firstNameValue, lastNameValue);
         save.click();
 
     }
 
     public void fillName(String firstNameValue, String middleNameValue, String lastNameValue) {
-        fillFirstAndLastName(firstNameValue,lastNameValue);
+        fillFirstAndLastName(firstNameValue, lastNameValue);
         middleName.sendKeys(middleNameValue);
         save.click();
     }
@@ -210,18 +220,58 @@ public class QuoteForm extends Page {
         return getDriver().findElement(By.xpath("//input[@name='" + field + "']"));
     }
 
+//
+//    public void errorNotPresent(String errorReference) {
+//        switch (errorReference) {
+//            case "username" -> checkErrorNotThere(usernameError);
+//            default -> throw new Error("unknown reference");
+//
+//        }
+//    }
+//
+//    private void checkErrorNotThere(WebElement usernameError) {
+//        //to do
+//    }
 
-    public void errorNotPresent(String errorReference) {
-        switch (errorReference) {
-            case "username" -> checkErrorNotThere(usernameError);
-            default -> throw new Error("unknown reference");
 
-        }
+    public boolean isUsernameErrorVisible() {
+        return isErrorVisible(usernameError);
     }
 
-    private void checkErrorNotThere(WebElement usernameError) {
-        //to do
+    public boolean isEmailErrorVisible() {
+        return isErrorVisible(emailError);
     }
 
+    public boolean isNameErrorVisible() {
+        return isErrorVisible(nameError);
+    }
 
+    public boolean isPasswordErrorVisible() {
+        return isErrorVisible(passwordError);
+    }
+
+    public boolean isPrivacyPolicyErrorVisible() {
+        return isErrorVisible(privacyPolicyError);
+    }
+
+    private boolean isErrorVisible(List<WebElement> errorElement) {
+        return errorElement
+                .stream()
+                .findFirst()
+                .filter(WebElement::isDisplayed)
+                .isPresent();
+    }
+
+    public String getUsernameErrorText() {
+        return getErrorText(usernameError, "Username");
+    }
+
+    private String getErrorText(List<WebElement> errorElement, String elementName) {
+        return errorElement
+                .stream()
+                .findFirst()
+                .filter(WebElement::isDisplayed)
+                .orElseThrow(() -> new Error(elementName + " error element does not exist or is not visible!"))
+                .getText();
+    }
 }

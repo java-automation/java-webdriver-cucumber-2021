@@ -3,7 +3,7 @@
 
 
      Scenario: E2E UPS Scenario
-       Given I go to "ups" page
+       Given I go to UPS page
        And I go to Create a Shipment
        When I fill out origin shipment fields
        And I submit the shipment form

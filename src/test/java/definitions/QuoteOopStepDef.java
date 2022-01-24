@@ -78,11 +78,25 @@ public class QuoteOopStepDef {
     }
 
     @Then("I don't see {string} error message")
-    public void iDonTSeeErrorMessage(String inputField) {
-        WebDriverWait wait = new WebDriverWait(getDriver(),5);
-        wait.until(ExpectedConditions.invisibilityOfElementLocated(By.xpath("//label[@id='"+ inputField+"-error']")));
+    public void iDonTSeeErrorMessage(String elementName) {
 
+        boolean isErrorVisible = switch (elementName) {
+            case "username" -> form.isUsernameErrorVisible();
+            case "email" -> form.isEmailErrorVisible();
+            case "password" -> form.isPasswordErrorVisible();
+            case "name" -> form.isNameErrorVisible();
+            case "agreedToPrivacyPolicy" -> form.isPrivacyPolicyErrorVisible();
+
+            default -> throw new Error("Unknown error message element reference: " + elementName);
+        };
+        assertThat(isErrorVisible).isFalse();
     }
+
+//        bad code
+//        WebDriverWait wait = new WebDriverWait(getDriver(),5);
+//        wait.until(ExpectedConditions.invisibilityOfElementLocated(By.xpath("//label[@id='"+ inputField+"-error']")));
+
+
 
     @Then("I see {string} error message {string}")
     public void iSeeErrorMessage(String inputField, String message) {
