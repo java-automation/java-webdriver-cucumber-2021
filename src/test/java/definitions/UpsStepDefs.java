@@ -7,7 +7,6 @@ import io.cucumber.java.en.When;
 import pages.UpsHome;
 import pages.UpsShip;
 
-import java.io.IOException;
 import java.util.Map;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -152,7 +151,6 @@ public class UpsStepDefs {
     public void iSetPackagingTypeAsAndWeightAsLbs(String packageType, int weight) {
         shipPage.selectPackagingType(packageType);
         shipPage.fillPackageWeight(weight);
-        //shipPage.removeReferenceNumbers();
     }
 
 //    @And("I do test step")

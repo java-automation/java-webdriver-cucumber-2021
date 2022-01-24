@@ -1,15 +1,11 @@
 package pages;
 
-import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebElement;
-import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.Select;
 
 import java.util.List;
-
-import static support.TestContext.getDriver;
 
 public class UpsShip extends UpsPage {
 
@@ -19,7 +15,7 @@ public class UpsShip extends UpsPage {
     }
 
     // origin
-    
+
     @FindBy(css = "origin .ups-section")
     private WebElement originSection;
 
@@ -67,7 +63,7 @@ public class UpsShip extends UpsPage {
 
     @FindBy(id = "origin_agentSummaryContactLine")
     private WebElement originSummaryContact;
-    
+
     // destination
 
     @FindBy(css = "destination .ups-section")
@@ -132,23 +128,23 @@ public class UpsShip extends UpsPage {
     private List<WebElement> packageWeightCheckmark;
 
     // common
-    
+
     @FindBy(css = ".dropdown-menu > .dropdown-item")
     private WebElement firstDropDownAddress;
-    
+
     @FindBy(id = "nbsBackForwardNavigationContinueButton")
     private WebElement continueButton;
 
     @FindBy(css = "img[src*='ajax-loader']")
     private List<WebElement> spinner;
-    
+
     // origin
 
     public void waitForFirstLoad() {
         waitForSpinnerToBeAbsent();
         getWait().until(ExpectedConditions.visibilityOf(originSection));
     }
-    
+
     public void selectOriginCountry(String countryName) {
         new Select(originCountry).selectByVisibleText(countryName);
     }
@@ -201,7 +197,7 @@ public class UpsShip extends UpsPage {
     public String getOriginSummaryContact() {
         return originSummaryContact.getText();
     }
-    
+
     // destination
 
     public void selectDestinationCountry(String countryName) {
@@ -252,32 +248,13 @@ public class UpsShip extends UpsPage {
     public void denyDestinationIsResidentialNonUS() {
         if (destinationIsResidentialNonUS.isSelected()) destinationIsResidentialNonUS.click();
     }
-    
+
     // common
 
     public void submitForm() {
-//        System.out.println(originEmail.getAttribute("value"));
-//        System.out.println(originPhone.getAttribute("value"));
-        waitForAjaxToComplete();
+        waitForLocalStorageUpdate();
         continueButton.click();
         waitForSpinnerToBeAbsent();
-    }
-    
-    // utility
-
-    private void sendKeysToCorrectAddressField(List<WebElement> toBeInvisible, List<WebElement> toBeVisible, String address) {
-        getWait().until(driver -> toBeInvisible.stream().findFirst().isEmpty());
-        toBeVisible.stream().findFirst().ifPresent(element -> element.sendKeys(address));
-    }
-
-    //private static int i = 0;
-    private void waitForSpinnerToBeAbsent() {
-        if (modalWindow.stream().findFirst().isEmpty())
-            getWait().until(driver -> spinner.stream().findFirst().isEmpty());
-
-//        i++;
-//        File screenshotAfterSpinner = ((TakesScreenshot)getDriver()).getScreenshotAs(OutputType.FILE);
-//        FileUtils.copyFile(screenshotAfterSpinner, new File("submitClick" + i + ".jpg"));
     }
 
     public void confirmDestinationIsResidentialUS() {
@@ -301,9 +278,25 @@ public class UpsShip extends UpsPage {
     }
 
     public void fillPackageWeight(int weight) {
-        new Actions(getDriver()).click(packageWeight).sendKeys(String.valueOf(weight), Keys.ENTER).perform();
-        //packageWeight.sendKeys(String.valueOf(weight));
+        packageWeight.sendKeys(String.valueOf(weight));
         getWait().until(driver -> packageWeightCheckmark.stream().findFirst().isPresent());
+    }
+
+    // utility
+
+    private void sendKeysToCorrectAddressField(List<WebElement> toBeInvisible, List<WebElement> toBeVisible, String address) {
+        getWait().until(driver -> toBeInvisible.stream().findFirst().isEmpty());
+        toBeVisible.stream().findFirst().ifPresent(element -> element.sendKeys(address));
+    }
+
+    private void waitForSpinnerToBeAbsent() {
+        if (modalWindow.stream().findFirst().isEmpty())
+            getWait().until(driver -> spinner.stream().findFirst().isEmpty());
+    }
+
+    private void waitForLocalStorageUpdate() {
+        String localStorageValue = getLocalStorage().getItem("GULP_SC2");
+        getWait().until(value -> !localStorageValue.equals(getLocalStorage().getItem("GULP_SC2")));
     }
 
 //    public void printSelectOptionsWithResidentialStatus() throws InterruptedException {

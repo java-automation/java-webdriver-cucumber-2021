@@ -11,17 +11,15 @@ Feature: UPS end to end scenarios
   Scenario: E2E UPS Scenario
     When I go to Create a Shipment
     *    I fill out origin shipment fields with "Julie Harris" profile
-    *    I wait for 1 sec
     *    I submit the shipment form
     Then I verify origin shipment fields submitted
     When I fill out destination shipment fields with "Richard Blank" profile
     *    I "confirm" residential address for non-US country
     *    I submit the shipment form
     *    I "confirm" residential address for US
-
-    And I set packaging type as "UPS Express Box - Small" and weight as 2 lbs
+    *    I set packaging type as "UPS Express Box - Small" and weight as 2 lbs
     *    I wait for 1 sec
-    When I submit the shipment form
+    *    I submit the shipment form
     *    I wait for 1 sec
 
 #    Then I verify total charges appear
