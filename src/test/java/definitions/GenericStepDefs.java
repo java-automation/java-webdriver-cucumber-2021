@@ -1,35 +1,44 @@
 package definitions;
 
 import io.cucumber.java.en.*;
+import io.cucumber.java.it.*;
 import org.openqa.selenium.*;
 import org.openqa.selenium.logging.*;
+import org.testng.reporters.jq.*;
 
 import java.util.*;
 import java.util.logging.*;
 import static support.TestContext.*;
+
 
 public class GenericStepDefs {
 
     Dimension phoneDimension = new Dimension(400, 768);
     Dimension desktopDimention = new Dimension(1024, 768);
 
+    Page Page = new Page();
+
+
     @Given("I go to {string} page and print details")
     public void iGoToPage(String page) {
         switch (page.toLowerCase()) {
             case "quote":
-                getDriver().navigate().to("https://skryabin.com/market/quote.html");
+                Page.open("https://skryabin.com/market/quote.html");
                 break;
             case "google":
-                getDriver().navigate().to("https://www.google.com/");
+                Page.open("https://www.google.com/");
                 break;
             case "usps":
-                getDriver().navigate().to("https://www.usps.com/");
+                Page.open("https://www.usps.com/");
                 break;
+            case "ups":
+               Page.open("https://www.ups.com/us/en/Home.page");
+               break;
             case "unitconverters":
-                getDriver().navigate().to("https://www.unitconverters.net/");
+                Page.open("https://www.unitconverters.net/");
                 break;
             case "calculator":
-                getDriver().navigate().to("https://www.calculator.net/");
+               Page.open("https://www.calculator.net/");
                 break;
             default:
                 throw new Error("Unsupported page: " + page);
