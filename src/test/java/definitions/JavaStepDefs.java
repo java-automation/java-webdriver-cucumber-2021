@@ -592,14 +592,35 @@ public class JavaStepDefs<now> {
 
     @Given("I solve coding challenges")
     public void iSolveCodingChallenges() {
-        toSwap(3, 5);
-        printDivBy3and4(12);
-
-        int [] arr = {3, 4, 1, 5, 8, 4};
-        int i = 1;
-        System.out.println(isArrayContains(arr, i));
-
+//        toSwap(3, 5);
+//        printDivBy3and4(12);
+//
+//        int [] arr = {3, 4, 1, 5, 8, 4};
+//        int i = 1;
+//        System.out.println(isArrayContains(arr, i));
+//
+        for (int i=0; i<= 100; i++) {
+            if (isPrime(i)) {
+                System.out.println(i + "");
+            }
+        }
     }
+
+    //find if a number is a prime number
+    boolean isPrime (int num) {
+        if (num < 2) {
+            return false;
+        }
+
+        for (int i=2; i < num; i++) {               // if i = 2; 2 can't be less than 2, so it kicks out to return True
+            if (num % i == 0) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+
 
     boolean isArrayContains(int [] array, int el) {
         for (int arrayEl : array) {

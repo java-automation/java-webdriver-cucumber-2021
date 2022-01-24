@@ -6,17 +6,17 @@ import org.openqa.selenium.support.PageFactory;
 
 import static support.TestContext.getDriver;
 
-public class QuoteFormResult {
-
-    //constructor
-    public QuoteFormResult() {
-        PageFactory.initElements(getDriver(), this);  //init means initialization
-    }
+public class QuoteFormResult extends Page {
 
 
     //fields
+    public QuoteFormResult () {
+        url = "https://skryabin.com/market/result.html";
+        title = "Get a Quote";
+    }
 
-    @FindBy (id = "quotePageResul")
+
+    @FindBy (id = "quotePageResult")
     private WebElement resultContainer;
 
     @FindBy (xpath = "//b[@name='password']")

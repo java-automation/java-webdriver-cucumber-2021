@@ -67,9 +67,9 @@ Feature: Java feature
     @java10
     Scenario: Coding challenges
       Given I solve coding challenges
-      Then I solve FizzBuzz
+#      Then I solve FizzBuzz
 #      And I solve FizzBuzz with scanner
-      And I say the sentence five times
+#      And I say the sentence five times
 #      And I solve reverse
 
 

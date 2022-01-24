@@ -9,15 +9,14 @@ import java.util.List;
 
 import static support.TestContext.getDriver;
 
-public class QuoteForm {
+public class QuoteForm extends Page {
 
-    //constructor
-    public QuoteForm() {
-        PageFactory.initElements(getDriver(), this);  //init means initialization
-    }
 
     //fields
-    private String url = "https://skryabin.com/market/quote.html";
+    public QuoteForm () {
+        url = "https://skryabin.com/market/quote.html";
+        title = "Get a Quote";
+    }
 
     @FindBy (xpath = "//input[@name='username']") // lazy instantiation
     private WebElement username;
@@ -79,17 +78,12 @@ public class QuoteForm {
 
 
     //methods
-    public void open() {
-        getDriver().get(url);
-    }
 
     public void fillUsername(String value) {
         username.sendKeys(value);
     }
 
-    public void refreshPage() {
-        getDriver().navigate().refresh();
-    }
+
 
     public void fillEmail (String value) {
         email.sendKeys(value);
@@ -110,6 +104,7 @@ public class QuoteForm {
     }
 
     public void selectGender () {
+
         male.click();
     }
 
