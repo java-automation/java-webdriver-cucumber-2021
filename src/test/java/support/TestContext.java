@@ -40,21 +40,28 @@ public class TestContext {
         return (JavascriptExecutor) getDriver();
     }
 
+    public static Map<String, String> getData(String recordKey, String project) {
+        return getData(project).get(recordKey);
+    }
+
+    public static Map<String, Map<String, String>> getData(String project) {
+        return new Yaml().load(getDataFile(project));
+    }
+
+    private static FileInputStream getDataFile(String fileName) {
+        try {
+            return new FileInputStream(System.getProperty("user.dir") + "/src/test/resources/data/" + fileName + ".yml");
+        } catch (FileNotFoundException e) {
+            throw new Error("Couldn't open project data file: " + fileName + ". Error: " + e);
+        }
+    }
+
     public static void initialize() {
         initialize("chrome", "local", false);
     }
 
     public static void teardown() {
         driver.quit();
-    }
-
-    public static Map<String, String> getData(String fileName) {
-        try {
-            FileInputStream stream = new FileInputStream(System.getProperty("user.dir") + "/src/test/resources/data/" + fileName + ".yml");
-            return new Yaml().load(stream);
-        } catch (FileNotFoundException e) {
-            throw new Error("File not found: " + e);
-        }
     }
 
     public static void initialize(String browser, String testEnv, boolean isHeadless) {

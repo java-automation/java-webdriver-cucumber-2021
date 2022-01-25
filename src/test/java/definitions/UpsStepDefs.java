@@ -33,7 +33,7 @@ public class UpsStepDefs {
 
     @When("I fill out origin shipment fields with {string} profile")
     public void iFillOutOriginShipmentFields(String profileReference) {
-        origin = getData(profileReference.toLowerCase().replace(" ", ""));
+        origin = getData(profileReference, "ups");
 
         String country = origin.get("country");
         shipPage.selectOriginCountry(country);
@@ -97,7 +97,7 @@ public class UpsStepDefs {
 
     @When("I fill out destination shipment fields with {string} profile")
     public void iFillOutDestinationShipmentFieldsWithProfile(String profileReference) {
-        destination = getData(profileReference.toLowerCase().replace(" ", ""));
+        destination = getData(profileReference, "ups");
         String country = destination.get("country");
         boolean isDeliveryInsideCountry = country.equals(origin.get("country"));
 

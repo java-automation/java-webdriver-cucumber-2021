@@ -1,0 +1,36 @@
+John Doe:
+  username: jdoe
+  email: john.doe@corp.com
+  password: jsecret
+  firstName: John
+  middleName: Vitaljevich
+  lastName: Doe
+  phone: "2223456789"
+  dateOfBirth: 11/01/1990
+  countryOfOrigin: Canada
+  gender: male
+  allowedToContact: "true"
+  address: 111 222 Street San Jose CA US 75000
+  carMake: BMW
+  contactName: Juanita Alvares
+  contactPhone: +1 (222) 987-6543
+  thirdPartyAgreement: accepted
+  attachment: downloadedResume.pdf
+Monica Smith:
+  username: msmith
+  email: monica.smith@corp.com
+  password: msecret
+  firstName: Monica
+  middleName: Ivanovich
+  lastName: Smith
+  phone: "3333456789"
+  dateOfBirth: 01/25/1995
+  countryOfOrigin: USA
+  gender: female
+  allowedToContact: "false"
+  address: 222 111 Avenue San Jose CA US 75000
+  carMake: Toyota, Other
+  contactName: Albert Navarro
+  contactPhone: +1 (333) 987-6543
+  thirdPartyAgreement: declined
+  attachment: downloadedResume.pdf

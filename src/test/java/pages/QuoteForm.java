@@ -148,6 +148,10 @@ public class QuoteForm extends QuotePage {
         email.sendKeys(value);
     }
 
+    public String getEmail() {
+        return email.getAttribute("value");
+    }
+
     public boolean isEmailErrorVisible() {
         return isErrorVisible(emailError);
     }

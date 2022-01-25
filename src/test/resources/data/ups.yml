@@ -1,0 +1,27 @@
+Julie Harris:
+  companyOrName: Julie's Bakery
+  contact: Julie Harris
+  address: 178 E Pine Street
+  city: Independence
+  postalCode: "67301"
+  phone: 724-304-9793
+  email: JulieHarris@example.com
+  country: United States
+Mary Johansson:
+  companyOrName: Johansson & Co.
+  contact: Mary Johansson
+  address: Eerikinkatu 10
+  city: Helsinki
+  postalCode: "00100"
+  phone: 040-824-4386
+  email: MaryJohansson@example.com
+  country: Finland
+Richard Blank:
+  companyOrName: Richard Blank
+  contact: Richard Blank
+  address: 130 S Center St
+  city: Reno
+  postalCode: "89501"
+  phone: 337-867-7672
+  email: RichardBlank@example.com
+  country: United States

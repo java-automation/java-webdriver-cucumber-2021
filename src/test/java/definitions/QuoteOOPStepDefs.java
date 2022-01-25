@@ -128,7 +128,7 @@ public class QuoteOOPStepDefs {
             case "all" -> isCompleteForm = true;
             default -> throw new Error("Unknown scenario context reference: " + whatFields);
         }
-        user = getData(profileReference.toLowerCase().replace(" ", ""));
+        user = getData(profileReference, "quote");
     }
 
     @Then("I don't see {string} error message")
@@ -184,6 +184,7 @@ public class QuoteOOPStepDefs {
     public void iVerifyFieldValue(String fieldName, String value) {
         String actualValue = switch (fieldName) {
             case "name" -> form.getName();
+            case "email" -> form.getEmail();
             default -> throw new Error("Unknown field name reference: " + fieldName);
         };
         assertThat(actualValue).isEqualTo(value);

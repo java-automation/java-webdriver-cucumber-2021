@@ -5,13 +5,17 @@ Feature: Quote page and page object pattern
     Given I go to quote form page OOP
 
   @quote_oop1
-  #valid entries when filling the form: "all"/"required"; "Monica Smith"/"John Doe"
-  Scenario: Submit the form with specified field set and one of the preset profiles
-    When  I fill out "all" fields with "Monica Smith" profile OOP
-    *     I wait for 3 sec
-    *     I submit the form OOP
-    Then  I verify that submitted fields got saved correctly OOP
-    *     I wait for 3 sec
+  Scenario Outline: Submit the form with specified field set and one of the preset profiles
+    When I fill out "<fields>" fields with "<profile>" profile OOP
+    * I wait for <sec> sec
+    * I submit the form OOP
+    Then I verify that submitted fields got saved correctly OOP
+    * I wait for <sec> sec
+
+    Examples:
+      | fields   | profile      | sec |
+      | all      | Monica Smith | 2   |
+      | required | John Doe     | 2   |
 
   @quote_oop2
   Scenario: Required fields error messages

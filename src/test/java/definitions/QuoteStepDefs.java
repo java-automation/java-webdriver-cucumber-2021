@@ -75,7 +75,7 @@ public class QuoteStepDefs {
             case "all" -> isCompleteForm = true;
             default -> throw new Error("Unknown scenario context reference: " + whatFields);
         }
-        workingProfile = getData(profileReference.toLowerCase().replace(" ", ""));
+        workingProfile = getData(profileReference, "quote");
     }
 
     @When("I fill out {string} fields with {string} profile")
