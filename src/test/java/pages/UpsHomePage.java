@@ -2,32 +2,20 @@ package pages;
 
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
-import org.openqa.selenium.support.PageFactory;
 
-import java.util.List;
-
-import static support.TestContext.getDriver;
-
-public class UpsHomePage {
+public class UpsHomePage extends UpsBasePage {
 
     public UpsHomePage() {
-        PageFactory.initElements(getDriver(),this);
+        url = "https://www.ups.com/us/en/Home.page";
+        urlRegExp = ".*www.ups.com/us/en/Home.page";
         closeCookiesDialogIfDisplayed();
     }
 
-    @FindBy(xpath = "//div[@class='implicit_privacy_prompt implicit_consent']//button[contains(@class,'close')]")
-    private List<WebElement> websiteUsesCookiesDialogCloseButton;
-
+    // fields
     @FindBy(xpath="//ul[contains(@class,'jobs-list')]//span[text()='Ship']")
     private WebElement ship;
 
-    public void closeCookiesDialogIfDisplayed() {
-        websiteUsesCookiesDialogCloseButton.stream()
-                                           .findFirst()
-                                           .filter(WebElement::isDisplayed)
-                                           .ifPresent(WebElement::click);
-    }
-
+    // methods
     public void gotoCreateShipmentPage() {
         ship.click();
     }

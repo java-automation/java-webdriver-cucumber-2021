@@ -24,20 +24,20 @@ public class UpsStepDefs {
         // single address line has length limit of 35 characters
         // SOMETIMES (race condition) triggering error "Address Line 1 max length exceeded" and showing expanded form
         // 100 Main Street, White Plains, NY 10601 (33 chars without zip, 39 chars with zip)
-        origin.put("type","commercial");
-        origin.put("address1","100 Main Street");
-        origin.put("city","White Plains");
-        origin.put("state","NY");
-        origin.put("zipCode","10601");
+//        origin.put("type","commercial");
+//        origin.put("address1","100 Main Street");
+//        origin.put("city","White Plains");
+//        origin.put("state","NY");
+//        origin.put("zipCode","10601");
 
         // Note: residential addresses do not trigger max length PROBABLY due to one prediction in the list
         // residential, one prediction, more than 35 chars
         // 678 Main Street, White Plains, NY 10601 (33 chars without zip, 39 chars with zip)
-//        origin.put("type","residential");
-//        origin.put("address1","678 Main Street");
-//        origin.put("city","White Plains");
-//        origin.put("state","NY");
-//        origin.put("zipCode","10601");
+        origin.put("type","residential");
+        origin.put("address1","678 Main Street");
+        origin.put("city","White Plains");
+        origin.put("state","NY");
+        origin.put("zipCode","10601");
 
         // 105 Tyler Blvd, Coffeyville, KS 67337 (31 chars without zip, 37 chars with zip)
         // residential, one prediction, more than 35 chars

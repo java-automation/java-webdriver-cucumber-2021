@@ -2,17 +2,15 @@ package pages;
 
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
-import org.openqa.selenium.support.PageFactory;
 import org.openqa.selenium.support.ui.Select;
 
-import static support.TestContext.getDriver;
-
-public class UpsShipmentPackageKindSection {
+public class UpsShipmentPackageKindSection extends UpsBasePage {
 
     public UpsShipmentPackageKindSection() {
-         PageFactory.initElements(getDriver(),this);
+        urlRegExp = ".*www.ups.com/ship/guided/package.*";
     }
 
+    // fields
     @FindBy(xpath = "//shipment-packages")
     private WebElement packageKindFormWrapper;
 

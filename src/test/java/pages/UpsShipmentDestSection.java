@@ -2,26 +2,26 @@ package pages;
 
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
-import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static support.TestContext.getDriver;
 
-public class UpsShipmentDestSection extends UpsShipmentOriginSection {
+public class UpsShipmentDestSection extends UpsBasePage {
+
+    private UpsShipmentForm destForm = new UpsShipmentForm();
 
     public UpsShipmentDestSection() {
+        urlRegExp = ".*www.ups.com/ship/guided/destination.*";
     }
 
-    private WebDriverWait wait = new WebDriverWait(getDriver(),10,200);
-
+    // fields
     @FindBy(xpath = "//destination")
     private WebElement destinationFormWrapper;
 
-    // origin summary
+    // origin summary fields
     @FindBy(id = "origin_showSummaryAddress")
     private WebElement origin_summary;
 
@@ -40,7 +40,7 @@ public class UpsShipmentDestSection extends UpsShipmentOriginSection {
     @FindBy(id = "origin_agentSummaryResidentialLine")
     private WebElement origin_agentResidential;
 
-    //modal dialog
+    //modal dialog fields
     @FindBy(xpath = "//div[contains(@class,'modal-content')]")
     private WebElement modalDialog;
 
@@ -76,9 +76,10 @@ public class UpsShipmentDestSection extends UpsShipmentOriginSection {
         }
     }
 
-    public void fillOutDestination(String country, String name, String address1, String city, String state,
-                              String zipCode, String email, String phone, String type) {
-        fillOutOrigin(country,name,address1,city,state,zipCode,email,phone,type);
+    public void fillOutDestination(Map<String,String> dest) {
+        destForm.fillOutForm(dest.get("country"), dest.get("name"), dest.get("address1"),
+                             dest.get("city"), dest.get("state"), dest.get("zipCode"),
+                             dest.get("email"), dest.get("phone"), dest.get("type"));
     }
 
     private boolean isAddressSwitchResidential() {
@@ -103,7 +104,6 @@ public class UpsShipmentDestSection extends UpsShipmentOriginSection {
         dialogContinueButton.click();
     }
 
-    @Override
     public boolean isSwitchedTo() {
         return destinationFormWrapper.isDisplayed();
     }
