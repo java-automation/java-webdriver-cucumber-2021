@@ -21,6 +21,7 @@ import org.yaml.snakeyaml.Yaml;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.InputStream;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
@@ -31,45 +32,48 @@ import java.util.logging.Level;
 public class TestContext {
 
     private static WebDriver driver;
+    private static Config config;
 
     public static WebDriver getDriver() {
         return driver;
     }
 
     public static JavascriptExecutor getExecutor() {
-        return (JavascriptExecutor) getDriver();
+        return (JavascriptExecutor) driver;
+    }
+
+    public static Config getConfig() {
+        return config;
+    }
+
+    private static void setConfig() {
+        config = new Yaml().loadAs(getStream("config"), Config.class);
     }
 
     public static Map<String, String> getData(String recordKey, String project) {
-        return getData(project).get(recordKey);
+        Map<String, Map<String, String>> map = new Yaml().load(getStream(project));
+        return map.get(recordKey);
     }
 
-    public static Map<String, Map<String, String>> getData(String project) {
-        return new Yaml().load(getDataFile(project));
-    }
-
-    private static FileInputStream getDataFile(String fileName) {
+    private static InputStream getStream(String project) {
         try {
-            return new FileInputStream(System.getProperty("user.dir") + "/src/test/resources/data/" + fileName + ".yml");
+            return new FileInputStream(System.getProperty("user.dir") + "/src/test/resources/data/" + project + ".yml");
         } catch (FileNotFoundException e) {
-            throw new Error("Couldn't open project data file: " + fileName + ". Error: " + e);
+            throw new Error("Couldn't stream project data for: " + project + ". Error: " + e);
         }
     }
 
     public static void initialize() {
-        initialize("chrome", "local", false);
-    }
-
-    public static void teardown() {
-        driver.quit();
-    }
-
-    public static void initialize(String browser, String testEnv, boolean isHeadless) {
-        Dimension size = new Dimension(1920, 1080);
+        setConfig();
+        String browser = config.browser;
+        String testEnv = config.runType;
+        boolean isHeadless = config.headless;
+        Dimension size = new Dimension(config.browserWidth, config.browserHeight);
         Point position = new Point(0, 0);
+
         if (testEnv.equals("local")) {
             switch (browser) {
-                case "chrome":
+                case "chrome" -> {
                     WebDriverManager.chromedriver().setup();
                     Map<String, Object> chromePreferences = new HashMap<>();
                     chromePreferences.put("profile.default_content_settings.geolocation", 2);
@@ -79,7 +83,7 @@ public class TestContext {
                     chromePreferences.put("download.default_directory", System.getProperty("user.dir") + "/src/test/resources/downloads");
                     chromePreferences.put("safebrowsing.enabled", false);
                     chromePreferences.put("plugins.always_open_pdf_externally", true);
-                    chromePreferences.put("plugins.plugins_disabled", new ArrayList<String>(){{ add("Chrome PDF Viewer"); }});
+                    chromePreferences.put("plugins.plugins_disabled", new ArrayList<String>() {{ add("Chrome PDF Viewer"); }});
                     chromePreferences.put("credentials_enable_service", false);
                     chromePreferences.put("password_manager_enabled", false);
                     ChromeOptions chromeOptions = new ChromeOptions();
@@ -89,12 +93,15 @@ public class TestContext {
                     chromeOptions.setExperimentalOption("prefs", chromePreferences);
 
                     //logging for network
-                    LoggingPreferences logPrefs = new LoggingPreferences();
-                    logPrefs.enable(LogType.PERFORMANCE, Level.ALL);
-                    chromeOptions.setCapability("goog:loggingPrefs", logPrefs);
-                    System.setProperty(ChromeDriverService.CHROME_DRIVER_LOG_PROPERTY, System.getProperty("user.dir") + "/target/performance.log");
-                    System.setProperty(ChromeDriverService.CHROME_DRIVER_VERBOSE_LOG_PROPERTY, "true");
-                    //System.setProperty(ChromeDriverService.CHROME_DRIVER_SILENT_OUTPUT_PROPERTY, "true");
+                    if (config.logPerformance) {
+                        LoggingPreferences logPrefs = new LoggingPreferences();
+                        logPrefs.enable(LogType.PERFORMANCE, Level.ALL);
+                        chromeOptions.setCapability("goog:loggingPrefs", logPrefs);
+                        System.setProperty(ChromeDriverService.CHROME_DRIVER_LOG_PROPERTY, System.getProperty("user.dir") + "/target/performance.log");
+                        System.setProperty(ChromeDriverService.CHROME_DRIVER_VERBOSE_LOG_PROPERTY, "true");
+                    } else {
+                        System.setProperty(ChromeDriverService.CHROME_DRIVER_SILENT_OUTPUT_PROPERTY, "true");
+                    }
 
                     if (isHeadless) {
                         chromeOptions.setHeadless(true);
@@ -102,8 +109,8 @@ public class TestContext {
                         chromeOptions.addArguments("--disable-gpu");
                     }
                     driver = new ChromeDriver(chromeOptions);
-                    break;
-                case "firefox":
+                }
+                case "firefox" -> {
                     WebDriverManager.firefoxdriver().setup();
                     FirefoxOptions firefoxOptions = new FirefoxOptions();
                     if (isHeadless) {
@@ -112,22 +119,19 @@ public class TestContext {
                         firefoxOptions.setBinary(firefoxBinary);
                     }
                     driver = new FirefoxDriver(firefoxOptions);
-                    break;
-                case "safari":
-                    driver = new SafariDriver();
-                    break;
-                case "edge":
+                }
+                case "safari" -> driver = new SafariDriver();
+                case "edge" -> {
                     WebDriverManager.edgedriver().setup();
                     driver = new EdgeDriver();
-                    break;
-                case "ie":
+                }
+                case "ie" -> {
                     WebDriverManager.iedriver().setup();
                     driver = new InternetExplorerDriver();
-                    break;
-                default:
-                    throw new RuntimeException("Driver is not implemented for: " + browser);
+                }
+                default -> throw new RuntimeException("Driver is not implemented for: " + browser);
             }
-        } else if (testEnv.equals("grid")){
+        } else if (testEnv.equals("grid")) {
             DesiredCapabilities capabilities = new DesiredCapabilities();
             capabilities.setBrowserName(browser);
             capabilities.setPlatform(Platform.ANY);
@@ -143,5 +147,9 @@ public class TestContext {
         }
         driver.manage().window().setPosition(position);
         driver.manage().window().setSize(size);
+    }
+
+    public static void teardown() {
+        driver.quit();
     }
 }

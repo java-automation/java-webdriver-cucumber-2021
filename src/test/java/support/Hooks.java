@@ -8,6 +8,7 @@ import org.openqa.selenium.TakesScreenshot;
 
 import java.util.concurrent.TimeUnit;
 
+import static support.TestContext.getConfig;
 import static support.TestContext.getDriver;
 
 public class Hooks {
@@ -15,8 +16,8 @@ public class Hooks {
     @Before(order = 0)
     public void scenarioStart() {
         TestContext.initialize();
-        getDriver().manage().timeouts().pageLoadTimeout(60, TimeUnit.SECONDS);
-        getDriver().manage().timeouts().implicitlyWait(1, TimeUnit.SECONDS);
+        getDriver().manage().timeouts().pageLoadTimeout(getConfig().pageLoadTimeout, TimeUnit.SECONDS);
+        getDriver().manage().timeouts().implicitlyWait(getConfig().implicitWait, TimeUnit.SECONDS);
         getDriver().manage().deleteAllCookies();
     }
 

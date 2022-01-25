@@ -14,7 +14,7 @@ Feature: Quote page and page object pattern
 
     Examples:
       | fields   | profile      | sec |
-      | all      | Monica Smith | 2   |
+      | all      | Monica Smith | 3   |
       | required | John Doe     | 2   |
 
   @quote_oop2

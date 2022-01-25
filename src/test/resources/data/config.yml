@@ -1,0 +1,12 @@
+browser: chrome
+runType: local
+headless: false
+browserWidth: 1920
+browserHeight: 1080
+logPerformance: true
+pageLoadTimeout: 60
+implicitWait: 1
+explicitWait: 5
+supportedOS:
+  - "win"
+  - "mac"

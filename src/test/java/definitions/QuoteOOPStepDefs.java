@@ -31,13 +31,15 @@ public class QuoteOOPStepDefs {
     public void iFillOutFieldsWithProfileOOP(String whatFields, String profileReference) {
         setFormFillingContext(whatFields, profileReference);
 
+        String firstName = user.get("firstName");
+        String lastName = user.get("lastName");
+        System.out.println("Filling form for " + firstName + " " + lastName + ". Full form? " + isCompleteForm);
+
         form.fillUsername(user.get("username"));
         form.fillEmail(user.get("email"));
         form.fillPasswords(user.get("password"));
 
         //middle name is optional and can be empty/null
-        String firstName = user.get("firstName");
-        String lastName = user.get("lastName");
         String middleName = user.get("middleName");
         if (middleName == null || middleName.isEmpty()) {
             form.fillName(firstName, lastName);
@@ -85,6 +87,10 @@ public class QuoteOOPStepDefs {
 
     @Then("I verify that submitted fields got saved correctly OOP")
     public void iVerifyThatSubmittedFieldsGotSavedCorrectlyOOP() {
+        String firstName = user.get("firstName");
+        String lastName = user.get("lastName");
+        System.out.println("Verifying form for " + firstName + " " + lastName + ". Full form? " + isCompleteForm);
+
         assertThat(results.getUsername()).isEqualTo(user.get("username"));
         assertThat(results.getEmail()).isEqualTo(user.get("email"));
 
@@ -92,8 +98,6 @@ public class QuoteOOPStepDefs {
         assertThat(results.getPassword()).isEqualTo("[entered]");
 
         //middle name is optional and can be empty/null
-        String firstName = user.get("firstName");
-        String lastName = user.get("lastName");
         assertThat(results.getFirstName()).isEqualTo(firstName);
         assertThat(results.getLastName()).isEqualTo(lastName);
 
