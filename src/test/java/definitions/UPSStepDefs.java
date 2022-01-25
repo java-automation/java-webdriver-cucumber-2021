@@ -6,6 +6,7 @@ import io.cucumber.java.en.When;
 import org.junit.Assert;
 import org.openqa.selenium.By;
 import org.openqa.selenium.Keys;
+import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.Select;
@@ -55,7 +56,7 @@ public class UPSStepDefs extends HelperStepDefs {
                     .click()
                     .perform();
         }
-        wait.until(ExpectedConditions.textToBePresentInElement(getDriver().findElement(By.xpath("//h1/span")), "Create a Shipment"));
+        wait.until(ExpectedConditions.textToBePresentInElement(getDriver().findElement(By.xpath("//h1/span")), textLink));
     }
 
     @When("I fill out origin shipment fields")
@@ -76,29 +77,22 @@ public class UPSStepDefs extends HelperStepDefs {
         new Actions(getDriver())
                 .sendKeys(getDriver().findElement(By.xpath("//input[@id='origin-cac_singleLineAddress']")), Keys.ENTER)
                 .perform();
-        cookieSettingsWindowBlocks();
         Thread.sleep(3000);
         if (isPresent(By.xpath("//input[@id='origin-cac_addressLine1']"))) {
-            cookieSettingsWindowBlocks();
             assertEquals(getDriver().findElement(By.xpath("//input[@id='origin-cac_addressLine1']"))
                             .getAttribute("value"),
                     user.get("street"));
         } else if (isPresent(By.xpath("//div[@class='ng-star-inserted']/p[@class='ng-star-inserted']"))) {
-            cookieSettingsWindowBlocks();
             String enteredAddress = getDriver().findElement(By.xpath("//div[@class='ng-star-inserted']/p[@class='ng-star-inserted']"))
                     .getText();
             System.out.println("Entered Address: " + enteredAddress);
             Assert.assertTrue(enteredAddress.contains(user.get("street")));
         } else {
-            cookieSettingsWindowBlocks();
             assertEquals(
                     getDriver().findElement(By.xpath("//input[@id='origin-cac_singleLineAddress']"))
                             .getAttribute("value"),
                     user.get("street"));
         }
-        cookieSettingsWindowBlocks();
-        //  wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//input[@id='origin-cac_postalCode']")));
-        cookieSettingsWindowBlocks();
         if (isPresent(By.xpath("//input[@id='origin-cac_postalCode']"))) {
             getDriver().findElement(By.xpath("//input[@id='origin-cac_postalCode']"))
                     .sendKeys(user.get("zipcode"));
@@ -107,22 +101,22 @@ public class UPSStepDefs extends HelperStepDefs {
             new Select(getDriver().findElement(By.xpath("//select[@id='origin-cac_state']")))
                     .selectByVisibleText(user.get("state"));
         }
-
-        cookieSettingsWindowBlocks();
-        getDriver().findElement(By.xpath("//input[@id='origin-cac_email']"))
-                .sendKeys(user.get("email"));
-        cookieSettingsWindowBlocks();
-        getDriver().findElement(By.xpath("//input[@id='origin-cac_phone']"))
-                .sendKeys(user.get("phone"));
-        cookieSettingsWindowBlocks();
-
-    }
-
-    private void cookieSettingsWindowBlocks() {
-        if (isPresent(CONFIRM_BUTTON)) {
-            getDriver().findElement(CONFIRM_BUTTON).click();
-            wait.until(ExpectedConditions.invisibilityOfElementLocated(CONFIRM_BUTTON));
-        }
+        wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//input[@id='origin-cac_phone']")))
+                .click();
+        WebElement phone = getDriver().findElement(By.xpath("//input[@id='origin-cac_phone']"));
+        phone.sendKeys(user.get("phone"));
+        new Actions(getDriver())
+                .click(phone)
+                .sendKeys(phone, Keys.ENTER)
+                .perform();
+        WebElement email = getDriver().findElement(By.xpath("//input[@id='origin-cac_email']"));
+        email.sendKeys(user.get("email"));
+        new Actions(getDriver())
+                .click(email)
+                .sendKeys(email, Keys.ENTER)
+                .perform();
+        System.out.println("phone entered: " + phone.getAttribute("value"));
+        System.out.println("phone email: " + email.getAttribute("value"));
     }
 
     @And("I submit the shipment form")
