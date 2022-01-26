@@ -1,0 +1,14 @@
+user:
+  username: jdoe
+  email: jdoe@exaple.com
+  password: welcome
+  firstName: John
+  middleName: Adam
+  lastName: Doe
+admin:
+  username: rroe
+  email: rroe@exaple.com
+  password: password
+  firstName: Richard
+  middleName: Josh
+  lastName: Roe

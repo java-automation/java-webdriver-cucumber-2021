@@ -1,0 +1,10 @@
+origin:
+  country: United States
+  name: Administrator
+  address: 4970 El Camino Real, Los Altos, CA 94022
+  email: admin@example.com
+  phone: "1234567890"
+destination:
+  country: United States
+  name: John Doe
+  address: 870 7th Avenue, New York, NY 10019

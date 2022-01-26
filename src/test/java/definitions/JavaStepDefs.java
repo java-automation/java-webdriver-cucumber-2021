@@ -3,8 +3,11 @@ package definitions;
 import io.cucumber.java.Transpose;
 import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
-import org.assertj.core.util.Arrays;
+//import org.assertj.core.util.Arrays;
 import org.openqa.selenium.WebElement;
+import pages.Animal;
+import pages.Cat;
+import pages.Dog;
 
 import java.sql.SQLOutput;
 import java.util.*;
@@ -477,7 +480,7 @@ public class JavaStepDefs {
         reverseWords("I love Kansas");
         sort(arr);
     }
-
+    //O(1)
     void toSwap(int num1, int num2) {
         System.out.println("Swap method begin: num1: " + num1 + ", num2: " + num2);
 
@@ -485,17 +488,17 @@ public class JavaStepDefs {
         num1 = num2;
         num2 = temp;
 
-        num1 = num1 + num2; // 3+5=8
-        num2 = num1 - num2; // 8-5=3 (num2)
-        num1 = num1 - num2; // 8-3=5 (num1)
-
-        num1 = num1 * num2; // 3*5=15
-        num2 = num1 / num2; // 15/5=3 (num2)
-        num1 = num1 / num2; // 15/3=5 (num1)
+//        num1 = num1 + num2; // 3+5=8
+//        num2 = num1 - num2; // 8-5=3 (num2)
+//        num1 = num1 - num2; // 8-3=5 (num1)
+//
+//        num1 = num1 * num2; // 3*5=15
+//        num2 = num1 / num2; // 15/5=3 (num2)
+//        num1 = num1 / num2; // 15/3=5 (num1)
 
         System.out.println("Swap method end: num1: " + num1 + ", num2: " + num2);
     }
-
+    //O(N^2)
     int[] sort(int[] arr) {
         for (int i = 0; i < arr.length - 1; i++) {
             for (int j = i + 1; j < arr.length; j++) {
@@ -509,7 +512,7 @@ public class JavaStepDefs {
         return arr;
     }
 
-
+    //O(1)
     void printDivBy3and4(int num) {
         System.out.println("\n" + "Is " + num + " div by 3 and 4?");
         if (num % 3 == 0 && num % 4 == 0) {
@@ -523,6 +526,7 @@ public class JavaStepDefs {
         }
     }
 
+    //O(N)
     boolean isArrayContains(int[] array, int el) {
         //boolean res = false;
         for (int arrayEl : array) {
@@ -535,6 +539,7 @@ public class JavaStepDefs {
         return false;
     }
 
+    //O(N)
     boolean isArrayContains2(String[] array, String toFind) {
         for (String arrayEl : array) {
             if (arrayEl.equals(toFind)) {
@@ -544,6 +549,7 @@ public class JavaStepDefs {
         return false;
     }
 
+    //O(N)
     boolean isArrayContainsboth(Object[] array, Object toFind) {
         for (Object arrayEl : array) {
             if (arrayEl.equals(toFind)) {
@@ -574,6 +580,8 @@ public class JavaStepDefs {
      * @param index_el1
      * @param index_el2
      */
+
+    //O(1)
     void toSwapArrEl(int array[], int index_el1, int index_el2) {
 
         System.out.print("Initial array: ");
@@ -617,6 +625,7 @@ public class JavaStepDefs {
     //Result for 20:
     //1 2 Fizz 4 Buzz Fizz 7 8 Fizz Buzz 11 Fizz 13 14 FizzBuzz 16 17 Fizz 19 Buzz
 
+    // O(N)
     void fizzBuzz(int num) {
         System.out.println("FizzBuzz for " + num);
 
@@ -634,6 +643,7 @@ public class JavaStepDefs {
         System.out.println();
     }
 
+    // O(N)
     void printFizzBuzz(int array[]) {
 
         for (int i = 0; i < array.length; i++) {
@@ -661,6 +671,7 @@ public class JavaStepDefs {
         System.out.println("\n" + r.toString());
     }
 
+    //O(N )
     void printReversed(String str) {
         System.out.println("Print reversed " + str);
         for (int i = str.length() - 1; i >= 0; i--) {
@@ -696,10 +707,11 @@ public class JavaStepDefs {
 
     //**********************************************************************************************
 
-    @And("I do my HW for Day10")
-    public void iDoMyHWForDay() {
+    @And("I do my HW for Day_10")
+    public void iDoMyHWForDay10() {
         int arrayOfNum[] = {1, 1, 2, 4, 2, 1, 7, 8, 9, 10};
         int arrayOfNum2[] = {1, 7, 3, 2, 8};
+     //   findMaxNum(arrayOfNum);
         System.out.println(containsDuplicateNum(arrayOfNum));
         System.out.println(containsDuplicateNum(arrayOfNum2));
 
@@ -769,6 +781,7 @@ public class JavaStepDefs {
     }
 
     //c) Write a function that finds 2 max numbers in the array
+    // O(N)
     public static int[] findTwoHighestDistinctValues(int[] array) {
         int max = Integer.MIN_VALUE;
         int secondMax = Integer.MIN_VALUE;
@@ -782,6 +795,127 @@ public class JavaStepDefs {
         }
         return new int[]{max, secondMax};
     }
+
+    // O(N)
+    int findMaxNum(int[] numArr) {
+        System.out.println("Max num in array: " + Arrays.toString(numArr));
+        int max = numArr[0];
+        for (int i = 1; i < numArr.length; i++) {
+            if (max < numArr[i]) {
+               max = numArr[i];
+            }
+        }
+        return max;
+    }
+
+    //**********************************************************************************************
+
+    @And("I do my HW for Day_11")
+    public void iDoMyHWForDay11() {
+       int arr[] = {1, 7, 3, 2, 8};
+        findTwoMaxNum(arr);
+    }
+    //Write a function that prints two max numbers in an array
+    // O(N)
+    void findTwoMaxNum(int[] numArr) {
+        System.out.println("Two max num in array: " + Arrays.toString(numArr));
+        int max1 = Integer.MIN_VALUE;
+        int max2 = Integer.MIN_VALUE;
+
+        for (int i = 0; i < numArr.length; i++) {
+            if (max1 < numArr[i]) {
+                max2 = max1;
+                max1 = numArr[i];
+            } else if (max2 < numArr[i]) {
+                max2 = numArr[i];
+            }
+        }
+        System.out.println("Largest: " + max1 + " Second largest: " + max2);
+    }
+
+    //Write a function that finds if any two elements of an array result in sum
+
+    //**********************************************************************************************
+
+    @And("I do my HW for Day_12")
+    public void iDoMyHWForDay12() {
+        int num = 5;
+        System.out.println("Number " + num + " is prime: " + isPrimeNumber(num));
+        System.out.println("Factorial of number " + num + " is " + findFactortial(num));
+    }
+
+//    Find if a number is a prime (a natural number greater than 1 that is not a product of two smaller natural numbers)
+    public boolean isPrimeNumber(int num){
+        boolean flag = false;
+        for (int i = 2; i <= num / 2; ++i) {
+            if (num % i == 0) {
+                flag = true;
+                break;
+            }
+        }
+        if (!flag)
+            return true;
+        else
+           return false;
+    }
+
+//    Find factorial of a number (5! = 5 * 4 * 3 * 2 * 1)
+    public long findFactortial(int num){
+        long factorial = 1;
+        for(int i = 1; i <= num; ++i){
+            factorial *= i;
+        }
+        return factorial;
+    }
+
+    //**********************************************************************************************
+
+    @Given("I work with classes")
+    public void iWorkWithClasses() {
+
+        System.out.println();
+        System.out.println();
+
+        Animal cat = new Cat("Tom");
+        cat.sleep();
+        cat.walk();
+        cat.speak();
+        cat.eat("fish");
+        System.out.println(cat.getName());
+
+        System.out.println();
+
+        Animal anotherCat = new Cat();
+        anotherCat.sleep();
+        anotherCat.speak();
+        System.out.println("Street cat name is " + anotherCat.getName());
+
+        System.out.println();
+        System.out.println();
+
+        Animal dog = new Dog();
+        System.out.println("Dog name is " + dog.getName());
+        dog.setName("Bobby");
+        dog.eat("bone");
+        dog.sleep();
+        dog.speak();
+
+        List<Animal> animals = new ArrayList<>();
+        animals.add(cat);
+        animals.add(anotherCat);
+        animals.add(dog);
+        printAnimalNames(animals);
+    }
+
+    void printAnimalNames(List<Animal> animals) {
+        System.out.println();
+        System.out.println("All animal names >>>> ");
+        for (Animal animal : animals) {
+            System.out.println(animal.getName());
+            animal.sleep();
+            animal.speak();
+        }
+    }
 }
 
 // Locators - XPath + DevTools (Chrome)
@@ -794,5 +928,4 @@ public class JavaStepDefs {
 // Projects - SPA, REST API project, etc.
 
 
-//**********************************************************************************************
 
