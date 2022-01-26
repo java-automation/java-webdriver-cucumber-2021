@@ -1,5 +1,6 @@
 package support;
 
+import com.fasterxml.jackson.dataformat.yaml.YAMLMapper;
 import io.github.bonigarcia.wdm.WebDriverManager;
 import org.openqa.selenium.*;
 import org.openqa.selenium.chrome.ChromeDriver;
@@ -18,10 +19,7 @@ import org.openqa.selenium.remote.RemoteWebDriver;
 import org.openqa.selenium.safari.SafariDriver;
 import org.yaml.snakeyaml.Yaml;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.InputStream;
+import java.io.*;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
@@ -47,7 +45,12 @@ public class TestContext {
     }
 
     private static void setConfig() {
-        config = new Yaml().loadAs(getStream("config"), Config.class);
+        try {
+            config = new YAMLMapper().readValue(getStream("config"), Config.class);
+        } catch (IOException e) {
+            throw new Error("Couldn't process test config data! Error: " + e);
+        }
+        //config = new Yaml().loadAs(getStream("config"), Config.class);
     }
 
     public static Map<String, String> getData(String recordKey, String project) {
@@ -65,10 +68,10 @@ public class TestContext {
 
     public static void initialize() {
         setConfig();
-        String browser = config.browser;
-        String testEnv = config.runType;
-        boolean isHeadless = config.headless;
-        Dimension size = new Dimension(config.browserWidth, config.browserHeight);
+        String browser = config.getBrowser();
+        String testEnv = config.getRunType();
+        boolean isHeadless = config.isHeadless();
+        Dimension size = new Dimension(config.getBrowserWidth(), config.getBrowserHeight());
         Point position = new Point(0, 0);
 
         if (testEnv.equals("local")) {
@@ -93,7 +96,7 @@ public class TestContext {
                     chromeOptions.setExperimentalOption("prefs", chromePreferences);
 
                     //logging for network
-                    if (config.logPerformance) {
+                    if (config.isLogPerformance()) {
                         LoggingPreferences logPrefs = new LoggingPreferences();
                         logPrefs.enable(LogType.PERFORMANCE, Level.ALL);
                         chromeOptions.setCapability("goog:loggingPrefs", logPrefs);
