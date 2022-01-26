@@ -3,8 +3,7 @@ package definitions;
 import io.cucumber.java.en.And;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
-import pages.UpsHome;
-import pages.UpsShip;
+import pages.*;
 
 import java.util.Map;
 
@@ -13,42 +12,50 @@ import static support.TestContext.getData;
 
 public class UpsStepDefs {
 
-    private final UpsHome homePage = new UpsHome();
-    private final UpsShip shipPage = new UpsShip();
+    private static final UpsHome homePage = new UpsHome();
 
-    private Map<String, String> origin, destination;
+    private UpsCreateShipment createShipmentPage;
+    private UpsOrigin originPage;
+    private UpsDestination destinationPage;
+    private UpsPackage packagePage;
+    private UpsPickup pickupPage;
+    private Map<String, String> originData, destinationData;
 
     @And("I go to Create a Shipment")
     public void iGoToCreateAShipment() {
         homePage.closePrivacyPrompt();
         homePage.createShipment();
-        shipPage.waitForFirstLoad();
+        createShipmentPage = new UpsCreateShipment();
+        createShipmentPage.waitForFirstLoad();
+        originPage = new UpsOrigin();
+        destinationPage = new UpsDestination();
+        packagePage = new UpsPackage();
+        pickupPage = new UpsPickup();
     }
 
     @When("I fill out origin shipment fields with {string} profile")
     public void iFillOutOriginShipmentFields(String profileReference) {
-        origin = getData(profileReference, "ups");
+        originData = getData(profileReference, "ups");
 
-        String country = origin.get("country");
-        shipPage.selectOriginCountry(country);
-        shipPage.fillOriginCompanyOrName(origin.get("companyOrName"));
+        String country = originData.get("country");
+        originPage.selectOriginCountry(country);
+        originPage.fillOriginCompanyOrName(originData.get("companyOrName"));
 
         //some countries have only one address line, some require three - need to wait for refresh of appropriate one
-        String address = origin.get("address");
-        String city = origin.get("city");
-        String postalCode = origin.get("postalCode");
+        String address = originData.get("address");
+        String city = originData.get("city");
+        String postalCode = originData.get("postalCode");
         if (isSingleLineAddressCountry(country)) {
-            shipPage.fillOriginAddress(address + ", " + city + ", " + postalCode);
-            verifyAddressArtifacts(address, city, postalCode, shipPage.getProcessedOriginAddress());
-        }
-        else {
-            shipPage.fillOriginAddress1(address);
-            shipPage.fillOriginPostalCode(postalCode);
-            shipPage.fillOriginCity(city);
+            originPage.fillOriginAddress(address + ", " + city + ", " + postalCode);
+            verifyAddressArtifacts(address, city, postalCode, originPage.getProcessedOriginAddress());
+        } else {
+            originPage.fillOriginAddress1(address);
+            originPage.fillOriginPostalCode(postalCode);
+            originPage.fillOriginCity(city);
         }
 
-        shipPage.fillOriginEmail(origin.get("email"));
-        shipPage.fillOriginPhone(origin.get("phone"));
+        originPage.fillOriginEmail(originData.get("email"));
+        originPage.fillOriginPhone(originData.get("phone"));
     }
 
     private void verifyAddressArtifacts(String address, String city, String postalCode, String actualAddress) {
@@ -68,92 +75,77 @@ public class UpsStepDefs {
 
     @And("I submit the shipment form")
     public void iSubmitTheShipmentForm() {
-        shipPage.submitForm();
+        createShipmentPage.submitForm();
     }
 
     @Then("I verify origin shipment fields submitted")
     public void iVerifyOriginShipmentFieldsSubmitted() {
-        assertThat(shipPage.getOriginSummaryName()).isEqualTo(origin.get("companyOrName"));
-        verifyAddressArtifacts(origin.get("address"), origin.get("city"), origin.get("postalCode"), shipPage.getOriginSummaryAddress());
-        assertThat(shipPage.getOriginSummaryCountry()).isEqualTo(
-                getAlpha2CountryCode(origin.get("country")));
-        assertThat(shipPage.getOriginSummaryContact()).isEqualTo(
-                origin.get("email") + ", " + origin.get("phone"));
-    }
-
-    private String getAlpha2CountryCode(String country) {
-        return switch (country) {
-            case "United States" -> "US";
-            case "Finland" -> "FI";
-            default -> throw new Error("Unknown country name: " + country);
-        };
+        assertThat(destinationPage.getOriginSummaryName()).isEqualTo(originData.get("companyOrName"));
+        verifyAddressArtifacts(originData.get("address"), originData.get("city"), originData.get("postalCode"), destinationPage.getOriginSummaryAddress());
+        assertThat(destinationPage.getOriginSummaryCountry()).isEqualTo(originData.get("alpha2Code"));
+        assertThat(destinationPage.getOriginSummaryContact()).isEqualTo(
+                originData.get("email") + ", " + originData.get("phone"));
     }
 
     @When("I fill out destination shipment fields with {string} profile")
     public void iFillOutDestinationShipmentFieldsWithProfile(String profileReference) {
-        destination = getData(profileReference, "ups");
-        String country = destination.get("country");
-        boolean isDeliveryInsideCountry = country.equals(origin.get("country"));
+        destinationData = getData(profileReference, "ups");
+        String country = destinationData.get("country");
+        boolean isDeliveryInsideCountry = country.equals(originData.get("country"));
 
-        shipPage.selectDestinationCountry(country);
-        shipPage.fillDestinationCompanyOrName(destination.get("companyOrName"));
+        destinationPage.selectDestinationCountry(country);
+        destinationPage.fillDestinationCompanyOrName(destinationData.get("companyOrName"));
 
         //contact required only if shipping to a different country (customs?)
-        if (!isDeliveryInsideCountry) shipPage.fillDestinationContactName(destination.get("contact"));
+        if (!isDeliveryInsideCountry) destinationPage.fillDestinationContactName(destinationData.get("contact"));
 
         //some countries have only one address line, some require three - need to wait for refresh of appropriate one
-        String address = destination.get("address");
-        String city = destination.get("city");
-        String postalCode = destination.get("postalCode");
+        String address = destinationData.get("address");
+        String city = destinationData.get("city");
+        String postalCode = destinationData.get("postalCode");
         if (isSingleLineAddressCountry(country)) {
-            shipPage.fillDestinationAddress(address + ", " + city + ", " + postalCode);
-            verifyAddressArtifacts(address, city, postalCode, shipPage.getProcessedDestinationAddress());
-        }
-        else {
-            shipPage.fillDestinationAddress1(address);
-            shipPage.fillDestinationPostalCode(postalCode);
-            shipPage.fillDestinationCity(city);
+            destinationPage.fillDestinationAddress(address + ", " + city + ", " + postalCode);
+            verifyAddressArtifacts(address, city, postalCode, destinationPage.getProcessedDestinationAddress());
+        } else {
+            destinationPage.fillDestinationAddress1(address);
+            destinationPage.fillDestinationPostalCode(postalCode);
+            destinationPage.fillDestinationCity(city);
         }
 
         //phone required only if shipping to a different country (customs?)
-        if (!isDeliveryInsideCountry) shipPage.fillDestinationPhone(destination.get("phone"));
+        if (!isDeliveryInsideCountry) destinationPage.fillDestinationPhone(destinationData.get("phone"));
     }
 
     @And("I {string} residential address for non-US country")
     public void iResidentialAddressForNonUSCountry(String action) {
-        if (destination.get("country").equals("United States")) return;
+        if (destinationData.get("country").equals("United States")) return;
 
         switch (action.toLowerCase()) {
-            case "confirm" -> shipPage.confirmDestinationIsResidentialNonUS();
-            case "deny" -> shipPage.denyDestinationIsResidentialNonUS();
+            case "confirm" -> destinationPage.confirmDestinationIsResidentialNonUS();
+            case "deny" -> destinationPage.denyDestinationIsResidentialNonUS();
             default -> throw new Error("Unknown action reference: " + action);
         }
     }
 
     @And("I {string} residential address for US")
     public void iResidentialAddressForUS(String action) {
-        if (!destination.get("country").equals("United States")) return;
+        if (!destinationData.get("country").equals("United States")) return;
 
         switch (action.toLowerCase()) {
-            case "confirm" -> shipPage.confirmDestinationIsResidentialUS();
-            case "deny" -> shipPage.denyDestinationIsResidentialUS();
+            case "confirm" -> destinationPage.confirmDestinationIsResidentialUS();
+            case "deny" -> destinationPage.denyDestinationIsResidentialUS();
             default -> throw new Error("Unknown action reference: " + action);
         }
     }
 
     @And("I set packaging type as {string} and weight as {int} units")
     public void iSetPackagingTypeAsAndWeightAsUnits(String packageType, int weight) {
-        shipPage.selectPackagingType(packageType);
-        shipPage.fillPackageWeight(weight);
+        packagePage.selectPackagingType(packageType);
+        packagePage.fillPackageWeight(weight);
     }
 
     @Then("I verify total charges appear")
     public void iVerifyTotalChargesAppear() {
-        assertThat(shipPage.isTotalChargesVisible()).isTrue();
+        assertThat(pickupPage.isTotalChargesVisible()).isTrue();
     }
-
-//    @And("I do test step")
-//    public void iDoTestStep() throws InterruptedException {
-//        shipPage.printSelectOptionsWithResidentialStatus();
-//    }
 }

@@ -10,7 +10,7 @@ public class UpsHome extends Page {
         setTitle("Global Shipping & Logistics Services | UPS - United States");
     }
 
-    @FindBy(css = ".nav.jobs-list .widget-link-ship")
+    @FindBy(css = ".nav-link.widget-link-ship")
     private WebElement shipMenuButton;
 
     @FindBy(css = ".implicit_privacy_prompt button")
@@ -21,6 +21,6 @@ public class UpsHome extends Page {
     }
 
     public void closePrivacyPrompt() {
-        privacyPromptCloseButton.click();
+        if (privacyPromptCloseButton.isDisplayed()) privacyPromptCloseButton.click();
     }
 }

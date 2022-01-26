@@ -7,6 +7,7 @@ Julie Harris:
   phone: 724-304-9793
   email: JulieHarris@example.com
   country: United States
+  alpha2Code: US
 Mary Johansson:
   companyOrName: Johansson & Co.
   contact: Mary Johansson
@@ -16,6 +17,7 @@ Mary Johansson:
   phone: 040-824-4386
   email: MaryJohansson@example.com
   country: Finland
+  alpha2Code: FI
 Richard Blank:
   companyOrName: Richard Blank
   contact: Richard Blank
@@ -25,3 +27,4 @@ Richard Blank:
   phone: 337-867-7672
   email: RichardBlank@example.com
   country: United States
+  alpha2Code: US
