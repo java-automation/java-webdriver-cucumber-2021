@@ -1,27 +1,21 @@
 package pages;
 
-import org.openqa.selenium.html5.LocalStorage;
-import org.openqa.selenium.html5.WebStorage;
 import org.openqa.selenium.logging.LogEntries;
-import org.openqa.selenium.logging.LogType;
 import org.openqa.selenium.support.PageFactory;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
-import static support.TestContext.getDriver;
-import static support.TestContext.getExecutor;
+import static support.TestContext.*;
 
-public class UpsPage {
+public class Page {
 
     private String url;
     private String title;
 
     private final WebDriverWait wait;
-    private final LocalStorage localStorage;
 
-    public UpsPage() {
+    public Page() {
         PageFactory.initElements(getDriver(), this);
-        wait = new WebDriverWait(getDriver(), 5);
-        localStorage = ((WebStorage) getDriver()).getLocalStorage();
+        wait = new WebDriverWait(getDriver(), getConfig().getExplicitWait());
     }
 
     public void open() {
@@ -52,16 +46,12 @@ public class UpsPage {
         return wait;
     }
 
+    public LogEntries getLogs(String type) {
+        return getDriver().manage().logs().get(type);
+    }
+
     public void waitForAjaxToComplete()
     {
         wait.until(driver -> getExecutor().executeScript("return (window.jQuery != null) && (jQuery.active === 0);"));
-    }
-
-    public LocalStorage getLocalStorage() {
-        return localStorage;
-    }
-
-    public LogEntries getLogs() {
-        return getDriver().manage().logs().get(LogType.PERFORMANCE);
     }
 }

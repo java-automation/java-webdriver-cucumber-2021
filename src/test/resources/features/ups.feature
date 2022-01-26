@@ -2,7 +2,7 @@
 Feature: UPS end to end scenarios
 
   Background:
-    Given I go to UPS page
+    Given I go to "ups" page OOP
 
   @ups
   #valid US profiles: Richard Blank/Julie Harris

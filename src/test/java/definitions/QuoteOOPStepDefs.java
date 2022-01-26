@@ -1,7 +1,6 @@
 package definitions;
 
 import io.cucumber.java.en.And;
-import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 import pages.QuoteForm;
@@ -21,11 +20,6 @@ public class QuoteOOPStepDefs {
 
     private Map<String, String> user;
     private boolean isCompleteForm;
-
-    @Given("I go to quote form page OOP")
-    public void iGoToQuoteFormPageOOP() {
-        form.open();
-    }
 
     @When("I fill out {string} fields with {string} profile OOP")
     public void iFillOutFieldsWithProfileOOP(String whatFields, String profileReference) {

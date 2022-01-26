@@ -3,10 +3,10 @@ package pages;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 
-public class QuoteResult extends QuotePage {
+public class QuoteResult extends Page {
 
     public QuoteResult() {
-        setURL("https://skryabin.com/market/quote.html");
+        setUrl("https://skryabin.com/market/quote.html");
         setTitle("Get a Quote");
     }
 

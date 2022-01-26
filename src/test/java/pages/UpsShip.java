@@ -1,17 +1,29 @@
 package pages;
 
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.html5.LocalStorage;
+import org.openqa.selenium.html5.WebStorage;
+import org.openqa.selenium.logging.LogType;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.Select;
 
 import java.util.List;
 
-public class UpsShip extends UpsPage {
+import static support.TestContext.*;
+
+public class UpsShip extends Page {
+
+    private final LocalStorage localStorage;
 
     public UpsShip() {
         setUrl("https://www.ups.com/ship?loc=en_US");
         setTitle("UPS Shipping");
+        localStorage = ((WebStorage) getDriver()).getLocalStorage();
+    }
+
+    public LocalStorage getLocalStorage() {
+        return localStorage;
     }
 
     // origin
@@ -269,7 +281,7 @@ public class UpsShip extends UpsPage {
     public void selectPackagingType(String type) {
         new Select(packageTypeSelect).selectByVisibleText(type);
         waitForLocalStorageUpdate();
-        getWait().until(log -> getLogs()
+        getWait().until(log -> getLogs(LogType.PERFORMANCE)
                 .getAll()
                 .stream()
                 .filter(entry -> entry.getMessage().contains("https://www.ups.com/ship/api/LookupAndValidation/GetOptionsAvailability"))
@@ -281,7 +293,7 @@ public class UpsShip extends UpsPage {
     public void fillPackageWeight(int weight) {
         packageWeight.sendKeys(String.valueOf(weight));
         waitForLocalStorageUpdate();
-        getWait().until(log -> getLogs()
+        getWait().until(log -> getLogs(LogType.PERFORMANCE)
                 .getAll()
                 .stream()
                 .filter(entry -> entry.getMessage().contains("https://www.ups.com/ship/api/RatingAndProcessing/RateShipmentForAllServices"))

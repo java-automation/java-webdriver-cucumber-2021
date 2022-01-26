@@ -1,7 +1,6 @@
 package definitions;
 
 import io.cucumber.java.en.And;
-import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 import pages.UpsHome;
@@ -19,14 +18,9 @@ public class UpsStepDefs {
 
     private Map<String, String> origin, destination;
 
-    @Given("I go to UPS page")
-    public void iGoToUPSPage() {
-        homePage.open();
-        homePage.closePrivacyPrompt();
-    }
-
     @And("I go to Create a Shipment")
     public void iGoToCreateAShipment() {
+        homePage.closePrivacyPrompt();
         homePage.createShipment();
         shipPage.waitForFirstLoad();
     }

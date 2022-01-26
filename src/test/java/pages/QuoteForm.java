@@ -8,10 +8,10 @@ import java.util.List;
 
 import static support.TestContext.getDriver;
 
-public class QuoteForm extends QuotePage {
+public class QuoteForm extends Page {
 
     public QuoteForm() {
-        setURL("https://skryabin.com/market/quote.html");
+        setUrl("https://skryabin.com/market/quote.html");
         setTitle("Get a Quote");
     }
 

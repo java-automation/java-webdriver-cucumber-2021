@@ -3,7 +3,7 @@ package pages;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 
-public class UpsHome extends UpsPage {
+public class UpsHome extends Page {
 
     public UpsHome() {
         setUrl("https://www.ups.com/us/en/Home.page");

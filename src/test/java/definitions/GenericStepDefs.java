@@ -7,6 +7,8 @@ import org.openqa.selenium.Dimension;
 import org.openqa.selenium.logging.LogEntries;
 import org.openqa.selenium.logging.LogEntry;
 import org.openqa.selenium.logging.LogType;
+import pages.QuoteForm;
+import pages.UpsHome;
 
 import java.util.logging.Level;
 
@@ -16,6 +18,15 @@ public class GenericStepDefs {
     @Given("I go to {string} page")
     public void iGoToPage(String websiteReference) {
         getDriver().get(getURLUsingKnownReference(websiteReference));
+    }
+
+    @Given("I go to {string} page OOP")
+    public void iGoToPageOOP(String pageReference) {
+        switch (pageReference.toLowerCase()) {
+            case "quote form" -> new QuoteForm().open();
+            case "ups" -> new UpsHome().open();
+            default -> throw new Error("Unknown URL reference: " + pageReference);
+        }
     }
 
     static String getURLUsingKnownReference(String websiteReference) {

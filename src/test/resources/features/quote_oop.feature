@@ -2,7 +2,7 @@
 Feature: Quote page and page object pattern
 
   Background:
-    Given I go to quote form page OOP
+    Given I go to "quote form" page OOP
 
   @quote_oop1
   Scenario Outline: Submit the form with specified field set and one of the preset profiles
