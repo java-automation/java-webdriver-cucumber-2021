@@ -101,4 +101,5 @@
     Given I work with classes
 #    And I work with classes Dog
 #  And Print animal names
+    And bigOnotation
 

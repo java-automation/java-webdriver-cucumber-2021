@@ -1,13 +1,18 @@
 @quote_oop
 
   Feature: Quote feature
-    Scenario: Quote end to end OOP
+    Scenario Outline: Quote end to end OOP
       Given I go to the "quote" page oop
-      When I fill out "user" required fields oop
-      When I fill out "user" optional fields OOP
+      When I fill out "<role>" required fields oop
+      When I fill out "<role>" optional fields OOP
       And I submit a form OOP
-      Then I verify "user" the required fields OOP
-      And I wait for 8 sec
+      Then I verify "<role>" the required fields OOP
+      And I wait for 3 sec
+      Examples:
+      | role  |
+      | user  |
+      | admin |
+
 
 
     @quote3

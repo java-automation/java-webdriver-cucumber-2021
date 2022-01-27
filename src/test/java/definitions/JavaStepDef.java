@@ -4,22 +4,15 @@ import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
-import io.cucumber.java.sl.In;
-import io.cucumber.java8.Ca;
-import org.apache.commons.compress.archivers.ar.ArArchiveEntry;
-import org.apache.commons.lang3.ArrayUtils;
 import org.openqa.selenium.By;
 import org.openqa.selenium.Dimension;
 import org.openqa.selenium.Keys;
-import org.openqa.selenium.remote.server.handler.DeleteSession;
 import pages.Animal;
 import pages.Cat;
 import pages.Dog;
 
 import static org.assertj.core.api.Assertions.*;
 
-import java.security.Key;
-import java.sql.SQLOutput;
 import java.util.*;
 
 import static support.TestContext.getDriver;
@@ -1022,5 +1015,13 @@ public class JavaStepDef {
         }
          return 0;
     }
+
+    @And("bigOnotation")
+    int getFirstElementFromArr(int[] arr){
+            return arr[0];
+        }
+
+
+
 }
 

@@ -1,0 +1,8 @@
+origin:
+  name: admnistrator
+  address: 1121 melrose ave, apt 5, Glendale, CA 94022
+  email: admin@example.com
+  phone: "124356789"
+
+destination:
+  name: Jonh Doe

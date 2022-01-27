@@ -1,0 +1,11 @@
+browser: chrome
+runType: local
+headless: false
+browserWidth: 1980
+browserHeight: 1080
+pageLoadTimeout: 60
+implicitTimeout: 1
+explicitTimeout: 5
+#supportedOslist:
+#  - "win"
+#  - "mac"

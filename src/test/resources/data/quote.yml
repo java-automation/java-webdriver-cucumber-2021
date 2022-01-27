@@ -1,0 +1,22 @@
+user:
+  username: jdoe
+  email: jdoe@exaple.com
+  password: welcome
+  firstName: John
+  lastName: Doe
+  passwordExp: [ entered ]
+  phone: "5556664444"
+  country: Canada
+  address: 1600 Pennsylvania Avenue, N.W. Washington, DC 20500
+  year: 1991
+  month: 8
+  gender: male
+
+admin:
+  username: rroe
+  email: rroe@exaple.com
+  password: password
+  firstName: Josh
+  lastName: Roe
+
+

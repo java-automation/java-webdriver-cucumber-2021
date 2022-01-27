@@ -23,6 +23,7 @@ import org.yaml.snakeyaml.Yaml;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.InputStream;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
@@ -38,26 +39,41 @@ public class TestContext {
     }
 
     public static void initialize() {
-        initialize("chrome", "local", false);
+        initialize(getConfig().browser, getConfig().runType, getConfig().headless);
     }
 
     public static void teardown() {
         driver.quit();
     }
 
-    public static Map<String, String> getData(String fileName) {
+    public static Map<String, String> getData(String dataKey) {
+        return getData(dataKey, "quote");
+    }
+
+    public static Config getConfig() {
+        InputStream stream = getStream("config");
+        Config config = new Yaml().loadAs(stream, Config.class);
+        return config;
+    }
+
+    public static Map<String, String> getData(String dataKey, String project) {
+        InputStream stream = getStream(project);
+        Map<String, Map<String, String>> mapOfMaps = new Yaml().load(stream);
+        Map<String, String> testData = mapOfMaps.get(dataKey);
+        return testData;
+    }
+
+    private static InputStream getStream(String project) {
         try {
-            String filePath = System.getProperty("user.dir") + "/src/test/resources/data/" + fileName + ".yml";
-            FileInputStream stream = new FileInputStream(filePath);
-            return new Yaml().load(stream);
+            String filePath = System.getProperty("user.dir") + "/src/test/resources/data/" + project + ".yml";
+            return new FileInputStream(filePath);
         } catch (FileNotFoundException e) {
             throw new Error(e);
         }
     }
 
-
     public static void initialize(String browser, String testEnv, boolean isHeadless) {
-        Dimension size = new Dimension(1920, 1080);
+        Dimension size = new Dimension(getConfig().browserWidth, getConfig().browserHeight);
         Point position = new Point(0, 0);
         if (testEnv.equals("local")) {
             switch (browser) {
