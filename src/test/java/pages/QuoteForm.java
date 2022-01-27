@@ -4,17 +4,16 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
 
+import java.util.Map;
+
 import static support.TestContext.getDriver;
 
-public class QuoteForm {
+public class QuoteForm extends Page {
 
-    // constructor
     public QuoteForm() {
-        PageFactory.initElements(getDriver(), this);
+        url  = "https://skryabin.com/market/quote.html";
+        title = "Get a Quote";
     }
-
-    // fields
-    private String url  = "https://skryabin.com/market/quote.html";
 
     @FindBy(xpath = "//input[@name='username']")
     private WebElement username;
@@ -35,6 +34,9 @@ public class QuoteForm {
     @FindBy(xpath = "//input[@id='firstName']")
     private WebElement firstName;
 
+    @FindBy(xpath = "//input[@id='middleName']")
+    private WebElement middleName;
+
     @FindBy(xpath = "//input[@id='lastName']")
     private WebElement lastName;
 
@@ -47,10 +49,6 @@ public class QuoteForm {
     @FindBy(id = "formSubmit")
     private WebElement submitButton;
 
-    //methods
-    public void open() {
-        getDriver().get(url);
-    }
 
     public void fillUsername(String value) {
         username.sendKeys(value);
@@ -65,11 +63,25 @@ public class QuoteForm {
         confirmPassword.sendKeys(value);
     }
 
-    public void fillName(String firstNameValue, String lastNameValue) {
+    private void fillOutFirstLastName(String firstNameValue, String lastNameValue) {
         name.click();
         firstName.sendKeys(firstNameValue);
         lastName.sendKeys(lastNameValue);
+    }
+
+    public void fillName(String firstNameValue, String lastNameValue) {
+        fillOutFirstLastName(firstNameValue, lastNameValue);
         save.click();
+    }
+
+    public void fillName(String firstNameValue, String middleNameValue, String lastNameValue) {
+        fillOutFirstLastName(firstNameValue, lastNameValue);
+        middleName.sendKeys(middleNameValue);
+        save.click();
+    }
+
+    public void fillName(Map<String, String> user) {
+        fillName(user.get("firstName"), user.get("middleName"), user.get("lastName"));
     }
 
     public void acceptPrivacyPolicy() {
