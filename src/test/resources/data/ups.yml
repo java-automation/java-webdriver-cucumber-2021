@@ -1,0 +1,43 @@
+origin:
+  country: United States
+  name: Administrator
+  address: 4970 El Camino Real, Los Altos, CA 94022
+  email: admin@example.com
+  phone: "1234567890"
+
+originHW:
+  username: jdoe
+  email: jdoe@exaple.com
+  password: welcome
+  firstName: John
+  middleName: Jonny
+  lastName: Doe
+  street: 611 Walker St
+  city: Houston
+  zipcode: 77002
+  state: TX
+  address: Bob Lanier Public Works Building, 611 Walker St, Houston, TX 77002
+  organization: Houston City Administration
+  phone: (713) 837-9534
+  country: United States
+
+destination:
+  country: United States
+  name: John Doe
+  address: 870 7th Avenue, New York, NY 10019
+
+destinationHW:
+  username: Rroe
+  email: rroe@exaple.com
+  password: password
+  firstName: Richard
+  lastName: Roe
+  street: 1100 Congress Ave
+  city: Austin
+  zipcode: 78701
+  state: TX
+  address: 1100 Congress Ave, Austin, TX, 78701
+  organization: Texas Capitol
+  phone: (512) 463-4630
+  country: United States
+

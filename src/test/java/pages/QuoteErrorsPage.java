@@ -54,6 +54,14 @@ public class QuoteErrorsPage extends HelperStepDefs {
     @FindBy(xpath = PRIVACY_POLICY_ERROR_XPATH)
     private WebElement privacyPolicy;
 
+
+    @FindBy(xpath = "//h1/span")
+    private List<WebElement> listUserNameError1;
+
+    public List<WebElement> getListUserNameError1() {
+        return listUserNameError1;
+    }
+
     @FindAll({@FindBy(xpath = USERNAME_ERROR_XPATH)})
     private List<WebElement> listUserNameError;
 

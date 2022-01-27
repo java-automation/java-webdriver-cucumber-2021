@@ -21,6 +21,7 @@ import org.yaml.snakeyaml.Yaml;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.InputStream;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
@@ -36,18 +37,34 @@ public class TestContext {
     }
 
     public static void initialize() {
-        initialize("chrome", "local", false);
+        initialize(getConfig().browser, getConfig().runType, getConfig().headless);
     }
 
     public static void teardown() {
         driver.quit();
     }
 
-    public static Map<String, String> getData(String fileName) {
+    public static Map<String, String> getData(String dataKey) {
+        return getData(dataKey, "quote");
+    }
+
+    public static Config getConfig() {
+        InputStream stream = getStream("config");
+        Config config = new Yaml().loadAs(stream, Config.class);
+        return config;
+    }
+
+    public static Map<String, String> getData(String dataKey, String project) {
+        InputStream stream = getStream(project);
+        Map<String, Map<String, String>> mapOfMaps = new Yaml().load(stream);
+        Map<String, String> testData = mapOfMaps.get(dataKey);
+        return testData;
+    }
+
+    private static InputStream getStream(String project) {
         try {
-            String filePath = System.getProperty("user.dir") + "/src/test/resources/data/" + fileName + ".yml";
-            FileInputStream stream = new FileInputStream(filePath);
-            return new Yaml().load(stream);
+            String filePath = System.getProperty("user.dir") + "/src/test/resources/data/" + project + ".yml";
+            return new FileInputStream(filePath);
         } catch (FileNotFoundException e) {
             throw new Error(e);
         }
@@ -69,7 +86,7 @@ public class TestContext {
                     chromePreferences.put("download.default_directory", System.getProperty("user.dir") + "/src/test/resources/downloads");
                     chromePreferences.put("safebrowsing.enabled", false);
                     chromePreferences.put("profile.block_third_party_cookies", true);
-                   // chromePreferences.put("profile.default_content_setting_values.cookies", 2); //block All cookies
+                    // chromePreferences.put("profile.default_content_setting_values.cookies", 2); //block All cookies
                     chromePreferences.put("plugins.always_open_pdf_externally", true);
                     chromePreferences.put("plugins.plugins_disabled", new ArrayList<String>() {{
                         add("Chrome PDF Viewer");

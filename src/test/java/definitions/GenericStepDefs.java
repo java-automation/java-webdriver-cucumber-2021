@@ -5,12 +5,29 @@ import io.cucumber.java.en.Given;
 import org.openqa.selenium.logging.LogEntries;
 import org.openqa.selenium.logging.LogEntry;
 import org.openqa.selenium.logging.LogType;
+import pages.QuoteForm;
+import pages.UpsHome;
 
 import java.util.logging.Level;
 
 import static support.TestContext.getDriver;
 
 public class GenericStepDefs {
+
+    @Given("I go to {string} page oop")
+    public void iGoToPageOop(String page) {
+        switch (page.toLowerCase()) {
+            case "quote":
+                new QuoteForm().open();
+                break;
+            case "ups":
+                new UpsHome().open();
+                break;
+            default:
+                throw new Error("Unsupported page: " + page);
+        }
+    }
+
     @Given("I go to {string} page")
     public void iGoToPage(String page) {
         getDriver().manage().window().maximize();
@@ -42,6 +59,9 @@ public class GenericStepDefs {
         System.out.println(getDriver().getTitle());
         System.out.println(getDriver().getCurrentUrl());
         System.out.println(getDriver().getWindowHandles());
+        System.out.println("Here is my cookie: " + getDriver().manage().getCookies());
+        // getDriver().manage().deleteAllCookies();
+        // System.out.println("Here is my cookie after deleting All cookie: " + getDriver().manage().getCookies());
     }
 
     @And("I print logs to the console")

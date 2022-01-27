@@ -11,13 +11,17 @@ import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.Select;
 import org.openqa.selenium.support.ui.WebDriverWait;
-import support.TestContext;
+import pages.UpsDestination;
+import pages.UpsHome;
+import pages.UpsOrigin;
 
 import java.util.Map;
 import java.util.stream.Collectors;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
+import static support.TestContext.getData;
 import static support.TestContext.getDriver;
 
 public class UPSStepDefs extends HelperStepDefs {
@@ -26,10 +30,16 @@ public class UPSStepDefs extends HelperStepDefs {
     public static final By DROP_DOWN_MENU_ADDRESS = By.xpath("//ngb-typeahead-window[@class='dropdown-menu show ng-star-inserted']/button");
     public static final By DROP_DOWN_MENU_ADDRESS_SUGGESTED_ADDRESSES = By.xpath("//ngb-typeahead-window[@class='dropdown-menu show ng-star-inserted']/button/ngb-highlight");
     private final WebDriverWait wait = new WebDriverWait(getDriver(), 10, 200);
-    Map<String, String> user = TestContext.getData("user");
 
+    Map<String, String> shipFromData = getData("originHW", "ups");
+    Map<String, String> shipToData = getData("destinationHW", "ups");
+    Map<String, String> originData = getData("origin", "ups");
+    Map<String, String> destinationData = getData("destination", "ups");
+    UpsHome homePage = new UpsHome();
+    UpsOrigin originPage = new UpsOrigin();
+    UpsDestination destinationPage = new UpsDestination();
 
-    @And("I go to {string}")
+    @And("I go to {string} 1")
     public void iGoToCreateAShipment(String textLink) {
         if (getDriver().findElement(By.xpath("//span[@class='icon ups-icon-hamburger']")).isDisplayed()) {
             getDriver().findElement(By.xpath("//span[@class='icon ups-icon-hamburger']")).click();
@@ -59,19 +69,19 @@ public class UPSStepDefs extends HelperStepDefs {
         wait.until(ExpectedConditions.textToBePresentInElement(getDriver().findElement(By.xpath("//h1/span")), textLink));
     }
 
-    @When("I fill out origin shipment fields")
-    public void iFillOutOriginShipmentFields() throws InterruptedException {
+    @When("I fill out origin shipment fields 1")
+    public void iFillOutOriginShipmentFields1() throws InterruptedException {
         wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//select[@id='origin-cac_country']")));
         if (isVisible(CLOSE_BUTTON_WEBSITE_COOKIES)) {
             getDriver().findElement(CLOSE_BUTTON_WEBSITE_COOKIES).click();
         }
         new Select(getDriver().findElement(By.xpath("//select[@id='origin-cac_country']")))
-                .selectByVisibleText(user.get("country"));
+                .selectByVisibleText(shipFromData.get("country"));
         getDriver().findElement(By.xpath("//input[@id='origin-cac_companyOrName']"))
-                .sendKeys(("%s %s").formatted(user.get("firstName"), user.get("lastName")));
+                .sendKeys(("%s %s").formatted(shipFromData.get("firstName"), shipFromData.get("lastName")));
         new Actions(getDriver())
                 .sendKeys(getDriver().findElement(By.xpath("//input[@id='origin-cac_singleLineAddress']")),
-                        user.get("street"))
+                        shipFromData.get("street"))
                 .perform();
         Thread.sleep(3000);
         new Actions(getDriver())
@@ -81,54 +91,86 @@ public class UPSStepDefs extends HelperStepDefs {
         if (isPresent(By.xpath("//input[@id='origin-cac_addressLine1']"))) {
             assertEquals(getDriver().findElement(By.xpath("//input[@id='origin-cac_addressLine1']"))
                             .getAttribute("value"),
-                    user.get("street"));
+                    shipFromData.get("street"));
         } else if (isPresent(By.xpath("//div[@class='ng-star-inserted']/p[@class='ng-star-inserted']"))) {
             String enteredAddress = getDriver().findElement(By.xpath("//div[@class='ng-star-inserted']/p[@class='ng-star-inserted']"))
                     .getText();
             System.out.println("Entered Address: " + enteredAddress);
-            Assert.assertTrue(enteredAddress.contains(user.get("street")));
+            Assert.assertTrue(enteredAddress.contains(shipFromData.get("street")));
         } else {
             assertEquals(
                     getDriver().findElement(By.xpath("//input[@id='origin-cac_singleLineAddress']"))
                             .getAttribute("value"),
-                    user.get("street"));
+                    shipFromData.get("street"));
         }
         if (isPresent(By.xpath("//input[@id='origin-cac_postalCode']"))) {
             getDriver().findElement(By.xpath("//input[@id='origin-cac_postalCode']"))
-                    .sendKeys(user.get("zipcode"));
+                    .sendKeys(shipFromData.get("zipcode"));
             getDriver().findElement(By.xpath("//input[@id='origin-cac_city']"))
-                    .sendKeys(user.get("city"));
+                    .sendKeys(shipFromData.get("city"));
             new Select(getDriver().findElement(By.xpath("//select[@id='origin-cac_state']")))
-                    .selectByVisibleText(user.get("state"));
+                    .selectByVisibleText(shipFromData.get("state"));
         }
         wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//input[@id='origin-cac_phone']")))
                 .click();
         WebElement phone = getDriver().findElement(By.xpath("//input[@id='origin-cac_phone']"));
-        phone.sendKeys(user.get("phone"));
+        phone.sendKeys(shipFromData.get("phone"));
         new Actions(getDriver())
                 .click(phone)
                 .sendKeys(phone, Keys.ENTER)
                 .perform();
         WebElement email = getDriver().findElement(By.xpath("//input[@id='origin-cac_email']"));
-        email.sendKeys(user.get("email"));
+        email.sendKeys(shipFromData.get("email"));
         new Actions(getDriver())
                 .click(email)
                 .sendKeys(email, Keys.ENTER)
                 .perform();
         System.out.println("phone entered: " + phone.getAttribute("value"));
-        System.out.println("phone email: " + email.getAttribute("value"));
+        System.out.println("email entered: " + email.getAttribute("value"));
     }
 
-    @And("I submit the shipment form")
-    public void iSubmitTheShipmentForm() {
+    @And("I submit the shipment form 1")
+    public void iSubmitTheShipmentForm1() {
         wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//button[@id='nbsBackForwardNavigationContinueButton']"))).click();
         wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//div[@class='ups-section']")));
     }
 
-    @Then("I verify origin shipment fields submitted")
-    public void iVerifyOriginShipmentFieldsSubmitted() {
+    @Then("I verify origin shipment fields submitted 1")
+    public void iVerifyOriginShipmentFieldsSubmitted1() {
         String shipTo = getDriver().findElement(By.xpath("//div[@class='ups-section']")).getText();
         System.out.println("Ship to: " + shipTo);
-        assertTrue(shipTo.contains(user.get("street")));
+        assertTrue(shipTo.contains(shipFromData.get("street")));
+    }
+
+    //from Day16_class_work
+
+    @And("I go to Create a Shipment")
+    public void iGoToCreateAShipment() {
+        homePage.closeBanner();
+        homePage.openShipment();
+    }
+
+    @When("I fill out origin shipment fields")
+    public void iFillOutOriginShipmentFields() throws InterruptedException {
+        originPage.selectCountry(originData.get("country"));
+        originPage.fillName(originData.get("name"));
+        originPage.fillAddress(originData.get("address"));
+        originPage.fillEmail(originData.get("email"));
+        originPage.fillPhone(originData.get("phone"));
+        Thread.sleep(500); // to be removed after bugfix #
+    }
+
+    @And("I submit the shipment form")
+    public void iSubmitTheShipmentForm() {
+        originPage.submit();
+    }
+
+    @Then("I verify origin shipment fields submitted")
+    public void iVerifyOriginShipmentFieldsSubmitted() {
+        String actualSummary = destinationPage.getResultSummary();
+        assertThat(actualSummary).contains(originData.get("name"));
+        assertThat(actualSummary).contains(originData.get("address"));
+        assertThat(actualSummary).contains(originData.get("email"));
+        assertThat(actualSummary).contains(originData.get("phone"));
     }
 }

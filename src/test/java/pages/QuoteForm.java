@@ -1,10 +1,8 @@
 package pages;
 
-import definitions.HelperStepDefs;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
-import org.openqa.selenium.support.PageFactory;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
@@ -13,11 +11,12 @@ import java.util.Map;
 import static org.junit.Assert.assertEquals;
 import static support.TestContext.getDriver;
 
-public class QuoteForm extends HelperStepDefs {
+public class QuoteForm extends Page {
 
     //constructor
     public QuoteForm() {
-        PageFactory.initElements(getDriver(), this);
+        url  = "https://skryabin.com/market/quote.html";
+        title = "Get a Quote";
     }
 
     //fields
@@ -111,6 +110,10 @@ public class QuoteForm extends HelperStepDefs {
         password.sendKeys(value);
         confirmPassword.sendKeys(value);
     }
+    public void fillPasswordFields(String value) {
+        password.sendKeys(value);
+        confirmPassword.sendKeys(value);
+    }
 
     public void fillOutOnlyPasswordField(String value) {
         password.clear();
@@ -123,6 +126,11 @@ public class QuoteForm extends HelperStepDefs {
     }
 
     public void selectPrivacyPolicy() {
+        if (!privacyPolicy.isSelected()) {
+            privacyPolicy.click();
+        }
+    }
+    public void acceptPrivacyPolicy() {
         if (!privacyPolicy.isSelected()) {
             privacyPolicy.click();
         }
