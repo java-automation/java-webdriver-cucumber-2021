@@ -49,7 +49,7 @@ public class UpsDestination extends UpsCreateShipment {
     @FindBy(id = "destination-cac_addressLine1")
     private List<WebElement> destinationAddress1;
 
-    @FindBy(css = ".dropdown-menu > .dropdown-item")
+    @FindBy(css = ".dropdown-menu > .dropdown-item.active")
     private WebElement firstDropDownAddress;
 
     @FindBy(id = "destination-cac_postalCode")

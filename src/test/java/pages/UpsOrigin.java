@@ -27,7 +27,7 @@ public class UpsOrigin extends UpsCreateShipment {
     @FindBy(id = "origin-cac_addressLine1")
     private List<WebElement> originAddress1;
 
-    @FindBy(css = ".dropdown-menu > .dropdown-item")
+    @FindBy(css = ".dropdown-menu > .dropdown-item.active")
     private WebElement firstDropDownAddress;
 
     @FindBy(id = "origin-cac_postalCode")

@@ -3,6 +3,7 @@ package pages;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.html5.LocalStorage;
 import org.openqa.selenium.html5.WebStorage;
+import org.openqa.selenium.logging.LogType;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 
@@ -38,6 +39,7 @@ public class UpsCreateShipment extends Page {
 
     public void submitForm() {
         waitForLocalStorageUpdate();
+        scrollToElementWithOffset(continueButton, 100);
         continueButton.click();
     }
 
@@ -49,6 +51,9 @@ public class UpsCreateShipment extends Page {
     /*
     This method was created is to bypass a bug and to make sure that user data gets saved correctly on each step before
     proceeding to the next one. Seems like there is constant polling going on which updates the storage every ~150-200ms.
+    If user or webdriver clicks on "continue" before update - last entry is not saved, even though there is no complain
+    about required fields or missing information from the web app.
+
     There is key in local storage that gets updated regularly as well. It's called GULP_SC2 and could be Gulp related.
     One idea was to create a custom wait that would wait for the key update before proceeding, but it was unstable as well.
     You get various errors related to local storage and the wait times out. Seems like Thread.sleep is more stable.
@@ -65,5 +70,27 @@ public class UpsCreateShipment extends Page {
 
     protected void waitForSpinnerToBeAbsent() {
         getWait().until(driver -> spinner.stream().findFirst().isEmpty());
+    }
+
+    protected void waitForSpinnerToBeInvisible() {
+        getWait().until(driver -> spinner.stream().findFirst().filter(WebElement::isDisplayed).isEmpty());
+    }
+
+    protected void waitForOptionsAvailabilityRequest() {
+        getWait().until(log -> getLogs(LogType.PERFORMANCE)
+                .getAll()
+                .stream()
+                .filter(entry -> entry.getMessage().contains("https://www.ups.com/ship/api/LookupAndValidation/GetOptionsAvailability"))
+                .filter(entry -> entry.getMessage().contains("application/json"))
+                .toList().size() > 0);
+    }
+
+    protected void waitForRateShipmentRequest() {
+        getWait().until(log -> getLogs(LogType.PERFORMANCE)
+                .getAll()
+                .stream()
+                .filter(entry -> entry.getMessage().contains("https://www.ups.com/ship/api/RatingAndProcessing/RateShipmentForAllServices"))
+                .filter(entry -> entry.getMessage().contains("application/json"))
+                .toList().size() > 0);
     }
 }

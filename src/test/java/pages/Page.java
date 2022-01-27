@@ -1,5 +1,6 @@
 package pages;
 
+import org.openqa.selenium.WebElement;
 import org.openqa.selenium.logging.LogEntries;
 import org.openqa.selenium.support.PageFactory;
 import org.openqa.selenium.support.ui.WebDriverWait;
@@ -48,6 +49,11 @@ public class Page {
 
     public LogEntries getLogs(String type) {
         return getDriver().manage().logs().get(type);
+    }
+
+    public void scrollToElementWithOffset(WebElement element, int offset) {
+        getExecutor().executeScript("arguments[0].scrollIntoView(false);", element);
+        getExecutor().executeScript("window.scrollBy(0, " + offset + ");", element);
     }
 
     public void waitForAjaxToComplete()

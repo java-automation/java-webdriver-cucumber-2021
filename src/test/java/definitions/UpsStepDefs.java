@@ -147,5 +147,14 @@ public class UpsStepDefs {
     @Then("I verify total charges appear")
     public void iVerifyTotalChargesAppear() {
         assertThat(pickupPage.isTotalChargesVisible()).isTrue();
+        System.out.println(pickupPage.getTotalChargeValue());
+    }
+
+    @When("I select cheapest delivery option")
+    public void iSelectCheapestDeliveryOption() {
+        pickupPage.selectCheapestOption();
+        String cardText = pickupPage.getCheapestOptionCardText();
+        assertThat(cardText).contains("Lowest Cost");
+        assertThat(cardText).contains(pickupPage.getTotalChargeValue().substring(15));
     }
 }

@@ -15,6 +15,7 @@ import java.util.logging.Level;
 import static support.TestContext.getDriver;
 
 public class GenericStepDefs {
+
     @Given("I go to {string} page")
     public void iGoToPage(String websiteReference) {
         getDriver().get(getURLUsingKnownReference(websiteReference));

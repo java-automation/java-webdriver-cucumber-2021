@@ -21,10 +21,10 @@ Feature: UPS end to end scenarios
     *    I set packaging type as "UPS Express Box - Medium" and weight as 2 units
     *    I submit the shipment form
     Then I verify total charges appear
+    When I select cheapest delivery option
+    *    I submit the shipment form
     And  I wait for 3 sec
 
-#    And I select cheapest delivery option
-#    And I submit the shipment form
 #    And I set description and check Saturday Delivery type if available
 #    And I check Deliver only to receiver's address
 #    Then I verify total charges changed

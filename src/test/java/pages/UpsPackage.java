@@ -23,24 +23,12 @@ public class UpsPackage extends UpsCreateShipment {
     public void selectPackagingType(String type) {
         new Select(packageTypeSelect).selectByVisibleText(type);
         waitForLocalStorageUpdate();
-        getWait().until(log -> getLogs(LogType.PERFORMANCE)
-                .getAll()
-                .stream()
-                .filter(entry -> entry.getMessage().contains("https://www.ups.com/ship/api/LookupAndValidation/GetOptionsAvailability"))
-                .filter(entry -> entry.getMessage().contains("application/json"))
-                //.filter(entry -> entry.getMessage().contains("\"status\": 200"))
-                .toList().size() > 0);
+        waitForOptionsAvailabilityRequest();
     }
 
     public void fillPackageWeight(int weight) {
         packageWeight.sendKeys(String.valueOf(weight));
         waitForLocalStorageUpdate();
-        getWait().until(log -> getLogs(LogType.PERFORMANCE)
-                .getAll()
-                .stream()
-                .filter(entry -> entry.getMessage().contains("https://www.ups.com/ship/api/RatingAndProcessing/RateShipmentForAllServices"))
-                .filter(entry -> entry.getMessage().contains("application/json"))
-                //.filter(entry -> entry.getMessage().contains("\"status\": 200"))
-                .toList().size() > 0);
+        waitForRateShipmentRequest();
     }
 }
