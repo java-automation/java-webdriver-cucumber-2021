@@ -8,6 +8,8 @@
   number: "6",
   fullName: "Eric Kimsey",
   companyName: "Southern roots",
-  address: "205 W Main St, Magnolia, AR 71753",
-  phone: "+18702347632"
+  address: "205 West Main Street, Magnolia, AR 71753",
+  phone: "+18702347632",
+  sendToName: "Susane Miller",
+  sendToAddress: "5600 Nebraska Furniture Mart Drive, The Colony, TX 75056"
 }
