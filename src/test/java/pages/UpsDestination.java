@@ -1,16 +1,24 @@
 package pages;
 
+import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
+import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.Select;
 
 import java.util.List;
+import java.util.Map;
+
+import static support.TestContext.getData;
 
 public class UpsDestination extends Page {
 
     public UpsDestination() {
         url = "https://www.ups.com/ship/guided/destination";
     }
+
+    Map<String, String> shipToData = getData("destinationHW", "ups");
+    public final By SWITCH_YES_MODAL_WINDOW = By.xpath("//span[@aria-hidden='true']/span[@class='ups-lever_switch_yes']");
 
     @FindBy(id = "origin_showSummaryAddress")
     private WebElement resultContainer;
@@ -48,8 +56,21 @@ public class UpsDestination extends Page {
     @FindBy(xpath = "//button[@id='nbsAddressClassificationContinue']")
     private WebElement continueButtonModalWindow;
 
+    @FindBy(xpath = "//div[@class='modal-content']//div[@class='ups-group ups-group_condensed']")
+    private WebElement shipToAddressContainer;
+
+    @FindBy(xpath = "//span[@class='ups-lever_switch_no']")
+    private WebElement switchNo;
+
+    @FindBy(xpath ="//span[@aria-hidden='true']/span[@class='ups-lever_switch_yes']")
+    private WebElement switchYes;
+
     public String getResultSummary() {
         return resultContainer.getText();
+    }
+
+    public WebElement getShipToAddressContainer() {
+        return shipToAddressContainer;
     }
 
     public void selectCountry(String value) {
@@ -58,6 +79,10 @@ public class UpsDestination extends Page {
 
     public void fillName(String value) {
         companyOrName.sendKeys(value);
+    }
+
+    public String getFullShipToName() {
+        return ("%s %s %s").formatted(shipToData.get("firstName"), shipToData.get("middleName"), shipToData.get("lastName"));
     }
 
     public void fillAddress(String value) {
@@ -78,6 +103,11 @@ public class UpsDestination extends Page {
     public void closeModalWindow() {
         if (closeButtonModalWindow.isDisplayed())
             closeButtonModalWindow.click();
+    }
+
+    public void switchNoToYes() {
+        switchNo.click();
+        wait.until(ExpectedConditions.presenceOfElementLocated(SWITCH_YES_MODAL_WINDOW));
     }
 
     public void continueModalWindow() {

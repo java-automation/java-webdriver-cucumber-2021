@@ -3,7 +3,6 @@ package definitions;
 import io.cucumber.java.en.And;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
-import org.junit.Assert;
 import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.Keys;
@@ -32,11 +31,9 @@ public class UPSStepDefs extends Page {
 
     Map<String, String> shipFromData = getData("originHW", "ups");
     Map<String, String> shipToData = getData("destinationHW", "ups");
-
     Map<String, String> originData = getData("origin", "ups");
     Map<String, String> destinationData = getData("destination", "ups");
     Map<String, String> packageData = getData("package", "ups");
-
 
     UpsHome homePage = new UpsHome();
     UpsOrigin originPage = new UpsOrigin();
@@ -102,7 +99,7 @@ public class UPSStepDefs extends Page {
             String enteredAddress = getDriver().findElement(By.xpath("//div[@class='ng-star-inserted']/p[@class='ng-star-inserted']"))
                     .getText();
             System.out.println("Entered Address: " + enteredAddress);
-            Assert.assertTrue(enteredAddress.contains(shipFromData.get("street")));
+            assertTrue(enteredAddress.contains(shipFromData.get("street")));
         } else {
             assertEquals(
                     getDriver().findElement(By.xpath("//input[@id='origin-cac_singleLineAddress']"))
@@ -211,7 +208,18 @@ public class UPSStepDefs extends Page {
 
     @And("I {string} residential address")
     public void iResidentialAddress(String button) {
-
+        String shipToEnteredContainer = destinationPage.getShipToAddressContainer().getText();
+        System.out.println("ShipTo entered address: \n" + shipToEnteredContainer);
+        System.out.println("Address: " + shipToData.get("address"));
+        System.out.println("Full Name: " + destinationPage.getFullShipToName());
+        destinationPage.switchNoToYes();
+        assertTrue(shipToEnteredContainer.contains(shipToData.get("street")));
+        assertTrue(shipToEnteredContainer.contains(shipToData.get("state")));
+        assertTrue(shipToEnteredContainer.contains(shipToData.get("zipcode")));
+        assertTrue(shipToEnteredContainer.contains(shipToData.get("firstName")));
+        assertTrue(shipToEnteredContainer.contains(shipToData.get("middleName")));
+        assertTrue(shipToEnteredContainer.contains(shipToData.get("lastName")));
+        //span[@class='ups-lever_switch_no']
         destinationPage.continueModalWindow();
         wait.until(ExpectedConditions.presenceOfElementLocated(PACKAGE_SECTION_XPATH));
     }
@@ -223,18 +231,15 @@ public class UPSStepDefs extends Page {
 
     @Then("I verify total charges appear")
     public void iVerifyTotalChargesAppear() {
-        System.out.println("new page to create");
-        wait.until(ExpectedConditions.presenceOfElementLocated(TOTAL_PRICE_BAR_HEADER));
+        wait.until(ExpectedConditions.visibilityOfElementLocated(TOTAL_PRICE_BAR_HEADER));
         System.out.println("Total price for the package: " + pickupServicePage.getTotalPrice().getText());
-        assertTrue(pickupServicePage.getRecommendedPrice().size() > 0);
     }
 
     @And("I select cheapest delivery option")
     public void iSelectCheapestDeliveryOption() {
-        System.out.println("new page to create");
         pickupServicePage.getCheapestPrice().get(0).click();
         wait.until(ExpectedConditions.visibilityOfAllElementsLocatedBy(CHEAPEST_PRICE_SELECT));
-        Assert.assertTrue(pickupServicePage.getCheapestPrice().get(0).isDisplayed());
+        assertTrue(pickupServicePage.getCheapestPrice().get(0).isDisplayed());
         new Actions(getDriver())
                 .moveToElement(continueButton)
                 .perform();

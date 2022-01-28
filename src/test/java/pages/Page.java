@@ -17,7 +17,7 @@ public class Page {
     public final By CONTINUE_BUTTON_XPATH = By.xpath("//button[@id='nbsBackForwardNavigationContinueButton']");
     public final By PACKAGE_SECTION_XPATH = By.id("nbsShipmentPackagesPackage0");
     public final By CHEAPEST_PRICE_SELECT = By.xpath("//div[@id='Cheapest']//span[@class='serviceCard_header-icon ups-icon-checkcircle-solid']");
-    public static final By TOTAL_PRICE_BAR_HEADER = By.id("nbsBalanceBarHeader");
+    public static final By TOTAL_PRICE_BAR_HEADER = By.xpath("//div[@id='nbsBalanceBarHeader']");
 
     @FindBy(id = "nbsBackForwardNavigationContinueButton")
     public WebElement continueButton;
