@@ -18,7 +18,6 @@ public class Hooks {
         TestContext.initialize();
         getDriver().manage().timeouts().pageLoadTimeout(getConfig().pageLoadTimeout, TimeUnit.SECONDS);
         getDriver().manage().timeouts().implicitlyWait(getConfig().implicitTimeout, TimeUnit.SECONDS);
-
         getDriver().manage().deleteAllCookies();
     }
 

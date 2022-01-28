@@ -34,14 +34,14 @@ Feature: UPS scenario HW#14 Bonus
     And I submit the shipment form 1
     Then I verify origin shipment fields submitted 1
 
-    @ups3_Day16
-    @ups1
-    Scenario: E2E UPS Scenario Day16_Class_Work
-      Given I go to "ups" page oop
-      And I go to Create a Shipment
-      When I fill out origin shipment fields
-      And I submit the shipment form
-      Then I verify origin shipment fields submitted
+  @ups3_Day16
+  @ups1
+  Scenario: E2E UPS Scenario Day16_Class_Work
+    Given I go to "ups" page oop
+    And I go to Create a Shipment
+    When I fill out origin shipment fields
+    And I submit the shipment form
+    Then I verify origin shipment fields submitted
       ###################################################
 #
 #      When I fill out destination shipment fields
@@ -66,11 +66,11 @@ Feature: UPS scenario HW#14 Bonus
   @ups4_Day16_HW
   Scenario: E2E UPS Scenario: Make progress on UPS scenario to cheapest delivery option
     Given I go to "ups" page oop
-    And I go to Create a Shipment
-    When I fill out origin shipment fields
+    And I go to "Create a Shipment" 1
+    When I fill out origin shipment fields 1
     And I submit the shipment form
-    Then I verify origin shipment fields submitted
-    When I fill out destination shipment fields
+    Then I verify origin shipment fields submitted 1
+    When I fill out destination shipment fields 1
     When I submit the shipment form
     And I "confirm" residential address
     And I set packaging type and weight

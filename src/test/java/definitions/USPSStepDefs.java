@@ -12,12 +12,10 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.math.BigDecimal;
 import java.text.MessageFormat;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Locale;
+import java.util.*;
 import java.util.stream.Collectors;
 
-import static definitions.PredefinedStepDefs.*;
+import static definitions.PredefinedStepDefs.iClickOnElementUsingJavaScriptWithXpath;
 import static java.lang.System.out;
 import static java.lang.Thread.sleep;
 import static org.junit.Assert.*;
@@ -434,10 +432,18 @@ public class USPSStepDefs extends HelperStepDefs {
     public void iVerifyThatResultsOfAvailableInHelpSearch(String searchQuery) {
         wait.until(ExpectedConditions.presenceOfAllElementsLocatedBy(By.xpath(LIST_OF_SEARCH_RESULTS_XPATH)));
         assertTrue(getDriver().findElements(By.xpath(LIST_EACH_SEARCH_RESULTS_XPATH)).size() > 0);
+        Map<Integer, String> resultsMap = new HashMap<>();
+        List<String> links = new ArrayList<>();
         while ((getDriver().findElement(By.xpath("//button[contains(text(),'Show More')]")).isDisplayed()) && (!isContains(searchQuery))) {
-            getDriver().findElements(By.xpath(LIST_OF_SEARCH_RESULTS_XPATH)).forEach(el -> {
+            getDriver().findElements(By.xpath("//div[@class='listContent']//ul[@class='slds-has-dividers--bottom']//li[contains(@class,'kbResultStencil')]//a")).forEach(el -> {
                 new Actions(getDriver()).moveToElement(el).perform();
+                resultsMap.put(
+                        getDriver().findElements(By.xpath("//div[@class='listContent']//ul[@class='slds-has-dividers--bottom']//li[contains(@class,'kbResultStencil')]//a")).indexOf(el),
+                        el.getAttribute("href"));
+                links.add(el.getAttribute("href"));
+                links.iterator().hasNext();
             });
+            out.println(resultsMap);
             iClickOnElementUsingJavaScriptWithXpath("//button[contains(text(),'Show More')]");
             out.println(getDriver().findElement(By.xpath("//div[contains(@class,'searchResultsGridHeader')]")).getText());
             wait.until(ExpectedConditions.refreshed(ExpectedConditions.presenceOfElementLocated(By.xpath("//div[@class='listContent']//li[contains(@class,'kbResultStencil')]/.."))));

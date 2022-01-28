@@ -5,15 +5,14 @@ import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 import org.junit.Assert;
 import org.openqa.selenium.By;
+import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.Select;
 import org.openqa.selenium.support.ui.WebDriverWait;
-import pages.UpsDestination;
-import pages.UpsHome;
-import pages.UpsOrigin;
+import pages.*;
 
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -24,7 +23,7 @@ import static org.junit.Assert.assertTrue;
 import static support.TestContext.getData;
 import static support.TestContext.getDriver;
 
-public class UPSStepDefs extends HelperStepDefs {
+public class UPSStepDefs extends Page {
     public static final By CONFIRM_BUTTON = By.xpath("//button[@id='preferences_prompt_submit'][contains(text(),'Confirm')]");
     public static final By CLOSE_BUTTON_WEBSITE_COOKIES = By.xpath("//div[@class='implicit_privacy_prompt implicit_consent']/button/span[@class='icon ups-icon-x']");
     public static final By DROP_DOWN_MENU_ADDRESS = By.xpath("//ngb-typeahead-window[@class='dropdown-menu show ng-star-inserted']/button");
@@ -33,11 +32,18 @@ public class UPSStepDefs extends HelperStepDefs {
 
     Map<String, String> shipFromData = getData("originHW", "ups");
     Map<String, String> shipToData = getData("destinationHW", "ups");
+
     Map<String, String> originData = getData("origin", "ups");
     Map<String, String> destinationData = getData("destination", "ups");
+    Map<String, String> packageData = getData("package", "ups");
+
+
     UpsHome homePage = new UpsHome();
     UpsOrigin originPage = new UpsOrigin();
     UpsDestination destinationPage = new UpsDestination();
+    UpsPackage packagePage = new UpsPackage();
+    UpsPickupService pickupServicePage = new UpsPickupService();
+    UpsOptions optionsPage = new UpsOptions();
 
     @And("I go to {string} 1")
     public void iGoToCreateAShipment(String textLink) {
@@ -83,11 +89,11 @@ public class UPSStepDefs extends HelperStepDefs {
                 .sendKeys(getDriver().findElement(By.xpath("//input[@id='origin-cac_singleLineAddress']")),
                         shipFromData.get("street"))
                 .perform();
-        Thread.sleep(3000);
+        Thread.sleep(1000);
         new Actions(getDriver())
                 .sendKeys(getDriver().findElement(By.xpath("//input[@id='origin-cac_singleLineAddress']")), Keys.ENTER)
                 .perform();
-        Thread.sleep(3000);
+        Thread.sleep(1000);
         if (isPresent(By.xpath("//input[@id='origin-cac_addressLine1']"))) {
             assertEquals(getDriver().findElement(By.xpath("//input[@id='origin-cac_addressLine1']"))
                             .getAttribute("value"),
@@ -140,6 +146,11 @@ public class UPSStepDefs extends HelperStepDefs {
         String shipTo = getDriver().findElement(By.xpath("//div[@class='ups-section']")).getText();
         System.out.println("Ship to: " + shipTo);
         assertTrue(shipTo.contains(shipFromData.get("street")));
+        assertTrue(shipTo.contains(shipFromData.get("zipcode")));
+        assertTrue(shipTo.contains(shipFromData.get("state")));
+        assertTrue(shipTo.contains(shipFromData.get("city")));
+        assertTrue(shipTo.contains(shipFromData.get("phone")));
+        assertTrue(shipTo.contains(shipFromData.get("email")));
     }
 
     //from Day16_class_work
@@ -162,8 +173,22 @@ public class UPSStepDefs extends HelperStepDefs {
 
     @And("I submit the shipment form")
     public void iSubmitTheShipmentForm() {
-        originPage.submit();
+        String currentUrl = getDriver().getCurrentUrl();
+        System.out.println("currentUrl = " + currentUrl);
+        if (currentUrl.contains("origin"))
+            originPage.submit();
+        else if (currentUrl.contains("destination")) {
+            destinationPage.submit();
+        } else if (currentUrl.contains("package")) {
+            packagePage.submit();
+        } else if (currentUrl.contains("pickup-service")) {
+            JavascriptExecutor executor = (JavascriptExecutor) getDriver();
+            executor.executeScript("arguments[0].click();", continueButton);
+            wait.until(ExpectedConditions.textToBePresentInElement(optionsPage.getSectionHeader(), "Almost done. Let's check a few more details."));
+            System.out.println("Good Job!");
+        } else throw new Error("Unknown page!");
     }
+
 
     @Then("I verify origin shipment fields submitted")
     public void iVerifyOriginShipmentFieldsSubmitted() {
@@ -172,5 +197,46 @@ public class UPSStepDefs extends HelperStepDefs {
         assertThat(actualSummary).contains(originData.get("address"));
         assertThat(actualSummary).contains(originData.get("email"));
         assertThat(actualSummary).contains(originData.get("phone"));
+    }
+
+    @When("I fill out destination shipment fields 1")
+    public void iFillOutDestinationShipmentFields() throws InterruptedException {
+        destinationPage.selectCountry(shipToData.get("country"));
+        destinationPage.fillName(("%s %s %s").formatted(shipToData.get("firstName"), shipToData.get("middleName"), shipToData.get("lastName")));
+        destinationPage.fillAddress(shipToData.get("address"));
+        destinationPage.fillEmail(shipToData.get("email"));
+        destinationPage.fillPhone(shipToData.get("phone"));
+        Thread.sleep(500);
+    }
+
+    @And("I {string} residential address")
+    public void iResidentialAddress(String button) {
+
+        destinationPage.continueModalWindow();
+        wait.until(ExpectedConditions.presenceOfElementLocated(PACKAGE_SECTION_XPATH));
+    }
+
+    @And("I set packaging type and weight")
+    public void iSetPackagingTypeAndWeight() {
+        packagePage.fillWeight(packageData.get("weight"));
+    }
+
+    @Then("I verify total charges appear")
+    public void iVerifyTotalChargesAppear() {
+        System.out.println("new page to create");
+        wait.until(ExpectedConditions.presenceOfElementLocated(TOTAL_PRICE_BAR_HEADER));
+        System.out.println("Total price for the package: " + pickupServicePage.getTotalPrice().getText());
+        assertTrue(pickupServicePage.getRecommendedPrice().size() > 0);
+    }
+
+    @And("I select cheapest delivery option")
+    public void iSelectCheapestDeliveryOption() {
+        System.out.println("new page to create");
+        pickupServicePage.getCheapestPrice().get(0).click();
+        wait.until(ExpectedConditions.visibilityOfAllElementsLocatedBy(CHEAPEST_PRICE_SELECT));
+        Assert.assertTrue(pickupServicePage.getCheapestPrice().get(0).isDisplayed());
+        new Actions(getDriver())
+                .moveToElement(continueButton)
+                .perform();
     }
 }

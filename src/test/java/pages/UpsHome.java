@@ -24,4 +24,5 @@ public class UpsHome extends Page {
             closeBanner.click();
         }
     }
+
 }

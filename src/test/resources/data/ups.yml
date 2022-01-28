@@ -14,7 +14,7 @@ originHW:
   lastName: Doe
   street: 611 Walker St
   city: Houston
-  zipcode: 77002
+  zipcode: "77002"
   state: TX
   address: Bob Lanier Public Works Building, 611 Walker St, Houston, TX 77002
   organization: Houston City Administration
@@ -31,13 +31,20 @@ destinationHW:
   email: rroe@exaple.com
   password: password
   firstName: Richard
+  middleName: Robert
   lastName: Roe
   street: 1100 Congress Ave
   city: Austin
-  zipcode: 78701
+  zipcode: "78701"
   state: TX
   address: 1100 Congress Ave, Austin, TX, 78701
   organization: Texas Capitol
   phone: (512) 463-4630
   country: United States
+
+package:
+  weight: "5"
+  length: "10"
+  width: "12"
+  Height: "14"
 
