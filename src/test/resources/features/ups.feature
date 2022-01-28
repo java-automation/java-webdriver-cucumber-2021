@@ -9,8 +9,11 @@
       When I fill out origin shipment fields
       And I wait for 2 sec
       And I submit the shipment form
+      And I wait for 2 sec
       Then I verify origin shipment fields submitted
+      And I wait for 2 sec
       When I fill out destination shipment fields
+      And I wait for 2 sec
       When I submit the shipment form
       And I "confirm" residential address
       And I set packaging type and weight
