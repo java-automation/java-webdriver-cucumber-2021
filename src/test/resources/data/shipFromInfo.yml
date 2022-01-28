@@ -1,12 +1,11 @@
 country: United States
 companyOrName: Valentina
-contactName: VV
-addressLine: 1720 S Michigan ave
-addressLine2: Unit 1708
-city: Chicago
-zipCode: 60616
+addressLine: 1720 S Michigan ave, Chicago, IL 60616
 state: Illinois
 email: test@test.com
-phone: 847-850-1101
+phone: "847-850-1101"
+
+
+
 
 

@@ -42,15 +42,18 @@ public class ShipFromPageUPS {
     private List<WebElement> addressList;
 
 
-    //@FindAll({@FindBy(how = How.ID, using = "foo"),
-    //           @FindBy(className = "bar")})
+
 
     @FindBy(xpath = "//input[@id='origin-cac_singleLineAddress']")
     private WebElement addressPageOpen;
 
+    @FindBy(xpath = "//button[@id='origin-singleLineAddressEditButton']/../p")
+    private WebElement filledAddress;
 
-    @FindBy(xpath = "//input[@id='destination-cac_singleLineAddress']")
+
+    @FindBy(xpath = "//input[@id='origin-cac_singleLineAddress']")   // "//input[@id='destination-cac_singleLineAddress']" // "origin-cac_singleLineAddress"
     private WebElement addressLine;
+
 
     @FindBy(xpath = "//input[@id='destination-cac_addressLine1']")
     private WebElement addressLine1;
@@ -79,6 +82,13 @@ public class ShipFromPageUPS {
     @FindBy(xpath = "//span/button[@id='nbsBackForwardNavigationContinueButton']")
     private WebElement continueButton;
 
+    @FindBy(css = ".ngb-highlight")
+    private WebElement suggestionHighlight;
+
+    @FindBy(xpath = "//ngb-typeahead-window/button")
+    private List<WebElement> suggestionsList;
+
+
 
 // methods
 
@@ -97,9 +107,19 @@ public class ShipFromPageUPS {
         companyOrName.sendKeys(value);
     }
 
-    public void fillAddressLine(String value){
-        addressList.get(0).sendKeys(value);
-        wait.until(ExpectedConditions.presenceOfAllElementsLocatedBy(By.xpath("//ngb-highlight"))).get(0).click();
+    public void fillAddress(String value) throws InterruptedException {
+
+        addressLine.sendKeys(value);
+        Thread.sleep(3000);
+       // Assert.assertTrue(suggestionHighlight.isDisplayed());
+        suggestionHighlight.click();
+
+
+//        suggestionsList.get(0).click();
+//        assertThat(filledAddress.getText()).isEqualTo(value);
+
+
+      //  wait.until(ExpectedConditions.presenceOfAllElementsLocatedBy(By.xpath("//ngb-highlight"))).get(0).click();
 
 
     }
