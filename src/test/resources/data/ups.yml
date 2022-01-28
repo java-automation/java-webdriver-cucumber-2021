@@ -47,4 +47,5 @@ package:
   length: "10"
   width: "12"
   Height: "14"
+  type: small
 

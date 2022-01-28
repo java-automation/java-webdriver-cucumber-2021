@@ -17,8 +17,7 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 import static support.TestContext.getData;
 import static support.TestContext.getDriver;
 
@@ -226,12 +225,15 @@ public class UPSStepDefs extends Page {
 
     @And("I set packaging type and weight")
     public void iSetPackagingTypeAndWeight() {
+        packagePage.selectType(packageData.get("type"));
         packagePage.fillWeight(packageData.get("weight"));
     }
 
     @Then("I verify total charges appear")
     public void iVerifyTotalChargesAppear() {
         wait.until(ExpectedConditions.visibilityOfElementLocated(TOTAL_PRICE_BAR_HEADER));
+        assertFalse(pickupServicePage.getTotalPrice().getText().isEmpty());
+        assertTrue(Double.parseDouble(pickupServicePage.getTotalPrice().getText().replace("$", "")) > 0);
         System.out.println("Total price for the package: " + pickupServicePage.getTotalPrice().getText());
     }
 
