@@ -67,8 +67,6 @@ public class UpsShipmentForm extends UpsBasePage {
                               String zipCode, String email, String phone, String type) {
         new Select(this.country).selectByVisibleText(country);
         companyOrName.sendKeys(name);
-        this.email.sendKeys(email);
-        this.phone.sendKeys(phone);
         if (type.equals("residential") || address1.length()+city.length()+state.length()+zipCode.length()+2 <= 35) {
             singleLineAddress.sendKeys(String.join(",", address1, city, state) + " " + zipCode);
             wait.until(driver -> addressPredictionsListItem.isDisplayed());
@@ -81,6 +79,13 @@ public class UpsShipmentForm extends UpsBasePage {
             this.city.sendKeys(city);
             new Select(this.state).selectByValue(state);
             wait.until(driver -> this.city.getAttribute("value").equals(city.toUpperCase()));
+        }
+        this.email.sendKeys(email);
+        this.phone.sendKeys(phone);
+        try {
+            Thread.sleep(300); // to be removed after bug fix
+        } catch (InterruptedException e) {
+            e.printStackTrace();
         }
     }
 

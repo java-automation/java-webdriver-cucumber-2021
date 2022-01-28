@@ -22,8 +22,9 @@ public class UpsBasePage {
     }
 
     // fields
-    @FindBy(xpath = "//div[@class='implicit_privacy_prompt implicit_consent']//button[contains(@class,'close')]")
-    private List<WebElement> websiteUsesCookiesDialogCloseButton;
+//    @FindBy(xpath = "//div[@class='implicit_privacy_prompt implicit_consent']//button[contains(@class,'close')]")
+    @FindBy(css=".close_btn_thick")
+    private List<WebElement> websiteUsesCookiesDialogCloseButton; // closeBanner
 
     // methods
     public void open() {

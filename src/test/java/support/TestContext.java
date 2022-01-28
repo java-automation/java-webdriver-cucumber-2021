@@ -1,6 +1,7 @@
 // Created by Viacheslav (Slava) Skryabin 04/01/2011
 package support;
 
+import com.fasterxml.jackson.dataformat.yaml.YAMLMapper;
 import io.github.bonigarcia.wdm.WebDriverManager;
 import org.openqa.selenium.Dimension;
 import org.openqa.selenium.Platform;
@@ -22,40 +23,74 @@ import org.yaml.snakeyaml.Yaml;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStream;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
+import java.util.function.Predicate;
 
 public class TestContext {
 
     private static WebDriver driver;
+    private static List<ShipmentEndpoint> shipments;
 
     public static WebDriver getDriver() {
         return driver;
     }
 
     public static void initialize() {
-        initialize("chrome", "local", false);
+        initialize(getConfig().getBrowser(), getConfig().getEnvironment(), getConfig().getHeadless());
+    }
+
+    public static void loadData() {
+        YAMLMapper mapper = new YAMLMapper();
+        try {
+            shipments = Arrays.asList(
+                    mapper.convertValue(
+                            mapper.readTree(getStream("shipmentEndpoints")).get("shipmentEndpoints"),
+                            ShipmentEndpoint[].class
+                    )
+            );
+        } catch (IOException e) {
+            // address1: "105 Tyler Blvd")
+            // java.lang.Error: com.fasterxml.jackson.dataformat.yaml.snakeyaml.error.MarkedYAMLException: while parsing a block mapping
+            throw new Error(e);
+        }
     }
 
     public static void teardown() {
         driver.quit();
     }
 
-    public static Map<String, String> getData(String fileName) {
+    public static ShipmentEndpoint getShipment(Predicate<ShipmentEndpoint> condition) {
+        return shipments.stream().filter(condition).findFirst().orElseThrow();
+    }
+
+    public static Config getConfig() {
+//        return new Yaml().loadAs(getStream("config"), Config.class); //class SnakeYaml version
         try {
-            String filePath = System.getProperty("user.dir") + "/src/test/resources/data/" + fileName + ".yml";
-            FileInputStream stream = new FileInputStream(filePath);
-            return new Yaml().load(stream);
+            return new YAMLMapper().readValue(getStream("config"), Config.class); //Jackson databind with dataformat-yaml
+        } catch (IOException e) {
+            throw new Error(e);
+        }
+    }
+
+    public static Map<String, String> getData(String fileName) {
+        return new Yaml().load(getStream(fileName));
+    }
+
+    public static InputStream getStream(String fileName) {
+        String filePath = System.getProperty("user.dir") + "/src/test/resources/data/" + fileName + ".yml";
+        try {
+            return new FileInputStream(filePath);
         } catch (FileNotFoundException e) {
             throw new Error(e);
         }
     }
 
     public static void initialize(String browser, String testEnv, boolean isHeadless) {
-        Dimension size = new Dimension(1920, 1080);
+        Dimension size = new Dimension(getConfig().getBrowserWidth(),getConfig().getBrowserHeight());
         Point position = new Point(0, 0);
         if (testEnv.equals("local")) {
             switch (browser) {

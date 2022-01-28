@@ -2,6 +2,7 @@ package pages;
 
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
+import support.ShipmentEndpoint;
 
 import java.util.HashMap;
 import java.util.Locale;
@@ -54,32 +55,28 @@ public class UpsShipmentDestSection extends UpsBasePage {
     private WebElement dialogContinueButton;
 
     // methods
-    public void verifyOrigin(Map<String, String> origin) {
+    public void verifyOrigin(ShipmentEndpoint origin) {
         String originSummary = origin_summary.getText();
-        for (String key : origin.keySet()) {
-            if (key.equals("country")) {
-                // ISO2 country codes from country names
-                Map<String, String> countries = new HashMap<>();
-                for (String iso : Locale.getISOCountries()) {
-                    Locale l = new Locale("", iso);
-                    countries.put(l.getDisplayCountry(), iso);
-                }
-                assertThat(originSummary).contains(countries.get(origin.get(key)));
-            } else {
-                String originValueLowcase = origin.get(key).toLowerCase();
-                if (key.equals("type")) {continue;}
-                if (key.equals("address1")) {
-                    originValueLowcase = originValueLowcase.replace("blvd", "boulevard");
-                }
-                assertThat(originSummary.toLowerCase()).contains(originValueLowcase);
-            }
+        // ISO2 country codes from country names
+        Map<String, String> countries = new HashMap<>();
+        for (String iso : Locale.getISOCountries()) {
+            Locale l = new Locale("", iso);
+            countries.put(l.getDisplayCountry(), iso);
         }
+        assertThat(originSummary.toLowerCase()).contains(
+                countries.get(origin.getCountry()).toLowerCase(),
+                origin.getName().toLowerCase(),
+                origin.getAddress1().replace("blvd", "boulevard").toLowerCase(),
+                origin.getCity().toLowerCase(),
+                origin.getState().toLowerCase(),
+                origin.getEmail().toLowerCase(),
+                origin.getPhone().toLowerCase());
     }
 
-    public void fillOutDestination(Map<String,String> dest) {
-        destForm.fillOutForm(dest.get("country"), dest.get("name"), dest.get("address1"),
-                             dest.get("city"), dest.get("state"), dest.get("zipCode"),
-                             dest.get("email"), dest.get("phone"), dest.get("type"));
+    public void fillOutDestination(ShipmentEndpoint dest) {
+        destForm.fillOutForm(dest.getCountry(), dest.getName(), dest.getAddress1(),
+                             dest.getCity(), dest.getState(), dest.getZipCode(),
+                             dest.getEmail(), dest.getPhone(), dest.getType());
     }
 
     private boolean isAddressSwitchResidential() {

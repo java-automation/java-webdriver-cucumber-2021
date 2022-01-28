@@ -16,12 +16,13 @@ Feature:
     Then I verify total charges appear
     And I select cheapest delivery option
     And I submit the shipment form
-    And I set description and check Saturday Delivery type if available
-    And I check Deliver only to receiver's address
-    Then I verify total charges changed
-    When I submit the shipment form
-    And I select Paypal payment type
-    And I submit the shipment form
-    Then I review all recorded details on the review page
-    And I cancel the shipment form
-    Then I verify shipment form is reset
+    And verify leaf present
+#    And I set description and check Saturday Delivery type if available
+#    And I check Deliver only to receiver's address
+#    Then I verify total charges changed
+#    When I submit the shipment form
+#    And I select Paypal payment type
+#    And I submit the shipment form
+#    Then I review all recorded details on the review page
+#    And I cancel the shipment form
+#    Then I verify shipment form is reset
