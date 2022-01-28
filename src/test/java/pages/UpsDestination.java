@@ -107,7 +107,7 @@ public class UpsDestination extends Page {
 
     public void switchNoToYes() {
         switchNo.click();
-        wait.until(ExpectedConditions.presenceOfElementLocated(SWITCH_YES_MODAL_WINDOW));
+        wait.until(ExpectedConditions.visibilityOfAllElements(switchYes));
     }
 
     public void continueModalWindow() {
