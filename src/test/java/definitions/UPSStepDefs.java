@@ -40,6 +40,7 @@ public class UPSStepDefs extends Page {
     UpsPackage packagePage = new UpsPackage();
     UpsPickupService pickupServicePage = new UpsPickupService();
     UpsOptions optionsPage = new UpsOptions();
+    UpsControls controls = new UpsControls();
 
     @And("I go to {string} 1")
     public void iGoToCreateAShipment(String textLink) {
@@ -172,14 +173,14 @@ public class UPSStepDefs extends Page {
         String currentUrl = getDriver().getCurrentUrl();
         System.out.println("currentUrl = " + currentUrl);
         if (currentUrl.contains("origin"))
-            originPage.submit();
+            controls.submit();
         else if (currentUrl.contains("destination")) {
-            destinationPage.submit();
+            controls.submit();
         } else if (currentUrl.contains("package")) {
-            packagePage.submit();
+            controls.submit();
         } else if (currentUrl.contains("pickup-service")) {
             JavascriptExecutor executor = (JavascriptExecutor) getDriver();
-            executor.executeScript("arguments[0].click();", continueButton);
+            executor.executeScript("arguments[0].click();", controls.continueButton);
             wait.until(ExpectedConditions.textToBePresentInElement(optionsPage.getSectionHeader(), "Almost done. Let's check a few more details."));
             System.out.println("Good Job!");
         } else throw new Error("Unknown page!");
@@ -240,10 +241,10 @@ public class UPSStepDefs extends Page {
     @And("I select cheapest delivery option")
     public void iSelectCheapestDeliveryOption() {
         pickupServicePage.getCheapestPrice().get(0).click();
-        wait.until(ExpectedConditions.visibilityOfAllElementsLocatedBy(CHEAPEST_PRICE_SELECT));
+        wait.until(ExpectedConditions.visibilityOfAllElementsLocatedBy(controls.CHEAPEST_PRICE_SELECT));
         assertTrue(pickupServicePage.getCheapestPrice().get(0).isDisplayed());
         new Actions(getDriver())
-                .moveToElement(continueButton)
+                .moveToElement(controls.continueButton)
                 .perform();
     }
 }

@@ -3,7 +3,6 @@ package pages;
 import org.openqa.selenium.By;
 import org.openqa.selenium.TimeoutException;
 import org.openqa.selenium.WebElement;
-import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
@@ -18,9 +17,10 @@ public class Page {
     public final WebDriverWait wait = new WebDriverWait(getDriver(), 10, 200);
     public final By CONTINUE_BUTTON_XPATH = By.xpath("//button[@id='nbsBackForwardNavigationContinueButton']");
     public final By PACKAGE_SECTION_XPATH = By.id("nbsShipmentPackagesPackage0");
-    public final By CHEAPEST_PRICE_SELECT = By.xpath("//div[@id='Cheapest']//span[@class='serviceCard_header-icon ups-icon-checkcircle-solid']");
-    @FindBy(id = "nbsBackForwardNavigationContinueButton")
-    public WebElement continueButton;
+
+    /*  public final By CHEAPEST_PRICE_SELECT = By.xpath("//div[@id='Cheapest']//span[@class='serviceCard_header-icon ups-icon-checkcircle-solid']");
+  /*  @FindBy(id = "nbsBackForwardNavigationContinueButton")
+     public WebElement continueButton;*/
     protected String url;
     protected String title;
 
@@ -47,10 +47,10 @@ public class Page {
             return getDriver().findElement(locator).isDisplayed();
         } else return false;
     }
-
+/*
     public void submit() {
         wait.until(ExpectedConditions.presenceOfElementLocated(CONTINUE_BUTTON_XPATH)).click();
-    }
+    }*/
 
     public boolean isWebElementPresent(WebElement el) {
         try {
