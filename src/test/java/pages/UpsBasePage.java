@@ -7,6 +7,7 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.util.List;
 
+import static support.TestContext.getConfig;
 import static support.TestContext.getDriver;
 
 public class UpsBasePage {
@@ -14,7 +15,7 @@ public class UpsBasePage {
     protected String url;
     protected String urlRegExp;
 
-    protected WebDriverWait wait = new WebDriverWait(getDriver(),10,200);
+    protected WebDriverWait wait = new WebDriverWait(getDriver(),getConfig().getExplicitTimeOut(),200);
 
     // constructor
     public UpsBasePage() {
@@ -22,9 +23,8 @@ public class UpsBasePage {
     }
 
     // fields
-//    @FindBy(xpath = "//div[@class='implicit_privacy_prompt implicit_consent']//button[contains(@class,'close')]")
     @FindBy(css=".close_btn_thick")
-    private List<WebElement> websiteUsesCookiesDialogCloseButton; // closeBanner
+    private List<WebElement> closeBanner;
 
     // methods
     public void open() {
@@ -35,14 +35,18 @@ public class UpsBasePage {
         return getDriver().getCurrentUrl().matches(urlRegExp);
     }
 
+    public void waitForUrlMatch() {
+        wait.withMessage("Did not jump to " + getClass() + " page.").until(driver -> urlMatches());
+    }
+
     public void refreshPage() {
         getDriver().navigate().refresh();
     }
 
     public void closeCookiesDialogIfDisplayed() {
-        websiteUsesCookiesDialogCloseButton.stream()
-                .findFirst()
-                .filter(WebElement::isDisplayed)
-                .ifPresent(WebElement::click);
+        closeBanner.stream()
+                   .findFirst()
+                   .filter(WebElement::isDisplayed)
+                   .ifPresent(WebElement::click);
     }
 }

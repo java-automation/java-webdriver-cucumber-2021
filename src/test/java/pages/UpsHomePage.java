@@ -12,13 +12,12 @@ public class UpsHomePage extends UpsBasePage {
     }
 
     // fields
-//    @FindBy(xpath="//ul[contains(@class,'jobs-list')]//span[text()='Ship']")
     @FindBy(css=".nav-link.widget-link-ship")
     private WebElement ship;
 
     // methods
-    public void gotoCreateShipmentPage() {
+    public void openShipment() {
         ship.click();
-    }  // openShipment
+    }
 
 }

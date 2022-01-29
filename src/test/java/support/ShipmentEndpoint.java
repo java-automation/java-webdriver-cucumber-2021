@@ -12,8 +12,12 @@ public class ShipmentEndpoint {
     private String zipCode;
     private String type;
 
-    public int getFullAddressLength() {
-       return address1.length() + city.length() + state.length() + zipCode.length() + 2;
+    public String getSingleLineAddress() {
+        return String.join(",", address1, city, state) + " " + zipCode;
+    }
+
+    public int getSingleLineAddressLength() {
+        return getSingleLineAddress().length();
     }
 
     public String getCountry() {

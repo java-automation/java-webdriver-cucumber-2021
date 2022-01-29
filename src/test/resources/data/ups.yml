@@ -1,41 +1,44 @@
+package:
+    weight: "1.1"
+    type: UPS Tube
 shipmentEndpoints:
     # single address line has length limit of 35 characters
     # SOMETIMES (race condition) triggering error "Address Line 1 max length exceeded" and showing expanded form
     # 100 Main Street, White Plains, NY 10601 (33 chars without zip, 39 chars with zip)
-  - country: "United States"
-    name: "John Smith"
-    email: "test@test.com"
-    phone: "(111)111-11-11"
-    address1: "100 Main Street"
-    city: "White Plains"
-    state: "NY"
+  - country: United States
+    name: John Smith
+    email: test@test.com
+    phone: (111)111-11-11
+    address1: 100 Main Street
+    city: White Plains
+    state: NY
     zipCode: "10601"
-    type: "commercial"
+    type: commercial
 
     # Note: residential addresses do not trigger max length PROBABLY due to one prediction in the list
     # residential, one prediction, more than 35 chars
     # 678 Main Street, White Plains, NY 10601 (33 chars without zip, 39 chars with zip)
-  - country: "United States"
-    name: "John Smith"
-    email: "test@test.com"
-    phone: "(111)111-11-11"
-    address1: "678 Main Street"
-    city: "White Plains"
-    state: "NY"
+  - country: United States
+    name: John Smith
+    email: test@test.com
+    phone: (111)111-11-11
+    address1: 678 Main Street
+    city: White Plains
+    state: NY
     zipCode: "10601"
-    type: "residential"
+    type: residential
 
     # 105 Tyler Blvd, Coffeyville, KS 67337 (31 chars without zip, 37 chars with zip)
     # residential, one prediction, more than 35 chars
-  - country: "United States"
-    name: "John Smith"
-    email: "test@test.com"
-    phone: "(111)111-11-11"
-    address1: "105 Tyler Blvd"
-    city: "Coffeyville"
-    state: "KS"
+  - country: United States
+    name: John Smith
+    email: test@test.com
+    phone: (111)111-11-11
+    address1: 105 Tyler Blvd
+    city: Coffeyville
+    state: KS
     zipCode: "67337"
-    type: "residential"
+    type: residential
 
     # POSSIBLE VARIATION OF DATA
     # data with incorrect zipCode
@@ -45,36 +48,36 @@ shipmentEndpoints:
 
     # commercial, multiple predictions, more than 35 chars
     # 345 Park Avenue South, New York, NY 10010 (35 chars without zip, 41 chars with zip)
-  - country: "United States"
-    name: "Terry Jackson"
-    email: "test2@test2.com"
-    phone: "(222)222-22-22"
-    address1: "345 Park Avenue South"
-    city: "New York"
-    state: "NY"
+  - country: United States
+    name: Terry Jackson
+    email: test2@test2.com
+    phone: (222)222-22-22
+    address1: 345 Park Avenue South
+    city: New York
+    state: NY
     zipCode: "10010"
-    type: "commercial"
+    type: commercial
 
     # commercial, multiple predictions, less than 35 chars
     # 2 Gold Street, New York, NY 10038 (27 chars without zip, 33 chars with zip)
-  - country: "United States"
-    name: "Terry Jackson"
-    email: "test2@test2.com"
-    phone: "(222)222-22-22"
-    address1: "2 Gold Street"
-    city: "New York"
-    state: "NY"
+  - country: United States
+    name: Terry Jackson
+    email: test2@test2.com
+    phone: (222)222-22-22
+    address1: 2 Gold Street
+    city: New York
+    state: NY
     zipCode: "10038"
-    type: "commercial"
+    type: commercial
 
     # residential, one prediction, less than 35 chars
     # 104 Fox Road, Bridgeton, NJ 08302 (27 chars without zip, 33 chars with zip)
-  - country: "United States"
-    name: "Terry Jackson"
-    email: "test2@test2.com"
-    phone: "(222)222-22-22"
-    address1: "104 Fox Road"
-    city: "Bridgeton"
-    state: "NJ"
+  - country: United States
+    name: Terry Jackson
+    email: test2@test2.com
+    phone: (222)222-22-22
+    address1: 104 Fox Road
+    city: Bridgeton
+    state: NJ
     zipCode: "08302"
-    type: "residential"
+    type: residential

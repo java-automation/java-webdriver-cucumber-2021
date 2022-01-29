@@ -3,14 +3,12 @@ package pages;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import support.ShipmentEndpoint;
-
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
-
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class UpsShipmentDestSection extends UpsBasePage {
+public class UpsShipmentDestSection extends UpsShipmentCreatePage {
 
     private UpsShipmentForm destForm = new UpsShipmentForm();
 
@@ -18,11 +16,10 @@ public class UpsShipmentDestSection extends UpsBasePage {
         urlRegExp = ".*www.ups.com/ship/guided/destination.*";
     }
 
-    // fields
-    @FindBy(xpath = "//destination")
-    private WebElement destinationFormWrapper;
-
     // origin summary fields
+    @FindBy(xpath = "//ship-app-agent-summary")
+    private WebElement originInfoWrapper;
+
     @FindBy(id = "origin_showSummaryAddress")
     private WebElement origin_summary;
 
@@ -55,7 +52,12 @@ public class UpsShipmentDestSection extends UpsBasePage {
     private WebElement dialogContinueButton;
 
     // methods
+    public boolean destinationFormDisplayed() {
+        return urlMatches() & destForm.formDisplayed();
+    }
+
     public void verifyOrigin(ShipmentEndpoint origin) {
+        wait.until(driver -> originInfoWrapper.isDisplayed());
         String originSummary = origin_summary.getText();
         // ISO2 country codes from country names
         Map<String, String> countries = new HashMap<>();
@@ -74,9 +76,8 @@ public class UpsShipmentDestSection extends UpsBasePage {
     }
 
     public void fillOutDestination(ShipmentEndpoint dest) {
-        destForm.fillOutForm(dest.getCountry(), dest.getName(), dest.getAddress1(),
-                             dest.getCity(), dest.getState(), dest.getZipCode(),
-                             dest.getEmail(), dest.getPhone(), dest.getType());
+        wait.until(driver -> destinationFormDisplayed());
+        destForm.fillOutForm(dest);
     }
 
     private boolean isAddressSwitchResidential() {
@@ -100,9 +101,4 @@ public class UpsShipmentDestSection extends UpsBasePage {
         wait.until(driver -> isAddressSwitchNonResidential());
         dialogContinueButton.click();
     }
-
-    public boolean isSwitchedTo() {
-        return destinationFormWrapper.isDisplayed();
-    }
-
 }

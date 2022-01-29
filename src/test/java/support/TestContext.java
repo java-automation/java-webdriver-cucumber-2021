@@ -1,6 +1,7 @@
 // Created by Viacheslav (Slava) Skryabin 04/01/2011
 package support;
 
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.dataformat.yaml.YAMLMapper;
 import io.github.bonigarcia.wdm.WebDriverManager;
 import org.openqa.selenium.Dimension;
@@ -25,15 +26,14 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
+import java.lang.reflect.Type;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.*;
-import java.util.function.Predicate;
 
 public class TestContext {
 
     private static WebDriver driver;
-    private static List<ShipmentEndpoint> shipments;
 
     public static WebDriver getDriver() {
         return driver;
@@ -41,22 +41,6 @@ public class TestContext {
 
     public static void initialize() {
         initialize(getConfig().getBrowser(), getConfig().getEnvironment(), getConfig().getHeadless());
-    }
-
-    public static void loadData() {
-        YAMLMapper mapper = new YAMLMapper();
-        try {
-            shipments = Arrays.asList(
-                    mapper.convertValue(
-                            mapper.readTree(getStream("shipmentEndpoints")).get("shipmentEndpoints"),
-                            ShipmentEndpoint[].class
-                    )
-            );
-        } catch (IOException e) {
-            // address1: "105 Tyler Blvd")
-            // java.lang.Error: com.fasterxml.jackson.dataformat.yaml.snakeyaml.error.MarkedYAMLException: while parsing a block mapping
-            throw new Error(e);
-        }
     }
 
     public static void teardown() {
@@ -70,23 +54,49 @@ public class TestContext {
     public static Config getConfig() {
 //        return new Yaml().loadAs(getStream("config"), Config.class); //class SnakeYaml version
         try {
-            return new YAMLMapper().readValue(getStream("config"), Config.class); //Jackson databind with dataformat-yaml
+            return new YAMLMapper().readValue(getStream("config"), Config.class);
         } catch (IOException e) {
             throw new Error(e);
         }
     }
 
-    public static Map<String, String> getData(String fileName) {
-        return new Yaml().load(getStream(fileName));
-    }
-
-    public static InputStream getStream(String fileName) {
-        String filePath = System.getProperty("user.dir") + "/src/test/resources/data/" + fileName + ".yml";
+    public static InputStream getStream(String project) {
+        String filePath = System.getProperty("user.dir") + "/src/test/resources/data/" + project + ".yml";
         try {
             return new FileInputStream(filePath);
         } catch (FileNotFoundException e) {
             throw new Error(e);
         }
+    }
+
+    public static Map<String, String> getData(String dataKey, String project) {
+        InputStream stream = getStream(project);
+        Map<String, Map<String, String>> mapOfMaps = new Yaml().load(stream);
+        return mapOfMaps.get(dataKey);
+    }
+
+    public static Map<String, String> getData(String dataKey) {
+        return getData(dataKey, "quote");
+    }
+
+    public static <T> List<T> getData(Class<T[]> type, String dataKey, String project) {
+        YAMLMapper mapper = new YAMLMapper();
+        List<T> list;
+        try {
+            list =  Arrays.asList(
+                    mapper.convertValue(
+                            mapper.readTree(getStream(project)).get(dataKey),
+                            new TypeReference<T[]>(){
+                                @Override
+                                public Type getType() {
+                                    return type;
+                                }
+                            })
+            );
+        } catch (IOException e) {
+            throw new Error(e);
+        }
+        return list;
     }
 
     public static void initialize(String browser, String testEnv, boolean isHeadless) {

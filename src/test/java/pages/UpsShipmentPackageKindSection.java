@@ -5,18 +5,13 @@ import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.Select;
 
-import java.util.stream.IntStream;
-
-public class UpsShipmentPackageKindSection extends UpsBasePage {
+public class UpsShipmentPackageKindSection extends UpsShipmentCreatePage {
 
     public UpsShipmentPackageKindSection() {
         urlRegExp = ".*www.ups.com/ship/guided/package.*";
     }
 
     // fields
-    @FindBy(xpath = "//shipment-packages")
-    private WebElement packageKindFormWrapper;
-
     @FindBy(xpath = "//select[contains(@name,'PackagingTypeDropdown')]")
     private WebElement packageType;
 
@@ -29,11 +24,12 @@ public class UpsShipmentPackageKindSection extends UpsBasePage {
     // methods
     public void setPackageTypeAndWeight(String type, String weight) {
         new Select(packageType).selectByVisibleText(type);
-        int i=0;
-        do {
-            i++;
-            packageWeight.sendKeys(weight);
-            wait.until(ExpectedConditions.visibilityOf(packageWeightCheckmark));
-        } while (packageWeight.getAttribute("value").equals("") || i>2);
+        packageWeight.sendKeys(weight);
+        wait.until(ExpectedConditions.visibilityOf(packageWeightCheckmark));
+        try {
+            Thread.sleep(300);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
     }
 }
