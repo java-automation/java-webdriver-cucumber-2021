@@ -3,7 +3,6 @@ package definitions;
 import io.cucumber.java.en.And;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
-import org.openqa.selenium.support.ui.WebDriverWait;
 import pages.*;
 import support.ShipmentEndpoint;
 
@@ -17,10 +16,10 @@ import static support.TestContext.getData;
 public class UpsStepDefs {
 
     UpsHomePage homePage = new UpsHomePage();
-    UpsShipmentOriginSection shipmentOriginSection = new UpsShipmentOriginSection();
-    UpsShipmentDestSection shipmentDestSection = new UpsShipmentDestSection();
-    UpsShipmentPackageKindSection shipmentPackageKindSection = new UpsShipmentPackageKindSection();
-    UpsShipmentHowSection shipmentHowSection = new UpsShipmentHowSection();
+    UpsShipmentOrigin shipmentOrigin = new UpsShipmentOrigin();
+    UpsShipmentDestination shipmentDest = new UpsShipmentDestination();
+    UpsShipmentWhat shipmentWhat = new UpsShipmentWhat();
+    UpsShipmentHow shipmentHow = new UpsShipmentHow();
 
     List<ShipmentEndpoint> shipmentEndpoints = getData(ShipmentEndpoint[].class,"shipmentEndpoints", "ups");
     Map<String,String> packageData = getData("package","ups");
@@ -38,45 +37,45 @@ public class UpsStepDefs {
     @When("I fill out origin shipment fields")
     public void iFillOutOriginShipmentFields() {
         origin = getShipment(s -> s.getType().equals("commercial") && (s.getSingleLineAddressLength() > 35));
-        shipmentOriginSection.fillOutOrigin(origin);
+        shipmentOrigin.fillOutOrigin(origin);
     }
 
     @And("I submit the shipment form")
     public void iSubmitTheShipmentForm() {
-        shipmentOriginSection.submitShipmentForm();
+        shipmentOrigin.submitShipmentForm();
     }
 
     @Then("I verify origin shipment fields submitted")
     public void iVerifyOriginShipmentFieldsSubmitted() {
-        shipmentDestSection.verifyOrigin(origin);
+        shipmentDest.verifyOrigin(origin);
     }
 
     @When("I fill out destination shipment fields")
     public void iFillOutDestinationShipmentFields() {
         ShipmentEndpoint shipment = getShipment(s -> s.getType().equals("residential"));
-        shipmentDestSection.fillOutDestination(shipment);
+        shipmentDest.fillOutDestination(shipment);
     }
 
     @And("I {string} residential address")
     public void iResidentialAddress(String choice) {
         if (choice.equalsIgnoreCase("confirm")) {
-            shipmentDestSection.confirmResidential();
+            shipmentDest.confirmResidential();
         }
     }
 
     @And("I set packaging type and weight")
     public void iSetPackagingTypeAndWeight() {
-        shipmentPackageKindSection.setPackageTypeAndWeight(packageData.get("type"),packageData.get("weight"));
+        shipmentWhat.setPackageTypeAndWeight(packageData.get("type"),packageData.get("weight"));
     }
 
     @Then("I verify total charges appear")
     public void iVerifyTotalChargesAppear() {
-        assertThat(shipmentHowSection.verifyTotalChargesPresent()).isTrue();
+        assertThat(shipmentHow.verifyTotalChargesPresent()).isTrue();
     }
 
     @And("I select cheapest delivery option")
     public void iSelectCheapestDeliveryOption() {
-        shipmentHowSection.selectCheapestOption();
+        shipmentHow.selectCheapestOption();
     }
 
     @And("verify leaf present")

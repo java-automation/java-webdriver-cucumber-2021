@@ -8,11 +8,11 @@ import java.util.Locale;
 import java.util.Map;
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class UpsShipmentDestSection extends UpsShipmentCreatePage {
+public class UpsShipmentDestination extends UpsShipmentPage {
 
     private UpsShipmentForm destForm = new UpsShipmentForm();
 
-    public UpsShipmentDestSection() {
+    public UpsShipmentDestination() {
         urlRegExp = ".*www.ups.com/ship/guided/destination.*";
     }
 

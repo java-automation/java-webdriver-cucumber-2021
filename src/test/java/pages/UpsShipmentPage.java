@@ -7,9 +7,9 @@ import org.openqa.selenium.support.FindBy;
 
 import static support.TestContext.getDriver;
 
-public class UpsShipmentCreatePage extends UpsBasePage {
+public class UpsShipmentPage extends UpsBasePage {
 
-    public UpsShipmentCreatePage() {
+    public UpsShipmentPage() {
         closeCookiesDialogIfDisplayed();
     }
 

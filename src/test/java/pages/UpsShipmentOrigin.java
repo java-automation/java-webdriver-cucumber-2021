@@ -4,11 +4,11 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import support.ShipmentEndpoint;
 
-public class UpsShipmentOriginSection extends UpsShipmentCreatePage {
+public class UpsShipmentOrigin extends UpsShipmentPage {
 
     private UpsShipmentForm originForm = new UpsShipmentForm();
 
-    public UpsShipmentOriginSection() {
+    public UpsShipmentOrigin() {
         url = "https://www.ups.com/ship/guided/origin";
         urlRegExp = ".*www.ups.com/ship/guided/origin.*";
     }

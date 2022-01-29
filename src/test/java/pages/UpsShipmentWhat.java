@@ -5,9 +5,9 @@ import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.Select;
 
-public class UpsShipmentPackageKindSection extends UpsShipmentCreatePage {
+public class UpsShipmentWhat extends UpsShipmentPage {
 
-    public UpsShipmentPackageKindSection() {
+    public UpsShipmentWhat() {
         urlRegExp = ".*www.ups.com/ship/guided/package.*";
     }
 

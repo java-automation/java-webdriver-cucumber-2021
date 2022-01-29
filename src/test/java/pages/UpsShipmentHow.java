@@ -11,9 +11,9 @@ import java.util.List;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static support.TestContext.getDriver;
 
-public class UpsShipmentHowSection extends UpsShipmentCreatePage {
+public class UpsShipmentHow extends UpsShipmentPage {
 
-    public UpsShipmentHowSection() {
+    public UpsShipmentHow() {
         urlRegExp = ".*www.ups.com/ship/guided/pickup-service.*";
     }
 
