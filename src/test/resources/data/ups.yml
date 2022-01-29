@@ -8,3 +8,6 @@ destination:
   country: United States
   name: John Doe
   address: 870 7th Avenue, New York, NY 10019
+package:
+  weight: "1"
+  type: UPS Express Box - Small

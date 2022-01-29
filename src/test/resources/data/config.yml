@@ -4,8 +4,8 @@ headless: false
 browserWidth: 1920
 browserHeight: 1080
 pageLoadTimeout: 60
-implicitTimeout: 1
+implicitTimeout: 3
 explicitTimeout: 5
-pusupportedOsList:
+supportedOsList:
   - "win"
   - "mac"

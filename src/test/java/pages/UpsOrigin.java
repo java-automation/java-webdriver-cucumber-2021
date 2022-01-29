@@ -8,7 +8,7 @@ import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class UpsOrigin extends Page {
+public class UpsOrigin extends UpsControls {
 
     public UpsOrigin() {
         url = "https://www.ups.com/ship/guided/origin";
@@ -32,9 +32,6 @@ public class UpsOrigin extends Page {
     @FindBy(id = "origin-cac_phone")
     private WebElement phone;
 
-    @FindBy(id = "nbsBackForwardNavigationContinueButton")
-    private WebElement continueButton;
-
     @FindBy(css = ".ngb-highlight")
     private WebElement suggestionHighlight;
 
@@ -57,8 +54,5 @@ public class UpsOrigin extends Page {
     }
     public void fillPhone(String value) {
         phone.sendKeys(value);
-    }
-    public void submit() {
-        continueButton.click();
     }
 }

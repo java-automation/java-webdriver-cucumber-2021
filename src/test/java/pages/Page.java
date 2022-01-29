@@ -1,7 +1,11 @@
 package pages;
 
+import org.openqa.selenium.JavascriptExecutor;
+import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.PageFactory;
+import org.openqa.selenium.support.ui.WebDriverWait;
 
+import static support.TestContext.getConfig;
 import static support.TestContext.getDriver;
 
 public class Page {
@@ -21,6 +25,15 @@ public class Page {
 
     public void refreshPage() {
         getDriver().navigate().refresh();
+    }
+
+    public WebDriverWait getWait() {
+        return new WebDriverWait(getDriver(), getConfig().explicitTimeout);
+    }
+
+    public void clickWithJS(WebElement element) {
+        JavascriptExecutor executor = (JavascriptExecutor) getDriver();
+        executor.executeScript("arguments[0].click();", element);
     }
 
 }
