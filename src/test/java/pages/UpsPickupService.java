@@ -3,6 +3,7 @@ package pages;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class UpsPickupService extends Page {
@@ -19,6 +20,13 @@ public class UpsPickupService extends Page {
     @FindBy(css = "#nbsBalanceBarTotalCharges #total-charges-spinner")
     private WebElement totalPrice;
 
+    @FindBy(xpath = "//div[@class='ups-wrap_inner']//span/p[contains(@class,'price')]")
+    private List<WebElement> priceList;
+
+    @FindBy(xpath = "//div[@class='ups-wrap_inner']//span/p[contains(@class,'price')]/ancestor::label")
+    private List<WebElement> cardList;
+
+
     public List<WebElement> getRecommendedPrice() {
         return recommendedPrice;
     }
@@ -29,5 +37,14 @@ public class UpsPickupService extends Page {
 
     public WebElement getTotalPrice() {
         return totalPrice;
+    }
+
+    public WebElement getMinPrice() {
+        ArrayList<Double> priceDoubleList = new ArrayList<>();
+        priceList
+                .forEach(el -> priceDoubleList.add(Double.parseDouble(el.getText().replace("$", ""))));
+        Double minPrice = priceDoubleList.stream().min(Double::compare).orElseThrow();
+        System.out.println("priceDoubleList.indexOf(minPrice) = " + priceDoubleList.indexOf(minPrice));
+        return cardList.get(priceDoubleList.indexOf(minPrice));
     }
 }

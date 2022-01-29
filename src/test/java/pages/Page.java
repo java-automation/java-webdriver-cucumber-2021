@@ -18,9 +18,6 @@ public class Page {
     public final By CONTINUE_BUTTON_XPATH = By.xpath("//button[@id='nbsBackForwardNavigationContinueButton']");
     public final By PACKAGE_SECTION_XPATH = By.id("nbsShipmentPackagesPackage0");
 
-    /*  public final By CHEAPEST_PRICE_SELECT = By.xpath("//div[@id='Cheapest']//span[@class='serviceCard_header-icon ups-icon-checkcircle-solid']");
-  /*  @FindBy(id = "nbsBackForwardNavigationContinueButton")
-     public WebElement continueButton;*/
     protected String url;
     protected String title;
 
@@ -47,12 +44,8 @@ public class Page {
             return getDriver().findElement(locator).isDisplayed();
         } else return false;
     }
-/*
-    public void submit() {
-        wait.until(ExpectedConditions.presenceOfElementLocated(CONTINUE_BUTTON_XPATH)).click();
-    }*/
 
-    public boolean isWebElementPresent(WebElement el) {
+    public boolean isElementPresent(WebElement el) {
         try {
             wait.until(ExpectedConditions.visibilityOf(el));
             return el.isDisplayed();

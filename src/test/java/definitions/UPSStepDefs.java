@@ -219,7 +219,6 @@ public class UPSStepDefs extends Page {
         assertTrue(shipToEnteredContainer.contains(shipToData.get("firstName")));
         assertTrue(shipToEnteredContainer.contains(shipToData.get("middleName")));
         assertTrue(shipToEnteredContainer.contains(shipToData.get("lastName")));
-        //span[@class='ups-lever_switch_no']
         destinationPage.continueModalWindow();
         wait.until(ExpectedConditions.presenceOfElementLocated(PACKAGE_SECTION_XPATH));
     }
@@ -240,7 +239,7 @@ public class UPSStepDefs extends Page {
 
     @And("I select cheapest delivery option")
     public void iSelectCheapestDeliveryOption() {
-        pickupServicePage.getCheapestPrice().get(0).click();
+        pickupServicePage.getMinPrice().click();
         wait.until(ExpectedConditions.visibilityOfAllElementsLocatedBy(controls.CHEAPEST_PRICE_SELECT));
         assertTrue(pickupServicePage.getCheapestPrice().get(0).isDisplayed());
         new Actions(getDriver())
