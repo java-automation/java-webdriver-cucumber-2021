@@ -7,9 +7,7 @@ import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeDriverService;
 import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.edge.EdgeDriver;
-import org.openqa.selenium.firefox.FirefoxBinary;
-import org.openqa.selenium.firefox.FirefoxDriver;
-import org.openqa.selenium.firefox.FirefoxOptions;
+import org.openqa.selenium.firefox.*;
 import org.openqa.selenium.ie.InternetExplorerDriver;
 import org.openqa.selenium.logging.LogType;
 import org.openqa.selenium.logging.LoggingPreferences;
@@ -99,6 +97,9 @@ public class TestContext {
                     chromePreferences.put("profile.default_content_setting_values.geolocation", 2);
                     //sites can send pop-ups and use redirects
                     chromePreferences.put("profile.default_content_setting_values.popups", 1);
+                    /* This one may be needed in Europe, since they have a consent popup with status stored in cookies.
+                       If you block them - google allows you to auto-proceed.
+                    chromePreferences.put("profile.default_content_setting_values.cookies", 2); */
 
                     ChromeOptions chromeOptions = new ChromeOptions();
                     chromeOptions.setExperimentalOption("prefs", chromePreferences);
@@ -109,7 +110,6 @@ public class TestContext {
                         chromeOptions.addExtensions(chroPathFile);
                     }
 
-                    //logging
                     if (config.isEnableLogs()) {
                         //performance logging that is not enabled by default
                         if (config.isEnablePerformanceLogs()) {
@@ -132,7 +132,22 @@ public class TestContext {
                 }
                 case "firefox" -> {
                     WebDriverManager.firefoxdriver().setup();
-                    FirefoxOptions firefoxOptions = new FirefoxOptions();
+
+                    FirefoxOptions firefoxOptions = new FirefoxOptions()
+                            .addPreference("browser.download.useDownloadDir", true)
+                            .addPreference("browser.download.lastDir", System.getProperty("user.dir") + "/src/test/resources/downloads");
+
+                    /* This one may be needed in Europe, since they have a consent popup with status stored in cookies.
+                       If you block them - google allows you to auto-proceed.
+                            .addPreference("network.cookie.cookieBehavior", 2); */
+
+                    if (config.isEnableLogs()) {
+                        System.setProperty(FirefoxDriver.SystemProperty.BROWSER_LOGFILE, System.getProperty("user.dir") + "/target/firefoxdriver.log");
+                        firefoxOptions.setLogLevel(FirefoxDriverLogLevel.TRACE);
+                    } else {
+                        System.setProperty(FirefoxDriver.SystemProperty.BROWSER_LOGFILE, "/dev/null");
+                    }
+
                     if (isHeadless) {
                         FirefoxBinary firefoxBinary = new FirefoxBinary();
                         firefoxBinary.addCommandLineOptions("--headless");
