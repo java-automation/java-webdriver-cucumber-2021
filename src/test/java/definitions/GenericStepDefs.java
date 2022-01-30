@@ -48,8 +48,9 @@ public class GenericStepDefs {
             case "portnov online" -> "https://portnov.net";
             case "hidden button" -> "http://uitestingplayground.com/scrollbars";
             case "usps" -> "https://usps.com";
-            case "unit converter" -> "https://www.unitconverters.net/";
-            case "calculator" -> "https://www.calculator.net/";
+            case "unit converter" -> "https://www.unitconverters.net";
+            case "calculator" -> "https://www.calculator.net";
+            case "the internet" -> "https://the-internet.herokuapp.com";
             default -> throw new Error("Unknown URL reference: " + websiteReference);
         };
     }

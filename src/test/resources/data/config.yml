@@ -3,10 +3,12 @@ runType: local
 headless: false
 browserWidth: 1920
 browserHeight: 1080
-logPerformance: true
+enableLogs: true
+enablePerformanceLogs: true
+useChroPath: false
 pageLoadTimeout: 60
-implicitWait: 1
-explicitWait: 5
+implicitTimeout: 1
+explicitTimeout: 5
 supportedOS:
   - "win"
   - "mac"

@@ -17,3 +17,15 @@ Feature: Various experiments with WebDriver
     Then I wait for 3 sec
     Then  I click on element with xpath "//*[@id='hidingButton']"
     Then I wait for 3 sec
+
+  @predefinedExperiment3
+  Scenario: Login functionality for The Internet app
+    Given I go to "the internet" page
+    When I wait for 1 sec
+    And I click on element with xpath "//div[@id='content']/ul//a[@href='/login']"
+    And I wait for 1 sec
+    And I type "tomsmith" into element with xpath "//*[@id='username']"
+    And I type "SuperSecretPassword!" into element with xpath "//*[@id='password']"
+    And I wait for 3 sec
+    And I click on element with xpath "//button"
+    And I wait for 3 sec

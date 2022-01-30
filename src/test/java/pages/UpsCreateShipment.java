@@ -76,19 +76,19 @@ public class UpsCreateShipment extends Page {
         getWait().until(driver -> spinner.stream().findFirst().filter(WebElement::isDisplayed).isEmpty());
     }
 
-    protected void waitForOptionsAvailabilityRequest() {
+    protected void waitForOptionsAvailabilityResponse() {
         getWait().until(log -> getLogs(LogType.PERFORMANCE)
-                .getAll()
                 .stream()
+                .filter(entry -> entry.getMessage().contains("Network.responseReceived"))
                 .filter(entry -> entry.getMessage().contains("https://www.ups.com/ship/api/LookupAndValidation/GetOptionsAvailability"))
                 .filter(entry -> entry.getMessage().contains("application/json"))
                 .toList().size() > 0);
     }
 
-    protected void waitForRateShipmentRequest() {
+    protected void waitForRateShipmentResponse() {
         getWait().until(log -> getLogs(LogType.PERFORMANCE)
-                .getAll()
                 .stream()
+                .filter(entry -> entry.getMessage().contains("Network.responseReceived"))
                 .filter(entry -> entry.getMessage().contains("https://www.ups.com/ship/api/RatingAndProcessing/RateShipmentForAllServices"))
                 .filter(entry -> entry.getMessage().contains("application/json"))
                 .toList().size() > 0);

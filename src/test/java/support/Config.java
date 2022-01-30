@@ -9,10 +9,12 @@ public class Config {
     private boolean headless;
     private int browserWidth;
     private int browserHeight;
-    private boolean logPerformance;
+    private boolean useChroPath;
+    private boolean enableLogs;
+    private boolean enablePerformanceLogs;
     private int pageLoadTimeout;
-    private int implicitWait;
-    private int explicitWait;
+    private int implicitTimeout;
+    private int explicitTimeout;
     private List<String> supportedOS;
 
     public String getBrowser() {
@@ -35,20 +37,28 @@ public class Config {
         return browserHeight;
     }
 
-    public boolean isLogPerformance() {
-        return logPerformance;
+    public boolean isEnableLogs() {
+        return enableLogs;
+    }
+
+    public boolean isEnablePerformanceLogs() {
+        return enablePerformanceLogs;
+    }
+
+    public boolean isUseChroPath() {
+        return useChroPath;
     }
 
     public int getPageLoadTimeout() {
         return pageLoadTimeout;
     }
 
-    public int getImplicitWait() {
-        return implicitWait;
+    public int getImplicitTimeout() {
+        return implicitTimeout;
     }
 
-    public int getExplicitWait() {
-        return explicitWait;
+    public int getExplicitTimeout() {
+        return explicitTimeout;
     }
 
     public List<String> getSupportedOS() {

@@ -21,14 +21,15 @@ public class UpsPackage extends UpsCreateShipment {
 
 
     public void selectPackagingType(String type) {
+        //to clear PERFORMANCE buffer, then we check for latest response after selecting an option
+        getLogs(LogType.PERFORMANCE);
         new Select(packageTypeSelect).selectByVisibleText(type);
-        waitForLocalStorageUpdate();
-        waitForOptionsAvailabilityRequest();
+        waitForOptionsAvailabilityResponse();
     }
 
     public void fillPackageWeight(int weight) {
+        //we assume buffer was cleared at the time of package selection, if not - need to request the latest logs only
         packageWeight.sendKeys(String.valueOf(weight));
-        waitForLocalStorageUpdate();
-        waitForRateShipmentRequest();
+        waitForRateShipmentResponse();
     }
 }

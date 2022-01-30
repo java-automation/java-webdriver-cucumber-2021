@@ -22,7 +22,6 @@ import org.yaml.snakeyaml.Yaml;
 import java.io.*;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.logging.Level;
@@ -78,29 +77,47 @@ public class TestContext {
             switch (browser) {
                 case "chrome" -> {
                     WebDriverManager.chromedriver().setup();
+
+                    //verified for Chrome v97
                     Map<String, Object> chromePreferences = new HashMap<>();
-                    chromePreferences.put("profile.default_content_settings.geolocation", 2);
-                    chromePreferences.put("profile.default_content_settings.popups", 0);
+                    //ask where to save each file before downloading - off
                     chromePreferences.put("download.prompt_for_download", false);
+                    //What does it actually do? Present on fresh Chrome profile with 'true' value. Saw a comment saying it's not needed from v97.
                     chromePreferences.put("download.directory_upgrade", true);
+                    //prefs JSON file has it as 'savefile.default_directory', but that version doesn't work
                     chromePreferences.put("download.default_directory", System.getProperty("user.dir") + "/src/test/resources/downloads");
-                    chromePreferences.put("safebrowsing.enabled", false);
+                    //download .pdf instead of opening
                     chromePreferences.put("plugins.always_open_pdf_externally", true);
-                    chromePreferences.put("plugins.plugins_disabled", new ArrayList<String>() {{ add("Chrome PDF Viewer"); }});
+                    //protection service - off, it checks against the list of harmful websites/extensions
+                    chromePreferences.put("safebrowsing.enabled", false);
+                    /* Offer to save passwords - off, even though seems to be auto-blocked by driver.
+                       Prompt doesn't show up even if slider is in 'on' position after passing true value.
+                       In manual mode setting works as intended.
+                       Prefs JSON file has it as 'chrome.credentials_enable_service', but that version doesn't work. */
                     chromePreferences.put("credentials_enable_service", false);
-                    chromePreferences.put("password_manager_enabled", false);
+                    //don't allow sites to see your location
+                    chromePreferences.put("profile.default_content_setting_values.geolocation", 2);
+                    //sites can send pop-ups and use redirects
+                    chromePreferences.put("profile.default_content_setting_values.popups", 1);
+
                     ChromeOptions chromeOptions = new ChromeOptions();
-                    File chroPathFile = new File(System.getProperty("user.dir") + "/src/test/resources/data/ChroPath.crx");
-                    chromeOptions.addExtensions(chroPathFile);
-                    chromeOptions.addArguments("--start-maximized");
                     chromeOptions.setExperimentalOption("prefs", chromePreferences);
 
-                    //logging for network
-                    if (config.isLogPerformance()) {
-                        LoggingPreferences logPrefs = new LoggingPreferences();
-                        logPrefs.enable(LogType.PERFORMANCE, Level.ALL);
-                        chromeOptions.setCapability("goog:loggingPrefs", logPrefs);
-                        System.setProperty(ChromeDriverService.CHROME_DRIVER_LOG_PROPERTY, System.getProperty("user.dir") + "/target/performance.log");
+                    //adding ChroPath if needed
+                    if (config.isUseChroPath()) {
+                        File chroPathFile = new File(System.getProperty("user.dir") + "/src/test/resources/data/ChroPath.crx");
+                        chromeOptions.addExtensions(chroPathFile);
+                    }
+
+                    //logging
+                    if (config.isEnableLogs()) {
+                        //performance logging that is not enabled by default
+                        if (config.isEnablePerformanceLogs()) {
+                            LoggingPreferences logPrefs = new LoggingPreferences();
+                            logPrefs.enable(LogType.PERFORMANCE, Level.ALL);
+                            chromeOptions.setCapability("goog:loggingPrefs", logPrefs);
+                        }
+                        System.setProperty(ChromeDriverService.CHROME_DRIVER_LOG_PROPERTY, System.getProperty("user.dir") + "/target/chromedriver.log");
                         System.setProperty(ChromeDriverService.CHROME_DRIVER_VERBOSE_LOG_PROPERTY, "true");
                     } else {
                         System.setProperty(ChromeDriverService.CHROME_DRIVER_SILENT_OUTPUT_PROPERTY, "true");

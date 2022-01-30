@@ -1,9 +1,11 @@
 package pages;
 
 import org.openqa.selenium.WebElement;
-import org.openqa.selenium.logging.LogEntries;
+import org.openqa.selenium.logging.LogEntry;
 import org.openqa.selenium.support.PageFactory;
 import org.openqa.selenium.support.ui.WebDriverWait;
+
+import java.util.List;
 
 import static support.TestContext.*;
 
@@ -16,7 +18,7 @@ public class Page {
 
     public Page() {
         PageFactory.initElements(getDriver(), this);
-        wait = new WebDriverWait(getDriver(), getConfig().getExplicitWait());
+        wait = new WebDriverWait(getDriver(), getConfig().getExplicitTimeout());
     }
 
     public void open() {
@@ -47,8 +49,8 @@ public class Page {
         return wait;
     }
 
-    public LogEntries getLogs(String type) {
-        return getDriver().manage().logs().get(type);
+    public List<LogEntry> getLogs(String type) {
+        return getDriver().manage().logs().get(type).getAll();
     }
 
     public void scrollToElementWithOffset(WebElement element, int offset) {
