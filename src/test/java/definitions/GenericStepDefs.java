@@ -7,6 +7,7 @@ import org.openqa.selenium.Dimension;
 import org.openqa.selenium.logging.LogEntries;
 import org.openqa.selenium.logging.LogEntry;
 import org.openqa.selenium.logging.LogType;
+import pages.CareersHome;
 import pages.QuoteForm;
 import pages.UpsHome;
 
@@ -26,6 +27,7 @@ public class GenericStepDefs {
         switch (pageReference.toLowerCase()) {
             case "quote form" -> new QuoteForm().open();
             case "ups" -> new UpsHome().open();
+            case "careers" -> new CareersHome().open();
             default -> throw new Error("Unknown URL reference: " + pageReference);
         }
     }

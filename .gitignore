@@ -5,6 +5,9 @@
 
 /target
 
+# sensitive configs
+/src/test/resources/data/secrets
+
 # Log file
 *.log
 
