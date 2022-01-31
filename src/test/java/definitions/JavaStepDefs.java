@@ -172,6 +172,9 @@ public class JavaStepDefs {
             case "calculator":
                 getDriver().navigate().to("https://www.calculator.net");
                 break;
+            case "careers":
+                getDriver().navigate().to("https://skryabin-careers.herokuapp.com");
+                break;
             default:
                 System.out.println("Unsupported page: " + sPage);
         }
