@@ -19,11 +19,13 @@ public class UpsPayment extends UpsCreateShipment {
 
     public void selectPayPal() {
         paypalOption.click();
+        cycleSpinner();
     }
 
     public void proceedToReview() {
         //avoiding footer
         scrollToElementWithOffset(reviewButton, 100);
         reviewButton.click();
+        cycleSpinner();
     }
 }

@@ -8,6 +8,7 @@ Julie Harris:
   email: JulieHarris@example.com
   country: United States
   alpha2Code: US
+  currency: USD
   packageType: UPS Express Box - Medium
   weight: "3"
   units: lb
@@ -22,6 +23,7 @@ Mary Johansson:
   email: MaryJohansson@example.com
   country: Finland
   alpha2Code: FI
+  currency: EUR
   packageType: UPS Express Box
   weight: "4"
   units: kg
@@ -36,6 +38,7 @@ Richard Blank:
   email: RichardBlank@example.com
   country: United States
   alpha2Code: US
+  currency: USD
   packageType: UPS Express Box - Small
   weight: "1"
   units: lb

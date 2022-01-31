@@ -28,7 +28,7 @@ Feature: UPS end to end scenarios
     When I submit the shipment form
     *    I select Paypal payment type
     *    I submit the shipment form
+    Then I review all recorded details on the review page
+    When I cancel the shipment form
+    Then I verify shipment form is reset
     And  I wait for 3 sec
-#    Then I review all recorded details on the review page
-#    And I cancel the shipment form
-#    Then I verify shipment form is reset

@@ -82,4 +82,11 @@ public class UpsOrigin extends UpsCreateShipment {
     public void fillOriginPhone(String phone) {
         originPhone.sendKeys(phone);
     }
+
+    public boolean isFirstLoad() {
+        return (originCompanyOrName.getAttribute("value").isEmpty() &&
+                originAddress.get(0).getAttribute("value").isEmpty() &&
+                originEmail.getAttribute("value").isEmpty()) &&
+                originPhone.getAttribute("value").isEmpty();
+    }
 }

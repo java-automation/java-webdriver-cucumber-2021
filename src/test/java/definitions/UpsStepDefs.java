@@ -9,6 +9,7 @@ import java.util.Map;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static support.TestContext.getData;
+import static support.TestContext.getDriver;
 
 public class UpsStepDefs {
 
@@ -21,6 +22,7 @@ public class UpsStepDefs {
     private UpsPickup pickupPage;
     private UpsOptions optionsPage;
     private UpsPayment paymentPage;
+    private UpsReview reviewPage;
     private Map<String, String> originData, destinationData;
     private double totalCharges = 0.0;
 
@@ -36,6 +38,7 @@ public class UpsStepDefs {
         pickupPage = new UpsPickup();
         optionsPage = new UpsOptions();
         paymentPage = new UpsPayment();
+        reviewPage = new UpsReview();
     }
 
     @When("I fill out origin shipment fields with {string} profile")
@@ -80,8 +83,8 @@ public class UpsStepDefs {
 
     @And("I submit the shipment form")
     public void iSubmitTheShipmentForm() {
-        if (!createShipmentPage.getProgressStepName().equals("Payment")) createShipmentPage.submitForm();
-        else paymentPage.proceedToReview();
+        if (createShipmentPage.getProgressStepName().equals("Payment")) paymentPage.proceedToReview();
+        else createShipmentPage.submitForm();
     }
 
     @Then("I verify origin shipment fields submitted")
@@ -161,7 +164,8 @@ public class UpsStepDefs {
         pickupPage.selectCheapestOption();
         String cardText = pickupPage.getCheapestOptionText();
         String costText = pickupPage.getTotalChargesText();
-        totalCharges = Double.parseDouble(costText.replace("$", ""));
+        //TODO: change to locale and remove currency symbol
+        totalCharges = Double.parseDouble(costText.substring(1));
         assertThat(cardText).contains("Lowest Cost");
         assertThat(cardText).contains(costText);
         System.out.println("Cheapest: $" + totalCharges);
@@ -180,12 +184,30 @@ public class UpsStepDefs {
 
     @Then("I verify total charges changed")
     public void iVerifyTotalChargesChanged() {
-        assertThat(Double.parseDouble(optionsPage.getTotalChargesText().replace("$", ""))).isNotEqualTo(totalCharges);
+        //TODO: change to locale and remove currency symbol
+        assertThat(Double.parseDouble(optionsPage.getTotalChargesText().substring(1))).isNotEqualTo(totalCharges);
         System.out.println("Changed: " + optionsPage.getTotalChargesText());
     }
 
     @And("I select Paypal payment type")
     public void iSelectPaypalPaymentType() {
         paymentPage.selectPayPal();
+    }
+
+    @Then("I review all recorded details on the review page")
+    public void iReviewAllRecordedDetailsOnTheReviewPage() {
+        //review
+    }
+
+    @And("I cancel the shipment form")
+    public void iCancelTheShipmentForm() {
+        reviewPage.cancelShipment();
+    }
+
+    @Then("I verify shipment form is reset")
+    public void iVerifyShipmentFormIsReset() {
+        assertThat(getDriver().getTitle()).contains(originPage.getTitle());
+        assertThat(createShipmentPage.getProgressStepName()).isEqualTo("Where");
+        assertThat(originPage.isFirstLoad()).isTrue();
     }
 }

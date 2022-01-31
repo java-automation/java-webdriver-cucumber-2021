@@ -69,9 +69,6 @@ public class UpsDestination extends UpsCreateShipment {
 
     // modal isResidential
 
-    @FindBy(css = ".modal-dialog")
-    private List<WebElement> modalWindow;
-
     @FindBy(css = ".ups-lever_switch_bg")
     private WebElement modalSwitch;
 
@@ -144,7 +141,7 @@ public class UpsDestination extends UpsCreateShipment {
     }
 
     public void confirmDestinationIsResidentialUS() {
-        getWait().until(driver -> modalWindow.stream().findFirst().isPresent());
+        waitForModalDialog();
         if (!modalYes.isDisplayed()) {
             modalSwitch.click();
             getWait().until(ExpectedConditions.visibilityOf(modalYes));
@@ -153,7 +150,7 @@ public class UpsDestination extends UpsCreateShipment {
     }
 
     public void denyDestinationIsResidentialUS() {
-        getWait().until(driver -> modalWindow.stream().findFirst().isPresent());
+        waitForModalDialog();
         if (modalYes.isDisplayed()) {
             modalSwitch.click();
             getWait().until(ExpectedConditions.invisibilityOf(modalYes));

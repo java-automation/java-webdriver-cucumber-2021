@@ -33,6 +33,9 @@ public class UpsCreateShipment extends Page {
     @FindBy(css = "img[src*='ajax-loader']")
     private List<WebElement> spinner;
 
+    @FindBy(css = ".modal-dialog")
+    private List<WebElement> modalWindow;
+
     @FindBy(id = "total-charges-spinner")
     private WebElement totalCharges;
 
@@ -119,6 +122,10 @@ public class UpsCreateShipment extends Page {
     protected void cycleSpinner() {
         waitForSpinnerToBeVisible();
         waitForSpinnerToBeInvisible();
+    }
+
+    protected void waitForModalDialog() {
+        getWait().until(driver -> modalWindow.stream().findFirst().isPresent());
     }
 
     protected void waitForOptionsAvailabilityResponse() {
