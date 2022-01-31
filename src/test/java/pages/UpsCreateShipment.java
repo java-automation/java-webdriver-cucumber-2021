@@ -1,5 +1,6 @@
 package pages;
 
+import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.TimeoutException;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.html5.LocalStorage;
@@ -9,7 +10,6 @@ import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 
 import java.util.List;
-import java.util.NoSuchElementException;
 
 import static support.TestContext.getDriver;
 
@@ -35,6 +35,9 @@ public class UpsCreateShipment extends Page {
 
     @FindBy(id = "total-charges-spinner")
     private WebElement totalCharges;
+
+    @FindBy(xpath = "//div[@class='ups-progress_bar']//div[contains(@class,'ups-progress_current')]/../div[@class='ups-progress_name']")
+    private WebElement progressStep;
 
 
     public void waitForFirstLoad() {
@@ -70,6 +73,10 @@ public class UpsCreateShipment extends Page {
         return totalCharges.getText().trim();
     }
 
+    public String getProgressStepName() {
+        return progressStep.getText();
+    }
+
     protected void sendKeysToCorrectAddressField(List<WebElement> toBeInvisible, List<WebElement> toBeVisible, String address) {
         getWait().until(driver -> toBeInvisible.stream().findFirst().isEmpty());
         toBeVisible.stream().findFirst().ifPresent(element -> element.sendKeys(address));
@@ -103,6 +110,15 @@ public class UpsCreateShipment extends Page {
 
     protected void waitForSpinnerToBeInvisible() {
         getWait().until(driver -> spinner.stream().findFirst().filter(WebElement::isDisplayed).isEmpty());
+    }
+
+    protected void waitForSpinnerToBeVisible() {
+        getWait().until(driver -> spinner.stream().findFirst().filter(WebElement::isDisplayed).isPresent());
+    }
+
+    protected void cycleSpinner() {
+        waitForSpinnerToBeVisible();
+        waitForSpinnerToBeInvisible();
     }
 
     protected void waitForOptionsAvailabilityResponse() {

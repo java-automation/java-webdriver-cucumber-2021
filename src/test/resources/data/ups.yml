@@ -11,6 +11,7 @@ Julie Harris:
   packageType: UPS Express Box - Medium
   weight: "3"
   units: lb
+  packageDescription: equipment part
 Mary Johansson:
   companyOrName: Johansson & Co.
   contact: Mary Johansson
@@ -24,6 +25,7 @@ Mary Johansson:
   packageType: UPS Express Box
   weight: "4"
   units: kg
+  packageDescription: product samples
 Richard Blank:
   companyOrName: Richard Blank
   contact: Richard Blank
@@ -37,3 +39,4 @@ Richard Blank:
   packageType: UPS Express Box - Small
   weight: "1"
   units: lb
+  packageDescription: business documentation

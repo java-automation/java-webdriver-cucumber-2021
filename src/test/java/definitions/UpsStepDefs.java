@@ -19,7 +19,10 @@ public class UpsStepDefs {
     private UpsDestination destinationPage;
     private UpsPackage packagePage;
     private UpsPickup pickupPage;
+    private UpsOptions optionsPage;
+    private UpsPayment paymentPage;
     private Map<String, String> originData, destinationData;
+    private double totalCharges = 0.0;
 
     @And("I go to Create a Shipment")
     public void iGoToCreateAShipment() {
@@ -31,6 +34,8 @@ public class UpsStepDefs {
         destinationPage = new UpsDestination();
         packagePage = new UpsPackage();
         pickupPage = new UpsPickup();
+        optionsPage = new UpsOptions();
+        paymentPage = new UpsPayment();
     }
 
     @When("I fill out origin shipment fields with {string} profile")
@@ -75,7 +80,8 @@ public class UpsStepDefs {
 
     @And("I submit the shipment form")
     public void iSubmitTheShipmentForm() {
-        createShipmentPage.submitForm();
+        if (!createShipmentPage.getProgressStepName().equals("Payment")) createShipmentPage.submitForm();
+        else paymentPage.proceedToReview();
     }
 
     @Then("I verify origin shipment fields submitted")
@@ -147,14 +153,39 @@ public class UpsStepDefs {
     @Then("I verify total charges appear")
     public void iVerifyTotalChargesAppear() {
         assertThat(pickupPage.isTotalChargesVisible()).isTrue();
-        System.out.println(pickupPage.getTotalChargesText());
+        System.out.println("Appears: " + pickupPage.getTotalChargesText());
     }
 
     @When("I select cheapest delivery option")
     public void iSelectCheapestDeliveryOption() {
         pickupPage.selectCheapestOption();
         String cardText = pickupPage.getCheapestOptionText();
+        String costText = pickupPage.getTotalChargesText();
+        totalCharges = Double.parseDouble(costText.replace("$", ""));
         assertThat(cardText).contains("Lowest Cost");
-        assertThat(cardText).contains(pickupPage.getTotalChargesText());
+        assertThat(cardText).contains(costText);
+        System.out.println("Cheapest: $" + totalCharges);
+    }
+
+    @And("I set description and check Saturday Delivery type if available")
+    public void iSetDescriptionAndCheckSaturdayDeliveryTypeIfAvailable() {
+        optionsPage.fillShipmentDescription(originData.get("packageDescription"));
+        if (optionsPage.isSaturdayDeliveryAvailable()) optionsPage.selectSaturdayDelivery();
+    }
+
+    @And("I check Deliver only to receiver's address")
+    public void iCheckDeliverOnlyToReceiverSAddress() {
+        optionsPage.selectDirectDelivery();
+    }
+
+    @Then("I verify total charges changed")
+    public void iVerifyTotalChargesChanged() {
+        assertThat(Double.parseDouble(optionsPage.getTotalChargesText().replace("$", ""))).isNotEqualTo(totalCharges);
+        System.out.println("Changed: " + optionsPage.getTotalChargesText());
+    }
+
+    @And("I select Paypal payment type")
+    public void iSelectPaypalPaymentType() {
+        paymentPage.selectPayPal();
     }
 }
