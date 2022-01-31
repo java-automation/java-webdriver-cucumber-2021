@@ -322,17 +322,18 @@ public class UspsStepDefs {
 
 
 
+
     //UPS
     @And("I go to Create a Shipment")
     public void iGoToCreateAShipment() {
         getDriver().findElement(By.xpath("//a[@id='tabs_0_tab_2']/span")).click();
     }
-    Map<String, String> upsUser = getDataUPS("upsUser");
+    Map<String, String> upsUser = getData("upsUser");
 
     @When("I fill out origin shipment fields")
     public void iFillOutOriginShipmentFields() throws InterruptedException {
         getDriver().findElement(By.xpath("//select[@name='cac_country']/option[contains(text(), '" + upsUser.get("country") + "')]"));
-        getDriver().findElement(By.xpath("//input[@name='cac_companyOrName']")).sendKeys(upsUser.get("fullname"));
+        getDriver().findElement(By.xpath("//input[@name='cac_companyOrName']")).sendKeys(upsUser.get("name"));
 
 //        WebElement zip = getDriver().findElement(By.xpath("//input[@name='cac_postalCode']"));
 //        WebDriverWait wait = new WebDriverWait(getDriver(), 3);
@@ -372,7 +373,7 @@ public class UspsStepDefs {
         WebDriverWait wait = new WebDriverWait(getDriver(), 3);
         wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//div[@id='origin_showSummaryAddress']")));
         String block = getDriver().findElement(By.xpath("//div[@id='origin_showSummaryAddress']")).getText();
-        Assertions.assertThat(block).contains(upsUser.get("fullname"));
+        Assertions.assertThat(block).contains(upsUser.get("name"));
         Assertions.assertThat(block).contains(upsUser.get("address"));
         Assertions.assertThat(block).contains(upsUser.get("email"));
         Assertions.assertThat(block).contains(upsUser.get("phone"));
@@ -380,7 +381,7 @@ public class UspsStepDefs {
 
     @When("I fill out destination shipment fields")
     public void iFillOutDestinationShipmentFields() throws InterruptedException {
-        getDriver().findElement(By.xpath("//input[@name='cac_companyOrName']")).sendKeys(upsUser.get("fullnameDestination"));
+        getDriver().findElement(By.xpath("//input[@name='cac_companyOrName']")).sendKeys(upsUser.get("nameDestination"));
         getDriver().findElement(By.xpath("//input[@name='cac_singleLineAddress']")).sendKeys(upsUser.get("addressDestination"));
         Thread.sleep(1000);
         getDriver().findElement(By.xpath("//input[@name='cac_singleLineAddress']")).sendKeys(Keys.ENTER);
@@ -408,7 +409,8 @@ public class UspsStepDefs {
         //select[@id='nbsPackagePackagingTypeDropdown0']/option[contains(text(), 'Packaging')]
         getDriver().findElement(By.xpath("//input[@id='nbsPackagePackageWeightField0']")).click();
         getDriver().findElement(By.xpath("//input[@id='nbsPackagePackageWeightField0']")).sendKeys(upsUser.get("weight"));
-        getDriver().findElement(By.xpath("//select[@id='nbsPackagePackagingTypeDropdown0']/option[contains(text(), '" + type + "')]")).click();
+        WebElement selector = getDriver().findElement(By.xpath("//select[@id='nbsPackagePackagingTypeDropdown0']"));
+        new Select(selector).selectByVisibleText(type);
     }
 
     @Then("I verify {string} appear")
@@ -430,6 +432,10 @@ public class UspsStepDefs {
         WebDriverWait wait = new WebDriverWait(getDriver(), 3);
         wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//input[@id='nbsShipmentDescription']")));
         getDriver().findElement(By.xpath("//input[@id='nbsShipmentDescription']")).sendKeys(upsUser.get("description"));
+
+        WebElement saturdayDelivery = getDriver().findElement(By.xpath("//div/strong[contains(text(), 'Saturday Delivery')]/../.."));
+        JavascriptExecutor executor = (JavascriptExecutor)getDriver();
+        executor.executeScript("arguments[0].click();", saturdayDelivery);
     }
 
     @And("I check {string}")
@@ -470,9 +476,9 @@ public class UspsStepDefs {
 //        wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//div[@id='origin_showSummaryAddress']")));
 
         String info = getDriver().findElement(By.xpath("//div[@id='origin_showSummaryAddress']")).getText();
-        Assertions.assertThat(info).contains(upsUser.get("fullname"));
+        Assertions.assertThat(info).contains(upsUser.get("name"));
         String info2 = getDriver().findElement(By.xpath("//div[@id='destination_showSummaryAddress']")).getText();
-        Assertions.assertThat(info2).contains(upsUser.get("fullnameDestination"));
+        Assertions.assertThat(info2).contains(upsUser.get("nameDestination"));
     }
 
     @And("I cancel the shipment form")

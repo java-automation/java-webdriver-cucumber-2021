@@ -1,0 +1,15 @@
+user:
+  username: jdoe
+  email: jdoe@gmail.com
+  password: qwerty
+  firstname: john
+  middlename: Adam
+  lastname: doe
+
+admin:
+  username: rroe
+  email: rroe@gmail.com
+  password: password
+  firstname: richard
+  middlename: josh
+  lastname: roe

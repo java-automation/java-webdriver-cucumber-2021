@@ -56,16 +56,16 @@ public class TestContext {
         return yaml.load(stream);
     }
 
-    public static Map<String, String> getDataUPS (String filename) {
-        String filePath = System.getProperty("user.dir") + "/src/test/resources/data/" + filename + ".yml";
-        try {
-            FileInputStream stream = new FileInputStream(filePath);
-            Yaml yaml = new Yaml();
-            return yaml.load(stream);
-        } catch (FileNotFoundException e) {
-            throw new Error(e);
-        }
-    }
+//    public static Map<String, String> getDataUPS (String filename) {
+//        String filePath = System.getProperty("user.dir") + "/src/test/resources/data/" + filename + ".yml";
+//        try {
+//            FileInputStream stream = new FileInputStream(filePath);
+//            Yaml yaml = new Yaml();
+//            return yaml.load(stream);
+//        } catch (FileNotFoundException e) {
+//            throw new Error(e);
+//        }
+//    }
 
 
 

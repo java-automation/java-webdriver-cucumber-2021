@@ -9,19 +9,27 @@ import org.openqa.selenium.support.PageFactory;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
+import java.util.Map;
 import java.util.NoSuchElementException;
 
 import static support.TestContext.getDriver;
 
-public class QuoteForm {
+public class QuoteForm extends Page {
 
     //constructor
-    public QuoteForm() {
-        PageFactory.initElements(getDriver(), this);
-    }
+//    public QuoteForm() {
+//        PageFactory.initElements(getDriver(), this);
+//    }
+    //we extracted this constructor to the other class and it is supposed to be deleted here
 
     //fields
-   private String url = "https://skryabin.com/market/quote.html";
+//   private String url = "https://skryabin.com/market/quote.html"; //мы extracted это в другой класс и перенесли присваивание значения в констрактор ниже
+
+   //constructor for parameters
+    public QuoteForm() {
+        url = "https://skryabin.com/market/quote.html";
+        title = "Get a Quote";
+    }
 
    @FindBy(xpath = "//input[@name='username']")
    private WebElement username; //= getDriver().findElement(By.xpath("//input[@name='username']"));
@@ -59,9 +67,15 @@ public class QuoteForm {
     private WebElement submit;
 
     //methods
-    public void open() {
-        getDriver().get(url);
-    }
+//    public void open() {
+//        getDriver().get(url);
+//    }
+    //this method is extracted to the other class and it is supposed to be deleted here
+
+//    public void refreshPage() {
+//        getDriver().navigate().refresh();
+//    }
+    //this method is extracted to the other class and it is supposed to be deleted here
 
     public void fillUsername(String value) {
         username.clear();
@@ -90,7 +104,7 @@ public class QuoteForm {
         confirmPassword.sendKeys(value);
     }
 
-    public void fillName(String firstNameValue, String lastNameValue) {
+    private void fillFirstLastName(String firstNameValue, String lastNameValue) { //это extraction (выносим часть дублированного кода из двух следующих методов) и ссылаемся на этот метод. Этот метод private, тк мы используем его только для внутренних нужд в этом классе.
         name.click();
 
         firstname.clear();
@@ -98,21 +112,18 @@ public class QuoteForm {
 
         lastname.clear();
         lastname.sendKeys(lastNameValue);
+    }
 
+    public void fillName(String firstNameValue, String lastNameValue) {
+        fillFirstLastName(firstNameValue, lastNameValue); //вызываем вышенаходящийся метод, чтобы избежать повторения кода в этом методе и следущем (мы вынесли общее в отдельный метод)
         saveButton.click();
     }
 
     public void fillName(String firstNameValue, String middleNameValue, String lastNameValue) {
-        name.click();
-
-        firstname.clear();
-        firstname.sendKeys(firstNameValue);
+        fillFirstLastName(firstNameValue, lastNameValue); //вызываем тот же метод, что и в предыдущем методе, чтобы не повторять одинаковый код
 
         middlename.clear();
-        middlename.sendKeys(firstNameValue);
-
-        lastname.clear();
-        lastname.sendKeys(lastNameValue);
+        middlename.sendKeys(middleNameValue);
 
         saveButton.click();
     }
@@ -128,9 +139,11 @@ public class QuoteForm {
     }
 
     public void verifyFieldValue(String field, String value) {
-        Assertions.assertThat(getDriver().findElement(By.xpath("//input[@name='" + field + "']")).getText()).isEqualTo(value);
-    }
+        //Assertions.assertThat(getDriver().findElement(By.xpath("//input[@name='" + field + "']")).getText()).isEqualTo(value);
+        Assertions.assertThat(getDriver().findElement(By.xpath("//input[@name='" + field + "']")).getAttribute("value")).isEqualTo(value);
+        //System.out.println(getDriver().findElement(By.xpath("//input[@name='" + field + "']")).getAttribute("value"));
 
+    }
 
     //Methods For Error Messages
     public void errorMessageIsNotVisible(String field) {

@@ -56,6 +56,8 @@ Feature: Java feature
 
 #      And I find if 11 is a prime number (double)
 #      And I find if 12 is a prime number (double)
+#      And I find if 0 is a prime number (double)
+#      And I find if 1 is a prime number (double)
 #      And I find factorial of 5 (double)
 #      And I find factorial of 1 (double)
 #      And I find factorial of 0 (double)

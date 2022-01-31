@@ -6,6 +6,8 @@ import org.openqa.selenium.Dimension;
 import org.openqa.selenium.logging.LogEntries;
 import org.openqa.selenium.logging.LogEntry;
 import org.openqa.selenium.logging.LogType;
+import pages.QuoteForm;
+import pages.UPSHome;
 
 import java.util.Locale;
 import java.util.logging.Level;
@@ -13,6 +15,26 @@ import java.util.logging.Level;
 import static support.TestContext.getDriver;
 
 public class GenericStepDefs {
+
+    @Given("I go to {string} page oop")
+    public void iGoToPageOop(String page) {
+        switch (page.toLowerCase()) {
+            case "quote":
+                //getDriver().get("https://skryabin.com/market/quote.html");
+                // TestContext.getDriver().get("https://skryabin.com/market/quote.html"); - то же самое
+                // TestContext.getDriver().navigate().to("https://skryabin.com/market/quote.html"); - то же самое
+                new QuoteForm().open(); //где form - созданный нами выше объект, open - instant метод из класса, которому принадлежит объект
+                break;
+            case "ups":
+                //getDriver().get("https://www.ups.com/us/en/Home.page");
+                new UPSHome().open();
+                break;
+            default:
+                throw new Error("Unsupported page: " + page);
+        }
+    }
+
+
     @Given("I go to {string} page")
     public void iGoToPage(String page) {
         switch (page.toLowerCase()) {
@@ -35,6 +57,9 @@ public class GenericStepDefs {
                 break;
             case "converter":
                 getDriver().get("https://www.unitconverters.net/");
+                break;
+            case "careers":
+                getDriver().get("https://skryabin-careers.herokuapp.com/");
                 break;
             default:
                 throw new Error("Unsupported page: " + page);

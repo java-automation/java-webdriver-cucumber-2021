@@ -378,15 +378,19 @@ public class JavaDoubleDefs {
     @And("I find if {int} is a prime number \\(double)")
     public void iFindIfIsAPrimeNumberDouble(int number) {
         boolean notPrime = false;
-        for (int i = 2; i < number; i++) { //делитель
-            if (number%i==0) {
-                System.out.println(number + " is not a prime number");
-                notPrime = true;
-                break;
+        if (number==0 || number==1) {
+            System.out.println("This is an exception to the rule");
+        } else {
+            for (int i = 2; i < number; i++) { //делитель
+                if (number%i==0) {
+                    System.out.println(number + " is not a prime number");
+                    notPrime = true;
+                    break;
+                }
             }
-        }
-        if (!notPrime) {
-            System.out.println(number + " is a prime number");
+            if (!notPrime) {
+                System.out.println(number + " is a prime number");
+            }
         }
     }
 

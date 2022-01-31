@@ -8,7 +8,6 @@ Feature: Quote Feature OOP
     And I submit the page oop
     And I wait for 1 sec
     Then I verity the required fields oop
-    And I wait for 1 sec
 
   @quote_oop2
   Scenario: Required fields test

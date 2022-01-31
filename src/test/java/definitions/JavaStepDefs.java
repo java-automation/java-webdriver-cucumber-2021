@@ -295,19 +295,6 @@ public class JavaStepDefs {
         System.out.println(result);
     }
 
-    @And("I solve coding challenges")
-    public void iSolveCodingChallenges() {
-        int num = 15;
-        if (num%3==0 && num%5==0)
-            System.out.println(num + " is div by both 3 and 5");
-        else if (num%3==0)
-            System.out.println(num + " is div by 3");
-        else if (num%5==0)
-            System.out.println(num + " is div by 5");
-        else
-            System.out.println(num + " is not div neither by 3 nor 5");
-    }
-
     @And("I check the division")
     public void iCheckTheDivision() {
         int n = 11;
@@ -559,32 +546,39 @@ public class JavaStepDefs {
     public void iFindIfAIsAPrime(int number) {
         boolean prime = true;
 
-        for (int i = 2; i < number; i++) { //for non-prime number. We are making sure that out number is not divided by any number between 1 (not included) and itself (not included).
-            if (number%i==0) {
-                prime = false;
-                break;
+        if (number <= 1){
+            System.out.println(number + " is an exception to the rule");
+        } else {
+            for (int i = 2; i < number; i++) { //for non-prime number. We are making sure that out number is not divided by any number between 1 (not included) and itself (not included).
+                if (number%i==0) {
+                    prime = false;
+                    break;
+                }
             }
+            if (prime)
+                System.out.println(number + " is a prime number");
+            else
+                System.out.println(number + " is not a prime number");
         }
-        if (prime)
-            System.out.println(number + " is a prime number");
-        else
-            System.out.println(number + " is not a prime number");
 
 
         //OR variant 2
         boolean notPrime = false; //not prime = false это prime (указываем по умолчанию)
 
-        for (int i = 2; i < number; i++) {
-            if (number%i==0) {
-                System.out.println(number + " is not a prime number");
-                notPrime = true;
-                break;
+        if (number <= 1){
+            System.out.println(number + " is an exception to the rule");
+        } else {
+            for (int i = 2; i < number; i++) {
+                if (number%i==0) {
+                    System.out.println(number + " is not a prime number");
+                    notPrime = true;
+                    break;
+                }
+            }
+            if (!notPrime) {
+                System.out.println(number + " is a prime number");
             }
         }
-        if (!notPrime) {
-            System.out.println(number + " is a prime number");
-        }
-
     }
 
     @And("I find factorial of {int}")
@@ -669,6 +663,19 @@ public class JavaStepDefs {
         if(!vowel) {
             System.out.println(letter + " is not a vowel");
         }
+    }
+
+    @And("I solve coding challenges")
+    public void iSolveCodingChallenges() {
+        int num = 15;
+        if (num%3==0 && num%5==0)
+            System.out.println(num + " is div by both 3 and 5");
+        else if (num%3==0)
+            System.out.println(num + " is div by 3");
+        else if (num%5==0)
+            System.out.println(num + " is div by 5");
+        else
+            System.out.println(num + " is not div neither by 3 nor 5");
     }
 
     @Given("I work with classes")

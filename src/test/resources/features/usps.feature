@@ -81,7 +81,7 @@
         When I submit the shipment form
         And I "confirm" residential address
         And I wait for 2 sec
-        And I set "Packaging" type and weight
+        And I set "My Packaging" type and weight
         When I submit the shipment form
         Then I verify "total charges" appear
         And I select "Cheapest" delivery option

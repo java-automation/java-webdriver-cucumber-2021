@@ -30,13 +30,12 @@
 
 #      Given I swap two variables
 #      And I convert a string "200" into int
-#      And I solve coding challenges
 #      And I check the division
 #      And I am playing a FizzBuzz game
-#      And I am playing a Fibonacci game
-      And I determine if "civic" is a palindrome
-      And I determine if "anna" is a palindrome
-      And I determine if "qwerty" is a palindrome
+##      And I am playing a Fibonacci game
+#      And I determine if "civic" is a palindrome
+#      And I determine if "anna" is a palindrome
+#      And I determine if "qwerty" is a palindrome
 #      And I am looking for the largest element in an array
 #      And I reverse a string
 #      And I reverse words in a sentence
@@ -50,17 +49,22 @@
 #      And I find the sum of numbers in the file
 #      ???And I find if any two elements of an array result in sum
 
-#      And I find if 11 is a prime number
-#      And I find if 12 is a prime number
+      And I find if 11 is a prime number
+      And I find if 12 is a prime number
+      And I find if 0 is a prime number
+      And I find if 1 is a prime number
 #      And I find factorial of 5
 #      And I find factorial of 1
 #      And I find factorial of 0
 #      And I check whether "Z" is a vowel or not
 #      And I check whether "a" is a vowel or not
 
+#      And I solve coding challenges
 
 
-      @java2
+
+
+    @java2
       Scenario: Classes
         Given I work with classes
 
