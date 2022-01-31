@@ -13,6 +13,7 @@ import org.openqa.selenium.logging.LogEntries;
 import org.openqa.selenium.logging.LogEntry;
 import org.openqa.selenium.logging.LogType;
 import org.openqa.selenium.support.ui.Select;
+import pages.QuoteForm;
 import pages.UpsHomePage;
 
 import java.util.ArrayList;
@@ -56,6 +57,7 @@ public class GenericStepDefs {
     @Given("I go to {string} page oop")
     public void iGoToPageOop(String page) {
         switch (page.toLowerCase()) {
+            case "quote" -> new QuoteForm().open();
             case "ups" -> new UpsHomePage().open();
             default -> throw new Error("Unsupported page: " + page);
         }

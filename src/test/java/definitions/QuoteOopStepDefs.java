@@ -16,18 +16,17 @@ public class QuoteOopStepDefs {
     QuoteForm form = new QuoteForm();
     SubmittedQuoteForm submittedForm = new SubmittedQuoteForm();
 
-    @Given("I go to {string} page oop")
-    public void iGoToPageOop(String page) {
-        form.open();
-    }
-
     @When("I fill out {string} required fields oop")
     public void iFillOutRequiredFieldsOop(String userType) {
         Map<String, String> user = getData(userType);
         form.fillUsername(user.get("username"));
         form.fillEmail(user.get("email"));
         form.fillPasswordFields(user.get("password"));
-        form.fillName(user.get("firstName"), user.get("lastName"));
+        if (user.get("middleName") != null) {
+            form.fillName(user.get("firstName"), user.get("middleName"), user.get("lastName"));
+        } else {
+            form.fillName(user.get("firstName"), user.get("lastName"));
+        }
         form.acceptPrivacyPolicy();
     }
 

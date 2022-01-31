@@ -1,5 +1,6 @@
 package pages;
 
+import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
@@ -87,7 +88,7 @@ public class QuoteForm {
         getDriver().get(url);
     }
 
-    public WebElement getElement(String field) {
+    public WebElement getElement_(String field) {
         return switch (field) {
             case InputField.USERNAME -> username;
             case InputField.EMAIL -> email;
@@ -97,6 +98,10 @@ public class QuoteForm {
             case InputField.PRIVACY_POLICY -> privacyPolicy;
             default -> throw new Error("No input fields associated with the description \"" + field + "\"");
         };
+    }
+
+    public WebElement getElement(String field) {
+        return getDriver().findElement(By.xpath("//input[@name='" + field + "']"));
     }
 
     public void fillOutField (String field, String value) {
@@ -152,7 +157,7 @@ public class QuoteForm {
         assertThat(getElement(field).getAttribute("value")).isEqualTo(value);
     }
 
-    public Optional<WebElement> getErrorElementFor(String field) {
+    public Optional<WebElement> getErrorElementFor_(String field) {
         List<WebElement> errors = switch (field) {
             case InputField.USERNAME -> usernameErrors;
             case InputField.EMAIL -> emailErrors;
@@ -165,8 +170,15 @@ public class QuoteForm {
         return errors.stream().findFirst();
     }
 
+    public Optional<WebElement> getErrorElementFor(String field) {
+//        return getElement(field).findElements(By.xpath("./following-sibling::label")).stream().findFirst();
+        return getDriver().findElements(By.xpath("//label[@for='" + field + "']" +
+                                                                 "[@id='" + field + "-error']")).stream().findFirst();
+    }
+
     public void assertNoError(String field) {
-        assertThat(getErrorElementFor(field).isEmpty() || !getErrorElementFor(field).get().isDisplayed()).isTrue();
+//        assertThat(getErrorElementFor(field).isEmpty() || !getErrorElementFor(field).get().isDisplayed()).isTrue();
+        assertThat(getErrorElementFor(field).filter(WebElement::isDisplayed).isEmpty()).isTrue();
     }
 
     public void assertErrorMessage(String inputField, String errorMessage) {
