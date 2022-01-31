@@ -27,7 +27,7 @@ public class UpsPickup extends UpsCreateShipment {
 
     public void selectCheapestOption() {
         waitForSpinnerToBeInvisible();
-        WebElement cheapestOption = upsellTileLabels.get(getCheapestTileIndex());
+        WebElement cheapestOption = upsellTilePrices.get(getCheapestTileIndex());
         //scrolling since prices are on the bottom and user may want to see them before clicking
         scrollToElementWithOffset(cheapestOption, 100);
         cheapestOption.click();

@@ -22,7 +22,7 @@ public class UpsPackage extends UpsCreateShipment {
 
     public void selectPackagingType(String type) {
         //to clear PERFORMANCE buffer, then we check for latest response after selecting an option
-        getLogs(LogType.PERFORMANCE);
+        //getLogs(LogType.PERFORMANCE);
         new Select(packageTypeSelect).selectByVisibleText(type);
         waitForOptionsAvailabilityResponse();
     }

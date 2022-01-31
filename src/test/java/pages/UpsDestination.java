@@ -15,20 +15,6 @@ public class UpsDestination extends UpsCreateShipment {
     }
 
 
-    // origin summary info
-
-    @FindBy(id = "origin_agentSummaryNameLine")
-    private WebElement originSummaryName;
-
-    @FindBy(id = "origin_agentSummaryAddressLine")
-    private WebElement originSummaryAddress;
-
-    @FindBy(id = "origin_agentSummaryCountryLine")
-    private WebElement originSummaryCountry;
-
-    @FindBy(id = "origin_agentSummaryContactLine")
-    private WebElement originSummaryContact;
-
     // destination
 
     @FindBy(css = "destination .ups-section")
@@ -78,22 +64,6 @@ public class UpsDestination extends UpsCreateShipment {
     @FindBy(id = "nbsAddressClassificationContinue")
     private WebElement modalContinueButton;
 
-
-    public String getOriginSummaryName() {
-        return originSummaryName.getText();
-    }
-
-    public String getOriginSummaryAddress() {
-        return originSummaryAddress.getText();
-    }
-
-    public String getOriginSummaryCountry() {
-        return originSummaryCountry.getText();
-    }
-
-    public String getOriginSummaryContact() {
-        return originSummaryContact.getText();
-    }
 
     public void selectDestinationCountry(String countryName) {
         new Select(destinationCountry).selectByVisibleText(countryName);

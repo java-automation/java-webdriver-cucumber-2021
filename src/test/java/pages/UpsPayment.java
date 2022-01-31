@@ -26,6 +26,5 @@ public class UpsPayment extends UpsCreateShipment {
         //avoiding footer
         scrollToElementWithOffset(reviewButton, 100);
         reviewButton.click();
-        cycleSpinner();
     }
 }

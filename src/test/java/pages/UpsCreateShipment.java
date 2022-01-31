@@ -42,6 +42,22 @@ public class UpsCreateShipment extends Page {
     @FindBy(xpath = "//div[@class='ups-progress_bar']//div[contains(@class,'ups-progress_current')]/../div[@class='ups-progress_name']")
     private WebElement progressStep;
 
+    // origin summary info, the only summary that present on multiple pages
+    @FindBy(id = "origin_agentSummaryNameLine")
+    private WebElement originSummaryName;
+
+    @FindBy(id = "origin_agentSummaryAddressLine")
+    private WebElement originSummaryAddress;
+
+    @FindBy(id = "origin_agentSummaryCountryLine")
+    private WebElement originSummaryCountry;
+
+    @FindBy(id = "origin_agentSummaryContactLine")
+    private WebElement originSummaryContact;
+
+    @FindBy(id = "origin_agentSummaryResidentialLine")
+    private WebElement originSummaryResidential;
+
 
     public void waitForFirstLoad() {
         waitForSpinnerToBeAbsent();
@@ -78,6 +94,26 @@ public class UpsCreateShipment extends Page {
 
     public String getProgressStepName() {
         return progressStep.getText();
+    }
+
+    public String getOriginSummaryName() {
+        return originSummaryName.getText();
+    }
+
+    public String getOriginSummaryAddress() {
+        return originSummaryAddress.getText();
+    }
+
+    public String getOriginSummaryCountry() {
+        return originSummaryCountry.getText();
+    }
+
+    public String getOriginSummaryContact() {
+        return originSummaryContact.getText();
+    }
+
+    public String getOriginSummaryResidential() {
+        return originSummaryResidential.getText();
     }
 
     protected void sendKeysToCorrectAddressField(List<WebElement> toBeInvisible, List<WebElement> toBeVisible, String address) {
@@ -128,21 +164,38 @@ public class UpsCreateShipment extends Page {
         getWait().until(driver -> modalWindow.stream().findFirst().isPresent());
     }
 
+    /*
+    This method was created is to bypass a bug. When you select a package type, page send a POST request to a specific
+    endpoint. If you enter package weight before that response is received - it will be cleared after and will trigger
+    an error about the empty field.
+    You can also observe it when updating the value. It will jump back to old one and then updated to new one again
+    after getting the response.
+
+    Logging and filtering PERFORMANCE entries works fine in Chrome, but Firefox has some issues with JSON from its own logs.
+    Therefore, Thread.sleep.
+
+    If this update bug gets fixed (unlikely) - can remove the method completely.
+     */
     protected void waitForOptionsAvailabilityResponse() {
-        getWait().until(log -> getLogs(LogType.PERFORMANCE)
-                .stream()
-                .filter(entry -> entry.getMessage().contains("Network.responseReceived"))
-                .filter(entry -> entry.getMessage().contains("https://www.ups.com/ship/api/LookupAndValidation/GetOptionsAvailability"))
-                .filter(entry -> entry.getMessage().contains("application/json"))
-                .toList().size() > 0);
+        try {
+            Thread.sleep(1000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+//        getWait().until(log -> getLogs(LogType.PERFORMANCE)
+//                .stream()
+//                .filter(entry -> entry.getMessage().contains("Network.responseReceived"))
+//                .filter(entry -> entry.getMessage().contains("https://www.ups.com/ship/api/LookupAndValidation/GetOptionsAvailability"))
+//                .filter(entry -> entry.getMessage().contains("application/json"))
+//                .toList().size() > 0);
     }
 
     protected void waitForRateShipmentResponse() {
-        getWait().until(log -> getLogs(LogType.PERFORMANCE)
-                .stream()
-                .filter(entry -> entry.getMessage().contains("Network.responseReceived"))
-                .filter(entry -> entry.getMessage().contains("https://www.ups.com/ship/api/RatingAndProcessing/RateShipmentForAllServices"))
-                .filter(entry -> entry.getMessage().contains("application/json"))
-                .toList().size() > 0);
+//        getWait().until(log -> getLogs(LogType.PERFORMANCE)
+//                .stream()
+//                .filter(entry -> entry.getMessage().contains("Network.responseReceived"))
+//                .filter(entry -> entry.getMessage().contains("https://www.ups.com/ship/api/RatingAndProcessing/RateShipmentForAllServices"))
+//                .filter(entry -> entry.getMessage().contains("application/json"))
+//                .toList().size() > 0);
     }
 }

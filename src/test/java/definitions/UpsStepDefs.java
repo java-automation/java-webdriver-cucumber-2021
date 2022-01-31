@@ -89,11 +89,18 @@ public class UpsStepDefs {
 
     @Then("I verify origin shipment fields submitted")
     public void iVerifyOriginShipmentFieldsSubmitted() {
-        assertThat(destinationPage.getOriginSummaryName()).isEqualTo(originData.get("companyOrName"));
-        verifyAddressArtifacts(originData.get("address"), originData.get("city"), originData.get("postalCode"), destinationPage.getOriginSummaryAddress());
-        assertThat(destinationPage.getOriginSummaryCountry()).isEqualTo(originData.get("alpha2Code"));
-        assertThat(destinationPage.getOriginSummaryContact()).isEqualTo(
-                originData.get("email") + ", " + originData.get("phone"));
+        verifyOriginSummaryOnSpecificPage(destinationPage, true, true, false);
+    }
+
+    private void verifyOriginSummaryOnSpecificPage(UpsCreateShipment page, boolean countryCheck, boolean contactCheck, boolean residentialCheck) {
+        assertThat(page.getOriginSummaryName()).isEqualTo(originData.get("companyOrName"));
+        verifyAddressArtifacts(originData.get("address"), originData.get("city"), originData.get("postalCode"), page.getOriginSummaryAddress());
+        if (countryCheck)
+            assertThat(page.getOriginSummaryCountry()).isEqualTo(originData.get("alpha2Code"));
+        if (contactCheck)
+            assertThat(page.getOriginSummaryContact()).isEqualTo(originData.get("email") + ", " + originData.get("phone"));
+        if (residentialCheck)
+            assertThat(page.getOriginSummaryResidential()).isEqualTo("Residential");
     }
 
     @When("I fill out destination shipment fields with {string} profile")
@@ -185,8 +192,10 @@ public class UpsStepDefs {
     @Then("I verify total charges changed")
     public void iVerifyTotalChargesChanged() {
         //TODO: change to locale and remove currency symbol
-        assertThat(Double.parseDouble(optionsPage.getTotalChargesText().substring(1))).isNotEqualTo(totalCharges);
-        System.out.println("Changed: " + optionsPage.getTotalChargesText());
+        double currentTotal = Double.parseDouble(optionsPage.getTotalChargesText().substring(1));
+        assertThat(currentTotal).isNotEqualTo(totalCharges);
+        System.out.println("Changed: " + currentTotal);
+        totalCharges = currentTotal;
     }
 
     @And("I select Paypal payment type")
@@ -196,7 +205,31 @@ public class UpsStepDefs {
 
     @Then("I review all recorded details on the review page")
     public void iReviewAllRecordedDetailsOnTheReviewPage() {
-        //review
+        //origin
+        verifyOriginSummaryOnSpecificPage(reviewPage, false, true, false);
+        //destination
+        verifyDestinationSummary(false, false, true);
+        //package
+        assertThat(reviewPage.getPackageSummaryText()).contains(originData.get("packageType") + " - " + originData.get("weight") + " " + originData.get("units"));
+        //delivery
+        assertThat(reviewPage.getDeliveryDaySummaryText()).contains(createShipmentPage.getTotalChargesText());
+        //options
+        String optionsText = reviewPage.getOptionsSummaryText();
+        assertThat(optionsText).contains("Description of Goods: " + originData.get("packageDescription"));
+        assertThat(optionsText).contains("Deliver Only To Receiver's Address");
+        //payment
+        assertThat(reviewPage.getPaymentSummaryText()).contains("PayPal");
+    }
+
+    private void verifyDestinationSummary(boolean countryCheck, boolean contactCheck, boolean residentialCheck) {
+        assertThat(reviewPage.getDestinationSummaryName()).isEqualTo(destinationData.get("companyOrName"));
+        verifyAddressArtifacts(destinationData.get("address"), destinationData.get("city"), destinationData.get("postalCode"), reviewPage.getDestinationSummaryAddress());
+        if (countryCheck)
+            assertThat(reviewPage.getDestinationSummaryCountry()).isEqualTo(destinationData.get("alpha2Code"));
+        if (contactCheck)
+            assertThat(reviewPage.getDestinationSummaryContact()).isEqualTo(destinationData.get("email") + ", " + destinationData.get("phone"));
+        if (residentialCheck)
+            assertThat(reviewPage.getDestinationSummaryResidential()).isEqualTo("Residential");
     }
 
     @And("I cancel the shipment form")
@@ -209,5 +242,6 @@ public class UpsStepDefs {
         assertThat(getDriver().getTitle()).contains(originPage.getTitle());
         assertThat(createShipmentPage.getProgressStepName()).isEqualTo("Where");
         assertThat(originPage.isFirstLoad()).isTrue();
+        System.out.println("Reset!");
     }
 }
