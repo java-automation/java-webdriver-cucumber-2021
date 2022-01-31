@@ -27,9 +27,9 @@ public class UpsPackage extends UpsCreateShipment {
         waitForOptionsAvailabilityResponse();
     }
 
-    public void fillPackageWeight(int weight) {
+    public void fillPackageWeight(String weight) {
         //we assume buffer was cleared at the time of package selection, if not - need to request the latest logs only
-        packageWeight.sendKeys(String.valueOf(weight));
+        packageWeight.sendKeys(weight);
         waitForRateShipmentResponse();
     }
 }

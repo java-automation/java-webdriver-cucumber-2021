@@ -138,23 +138,23 @@ public class UpsStepDefs {
         }
     }
 
-    @And("I set packaging type as {string} and weight as {int} units")
-    public void iSetPackagingTypeAsAndWeightAsUnits(String packageType, int weight) {
-        packagePage.selectPackagingType(packageType);
-        packagePage.fillPackageWeight(weight);
+    @And("I set packaging type and weight")
+    public void iSetPackagingTypeAndWeight() {
+        packagePage.selectPackagingType(originData.get("packageType"));
+        packagePage.fillPackageWeight(originData.get("weight"));
     }
 
     @Then("I verify total charges appear")
     public void iVerifyTotalChargesAppear() {
         assertThat(pickupPage.isTotalChargesVisible()).isTrue();
-        System.out.println(pickupPage.getTotalChargeValue());
+        System.out.println(pickupPage.getTotalChargesText());
     }
 
     @When("I select cheapest delivery option")
     public void iSelectCheapestDeliveryOption() {
         pickupPage.selectCheapestOption();
-        String cardText = pickupPage.getCheapestOptionCardText();
+        String cardText = pickupPage.getCheapestOptionText();
         assertThat(cardText).contains("Lowest Cost");
-        assertThat(cardText).contains(pickupPage.getTotalChargeValue().substring(15));
+        assertThat(cardText).contains(pickupPage.getTotalChargesText());
     }
 }

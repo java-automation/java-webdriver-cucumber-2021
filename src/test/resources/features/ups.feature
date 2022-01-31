@@ -18,7 +18,7 @@ Feature: UPS end to end scenarios
     *    I "confirm" residential address for non-US country
     *    I submit the shipment form
     *    I "confirm" residential address for US
-    *    I set packaging type as "UPS Express Box - Medium" and weight as 2 units
+    *    I set packaging type and weight
     *    I submit the shipment form
     Then I verify total charges appear
     When I select cheapest delivery option

@@ -88,18 +88,22 @@ public class TestContext {
                     chromePreferences.put("plugins.always_open_pdf_externally", true);
                     //protection service - off, it checks against the list of harmful websites/extensions
                     chromePreferences.put("safebrowsing.enabled", false);
-                    /* Offer to save passwords - off, even though seems to be auto-blocked by driver.
-                       Prompt doesn't show up even if slider is in 'on' position after passing true value.
-                       In manual mode setting works as intended.
-                       Prefs JSON file has it as 'chrome.credentials_enable_service', but that version doesn't work. */
+                    /*
+                    Offer to save passwords - off, even though seems to be auto-blocked by driver.
+                    Prompt doesn't show up even if slider is in 'on' position after passing true value.
+                    In manual mode setting works as intended.
+                    Prefs JSON file has it as 'chrome.credentials_enable_service', but that version doesn't work.
+                     */
                     chromePreferences.put("credentials_enable_service", false);
                     //don't allow sites to see your location
                     chromePreferences.put("profile.default_content_setting_values.geolocation", 2);
                     //sites can send pop-ups and use redirects
                     chromePreferences.put("profile.default_content_setting_values.popups", 1);
-                    /* This one may be needed in Europe, since they have a consent popup with status stored in cookies.
-                       If you block them - google allows you to auto-proceed.
-                    chromePreferences.put("profile.default_content_setting_values.cookies", 2); */
+                    /*
+                    This one may be needed in Europe, since they have a consent popup with status stored in cookies.
+                    If you block them - google allows you to auto-proceed.
+                    chromePreferences.put("profile.default_content_setting_values.cookies", 2);
+                     */
 
                     ChromeOptions chromeOptions = new ChromeOptions();
                     chromeOptions.setExperimentalOption("prefs", chromePreferences);
@@ -136,10 +140,11 @@ public class TestContext {
                     FirefoxOptions firefoxOptions = new FirefoxOptions()
                             .addPreference("browser.download.useDownloadDir", true)
                             .addPreference("browser.download.lastDir", System.getProperty("user.dir") + "/src/test/resources/downloads");
-
-                    /* This one may be needed in Europe, since they have a consent popup with status stored in cookies.
-                       If you block them - google allows you to auto-proceed.
-                            .addPreference("network.cookie.cookieBehavior", 2); */
+                    /*
+                    This one may be needed in Europe, since they have a consent popup with status stored in cookies.
+                    If you block them - google allows you to auto-proceed.
+                            .addPreference("network.cookie.cookieBehavior", 2);
+                     */
 
                     if (config.isEnableLogs()) {
                         System.setProperty(FirefoxDriver.SystemProperty.BROWSER_LOGFILE, System.getProperty("user.dir") + "/target/firefoxdriver.log");

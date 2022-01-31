@@ -1,5 +1,6 @@
 package pages;
 
+import org.openqa.selenium.TimeoutException;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.html5.LocalStorage;
 import org.openqa.selenium.html5.WebStorage;
@@ -8,6 +9,7 @@ import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 
 import java.util.List;
+import java.util.NoSuchElementException;
 
 import static support.TestContext.getDriver;
 
@@ -31,6 +33,9 @@ public class UpsCreateShipment extends Page {
     @FindBy(css = "img[src*='ajax-loader']")
     private List<WebElement> spinner;
 
+    @FindBy(id = "total-charges-spinner")
+    private WebElement totalCharges;
+
 
     public void waitForFirstLoad() {
         waitForSpinnerToBeAbsent();
@@ -39,8 +44,30 @@ public class UpsCreateShipment extends Page {
 
     public void submitForm() {
         waitForLocalStorageUpdate();
+        /*
+        Scrolling past continue button because this method is used on multiple pages and eventually footer shows up
+        that intercepts the click.
+         */
         scrollToElementWithOffset(continueButton, 100);
         continueButton.click();
+    }
+
+    /*
+    This footer shows up for the first time on pickup page, but later if you go back it stays up and the price
+    will adjust automatically based on your actions. Therefore, bringing it up to general workflow class and
+    putting it in a try/catch - it maybe both present and absent on the same page, depends on user actions.
+     */
+    public boolean isTotalChargesVisible() {
+        try {
+            getWait().until(ExpectedConditions.visibilityOf(totalCharges));
+        } catch (NoSuchElementException | TimeoutException e) {
+            return false;
+        }
+        return !totalCharges.getText().isEmpty();
+    }
+
+    public String getTotalChargesText() {
+        return totalCharges.getText().trim();
     }
 
     protected void sendKeysToCorrectAddressField(List<WebElement> toBeInvisible, List<WebElement> toBeVisible, String address) {
@@ -54,9 +81,11 @@ public class UpsCreateShipment extends Page {
     If user or webdriver clicks on "continue" before update - last entry is not saved, even though there is no complain
     about required fields or missing information from the web app.
 
-    There is key in local storage that gets updated regularly as well. It's called GULP_SC2 and could be Gulp related.
+    There is a key in local storage that gets updated regularly as well. It's called GULP_SC2 and could be Gulp related.
     One idea was to create a custom wait that would wait for the key update before proceeding, but it was unstable as well.
     You get various errors related to local storage and the wait times out. Seems like Thread.sleep is more stable.
+
+    If this update bug gets fixed (unlikely) - can remove the method completely.
      */
     protected void waitForLocalStorageUpdate() {
         try {
