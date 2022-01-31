@@ -1,11 +1,11 @@
 package pages;
 
-import org.openqa.selenium.ElementClickInterceptedException;
-import org.openqa.selenium.JavascriptExecutor;
+import org.openqa.selenium.TimeoutException;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
+import org.openqa.selenium.support.ui.ExpectedConditions;
 
-import static support.TestContext.getDriver;
+import java.util.function.Supplier;
 
 public class UpsShipmentPage extends UpsBasePage {
 
@@ -15,22 +15,72 @@ public class UpsShipmentPage extends UpsBasePage {
 
     // fields
     @FindBy(id = "nbsBackForwardNavigationContinueButton")
-    private WebElement continueButton;
+    protected WebElement continueButton;
+
+    @FindBy(id = "nbsBackForwardNavigationReviewPrimaryButton")
+    protected WebElement reviewButton;
 
     @FindBy(id = "nbsBackForwardNavigationCancelShipmentButton")
-    private WebElement cancelShipmentButton;
+    protected WebElement cancelShipmentButton;
 
     @FindBy(xpath = "//page-validation-errors")
-    private WebElement errorsSection;
+    protected WebElement errorsSection;
+
+    @FindBy(xpath = "//span[@id='total-charges-spinner']")
+    protected WebElement totalCharges;
+
+    @FindBy(xpath = "//span[@id='total-charges-spinner']//spinner/img")
+    protected WebElement totalChargesSpinner;
+
+    // modal dialog container
+    @FindBy(xpath = "//div[contains(@class,'modal-content')]")
+    protected WebElement modalDialog;
+
+    // fields of the modal dialog to cancel shipment
+    @FindBy(id = "nbsCancelShipmentWarningYes")
+    private WebElement yes;
+
+    @FindBy(id = "nbsCancelShipmentWarningNo")
+    private WebElement no;
 
     // methods
     public void submitShipmentForm() {
-        try {
-            continueButton.click();
-        } catch (ElementClickInterceptedException e) {
-            ((JavascriptExecutor)getDriver()).executeScript("arguments[0].scrollIntoView({" +
-                    "behavior: 'auto',block: 'center',inline: 'center'});", continueButton);
-            continueButton.click();
-        }
+        clickTryThenJS(continueButton);
     }
+
+    public void submitShipmentFormForReview() {
+        clickTryThenJS(reviewButton);
+    }
+
+    public void waitModalDialogDisplayed() {
+        wait.withMessage("Modal dialog on " + getClass() + " page did not appear.").until(driver -> modalDialog.isDisplayed());
+        wait.withMessage((Supplier<String>) null);
+    }
+
+    public void cancelShipmentForm() {
+        clickTryThenJS(cancelShipmentButton);
+        waitModalDialogDisplayed();
+        yes.click();
+    }
+
+    public boolean verifyTotalChargesPresent() {
+        return getTotalCharges().matches(".*\\$\\d+.\\d+.*");
+    }
+
+    public String getTotalCharges() {
+        waitForUrlMatch();
+        wait.until(ExpectedConditions.invisibilityOf(totalChargesSpinner));
+        return totalCharges.getText();
+    }
+
+    public String getTotalChargesWithSpinnerWait() {
+        waitForUrlMatch();
+        // waiting explicitTimeOut of time set in config.yml or till spinner visible
+        try {
+            wait.until(ExpectedConditions.visibilityOf(totalChargesSpinner));
+        } catch (TimeoutException e) {}
+        wait.until(ExpectedConditions.invisibilityOf(totalChargesSpinner));
+        return totalCharges.getText();
+    }
+
 }

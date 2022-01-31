@@ -47,10 +47,6 @@ public class TestContext {
         driver.quit();
     }
 
-    public static ShipmentEndpoint getShipment(Predicate<ShipmentEndpoint> condition) {
-        return shipments.stream().filter(condition).findFirst().orElseThrow();
-    }
-
     public static Config getConfig() {
 //        return new Yaml().loadAs(getStream("config"), Config.class); //class SnakeYaml version
         try {

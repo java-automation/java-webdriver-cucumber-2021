@@ -1,8 +1,8 @@
 browser: chrome      # chrome, firefox, safari, edge, ei
 environment: local   # local, grid
 headless: false
-browserWidt: 1920
-browserHeigh: 1080
+browserWidth: 1920
+browserHeight: 1080
 pageLoadTimeOut: 60  # 300 seconds default [ https://w3c.github.io/webdriver/#x9-timeouts ]
 implicitTimeOut: 1   # 0 seconds default
-explicitTimeOut: 5
+explicitTimeOut: 10

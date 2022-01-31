@@ -1,5 +1,6 @@
 package pages;
 
+import org.openqa.selenium.TimeoutException;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.ui.ExpectedConditions;
@@ -24,12 +25,13 @@ public class UpsShipmentWhat extends UpsShipmentPage {
     // methods
     public void setPackageTypeAndWeight(String type, String weight) {
         new Select(packageType).selectByVisibleText(type);
+        // can also put wait here since BUG reveals itself when fields are filled too fast
         packageWeight.sendKeys(weight);
         wait.until(ExpectedConditions.visibilityOf(packageWeightCheckmark));
+        // waiting explicitTimeOut of time set in config.yml or till weight field empties out due to BUG
         try {
-            Thread.sleep(300);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
+            wait.until(driver -> packageWeight.getAttribute("value").isEmpty());
+            packageWeight.sendKeys(weight);
+        } catch (TimeoutException e) {}
     }
 }

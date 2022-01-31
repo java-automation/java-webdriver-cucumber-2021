@@ -13,6 +13,7 @@ import org.openqa.selenium.logging.LogEntries;
 import org.openqa.selenium.logging.LogEntry;
 import org.openqa.selenium.logging.LogType;
 import org.openqa.selenium.support.ui.Select;
+import pages.UpsHomePage;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -52,6 +53,14 @@ public class GenericStepDefs {
         }
     }
 
+    @Given("I go to {string} page oop")
+    public void iGoToPageOop(String page) {
+        switch (page.toLowerCase()) {
+            case "ups" -> new UpsHomePage().open();
+            default -> throw new Error("Unsupported page: " + page);
+        }
+    }
+
     @Given("I go to {string} page")
     public void iGoToPage(String page) {
         switch (page.toLowerCase()) {
@@ -60,7 +69,6 @@ public class GenericStepDefs {
             case "usps" -> getDriver().get("https://usps.com");
             case "converter" -> getDriver().get("https://www.unitconverters.net/");
             case "calculator" -> getDriver().get("http://www.calculator.net/");
-            case "ups" -> getDriver().get("https://www.ups.com/us/en/Home.page");
             default -> System.out.println("Unsupported page: " + page);
         }
     }

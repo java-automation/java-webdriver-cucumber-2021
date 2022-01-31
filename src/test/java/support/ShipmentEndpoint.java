@@ -6,6 +6,7 @@ public class ShipmentEndpoint {
     private String name;
     private String email;
     private String phone;
+    private String postalAddress;
     private String address1;
     private String city;
     private String state;
@@ -50,6 +51,14 @@ public class ShipmentEndpoint {
 
     public void setPhone(String phone) {
         this.phone = phone;
+    }
+
+    public String getPostalAddress() {
+        return postalAddress;
+    }
+
+    public void setPostalAddress(String postalAddress) {
+        this.postalAddress = postalAddress;
     }
 
     public String getAddress1() {

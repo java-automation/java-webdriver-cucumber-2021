@@ -1,12 +1,9 @@
 package pages;
 
+import org.openqa.selenium.TimeoutException;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import support.ShipmentEndpoint;
-import java.util.HashMap;
-import java.util.Locale;
-import java.util.Map;
-import static org.assertj.core.api.Assertions.assertThat;
 
 public class UpsShipmentDestination extends UpsShipmentPage {
 
@@ -38,9 +35,9 @@ public class UpsShipmentDestination extends UpsShipmentPage {
     @FindBy(id = "origin_agentSummaryResidentialLine")
     private WebElement origin_agentResidential;
 
-    //modal dialog fields
-    @FindBy(xpath = "//div[contains(@class,'modal-content')]")
-    private WebElement modalDialog;
+    // fields of the modal dialog to set address residential or not
+    @FindBy(css = ".ups-lever_switch")
+    private WebElement residentialSwitch;
 
     @FindBy(xpath = "//span[@class='ups-lever_switch_no']")
     private WebElement nonResidentialSwitchPos;
@@ -48,31 +45,21 @@ public class UpsShipmentDestination extends UpsShipmentPage {
     @FindBy(xpath = "//span[@class='ups-lever_switch_yes']")
     private WebElement residentialSwitchPos;
 
-    @FindBy(xpath = "//button[@id='nbsAddressClassificationContinue']")
-    private WebElement dialogContinueButton;
+    @FindBy(id = "vm.residentialAddressControlId")
+    private WebElement residentialHiddenCheckbox;
+
+    @FindBy(id = "nbsAddressClassificationContinue")
+    private WebElement residentialPopupContinue;
+
 
     // methods
     public boolean destinationFormDisplayed() {
         return urlMatches() & destForm.formDisplayed();
     }
 
-    public void verifyOrigin(ShipmentEndpoint origin) {
+    public String getOriginSummary() {
         wait.until(driver -> originInfoWrapper.isDisplayed());
-        String originSummary = origin_summary.getText();
-        // ISO2 country codes from country names
-        Map<String, String> countries = new HashMap<>();
-        for (String iso : Locale.getISOCountries()) {
-            Locale l = new Locale("", iso);
-            countries.put(l.getDisplayCountry(), iso);
-        }
-        assertThat(originSummary.toLowerCase()).contains(
-                countries.get(origin.getCountry()).toLowerCase(),
-                origin.getName().toLowerCase(),
-                origin.getAddress1().replace("blvd", "boulevard").toLowerCase(),
-                origin.getCity().toLowerCase(),
-                origin.getState().toLowerCase(),
-                origin.getEmail().toLowerCase(),
-                origin.getPhone().toLowerCase());
+        return origin_summary.getText();
     }
 
     public void fillOutDestination(ShipmentEndpoint dest) {
@@ -88,17 +75,27 @@ public class UpsShipmentDestination extends UpsShipmentPage {
         return !residentialSwitchPos.isDisplayed() && nonResidentialSwitchPos.isDisplayed();
     }
 
-    public void confirmResidential(){
-        wait.until(driver -> modalDialog.isDisplayed());
-        if (isAddressSwitchNonResidential()) nonResidentialSwitchPos.click();
-        wait.until(driver -> isAddressSwitchResidential());
-        dialogContinueButton.click();
+    private void waitModalDialogDisplayedWithRetry(){
+        try {
+            waitModalDialogDisplayed();
+        } catch (TimeoutException e) {
+            submitShipmentForm();
+            waitModalDialogDisplayed();
+        }
     }
 
-    public void confirmNonResidential(){
-        wait.until(driver -> modalDialog.isDisplayed());
-        if (isAddressSwitchResidential()) residentialSwitchPos.click();
-        wait.until(driver -> isAddressSwitchNonResidential());
-        dialogContinueButton.click();
+    public void checkResidentialAddressSwitch(){
+        waitModalDialogDisplayedWithRetry();
+        if (isAddressSwitchNonResidential()) residentialSwitch.click();
+        wait.until(driver -> isAddressSwitchResidential());
+        residentialPopupContinue.click();
     }
+
+    public void uncheckResidentialAddressSwitch(){
+        waitModalDialogDisplayedWithRetry();
+        if (isAddressSwitchResidential()) residentialSwitch.click();
+        wait.until(driver -> isAddressSwitchNonResidential());
+        residentialPopupContinue.click();
+    }
+
 }

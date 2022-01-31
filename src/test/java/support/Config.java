@@ -7,9 +7,9 @@ public class Config {
     private String browser;
     private String environment;
     private Boolean headless;
-    @JsonProperty("browserWidt")
+    @JsonProperty("browserWidth") // can have different key name in config.yml
     private Integer browserWidth;
-    @JsonProperty("browserHeigh")
+    @JsonProperty("browserHeight")
     private Integer browserHeight;
     private Integer pageLoadTimeOut;
     private Integer implicitTimeOut;
