@@ -40,6 +40,9 @@ public class GenericStepDefs {
             case "calculator":
                Page.open("https://www.calculator.net/");
                 break;
+            case "careers":
+                Page.open("https://skryabin-careers.herokuapp.com/");
+                break;
             default:
                 throw new Error("Unsupported page: " + page);
         }
