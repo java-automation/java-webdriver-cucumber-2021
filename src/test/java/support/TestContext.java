@@ -9,6 +9,7 @@ import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.edge.EdgeDriver;
 import org.openqa.selenium.firefox.*;
 import org.openqa.selenium.ie.InternetExplorerDriver;
+import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.logging.LogType;
 import org.openqa.selenium.logging.LoggingPreferences;
 import org.openqa.selenium.remote.CapabilityType;
@@ -35,7 +36,11 @@ public class TestContext {
     }
 
     public static JavascriptExecutor getExecutor() {
-        return (JavascriptExecutor) driver;
+        return (JavascriptExecutor)driver;
+    }
+
+    public static Actions getActions() {
+        return new Actions(driver);
     }
 
     public static Config getConfig() {

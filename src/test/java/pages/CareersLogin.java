@@ -3,6 +3,8 @@ package pages;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 
+import java.util.Map;
+
 public class CareersLogin extends CareersHome {
 
     public CareersLogin() {
@@ -30,5 +32,11 @@ public class CareersLogin extends CareersHome {
 
     public void submitCredentials() {
         submitButton.click();
+    }
+
+    public void login(Map<String, String> credentials) {
+        fillUsername(credentials.get("email"));
+        fillPassword(credentials.get("password"));
+        submitCredentials();
     }
 }
