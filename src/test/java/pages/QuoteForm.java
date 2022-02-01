@@ -1,5 +1,6 @@
 package pages;
 
+import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.ui.Select;
@@ -19,32 +20,17 @@ public class QuoteForm extends Page {
     @FindBy(xpath = "//input[@name='username']")
     private WebElement username;
 
-    @FindBy(id = "username-error")
-    private List<WebElement> usernameError;
-
     @FindBy(xpath = "//input[@name='email']")
     private WebElement email;
-
-    @FindBy(id = "email-error")
-    private List<WebElement> emailError;
 
     @FindBy(xpath = "//input[@name='password']")
     private WebElement password;
 
-    @FindBy(id = "password-error")
-    private List<WebElement> passwordError;
-
     @FindBy(xpath = "//input[@name='confirmPassword']")
     private WebElement confirmPassword;
 
-    @FindBy(id = "confirmPassword-error")
-    private List<WebElement> confirmPasswordError;
-
     @FindBy(xpath = "//input[@id='name']")
     private WebElement name;
-
-    @FindBy(id = "name-error")
-    private List<WebElement> nameError;
 
 
     //name modal dialog ->
@@ -65,11 +51,12 @@ public class QuoteForm extends Page {
     @FindBy(xpath = "//input[@name='agreedToPrivacyPolicy']")
     private WebElement privacyPolicy;
 
-    @FindBy(id = "agreedToPrivacyPolicy-error")
-    private List<WebElement> privacyPolicyError;
-
     @FindBy(id = "formSubmit")
     private WebElement submitButton;
+
+    private List<WebElement> getErrorElement(String elementName) {
+        return getDriver().findElements(By.id(elementName + "-error"));
+    }
 
 
     // +++ OPTIONAL +++
@@ -135,14 +122,6 @@ public class QuoteForm extends Page {
         username.sendKeys(value);
     }
 
-    public boolean isUsernameErrorVisible() {
-        return isErrorVisible(usernameError);
-    }
-
-    public String getUsernameErrorText() {
-        return getErrorText(usernameError, "Username");
-    }
-
     public void fillEmail(String value) {
         email.clear();
         email.sendKeys(value);
@@ -150,14 +129,6 @@ public class QuoteForm extends Page {
 
     public String getEmail() {
         return email.getAttribute("value");
-    }
-
-    public boolean isEmailErrorVisible() {
-        return isErrorVisible(emailError);
-    }
-
-    public String getEmailErrorText() {
-        return getErrorText(emailError, "Email");
     }
 
     public void fillPasswords(String value) {
@@ -172,25 +143,9 @@ public class QuoteForm extends Page {
         password.sendKeys(value);
     }
 
-    public boolean isPasswordErrorVisible() {
-        return isErrorVisible(passwordError);
-    }
-
-    public String getPasswordErrorText() {
-        return getErrorText(passwordError, "Password");
-    }
-
     public void fillConfirmPassword(String value) {
         confirmPassword.clear();
         confirmPassword.sendKeys(value);
-    }
-
-    public boolean isConfirmPasswordErrorVisible() {
-        return isErrorVisible(confirmPasswordError);
-    }
-
-    public String getConfirmPasswordErrorText() {
-        return getErrorText(confirmPasswordError, "Confirm password");
     }
 
     public void fillName(String firstNameValue, String lastNameValue) {
@@ -214,28 +169,12 @@ public class QuoteForm extends Page {
         return name.getAttribute("value");
     }
 
-    public boolean isNameErrorVisible() {
-        return isErrorVisible(nameError);
-    }
-
-    public String getNameErrorText() {
-        return getErrorText(nameError, "Name");
-    }
-
     public void acceptPrivacyPolicy() {
         if (!privacyPolicy.isSelected()) privacyPolicy.click();
     }
 
     public void declinePrivacyPolicy() {
         if (privacyPolicy.isSelected()) privacyPolicy.click();
-    }
-
-    public boolean isPrivacyPolicyErrorVisible() {
-        return isErrorVisible(privacyPolicyError);
-    }
-
-    public String getPrivacyPolicyErrorText() {
-        return getErrorText(privacyPolicyError, "Privacy policy");
     }
 
     public void submit() {
@@ -304,16 +243,16 @@ public class QuoteForm extends Page {
         attachmentButton.sendKeys(filePath);
     }
 
-    private boolean isErrorVisible(List<WebElement> errorElement) {
-        return errorElement
+    public boolean isErrorMessageVisible(String elementName) {
+        return getErrorElement(elementName)
                 .stream()
                 .findFirst()
                 .filter(WebElement::isDisplayed)
                 .isPresent();
     }
 
-    private String getErrorText(List<WebElement> errorElement, String elementName) {
-        return errorElement
+    public String getErrorMessageText(String elementName) {
+        return getErrorElement(elementName)
                 .stream()
                 .findFirst()
                 .filter(WebElement::isDisplayed)
