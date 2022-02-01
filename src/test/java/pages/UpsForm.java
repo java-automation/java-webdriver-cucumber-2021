@@ -4,6 +4,7 @@ import org.junit.*;
 import org.openqa.selenium.*;
 import org.openqa.selenium.interactions.*;
 import org.openqa.selenium.support.*;
+import org.openqa.selenium.support.ui.*;
 
 import java.util.*;
 
@@ -14,6 +15,8 @@ public class UpsForm {
 
     Actions actions = new Actions(getDriver());
     Map<String, String> user = getData("user");
+    WebDriverWait wait = new WebDriverWait(getDriver(), 5);
+    JavascriptExecutor executor = (JavascriptExecutor) getDriver();
 
     //constructor
     public UpsForm() {
@@ -63,15 +66,68 @@ public class UpsForm {
     @FindBy(xpath = "//*[contains(@id,'origin_agentSummaryContactLine')]")
     private WebElement verifyOriginEmailAndPhone;
 
+    @FindBy(xpath = "//*[contains(@class,'ups-form_ctaGroup')]")
+    private WebElement ctaGroup;
+
     @FindBy(xpath = "//*[contains(@id,'nbsBackForwardNavigationContinueButton')]")
     private WebElement submit;
 
-    @FindBy(xpath = "//*[contains(@id,'vm.residentialAddressControlId')]")
-    private WebElement toggleYes;
+    @FindBy(xpath = "//*[contains(@id,'nbsBackForwardNavigationReviewPrimaryButton')]")
+    private WebElement review;
+
+    @FindBy(xpath = "//*[contains(@id,'nbsBackForwardNavigationBackButton')]")
+    private WebElement back;
+
+    @FindBy(xpath = "//*[contains(@id,'nbsBackForwardNavigationCancelShipmentButton')]")
+    private WebElement cancelShipment;
+
+    @FindBy(xpath = "//*[contains(@class,'ups-lever_switch_bg')]")
+    private WebElement toggleSwitch;
+
+    @FindBy(xpath = "//*[contains(@class,'ups-lever_switch_yes')]")
+    private WebElement toggleSwitchYes;
 
     @FindBy(xpath = "//*[contains(@id,'nbsAddressClassificationContinue')]")
     private WebElement continueButton;
 
+    @FindBy(xpath = "//option[text()='UPS Pak']")
+    private WebElement packageType;
+
+    @FindBy(xpath = "//input[contains(@id,'PackageWeight')]")
+    private WebElement packageWeight;
+
+    @FindBy(xpath = "//*[@id='nbsBalanceBarTotalCharges']")
+    private WebElement totalCharges;
+
+    @FindBy(xpath = "//*[@id='Cheapest']")
+    private WebElement cheapestShippingOption;
+
+    @FindBy(xpath = "//*[@id='nbsShipmentDescription']")
+    private WebElement shippingDescription;
+
+    @FindBy(xpath = "//*[contains(@class,'ups-lever_rlabel')]//strong[contains(text(),'Saturday Delivery')]")
+    private WebElement saturdayDelivery;
+
+    @FindBy(xpath = "//*[@for='nbsDirectDeliveryOnlyOptionBaseOptionSwitch']")
+    private WebElement deliverOnlyToReceiverAddress;
+
+    @FindBy(xpath = "//*[@id='other-ways-to-pay-tile']/..")
+    private WebElement paymentPayPal;
+
+    @FindBy(xpath = "//*[@for='payment-card-tile']")
+    private WebElement paymentCreditCard;
+
+    @FindBy(xpath = "//*[contains(@id,'origin_showSummaryAddress')]")
+    private WebElement shipFromSection;
+
+    @FindBy(xpath = "//*[contains(@id,'destination_showSummaryAddress')]")
+    private WebElement shipToSection;
+
+    @FindBy(xpath = "//*[@drawerid='packageDrawer']/li")
+    private WebElement packageInfoSection;
+
+    @FindBy(xpath = "//*[@id='additionalOptionsDrawer']/..")
+    private WebElement additionalOptionsSection;
 
     //methods
     public void dismissCookiesModal() {
@@ -88,17 +144,37 @@ public class UpsForm {
         originAddress.sendKeys(address);
         Thread.sleep(2000);
         selectOriginAddress.click();
-        Thread.sleep(2000);
+        Thread.sleep(3000);
         originEmail.sendKeys(email);
         Thread.sleep(2000);
         originPhone.sendKeys(phone);
         Thread.sleep(2000);
     }
     public void submit() {
-        actions.moveToElement(submit).click().perform();
+        //actions.moveToElement(submit).perform();
+
+        // Scrolling down the page till the element is found
+        executor.executeScript("arguments[0].scrollIntoView();", cancelShipment);
+        //executor.executeScript("window.scrollBy(0, " + offset + ");", submit);
+        //System.out.println(ctaGroup.getText());
+        if(ctaGroup.getText().contains("Continue")) {
+            if(submit.isDisplayed()) {
+                wait.until(ExpectedConditions.elementToBeClickable(submit));
+                submit.click();
+            } else if(continueButton.isDisplayed()) {
+                wait.until(ExpectedConditions.elementToBeClickable(continueButton));
+                continueButton.click();
+            }
+        } else {
+            wait.until(ExpectedConditions.elementToBeClickable(review));
+            review.click();
+        }
+        //submit.click();
+       // System.out.println("And I submitted form by clicking continue button with xpath:" + submit);
     }
 
     public void verifyOrigin() {
+        wait.until(ExpectedConditions.textToBe(By.xpath("//h2[contains(text(),'Where is your shipment going?')]"), "Where is your shipment going?"));
         Assert.assertEquals(user.get("fullName"), verifyOriginFullName.getText());
         Assert.assertEquals(user.get("address"), verifyOriginAddress.getText());
         Assert.assertEquals(user.get("email") + ", " + user.get("phone"), verifyOriginEmailAndPhone.getText());
@@ -114,7 +190,90 @@ public class UpsForm {
     }
 
     public void confirmResidentialAddress() {
-        toggleYes.click();
+        toggleSwitch.click();
+        wait.until(ExpectedConditions.textToBe(By.xpath("//*[contains(@class,'ups-lever_switch_yes')]"), "Yes"));
         continueButton.click();
+    }
+
+    public void setPackageType() {
+        packageType.click();
+    }
+
+    public void setPackageWeight() {
+        packageWeight.sendKeys("2");
+    }
+
+    public String getTotalCharges() {
+        return totalCharges.getText();
+    }
+
+    public void checkTotal() {
+        System.out.println(getTotalCharges());
+        Assert.assertTrue(totalCharges.isDisplayed());
+    }
+
+    public void selectOption() {
+        System.out.println(cheapestShippingOption.getText());
+        cheapestShippingOption.click();
+    }
+
+    public void setShippingDescription() {
+        shippingDescription.sendKeys("Study materials.");
+    }
+
+    public void checkSaturdayDelivery() {
+//        wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//*[contains(@class,'ups-lever_rlabel')]//strong[contains(text(),'Saturday Delivery')]")));
+//        Dimension numOfElem = saturdayDelivery.getSize();
+//        if(numOfElem > 0 && saturdayDelivery.isDisplayed()) {
+//            saturdayDelivery.click();
+//        }
+    }
+
+    public void checkDeliverOnlyToAddress() {
+        deliverOnlyToReceiverAddress.click();
+    }
+
+    public void  selectPaymentMethod(String paymentMethod) throws InterruptedException {
+        Thread.sleep(2000);
+//        if(paymentMethod == "Credit Card") {
+//           // executor.executeScript("arguments[0].scrollIntoView();", paymentCreditCard);
+//            paymentCreditCard.click();
+//        } else if(paymentMethod == "Paypal") {
+            executor.executeScript("arguments[0].scrollIntoView();", paymentPayPal);
+            Thread.sleep(3000);
+            wait.until(ExpectedConditions.elementToBeClickable(paymentPayPal));
+            paymentPayPal.click();
+            Thread.sleep(2000);
+//        }
+    }
+
+    public void cancelShipment() {
+        cancelShipment.click();
+    }
+
+    public void reviewShipFromDetails() {
+        executor.executeScript("arguments[0].scrollIntoView();", shipFromSection);
+        System.out.println(shipFromSection.getText());
+        Assert.assertTrue(shipFromSection.getText().contains(user.get("fullName")));
+        Assert.assertTrue(shipFromSection.getText().contains(user.get("address")));
+        Assert.assertTrue(shipFromSection.getText().contains(user.get("email")));
+        Assert.assertTrue(shipFromSection.getText().contains(user.get("phone")));
+    }
+
+    public void reviewShipToDetails() {
+        executor.executeScript("arguments[0].scrollIntoView();", shipToSection);
+        Assert.assertTrue(shipToSection.getText().contains(user.get("sendToName")));
+        Assert.assertTrue(shipToSection.getText().contains(user.get("sendToAddress")));
+    }
+
+    public void reviewPackageInformation() {
+        executor.executeScript("arguments[0].scrollIntoView();", packageInfoSection);
+        Assert.assertTrue(packageInfoSection.getText().contains(user.get("packageType")));
+        Assert.assertTrue(packageInfoSection.getText().contains(user.get("packageWeight")));
+    }
+
+    public void reviewAdditionalOptions() {
+        executor.executeScript("arguments[0].scrollIntoView();", additionalOptionsSection);
+        Assert.assertTrue(additionalOptionsSection.getText().contains(user.get("DeliverOnlyToReceiverAddress")));
     }
 }
