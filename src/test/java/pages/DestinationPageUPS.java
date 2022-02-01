@@ -1,17 +1,16 @@
 package pages;
 
+import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
-import org.openqa.selenium.support.PageFactory;
 
 import static support.TestContext.getDriver;
 
-public class DestinationPageUPS {
+public class DestinationPageUPS extends UpsControls {
 
     public DestinationPageUPS() {
-        String url = "https://www.ups.com/ship/guided/destination";
+         url = "https://www.ups.com/ship/guided/destination";
 
-        PageFactory.initElements(getDriver(), this);
     }
 
     @FindBy(xpath = "//div[@id='origin_showSummaryAddress']")
@@ -32,12 +31,37 @@ public class DestinationPageUPS {
     @FindBy(xpath = "//input[@id='destination-cac_phone']")
     private WebElement phone;
 
+    @FindBy(css = ".ups-lever_switch")
+    private WebElement residentialSwitch;
+
+    @FindBy(id = "vm.residentialAddressControlId")
+    private WebElement residentialHiddenCheckbox;
+
+    @FindBy(id = "nbsAddressClassificationContinue")
+    private WebElement residentialPopupContinue;
 
     public void fillAddress(String value) throws InterruptedException {
 
         destinationAddress.sendKeys(value);
         Thread.sleep(2000);
         suggestionHighlight.click();
+    }
+
+
+    public void checkResidentialAddressSwitch() {
+        WebDriver driver = getDriver();
+
+        if (!residentialHiddenCheckbox.isSelected()) {
+            residentialSwitch.click();
+        }
+        residentialPopupContinue.click();
+    }
+
+    public void uncheckResidentialAddressSwitch() {
+        if (residentialHiddenCheckbox.isSelected()) {
+            residentialSwitch.click();
+        }
+        residentialPopupContinue.click();
     }
 
     public void fillCompanyOrName(String value) {

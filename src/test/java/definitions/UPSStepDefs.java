@@ -16,14 +16,17 @@ import static support.TestContext.getDriver;
 public class UPSStepDefs {
 
     HomeUPS homePage = new HomeUPS();
-    DestinationPageUPS destinationPage = new DestinationPageUPS();
     ShipFromPageUPS shippingPage = new ShipFromPageUPS();
+    DestinationPageUPS destinationPage = new DestinationPageUPS();
     PackageUPS packPage = new PackageUPS();
     HowToShipUPS shippingOption = new HowToShipUPS();
+    DetailsUPS details = new DetailsUPS();
+    ReviewPageUPS reviewInfo = new ReviewPageUPS();
 
 
     Map<String, String> sender = getData("shipFromInfo");
     Map<String, String> recipient = getData("recipient");
+    Map<String,String> packageData = getData("packageType");
 
 //    Map<String, String> senderData = getData("sender", "ups");
 //    Map<String, String> recipientData = getData("recipient", "ups");
@@ -52,7 +55,7 @@ public class UPSStepDefs {
         shippingPage.fillCompanyOrName(sender.get("companyOrName"));
         Thread.sleep(1000);
         shippingPage.fillAddress(sender.get("addressLine"));
-        Thread.sleep(3000);
+        Thread.sleep(2000);
         shippingPage.fillEmail(sender.get("email"));
         shippingPage.fillPhone(sender.get("phone"));
 
@@ -61,9 +64,13 @@ public class UPSStepDefs {
     }
 
     @And("I submit the shipment form")
-    public void iSubmitTheShipmentForm() {
+    public void iSubmitTheShipmentForm() throws InterruptedException {
+
 
         shippingPage.continueButton();
+
+
+
     }
 
     @Then("I verify origin shipment fields submitted")
@@ -84,23 +91,19 @@ public class UPSStepDefs {
     public void iFillOutDestinationShipmentFields() throws InterruptedException {
 
         shippingPage.fillCountry(recipient.get("country"));
-        Thread.sleep(1000);
         destinationPage.fillCompanyOrName(recipient.get("recipientName"));
-        Thread.sleep(2000);
         destinationPage.fillAddress(recipient.get("destinationAddress"));
-        Thread.sleep(2000);
-        destinationPage.fillEmail(recipient.get("email"));
-        destinationPage.fillPhone(recipient.get("phone"));
-
 
     }
 
     @And("I {string} residential address")
     public void iResidentialAddress(String confirmAddress) {
 
-
-
-
+        if (confirmAddress.equals("confirm")) {
+            destinationPage.checkResidentialAddressSwitch();
+        } else {
+            destinationPage.uncheckResidentialAddressSwitch();
+        }
     }
 
     @And("I set packaging type and weight")
@@ -109,11 +112,8 @@ public class UPSStepDefs {
         Thread.sleep(2000);
 
         new Select(getDriver().findElement(By.xpath("//select[@id='nbsPackagePackagingTypeDropdown0']"))).selectByVisibleText("UPS Pak");
-
         getDriver().findElement(By.xpath("//input[@id='nbsPackagePackageWeightField0']")).sendKeys("2");
-
-       // getDriver().findElement(By.xpath("//section[@class='panel panel-default ng-star-inserted']")).click();
-
+        getDriver().findElement(By.xpath("//section[@class='panel panel-default ng-star-inserted']")).click();
         getDriver().findElement(By.xpath("//div[@class='ups-even panel-body ng-star-inserted']")).click();
 
 
@@ -122,21 +122,54 @@ public class UPSStepDefs {
     @Then("I verify total charges appear")
     public void iVerifyTotalChargesAppear() throws InterruptedException {
 
-        String shippingChoice = shippingOption.getPriceResult();
-
-        assertThat(shippingChoice).contains("nextDayAirEarly");
-        assertThat(shippingChoice).contains("nextDayAir");
-        assertThat(shippingChoice).contains("nextDayAirSaver");
-        assertThat(shippingChoice).contains("upsSecondDayAirAM");
-        assertThat(shippingChoice).contains("upsSecondDayAir");
+        assertThat(shippingOption.areTotalChargesAppear()).isTrue();
     }
 
     @And("I select cheapest delivery option")
     public void iSelectCheapestDeliveryOption() throws InterruptedException {
 
-        Thread.sleep(2000);
+       shippingOption.selectCheapestOption();
+       shippingOption.clickWithJS(getDriver().findElement(By.id("continueButton")));
 
-        shippingOption.cheapestOption();
+    }
+
+    @And("I set description and check Saturday Delivery type if available")
+    public void iSetDescriptionAndCheckSaturdayDeliveryTypeIfAvailable() {
+
+       getDriver().findElement(By.xpath("//input[@id='nbsShipmentDescription']")).sendKeys("Saturday Delivery type if available");
+
+    }
+
+    @And("I check Deliver only to receiver's address")
+    public void iCheckDeliverOnlyToReceiverSAddress() {
+
+        details.clickCheckBox();
+    }
+
+    @Then("I verify total charges changed")
+    public void iVerifyTotalChargesChanged() {
+
+
+    }
+
+    @And("I select Paypal payment type")
+    public void iSelectPaypalPaymentType() {
+
+        getDriver().findElement(By.xpath("//div[@id='tile-5']")).click();
+    }
+
+    @Then("I review all recorded details on the review page")
+    public void iReviewAllRecordedDetailsOnTheReviewPage() {
+    }
+
+    @And("I cancel the shipment form")
+    public void iCancelTheShipmentForm() {
+
+       reviewInfo.cancel();
+    }
+
+    @Then("I verify shipment form is reset")
+    public void iVerifyShipmentFormIsReset() {
 
     }
 }
