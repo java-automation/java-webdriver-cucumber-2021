@@ -5,6 +5,7 @@ import io.cucumber.java.en.Given;
 import org.openqa.selenium.logging.LogEntries;
 import org.openqa.selenium.logging.LogEntry;
 import org.openqa.selenium.logging.LogType;
+import pages.CareersHome;
 import pages.QuoteForm;
 import pages.UpsHome;
 
@@ -22,6 +23,9 @@ public class GenericStepDefs {
                 break;
             case "ups":
                 new UpsHome().open();
+                break;
+            case "careers":
+                new CareersHome().open();
                 break;
             default:
                 throw new Error("Unsupported page: " + page);
@@ -52,6 +56,9 @@ public class GenericStepDefs {
                 break;
             case "ups":
                 getDriver().get("https://www.ups.com/us/en/Home.page?");
+                break;
+            case "careers":
+                getDriver().get("https://skryabin-careers.herokuapp.com/");
                 break;
             default:
                 throw new Error("Unsupported page: " + page);

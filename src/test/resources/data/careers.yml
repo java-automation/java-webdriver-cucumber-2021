@@ -1,0 +1,11 @@
+recruiter:
+  name: Student
+  username: student@example.com
+  password: welcome
+
+candidate:
+  name: Danny
+  username: student@example.com
+  password: welcome
+
+
