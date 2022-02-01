@@ -20,6 +20,7 @@ public class UpsOrigin extends Page {
     @FindBy(id = "origin-cac_companyOrName")
     private WebElement name;
 
+
     @FindBy(id = "origin-cac_singleLineAddress")
     private WebElement address;
 
@@ -32,12 +33,15 @@ public class UpsOrigin extends Page {
     @FindBy(id = "origin-cac_phone")
     private WebElement phone;
 
-     @FindBy(css = ".ngb-highlight")
+    @FindBy(css = ".ngb-highlight")
     private WebElement suggestionHighlight;
 
     @FindBy(xpath = "//ngb-typeahead-window/button")
     private List<WebElement> suggestionsList;
 
+    public WebElement getAddress() {
+        return address;
+    }
 
     public void selectCountry(String value) {
         new Select(country).selectByVisibleText(value);
@@ -60,7 +64,6 @@ public class UpsOrigin extends Page {
     public void fillPhone(String value) {
         phone.sendKeys(value);
     }
-
 
 
 }

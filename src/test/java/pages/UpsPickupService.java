@@ -27,6 +27,29 @@ public class UpsPickupService extends Page {
     private List<WebElement> cardList;
 
 
+
+    @FindBy(xpath = "//p[contains(@class,'date')]")
+    private List<WebElement> deliverDate;
+
+    @FindBy(xpath = "//span[@class='icon ups-icon-calendar']")
+    private WebElement calendarIcon;
+
+    @FindBy(xpath = "//div[@class='ups-official_datepicker']")
+    private WebElement datePicker;
+
+    @FindBy(xpath = "//button[@class='ups-official_datepicker_date_chooser_btn ups-official_datepicker_today']")
+    private WebElement officialDatePickerToday;
+
+    @FindBy(xpath = "//button[@disabled]")
+    private List<WebElement> disableButtonDatePicker;
+
+    @FindBy(xpath = "//div[@class='ups-official_datepicker_table_container']//button[@type='button']")
+    private List<WebElement> buttonsDatePicker;
+
+
+    @FindBy(xpath = "//button[@type='button'][contains(text(),'Close')]")
+    private WebElement closeButtonDatePicker;
+
     public List<WebElement> getRecommendedPrice() {
         return recommendedPrice;
     }
@@ -44,7 +67,33 @@ public class UpsPickupService extends Page {
         priceList
                 .forEach(el -> priceDoubleList.add(Double.parseDouble(el.getText().replace("$", ""))));
         Double minPrice = priceDoubleList.stream().min(Double::compare).orElseThrow();
-        System.out.println("priceDoubleList.indexOf(minPrice) = " + priceDoubleList.indexOf(minPrice));
+        System.out.println("minPrice = " + minPrice);
         return cardList.get(priceDoubleList.indexOf(minPrice));
     }
+
+    public WebElement getCalendarIcon() {
+        return calendarIcon;
+    }
+
+    public WebElement getDatePicker() {
+        return datePicker;
+    }
+
+    public WebElement getCloseButtonDatePicker() {
+        return closeButtonDatePicker;
+    }
+
+    public List<WebElement> getDeliverDate() {
+        return deliverDate;
+    }
+    public boolean doWeHaveSaturdayDelivery() {
+        return deliverDate.stream().filter(el -> el.getText().contains("Saturday")).toList().size() > 0;
+    }
+
+    public List<WebElement> getAvailableDatePicker() {
+        return buttonsDatePicker.stream().filter(el ->
+                (!disableButtonDatePicker.contains(el))).toList();
+    }
+
+
 }

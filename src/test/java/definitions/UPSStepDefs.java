@@ -4,7 +4,6 @@ import io.cucumber.java.en.And;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 import org.openqa.selenium.By;
-import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.Actions;
@@ -13,6 +12,7 @@ import org.openqa.selenium.support.ui.Select;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import pages.*;
 
+import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
@@ -41,6 +41,8 @@ public class UPSStepDefs extends Page {
     UpsPickupService pickupServicePage = new UpsPickupService();
     UpsOptions optionsPage = new UpsOptions();
     UpsControls controls = new UpsControls();
+    UpsPayment payment = new UpsPayment();
+    UpsReview review = new UpsReview();
 
     @And("I go to {string} 1")
     public void iGoToCreateAShipment(String textLink) {
@@ -179,10 +181,13 @@ public class UPSStepDefs extends Page {
         } else if (currentUrl.contains("package")) {
             controls.submit();
         } else if (currentUrl.contains("pickup-service")) {
-            JavascriptExecutor executor = (JavascriptExecutor) getDriver();
-            executor.executeScript("arguments[0].click();", controls.continueButton);
+            clickWithJS(controls.continueButton);
             wait.until(ExpectedConditions.textToBePresentInElement(optionsPage.getSectionHeader(), "Almost done. Let's check a few more details."));
             System.out.println("Good Job!");
+        } else if (currentUrl.contains("options")) {
+            controls.submit();
+        } else if (currentUrl.contains("payment")) {
+            controls.review();
         } else throw new Error("Unknown page!");
     }
 
@@ -238,12 +243,96 @@ public class UPSStepDefs extends Page {
     }
 
     @And("I select cheapest delivery option")
-    public void iSelectCheapestDeliveryOption() {
+    public void iSelectCheapestDeliveryOption() throws InterruptedException {
         pickupServicePage.getMinPrice().click();
         wait.until(ExpectedConditions.visibilityOfAllElementsLocatedBy(controls.CHEAPEST_PRICE_SELECT));
         assertTrue(pickupServicePage.getCheapestPrice().get(0).isDisplayed());
+        int i = 0;
+        do {
+            clickWithJS(pickupServicePage.getCalendarIcon());
+            List<WebElement> dates = pickupServicePage.getAvailableDatePicker();
+            wait.until(ExpectedConditions.visibilityOf(pickupServicePage.getDatePicker()));
+            WebElement dateToClick = dates.get(i);
+            clickWithJS(dateToClick);
+            i++;
+            Thread.sleep(2000);
+            wait.until(ExpectedConditions.refreshed(ExpectedConditions.presenceOfElementLocated(TOTAL_CHARGES_SPINNER)));
+        } while (!pickupServicePage.doWeHaveSaturdayDelivery());
+
         new Actions(getDriver())
                 .moveToElement(controls.continueButton)
                 .perform();
+    }
+
+    @And("I set description and check Saturday Delivery type")
+    public void iSetDescriptionAndCheckSaturdayDeliveryType() {
+        optionsPage.fillDescriptions(packageData.get("descriptions"));
+        int i = optionsPage.getCheckBoxSelected().size();
+        if (isElementPresent(optionsPage.getSaturdayDelivery())) {
+            clickWithJS(optionsPage.getSaturdayDelivery());
+        }
+        assertEquals(optionsPage.getCheckBoxSelected().size(), i + 1);
+        //wait.until(ExpectedConditions.visibilityOf(optionsPage.getSaturdaySelected()));
+    }
+
+    @And("I check Deliver only to receiver's address")
+    public void iCheckDeliverOnlyToReceiverSAddress() {
+
+    }
+
+    @And("I check {string}")
+    public void iCheck(String text) {
+        int i = optionsPage.getCheckBoxSelected().size();
+        WebElement checkBox = optionsPage.getCheckBox(text);
+        if (!checkBox.isSelected()) {
+            clickWithJS(checkBox);
+        }
+        assertEquals(optionsPage.getCheckBoxSelected().size(), i + 1);
+        // wait.until(ExpectedConditions.visibilityOf(optionsPage.getDirectDeliverySelected()));
+    }
+
+    @Then("I verify total charges changed")
+    public void iVerifyTotalChargesChanged() {
+        System.out.println("Total charger: " + getDriver().findElement(TOTAL_CHARGES_SPINNER).getText());
+        wait.until(ExpectedConditions.refreshed(ExpectedConditions.presenceOfElementLocated(TOTAL_CHARGES_SPINNER)));
+    }
+
+    @And("I select Paypal payment type")
+    public void iSelectPaypalPaymentType() {
+        payment.selectPayPal();
+    }
+
+    @Then("I review all recorded details on the review page")
+    public void iReviewAllRecordedDetailsOnTheReviewPage() {
+        review.assertOrigin(originData.get("firstName"));
+        review.assertOrigin(originData.get("lastName"));
+        review.assertOrigin(originData.get("street"));
+        review.assertOrigin(originData.get("city"));
+        review.assertOrigin(originData.get("zipcode"));
+
+        review.assertDestination(destinationData.get("firstName"));
+        review.assertDestination(destinationData.get("middleName"));
+        review.assertDestination(destinationData.get("lastName"));
+        review.assertDestination(destinationData.get("street"));
+        review.assertDestination(destinationData.get("city"));
+        review.assertDestination(destinationData.get("zipcode"));
+
+        review.assertResidential(packageData.get("residential"));
+        review.assertPackageInformation(packageData.get("weight"));
+        review.assertPackageInformation(packageData.get("type"));
+
+        review.assertAdditionalOptions(packageData.get("description"));
+        review.assertPayments(packageData.get("payment"));
+    }
+
+    @And("I cancel the shipment form")
+    public void iCancelTheShipmentForm() {
+        controls.cancel();
+    }
+
+    @Then("I verify shipment form is reset")
+    public void iVerifyShipmentFormIsReset() {
+        wait.until(ExpectedConditions.visibilityOf(originPage.getAddress()));
+        System.out.println("Great Job!");
     }
 }

@@ -48,4 +48,7 @@ package:
   width: "12"
   Height: "14"
   type: small
+  residential: residential
+  descriptions: 2 books, 2 cds, 1 phone case
+  payment: PayPal
 
