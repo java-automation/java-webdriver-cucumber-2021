@@ -1,8 +1,10 @@
-package:
-    weight: "1.1"
-    type: UPS Tube
-    description: Book
-
+#package:
+#    weight: "1.1"
+#    type: UPS Tube
+#    description: Book
+weight: "1.1"
+type: UPS Tube
+description: Book
 shipmentEndpoints:
     # TO DO: test strategy
     # Ave->Avenue, St->Street, S->South, Blvd->Boulevard

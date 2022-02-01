@@ -47,6 +47,14 @@ public class TestContext {
         driver.quit();
     }
 
+    public static Shipment getShipment() {
+        try {
+            return new YAMLMapper().readValue(getStream("ups"), Shipment.class);
+        } catch (IOException e) {
+            throw new Error(e);
+        }
+    }
+
     public static Config getConfig() {
 //        return new Yaml().loadAs(getStream("config"), Config.class); //class SnakeYaml version
         try {

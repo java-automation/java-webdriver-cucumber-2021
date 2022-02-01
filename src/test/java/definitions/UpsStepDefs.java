@@ -4,17 +4,16 @@ import io.cucumber.java.en.And;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 import pages.*;
+import support.Shipment;
 import support.ShipmentEndpoint;
 
 import java.text.NumberFormat;
 import java.text.ParseException;
-import java.util.List;
-import java.util.Locale;
-import java.util.Map;
+import java.util.*;
 import java.util.function.Predicate;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static support.TestContext.getData;
+import static support.TestContext.getShipment;
 
 public class UpsStepDefs {
 
@@ -26,9 +25,8 @@ public class UpsStepDefs {
     UpsShipmentDetails shipmentDetails = new UpsShipmentDetails();
     UpsShipmentPayment shipmentPayment = new UpsShipmentPayment();
     UpsShipmentReview shipmentReview = new UpsShipmentReview();
-
-    List<ShipmentEndpoint> shipmentEndpoints = getData(ShipmentEndpoint[].class,"shipmentEndpoints", "ups");
-    Map<String,String> packageData = getData("package","ups");
+    Shipment shipment = getShipment();
+    List<ShipmentEndpoint> shipmentEndpoints = shipment.getShipmentEndpoints();
     ShipmentEndpoint origin;
     ShipmentEndpoint destination;
     String totalCharges;
@@ -53,7 +51,7 @@ public class UpsStepDefs {
         return "";
     }
 
-    private ShipmentEndpoint getShipment(Predicate<ShipmentEndpoint> condition) {
+    private ShipmentEndpoint getShipmentEndpoint(Predicate<ShipmentEndpoint> condition) {
         return shipmentEndpoints.stream().filter(condition).findFirst().orElseThrow();
     }
 
@@ -70,7 +68,7 @@ public class UpsStepDefs {
 
     @When("I fill out origin shipment fields")
     public void iFillOutOriginShipmentFields() {
-        origin = getShipment(s -> s.getType().equals("commercial") && (s.getSingleLineAddressLength() > 35));
+        origin = getShipmentEndpoint(s -> s.getType().equals("commercial") && (s.getSingleLineAddressLength() > 35));
         shipmentOrigin.fillOutOrigin(origin);
     }
 
@@ -86,7 +84,7 @@ public class UpsStepDefs {
 
     @When("I fill out destination shipment fields")
     public void iFillOutDestinationShipmentFields() {
-        destination = getShipment(s -> s.getType().equals("residential"));
+        destination = getShipmentEndpoint(s -> s.getType().equals("residential"));
         shipmentDest.fillOutDestination(destination);
     }
 
@@ -101,7 +99,7 @@ public class UpsStepDefs {
 
     @And("I set packaging type and weight")
     public void iSetPackagingTypeAndWeight() {
-        shipmentWhat.setPackageTypeAndWeight(packageData.get("type"),packageData.get("weight"));
+        shipmentWhat.setPackageTypeAndWeight(shipment.getType(),shipment.getWeight());
     }
 
     @Then("I verify total charges appear")
@@ -117,7 +115,7 @@ public class UpsStepDefs {
 
     @And("I set description and check Saturday Delivery type if available")
     public void iSetDescriptionAndCheckSaturdayDeliveryTypeIfAvailable() {
-        shipmentDetails.setDescription(packageData.get("description"));
+        shipmentDetails.setDescription(shipment.getDescription());
         shipmentDetails.checkSaturdayDeliveryType();
     }
 
@@ -160,11 +158,11 @@ public class UpsStepDefs {
         verifyEndpointSummary(shipmentReview.getOriginSummary(),origin);
         verifyEndpointSummary(shipmentReview.getDestinationSummary(),destination);
         assertThat(shipmentReview.getDestinationSummary()).containsIgnoringCase("residential");
-        assertThat(shipmentReview.getPackageSummary()).containsIgnoringCase(packageData.get("type"));
-        assertThat(shipmentReview.getPackageSummary()).containsIgnoringCase(packageData.get("weight"));
+        assertThat(shipmentReview.getPackageSummary()).containsIgnoringCase(shipment.getType());
+        assertThat(shipmentReview.getPackageSummary()).containsIgnoringCase(shipment.getWeight());
         assertThat(shipmentReview.getDropOffOrPickupSummary()).containsIgnoringCase("No");
         assertThat(shipmentReview.getDeliveryDaySummary()).contains(totalCharges);
-        assertThat(shipmentReview.getGoodsSummary()).containsIgnoringCase(packageData.get("description"));
+        assertThat(shipmentReview.getGoodsSummary()).containsIgnoringCase(shipment.getDescription());
         assertThat(shipmentReview.getPaymentMethodSummary()).isEqualToIgnoringCase("PayPal");
     }
 
