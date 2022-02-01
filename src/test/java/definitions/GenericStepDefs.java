@@ -71,6 +71,7 @@ public class GenericStepDefs {
             case "usps" -> getDriver().get("https://usps.com");
             case "converter" -> getDriver().get("https://www.unitconverters.net/");
             case "calculator" -> getDriver().get("http://www.calculator.net/");
+            case "careers" -> getDriver().get("https://skryabin-careers.herokuapp.com/");
             default -> System.out.println("Unsupported page: " + page);
         }
     }
