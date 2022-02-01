@@ -18,11 +18,13 @@ public class CareerRecruite extends Page {
 
     @FindBy(xpath = "//div[@class='card bg-white mb-3']//*[@class='card-title']")
     private List<WebElement> cardTitles;
-
     @FindBy(xpath = "//h4[text()='Principal Automation Engineer']/ancestor::div[@class='card bg-white mb-3']")
     private WebElement cardPosition;
     @FindBy(xpath = "//h4[text()='Principal Automation Engineer']/ancestor::div[@class='card bg-white mb-3']//button")
     private WebElement positionCardCloseButton;
+    public WebElement getCardPosition() {
+        return cardPosition;
+    }
 
     public WebElement positionCard(String title) { //it is an approach to deal with dynamic elements;
         return getDriver().findElement(By.xpath("//h4[text()='" + title + "']/ancestor::div[@class='card bg-white mb-3']"));

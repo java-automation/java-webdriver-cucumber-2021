@@ -3,16 +3,18 @@ package definitions;
 import io.cucumber.java.en.And;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
-import org.junit.Assert;
 import pages.CareerRecruite;
 import pages.CareersHome;
 import pages.CareersLogin;
+import pages.Page;
 
 import java.util.Map;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static support.TestContext.getData;
 
-public class CareersStepDefs {
+public class CareersStepDefs extends Page {
     CareersHome homePage = new CareersHome();
     CareersLogin loginPage = new CareersLogin();
     CareerRecruite recruitPage = new CareerRecruite();
@@ -27,7 +29,7 @@ public class CareersStepDefs {
     @Then("I verify {string} login")
     public void iVerifyLogin(String role) {
         Map<String, String> careersData = getData(role, "careers");
-        Assert.assertEquals(homePage.getLoggedUserName(), careersData.get("name"));
+        assertEquals(homePage.getLoggedUserName(), careersData.get("name"));
     }
 
     @When("I remove {string} position")
@@ -38,6 +40,6 @@ public class CareersStepDefs {
 
     @And("I verify {string} position is removed")
     public void iVerifyPositionIsRemoved(String title) {
-        Assert.assertFalse(recruitPage.isPositionCardVisible(title));
+        assertFalse(isElementPresent(recruitPage.getCardPosition()));
     }
 }
