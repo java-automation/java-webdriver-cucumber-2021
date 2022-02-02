@@ -11,6 +11,7 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import pages.CareersHomePage;
 import pages.CareersLoginPage;
+import pages.CareersNewPosition;
 import pages.CareersRecruitPage;
 
 import java.util.Map;
@@ -24,8 +25,10 @@ public class CareersStepDefs {
     CareersHomePage homePage = new CareersHomePage();
     CareersLoginPage loginPage = new CareersLoginPage();
     CareersRecruitPage recruitPage = new CareersRecruitPage();
+    CareersNewPosition newPosition = new CareersNewPosition();
 
     Map<String, String> logins;
+    Map<String, String> position;
 
     @And("I login as {string}")
     public void iLoginAs(String sRole) {
@@ -42,12 +45,16 @@ public class CareersStepDefs {
         assertThat(homePage.getLoginName()).isEqualTo(logins.get("name"));
     }
 
+    private void removePositionCommon(String sTitle) {
+        new WebDriverWait(getDriver(), 10).until(ExpectedConditions.elementToBeClickable(recruitPage.getPositionByTitle(sTitle)));
+        JavascriptExecutor js = (JavascriptExecutor) getDriver();
+        js.executeScript("arguments[0].click();", recruitPage.getCloseCardButtonByTitle(sTitle));
+    }
+
     @When("I remove {string} position")
     public void iRemovePosition(String sPosition) {
         homePage.recruitButton.click();
-        new WebDriverWait(getDriver(), 10).until(ExpectedConditions.elementToBeClickable(recruitPage.getPositionByTitle(sPosition)));
-        JavascriptExecutor js = (JavascriptExecutor) getDriver();
-        js.executeScript("arguments[0].click();", recruitPage.getCloseCardButtonByTitle(sPosition));
+        removePositionCommon(sPosition);
     }
 
     @And("I verify {string} position is removed")
@@ -58,5 +65,33 @@ public class CareersStepDefs {
         } catch (NoSuchElementException e) {
             assertThat(true).isTrue();
         }
+    }
+
+    @When("I create new position")
+    public void iCreateNewPosition() {
+        position = getData("newPosition");
+        homePage.recruitButton.click();
+        recruitPage.clickNewPositionLink();
+        newPosition.setPositionTitle(position.get("title"));
+        newPosition.setPositionDescription(position.get("description"));
+        newPosition.setPositionCity(position.get("city"));
+        newPosition.setPositionStateByVisibleText(position.get("state"));
+        newPosition.setPositionDateOpen(position.get("dateOpen"));
+        newPosition.clickSubmitButton();
+    }
+
+    @Then("I verify new position is created")
+    public void iVerifyNewPositionIsCreated() {
+        new WebDriverWait(getDriver(), 10).until(ExpectedConditions.elementToBeClickable(recruitPage.getPositionByTitle(position.get("title"))));
+    }
+
+    @When("I remove new position")
+    public void iRemoveNewPosition() {
+        removePositionCommon(position.get("title"));
+    }
+
+    @And("I verify new position is removed")
+    public void iVerifyNewPositionIsRemoved() {
+        iVerifyPositionIsRemoved(position.get("title"));
     }
 }
