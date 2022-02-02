@@ -451,6 +451,7 @@ public class USPSStepDefs extends HelperStepDefs {
         assertFalse(isContains(searchQuery));
         out.println("We've found " + getDriver().findElements(By.xpath(LIST_OF_SEARCH_RESULTS_XPATH)).size() + " results");
     }
+
 }
 
 

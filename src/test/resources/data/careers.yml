@@ -8,4 +8,28 @@ candidate:
   username: student@example.com
   password: welcome
 
-
+new_position:
+  title: QA Engineer Austin
+  description: "Zello builds technologies that connect and protect frontline workers, a staggering 80% of the global workforce. With over 150 million users, we turn any phone into a walkie talkie and provide a complete communications ecosystem for frontline organizations. We’re the industry leader, helping transportation/fleet management organizations, retail associates, paramedics, nurses, hospitality workers, and construction crews stay connected and get work done! As a company, Zello is bootstrapped, has strong product-market fit, and is now accelerating its growth across a multi-billion dollar market.
+  We are seeking an energetic, intellectually curious QA engineer to help us deliver the most reliable communication solution for frontline workers in the world. You'll test a broad range of products, applications, and services, applying your knowledge to ensure we maintain an exceptional level of quality for our thousands of customers and millions of users. In this role you'll collaborate closely with engineering, product, customer success, sales and outside partners.
+  After your first year, you will
+  Run test suites for all our major products with minimal supervision
+  Certify new hardware devices for use with our mobile applications
+  Engage with customers and end users directly about technical issues that make it past first line customer success
+  Contribute to automation in one or more areas
+  Proactively drive improvements in quality through constructive feedback on the test process
+  Be sought after as a test engineer on new projects, creating test plans and executing from start to finish
+  Be recognized for going above and beyond to generate positive impact on the organization
+  What you'll do
+  Research, write, and execute test plans across multiple product lines, primarily Zello's flagship mobile and web/desktop-web applications
+  Identify critical problems before they reach end users, providing clear reproduction steps and excellent context in your reports
+  Learn quickly, grow your knowledge base, and share your insight with the team
+  Requirements
+  2+ years experience in functional web and mobile testing, preferably with a focus on SaaS products
+  Strong working knowledge of iOS, Android, and browser environments.  Intermediate or better understanding of client/server concepts and technologies.
+  Excellent and proactive communication skills, written and verbal
+  Positive and collaborative attitude, good sense of humor, and the ability to work with many different personality types and levels of technical expertise
+  Attention to detail and commitment to quality"
+  city: Austin
+  state: TX
+  dateOpen: "12/15/2021"

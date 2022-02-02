@@ -4,8 +4,8 @@ headless: false
 browserWidth: 1920
 browserHeight: 1080
 pageLoadTimeout: 60
-implicitTimeout: 5
-explicitTimeout: 10
+implicitTimeout: 2
+explicitTimeout: 5
 supportedOsList:
   - "win"
   - "mac"

@@ -10,3 +10,5 @@ Feature: Find offer for Michelin tires;
     And I collect text from search results
     And I collect links from search results
     And I create HashMap from search results
+
+

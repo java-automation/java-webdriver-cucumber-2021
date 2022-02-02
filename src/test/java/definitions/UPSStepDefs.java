@@ -183,7 +183,6 @@ public class UPSStepDefs extends Page {
         } else if (currentUrl.contains("pickup-service")) {
             clickWithJS(controls.continueButton);
             wait.until(ExpectedConditions.textToBePresentInElement(optionsPage.getSectionHeader(), "Almost done. Let's check a few more details."));
-            System.out.println("Good Job!");
         } else if (currentUrl.contains("options")) {
             controls.submit();
         } else if (currentUrl.contains("payment")) {
