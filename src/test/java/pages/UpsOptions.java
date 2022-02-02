@@ -35,13 +35,11 @@ public class UpsOptions extends UpsCreateShipment {
     }
 
     public boolean isSaturdayDeliveryAvailable() {
-        String visibleText;
         try {
-            visibleText = saturdayDeliveryLabel.getText();
+            return saturdayDeliveryLabel.isDisplayed();
         } catch (NoSuchElementException e) {
             return false;
         }
-        return !visibleText.isEmpty();
     }
 
     public void selectSaturdayDelivery() {

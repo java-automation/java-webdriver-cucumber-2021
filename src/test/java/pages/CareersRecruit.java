@@ -2,8 +2,8 @@ package pages;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.NoSuchElementException;
-import org.openqa.selenium.TimeoutException;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 
 import static support.TestContext.getActions;
@@ -15,6 +15,12 @@ public class CareersRecruit extends CareersHome {
         setUrl("https://skryabin-careers.herokuapp.com/recruit");
         setTitle("Careers Portal");
     }
+
+    @FindBy(xpath = "//h4[@class='card-title'][normalize-space(.)='All candidates']")
+    private WebElement listCandidatesLink;
+
+    @FindBy(xpath = "//h4[@class='card-title'][normalize-space(.)='New Position']")
+    private WebElement createPositionLink;
 
     private String getPositionCardXPathByTitle(String title) {
         return "//h4[@class='card-title'][normalize-space(.)='" + title + "']/ancestor::div[contains(@class,'card') and not(contains(@class,'body'))]";
@@ -41,5 +47,9 @@ public class CareersRecruit extends CareersHome {
         } catch (NoSuchElementException e) {
             return false;
         }
+    }
+
+    public void clickNewPosition() {
+        createPositionLink.click();
     }
 }
