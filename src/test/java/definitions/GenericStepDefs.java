@@ -13,6 +13,7 @@ import org.openqa.selenium.logging.LogEntries;
 import org.openqa.selenium.logging.LogEntry;
 import org.openqa.selenium.logging.LogType;
 import org.openqa.selenium.support.ui.Select;
+import pages.CareersHome;
 import pages.QuoteForm;
 import pages.UpsHomePage;
 
@@ -59,6 +60,7 @@ public class GenericStepDefs {
         switch (page.toLowerCase()) {
             case "quote" -> new QuoteForm().open();
             case "ups" -> new UpsHomePage().open();
+            case "careers" -> new CareersHome().open();
             default -> throw new Error("Unsupported page: " + page);
         }
     }

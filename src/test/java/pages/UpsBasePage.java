@@ -63,6 +63,10 @@ public class UpsBasePage {
         }
     }
 
+    public WebDriverWait getWait() {
+        return new WebDriverWait(getDriver(), getConfig().getExplicitTimeOut());
+    }
+
     public void clickWithJS(WebElement element) {
         JavascriptExecutor executor = (JavascriptExecutor) getDriver();
         executor.executeScript("arguments[0].click();", element);

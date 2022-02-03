@@ -1,0 +1,20 @@
+recruiter:
+  name: Student
+  email: student@example.com
+  password: welcome
+candidate:
+  name: John Doe
+  email: xyz@example.com
+  password: welcome
+new_position:
+  title: QA Engineer
+  description:  A QA engineer monitors every phase of the software development process,
+                including design, development, testing, debugging and delivery.
+
+                They maintain the quality standards of the software at every stage
+                and ensure the final product meets the requirement.
+  address: 2478 Beaumont Rd
+  city: Nyssa
+  state: Oregon
+  zip: "97913"
+  dateOpen: "6/12/2000"
