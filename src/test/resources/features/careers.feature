@@ -14,10 +14,12 @@
 
     @careers2
     Scenario: Recruiter creates position
-      Given I go to "careers" page oop
+      Given I go to "careers" page 
       And I login as "recruiter"
+      And I wait for 2 sec
       Then I verify "recruiter" login
       When I create new position
+      And I wait for 2 sec
       Then I verify new position is created
       When I remove new position
       And I verify new position is removed

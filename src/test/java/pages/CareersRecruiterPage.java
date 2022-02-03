@@ -19,6 +19,18 @@ public class CareersRecruiterPage extends Page {
     @FindBy(xpath = "div[@class='card bg-white mb-3']")
     private List<WebElement> cards;
 
+    @FindBy(xpath ="//a[@href='/new_position']//*[@class='card-title']")
+    private WebElement newPosition;
+
+
+    @FindBy(xpath = "//h4[text()='Senior QA Engineer in test']/ancestor::div[@class='card bg-white mb-3']")
+    private WebElement resultOfNewPosition;
+
+
+    public String getResultOfNewPosition() {
+        return resultOfNewPosition.getText();
+
+    }
 
     private WebElement positionCard(String title) {
         return getDriver().findElement(By.xpath("//h4[text()='" + title + "']/ancestor::div[@class='card bg-white mb-3']"));
@@ -28,6 +40,11 @@ public class CareersRecruiterPage extends Page {
     private WebElement positionCardCloseButton(String title) {
         return getDriver().findElement(By.xpath("//h4[text()='" + title + "']/ancestor::div[@class='card bg-white mb-3']//button"));
 
+    }
+
+    public void clickNewPosition(){
+        getWait().until(ExpectedConditions.elementToBeClickable(newPosition));
+        newPosition.click();
     }
 
     public void removePositionByTitle(String title)  {

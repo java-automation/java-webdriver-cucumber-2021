@@ -6,6 +6,7 @@ import io.cucumber.java.en.When;
 import pages.CareersHome;
 import pages.CareersRecruiterPage;
 import pages.LoginCareers;
+import pages.OpenPositionCareers;
 
 import java.util.Map;
 
@@ -17,8 +18,10 @@ public class CareersStepDefs {
     LoginCareers loginPage = new LoginCareers();
     CareersHome homePage = new CareersHome();
     CareersRecruiterPage recruitPage = new CareersRecruiterPage();
+    OpenPositionCareers newPosition = new OpenPositionCareers();
 
     Map<String, String> recruiterData = getData("recruiter");
+    Map<String, String> createPosition = getData("newPosition");
 
 
     @And("I login as {string}")
@@ -53,5 +56,45 @@ public class CareersStepDefs {
     public void iVerifyPositionIsRemoved(String title) {
         boolean isVisible = recruitPage.isPositionCardVisible(title);
         assertThat(isVisible).isFalse();
+    }
+
+    @When("I create new position")
+    public void iCreateNewPosition()  {
+        homePage.clickRecruit();
+        recruitPage.clickNewPosition();
+
+
+        newPosition.fillOutTitle(createPosition.get("title"));
+        newPosition.fillDescription(createPosition.get("description"));
+        newPosition.fillOutCity(createPosition.get("city"));
+       // newPosition.fillOutState(createPosition.get("state"));
+        newPosition.fillOutDate(createPosition.get("date open"));
+
+        newPosition.fillOutState();
+
+        newPosition.clickSubmitPosition();
+
+
+    }
+
+    @Then("I verify new position is created")
+    public void iVerifyNewPositionIsCreated() {
+
+        recruitPage.getResultOfNewPosition();
+
+    }
+
+    @When("I remove new position")
+    public void iRemoveNewPosition() {
+
+        recruitPage.removePositionByTitle("Senior QA Engineer in test");
+
+    }
+
+    @And("I verify new position is removed")
+    public void iVerifyNewPositionIsRemoved() {
+        boolean isVisible = recruitPage.isPositionCardVisible("Senior QA Engineer in test");
+        assertThat(isVisible).isFalse();
+
     }
 }

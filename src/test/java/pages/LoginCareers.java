@@ -3,6 +3,8 @@ package pages;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 
+import java.util.Map;
+
 public class LoginCareers extends Page {
 
 
@@ -10,27 +12,28 @@ public class LoginCareers extends Page {
 
        // PageFactory.initElements(getDriver(),this);
     }
-    @FindBy(xpath = "//input[@placeholder='Please enter an Email']")
+    @FindBy(xpath = "//label[@for='loginUsername']/../input")
     private WebElement username;
 
-    @FindBy(xpath = "//input[@placeholder='Please enter a Password']")
+    @FindBy(xpath = "//label[@for='loginPassword']/../input")
     private WebElement password;
 
 
-    @FindBy(xpath = "//button[@id='loginButton']")
+    @FindBy(id="loginButton")
     private WebElement submit;
 
 
-    public void clickSubmit(){
+    public void login(String usernameValue, String passwordValue){
+        username.sendKeys(usernameValue);
+        password.sendKeys(passwordValue);
         submit.click();
     }
 
-    public void fillPassword(String value){
-        password.sendKeys(value);
-    }
+    public void login(Map<String,String>user){
+        login(user.get("email"),user.get("password"));
 
-    public void fillUserName(String value){
-        username.sendKeys(value);
-
+//        username.sendKeys(user.get("email"));
+//        password.sendKeys(user.get("password"));
+//        submit.click();
     }
 }
