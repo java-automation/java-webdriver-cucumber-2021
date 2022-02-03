@@ -1,0 +1,11 @@
+origin:
+  country: United States
+  name: Administrator
+  address: 1121 melrose ave, apt 5, Glendale, CA
+  email: admin@example.com
+  phone: "1234567890"
+
+destination:
+  country: United States
+  name: Jonh Doe
+  address: 870 7th Avenue, New York, NY 10019

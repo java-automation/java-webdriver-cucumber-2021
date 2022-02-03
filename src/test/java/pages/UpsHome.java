@@ -18,7 +18,8 @@ public class UpsHome extends Page{
 
 
     public void closeBanner(){
-    closeBanner.click();
+   if(closeBanner.isDisplayed()){
+    closeBanner.click();}
     }
 
     public void openShipment(){

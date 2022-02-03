@@ -5,9 +5,9 @@
      Scenario: E2E UPS Scenario
        Given I go to UPS page
        And I go to Create a Shipment
-        And I wait for 3 sec
        When I fill out origin shipment fields
-#       And I submit the shipment form
+       And I wait for 10 sec
+       And I submit the shipment form
 #       Then I verify origin shipment fields submitted
 
 #       When I fill out destination shipment fields

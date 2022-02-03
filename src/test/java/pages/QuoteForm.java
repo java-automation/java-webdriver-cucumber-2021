@@ -106,7 +106,6 @@ public class QuoteForm extends Page {
 
         switch (page) {
             case "quote" -> getDriver().get("https://skryabin.com/market/quote.html");
-            case "google" -> getDriver().get("https://google.com");
         }
 
     }

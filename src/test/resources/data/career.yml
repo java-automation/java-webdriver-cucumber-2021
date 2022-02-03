@@ -1,0 +1,14 @@
+recruiter:
+  name: Student
+  email: student@example.com
+  password: welcome
+candidate:
+  email: student1@example.com
+  password: welcome
+position:
+  title: President of the Galaxy
+  description: The President is responsible for implementing and enforcing the laws written by Aliens.
+  street: Pushkinskaya Ulitsa, 221в
+  city: Izhevsk
+  zipcode: 426000
+  date: 02/02/2022

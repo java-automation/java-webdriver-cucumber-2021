@@ -14,6 +14,7 @@ import org.openqa.selenium.logging.LogType;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
 import org.openqa.selenium.support.ui.Select;
+import pages.CareersHome;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.Assert.assertTrue;
@@ -23,6 +24,13 @@ public class GenericStepDefs {
 
     public GenericStepDefs(){
         PageFactory.initElements(getDriver(),this);
+    }
+
+    @Given("I go to {string} page oop")
+    public void iGoToPageOop(String page) {
+        switch (page.toLowerCase()){
+            case "careers" -> new CareersHome().open();
+        }
     }
 
     @Given("I go to the {string} page")
@@ -194,6 +202,7 @@ public class GenericStepDefs {
         getDriver().switchTo().defaultContent();
         Thread.sleep(5000);
     }
+
 }
 
 
