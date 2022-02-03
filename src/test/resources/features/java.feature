@@ -222,3 +222,11 @@ Feature: Java experiments
     And I convert 2381 to Roman number
     And I convert "MCDLXII" to decimal
     And I calculate sum of "CDXCVII" and "DXIX"
+
+  @java41
+  Scenario: Brackets
+    And I check if "(())[][]{{{}}}((())){{{}}}[[[]]]({[]}){}" has valid bracket pairs set
+
+  @java42
+  Scenario: Anagrams
+    And I check if "abababc" and "aacabbb" are anagrams of each other

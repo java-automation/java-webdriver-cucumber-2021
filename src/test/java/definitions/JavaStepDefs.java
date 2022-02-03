@@ -1314,4 +1314,65 @@ public class JavaStepDefs {
         if (decimalSum > 3999) throw new Error("Numbers are too big to add in Roman (sum > 3999)!");
         System.out.println("Sum of " + romanNum1 + " and " + romanNum2 + " is " + convertDecimalToRomanUsingPredefinedValuesSubtraction(decimalSum));
     }
+
+    @And("I check if {string} has valid bracket pairs set")
+    public void iCheckIfHasValidBracketPairs(String s) {
+        System.out.println("Brackets set: " + s);
+        System.out.println("Is valid? " + isValidBracketsUsingStack(s));
+        System.out.println("Is valid? " + isValidBracketsByRemovingSubstrings(s));
+    }
+
+    private boolean isValidBracketsByRemovingSubstrings(String s) {
+        int len = s.length();
+        if (len % 2 != 0) return false;
+
+        int oldLen;
+        do {
+            oldLen = s.length();
+            s = s.replace("()", "").replace("{}", "").replace("[]", "");
+        } while (s.length() != oldLen);
+
+        return oldLen == 0;
+    }
+
+    private boolean isValidBracketsUsingStack(String s) {
+        int len = s.length();
+        if (len % 2 != 0) return false;
+
+        char c;
+        Stack<Character> stack = new Stack<>();
+        for (int i = 0; i < len; i++) {
+            c = s.charAt(i);
+            switch (c) {
+                case '(' -> stack.push(')');
+                case '{' -> stack.push('}');
+                case '[' -> stack.push(']');
+                default -> {
+                    if (stack.isEmpty() || c != stack.pop()) return false;
+                }
+            }
+        }
+        return true;
+    }
+
+    @And("I check if {string} and {string} are anagrams of each other")
+    public void iCheckIfAndAreAnagrams(String word1, String word2) {
+        System.out.println("Word 1: " + word1);
+        System.out.println("Word 2: " + word2);
+        System.out.println("Are they anagrams of each other? " + isAnagram(word1, word2));
+    }
+
+    private boolean isAnagram(String word1, String word2) {
+        if (word1.length() != word2.length()) return false;
+
+        int[] buckets = new int[26];
+        for (int i = 0; i < word1.length(); i++) {
+            buckets[word1.charAt(i) - 'a']++;
+            buckets[word2.charAt(i) - 'a']--;
+        }
+        for (int number : buckets ) {
+            if (number != 0) return false;
+        }
+        return true;
+    }
 }
