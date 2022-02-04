@@ -1,10 +1,18 @@
 package pages;
 
+import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.ui.Select;
 
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.time.format.TextStyle;
+import java.util.List;
+import java.util.Locale;
 import java.util.Map;
+
+import static support.TestContext.getDriver;
 
 public class CareersNewPosition extends CareersRecruit {
 
@@ -26,7 +34,28 @@ public class CareersNewPosition extends CareersRecruit {
     private WebElement stateSelect;
 
     @FindBy(id = "positionDateOpen")
-    private WebElement datePicker;
+    private WebElement datePickerInput;
+
+    @FindBy(id = "datepicker-popper")
+    private List<WebElement> datePickerPopper;
+
+    @FindBy(xpath = "//div[contains(@class,'year-read-view')]")
+    private WebElement datePickerYearSelect;
+
+    private WebElement getDatePickerYearOption(String year) {
+        return getDriver().findElement(By.xpath("//div[contains(@class,'year-option')][contains(normalize-space(.),'" + year + "')]"));
+    }
+
+    @FindBy(xpath = "//div[contains(@class,'month-read-view')]")
+    private WebElement datePickerMonthSelect;
+
+    private WebElement getDatePickerMonthOption(String month) {
+        return getDriver().findElement(By.xpath("//div[contains(@class,'month-option')][contains(normalize-space(.),'" + month + "')]"));
+    }
+
+    private WebElement getDatePickerDayOption(String day) {
+        return getDriver().findElement(By.xpath("//div[contains(@class,'day')][contains(normalize-space(.),'" + day + "')]"));
+    }
 
     @FindBy(id = "positionSubmit")
     private WebElement submitButton;
@@ -48,9 +77,22 @@ public class CareersNewPosition extends CareersRecruit {
         new Select(stateSelect).selectByValue(state);
     }
 
+    public boolean isDatePickerVisible() {
+        return datePickerPopper.stream().findFirst().isPresent();
+    }
+
     public void pickDate(String date) {
-        //TODO: use custom select and click instead of sending keys
-        datePicker.sendKeys(date);
+        datePickerInput.sendKeys(date);
+    }
+
+    public void pickDate(String year, String month, String day) {
+        datePickerInput.click();
+        datePickerYearSelect.click();
+        getDatePickerYearOption(year).click();
+        datePickerMonthSelect.click();
+        getDatePickerMonthOption(month).click();
+        getDatePickerDayOption(day).click();
+        getWait().until(driver -> !isDatePickerVisible());
     }
 
     public void submitNewPositionForm() {
@@ -64,6 +106,13 @@ public class CareersNewPosition extends CareersRecruit {
         fillCity(data.get("city"));
         selectState(data.get("state"));
         pickDate(data.get("date"));
+
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MM/dd/yyyy");
+        LocalDate parsedDate = LocalDate.parse(data.get("date"), formatter);
+        pickDate(String.valueOf(parsedDate.getYear()),
+                parsedDate.getMonth().getDisplayName(TextStyle.FULL, Locale.US),
+                String.valueOf(parsedDate.getDayOfMonth()));
+
         submitNewPositionForm();
         getWait().until(driver -> isPositionVisible(title));
     }
