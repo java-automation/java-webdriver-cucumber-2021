@@ -52,7 +52,7 @@ public class CareerStepDefs {
         homePage.clickRecruit();
         recruitPage.openNewPosition();
 
-        Map<String,String> position = getData("position", "career");
+        Map<String,String> data = getData("position", "career");
 
 
 

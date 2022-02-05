@@ -25,6 +25,30 @@ public class CareerNewPositionPage extends Page{
     @FindBy(xpath = "//input[@id='positionDateOpen']")
     private WebElement dateField;
 
+    public void filloutTitle(String value){
+        titleField.sendKeys(value);
+    }
+
+    public void filloutDescription(String value){
+        descriptionField.sendKeys(value);
+    }
+
+    public void filloutAddress(String value){
+        addressField.sendKeys(value);
+    }
+
+    public void filloutCity(String value){
+        cityField.sendKeys(value);
+    }
+
+    public void filloutZipcode(String value){
+        zipCode.sendKeys(value);
+    }
+
+    public void filloutDate(String value){
+        dateField.sendKeys(value);
+    }
+
     public void createPosition(Map<String,String> data){
 
     }
