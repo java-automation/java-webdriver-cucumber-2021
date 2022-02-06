@@ -8,7 +8,9 @@ import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 
 import java.util.List;
+import java.util.Map;
 
+import static support.TestContext.getData;
 import static support.TestContext.getDriver;
 
 public class CareersRecruit extends Page {
@@ -16,6 +18,9 @@ public class CareersRecruit extends Page {
 
     @FindBy(xpath = "//a[@class='text-blue text-decoration-none']/h4[text()='New Position']")
     private WebElement newPositionButton;
+
+    @FindBy(xpath = "//h4[@class='card-title']")
+    private WebElement allCardTitles;
 
     private WebElement positionCard(String title) {
         return getDriver().findElement(By.xpath("//h4[text()='" + title + "']/ancestor::div[@class='card bg-white mb-3']"));
@@ -31,7 +36,8 @@ public class CareersRecruit extends Page {
         positionCardCloseButton(title).click();
         getWait().until(ExpectedConditions.invisibilityOf(positionCard(title)));
     }
-    public void openNewPosition(){
+
+    public void openNewPosition() {
         newPositionButton.click();
     }
 
@@ -43,8 +49,14 @@ public class CareersRecruit extends Page {
         }
 
     }
-    public List<WebElement> candidates(){
+    boolean isCardCreated(){
+        Map<String,String> data = getData("position", "career");
+        boolean result = false;
+        String expCard = data.get("title");
+        List<WebElement> cards = getDriver().findElements(By.xpath("//h4[@class='card-title']"));
+        for (WebElement el : cards ){
 
+        }
+    return  true;
     }
-
 }

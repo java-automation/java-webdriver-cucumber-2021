@@ -64,5 +64,6 @@ public class CareerStepDefs {
 
     @Then("I verify new position is created")
     public void iVerifyNewPositionIsCreated() {
+        recruitPage.
     }
 }
