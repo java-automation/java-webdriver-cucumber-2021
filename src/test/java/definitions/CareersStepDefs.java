@@ -33,4 +33,25 @@ public class CareersStepDefs {
     public void iVerifyPositionIsRemoved(String position) {
         Assert.assertFalse(form.positionExists(position));
     }
+
+    @When("I create new position")
+    public void iCreateNewPosition() {
+        form.createPosition();
+    }
+
+    @Then("I verify new position is created")
+    public void iVerifyNewPositionIsCreated() {
+        form.waitForPositionsPage();
+        Assert.assertTrue(form.positionIsCreated());
+    }
+
+    @When("I remove new position")
+    public void iRemoveNewPosition() throws InterruptedException {
+        form.removePosition();
+    }
+
+    @And("I verify new position is removed")
+    public void iVerifyNewPositionIsRemoved() {
+        Assert.assertTrue(form.positionIsRemoved());
+    }
 }
