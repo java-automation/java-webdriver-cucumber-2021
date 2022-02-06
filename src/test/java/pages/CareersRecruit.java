@@ -7,6 +7,8 @@ import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 
+import java.util.List;
+
 import static support.TestContext.getDriver;
 
 public class CareersRecruit extends Page {
@@ -41,4 +43,8 @@ public class CareersRecruit extends Page {
         }
 
     }
+    public List<WebElement> candidates(){
+
+    }
+
 }

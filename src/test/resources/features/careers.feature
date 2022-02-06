@@ -15,7 +15,7 @@ Feature: Careers
     And I login as "recruiter"
     Then I verify "recruiter" login
     When I create new position
+    Then I verify new position is created
     And I wait for 3 sec
-#    Then I verify new position is created
 #    When I remove new position
 #    And I verify new position is removed

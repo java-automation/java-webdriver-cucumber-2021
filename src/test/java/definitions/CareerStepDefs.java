@@ -4,6 +4,7 @@ import io.cucumber.java.en.And;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 import pages.CareerLogin;
+import pages.CareerNewPositionPage;
 import pages.CareersHome;
 import pages.CareersRecruit;
 
@@ -16,6 +17,8 @@ public class CareerStepDefs {
     CareersHome homePage = new CareersHome();
     CareerLogin loginPage = new CareerLogin();
     CareersRecruit recruitPage = new CareersRecruit();
+    CareerNewPositionPage newPositionPage = new CareerNewPositionPage();
+    Map<String,String> data;
 
 
     @And("I login as {string}")
@@ -49,13 +52,17 @@ public class CareerStepDefs {
 
     @When("I create new position")
     public void iCreateNewPosition() {
+        data = getData("position", "career");
         homePage.clickRecruit();
         recruitPage.openNewPosition();
-
-        Map<String,String> data = getData("position", "career");
-
-
+        newPositionPage.createPosition(data);
+        newPositionPage.clickSubmit();
 
 
+
+    }
+
+    @Then("I verify new position is created")
+    public void iVerifyNewPositionIsCreated() {
     }
 }

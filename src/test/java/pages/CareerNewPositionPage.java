@@ -2,6 +2,7 @@ package pages;
 
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
+import org.openqa.selenium.support.ui.Select;
 
 import java.util.Map;
 
@@ -24,6 +25,16 @@ public class CareerNewPositionPage extends Page{
 
     @FindBy(xpath = "//input[@id='positionDateOpen']")
     private WebElement dateField;
+
+    @FindBy(xpath = "//button[@id='positionSubmit']")
+    private WebElement submitButton;
+
+    @FindBy(xpath = "//select")
+    private WebElement state;
+
+    public void clickSubmit(){
+        submitButton.click();
+    }
 
     public void filloutTitle(String value){
         titleField.sendKeys(value);
@@ -49,7 +60,19 @@ public class CareerNewPositionPage extends Page{
         dateField.sendKeys(value);
     }
 
+    public void selectState(String value){
+        new Select(state).selectByVisibleText(value);
+    }
+
+
     public void createPosition(Map<String,String> data){
+        filloutTitle(data.get("title"));
+        filloutDescription(data.get("description"));
+        filloutAddress(data.get("address"));
+        filloutCity(data.get("city"));
+        selectState(data.get("state"));
+        filloutZipcode(data.get("zipcode"));
+        filloutDate(data.get("date"));
 
     }
 
