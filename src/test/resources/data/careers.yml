@@ -1,5 +1,8 @@
-{
-  username: "Student",
-  email: "student@example.com",
+recruiter:
+  username: "Student"
+  email: "student@example.com"
   password: "welcome"
-}
+student:
+  username: "Student"
+  email: "student@example.com"
+  password: "welcome"
