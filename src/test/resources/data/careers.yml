@@ -1,0 +1,8 @@
+recruiter:
+  name: Student
+  email: student@example.com
+  password: welcome
+candidate:
+  name: John Doe
+  email: xyz@example.com
+  password: welcome
