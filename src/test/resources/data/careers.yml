@@ -1,15 +1,17 @@
 recruiter:
   name: Student
   username: student@example.com
+  email: student@example.com
   password: welcome
 
 candidate:
   name: Danny
   username: student@example.com
+  email: student@example.com
   password: welcome
 
 new_position:
-  title: QA Engineer Austin
+  title: "QA Engineer Austin"
   description: "Zello builds technologies that connect and protect frontline workers, a staggering 80% of the global workforce. With over 150 million users, we turn any phone into a walkie talkie and provide a complete communications ecosystem for frontline organizations. We’re the industry leader, helping transportation/fleet management organizations, retail associates, paramedics, nurses, hospitality workers, and construction crews stay connected and get work done! As a company, Zello is bootstrapped, has strong product-market fit, and is now accelerating its growth across a multi-billion dollar market.
   We are seeking an energetic, intellectually curious QA engineer to help us deliver the most reliable communication solution for frontline workers in the world. You'll test a broad range of products, applications, and services, applying your knowledge to ensure we maintain an exceptional level of quality for our thousands of customers and millions of users. In this role you'll collaborate closely with engineering, product, customer success, sales and outside partners.
   After your first year, you will
@@ -30,6 +32,6 @@ new_position:
   Excellent and proactive communication skills, written and verbal
   Positive and collaborative attitude, good sense of humor, and the ability to work with many different personality types and levels of technical expertise
   Attention to detail and commitment to quality"
-  city: Austin
-  state: TX
+  city: "Austin"
+  state: "TX"
   dateOpen: "12/15/2021"
