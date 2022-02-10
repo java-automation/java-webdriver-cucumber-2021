@@ -13,6 +13,7 @@ import org.openqa.selenium.edge.EdgeDriver;
 import org.openqa.selenium.firefox.FirefoxBinary;
 import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.firefox.FirefoxOptions;
+import org.openqa.selenium.grid.config.*;
 import org.openqa.selenium.ie.InternetExplorerDriver;
 import org.openqa.selenium.remote.DesiredCapabilities;
 import org.openqa.selenium.remote.LocalFileDetector;
@@ -114,15 +115,27 @@ public class TestContext {
             throw new RuntimeException("Unsupported test environment: " + testEnv);
         }
     }
-    public static Map<String, String> getData(String fileName) {
-        String filePath = System.getProperty("user.dir") + "/src/test/resources/data/" + fileName + ".yml";
+    public static Map<String, String> getData(String dataKey) {
+        return getData(dataKey, "quote");
+    }
+    public static Config getConfig() {
+        InputStream stream = getStream("config");
+        Config config = new Yaml().loadAs(stream, Config.class);
+        return config;
+    }
+    public static Map<String, String> getData(String dataKey, String fileName) {
+        InputStream stream = getStream(fileName);
+        Map<String, Map<String, String>> mapOfMaps = new Yaml().load(stream);
+        Map<String, String> testData = mapOfMaps.get(dataKey);
+        return testData;
+    }
+
+    private static InputStream getStream(String fileName) {
         try {
-            FileInputStream stream = new FileInputStream(filePath);
-            Yaml yaml = new Yaml();
-            return yaml.load(stream);
+            String filePath = System.getProperty("user.dir") + "/src/test/resources/data/" + fileName + ".yml";
+            return new FileInputStream(filePath);
         } catch (FileNotFoundException e) {
             throw new Error(e);
         }
-
     }
 }
