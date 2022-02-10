@@ -1,0 +1,10 @@
+automation:
+  title: Automation Engineer
+  description: Some description..
+  address: 123 Roses Dr
+  city: Raleigh
+  state: NC
+  zip: 71105
+  dateOpen: 2022-02-07
+update:
+  description: We are looking for a highly-skilled Test Automation Engineer to design automation tests.
