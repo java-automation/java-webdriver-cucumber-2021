@@ -4,7 +4,6 @@ import io.restassured.RestAssured;
 import io.restassured.response.Response;
 import io.restassured.specification.RequestSpecification;
 
-import java.util.Base64;
 import java.util.List;
 import java.util.Map;
 
@@ -70,6 +69,30 @@ public class RestClient {
         return position;
     }
 
+    public Map<String, Object> getCandidateById(int id) {
+        // prepare a request
+        RequestSpecification request = RestAssured
+                .given()
+                .baseUri("https://skryabin.com/recruit/api/v1")
+                .log().all();
+
+        // execute request
+        Response response = request
+                .when()
+                .get("/candidates/" + id);
+
+        // parse response
+        Map<String, Object> candidate = response
+                .then()
+                .log().all()
+                .statusCode(200) //200 -- A single candidate
+                .extract()
+                .jsonPath()
+                .getMap("");
+
+        return candidate;
+    }
+
     public int createPosition(Map<String, String> position) {
 
         Map<String, String> credentials = getData("recruiter", "careers");
@@ -93,6 +116,63 @@ public class RestClient {
                 .then()
                 .log().all()
                 .statusCode(201)
+                .extract()
+                .jsonPath()
+                .getMap("");
+
+        int id = (Integer) result.get("id");
+
+        return id;
+    }
+
+    public List<Map<String, Object>> getCandidates() {
+
+        // prepare a request
+        RequestSpecification request = RestAssured
+                .given()
+                .baseUri("https://skryabin.com/recruit/api/v1")
+                .log().all();
+
+        // execute request
+        Response response = request
+                .when()
+                .get("/candidates");
+
+        // parse response
+        List<Map<String, Object>> candidates = response
+                .then()
+                .log().all()
+                .statusCode(200)
+                .extract()
+                .jsonPath()
+                .getList("");
+
+        return candidates;
+    }
+
+    public int createCandidate(Map<String, String> candidate) {
+
+        Map<String, String> credentials = getData("recruiter", "careers");
+
+        // prepare a request
+        RequestSpecification request = RestAssured
+                .given()
+                .auth().preemptive().basic(credentials.get("email"), credentials.get("password"))
+                .baseUri("https://skryabin.com/recruit/api/v1")
+                .header("Content-Type", "application/json")
+                .body(candidate)
+                .log().all();
+
+        // execute request
+        Response response = request
+                .when()
+                .post("/candidates");
+
+        // parse response
+        Map<String, Object> result = response
+                .then()
+                .log().all()
+                .statusCode(201) //201 -- Successfully created
                 .extract()
                 .jsonPath()
                 .getMap("");

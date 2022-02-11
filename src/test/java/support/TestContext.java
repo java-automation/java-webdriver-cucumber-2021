@@ -79,7 +79,9 @@ public class TestContext {
                     WebDriverManager.chromedriver().setup();
                     Map<String, Object> chromePreferences = new HashMap<>();
                     // chromePreferences.put("profile.default_content_settings.geolocation", 2);
-                    chromePreferences.put("profile.default_content_setting_values.geolocation", 2);
+                    //chromePreferences.put("profile.default_content_setting_values.geolocation", 2);
+                    //??? options value: 0 - default; 1- allow, 2 - block;
+                    chromePreferences.put("profile.managed_default_content_settings.geolocation", 2);
                     chromePreferences.put("profile.default_content_settings.popups", 0);
                     chromePreferences.put("profile.default_content_setting_values.notifications", 1);
                     chromePreferences.put("download.prompt_for_download", false);
