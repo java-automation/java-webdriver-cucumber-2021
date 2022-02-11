@@ -16,3 +16,9 @@ position3:
   city: Portland
   state: OR
   dateOpen: "2022-03-01"
+candidate1:
+  firstName: John II
+  lastName: Doe
+candidate2:
+  firstName: Richard II
+  lastName: Roe

@@ -119,6 +119,87 @@ public class RestClient {
                 .statusCode(204);
     }
 
+    public int createCandidate(Map<String, String> candidateProfile) {
+        RequestSpecification request = RestAssured
+                .given()
+                .baseUri("https://skryabin.com/recruit/api/v1")
+                .contentType("application/json")
+                .body(candidateProfile)
+                .log().all();
+
+        Response response = request
+                .when()
+                .post("/candidates");
+
+        Map<String, Object> result = response
+                .then()
+                .log().all()
+                .statusCode(201)
+                .extract()
+                .jsonPath()
+                .getMap("");
+
+        return (Integer) result.get("id");
+    }
+
+    public Map<String, Object> getCandidateById(int id) {
+        RequestSpecification request = RestAssured
+                .given()
+                .baseUri("https://skryabin.com/recruit/api/v1")
+                .log().all();
+
+        Response response = request
+                .when()
+                .get("/candidates/" + id);
+
+        Map<String, Object> candidate = response
+                .then()
+                .log().all()
+                .statusCode(200)
+                .extract()
+                .jsonPath()
+                .getMap("");
+
+        return candidate;
+    }
+
+    public Map<String, Object> updateCandidateById(Map<String, String> candidateProfile, int id) {
+        RequestSpecification request = RestAssured
+                .given()
+                .auth().preemptive().basic(getBasicAuthLogin(),getBasicAuthPassword())
+                .baseUri("https://skryabin.com/recruit/api/v1")
+                .contentType("application/json")
+                .body(candidateProfile)
+                .log().all();
+
+        Response response = request
+                .when()
+                .put("/candidates/" + id);
+
+        Map<String, Object> result = response
+                .then()
+                .log().all()
+                .statusCode(200)
+                .extract()
+                .jsonPath()
+                .getMap("");
+
+        return result;
+    }
+
+    public void deleteCandidateById(int id) {
+        RestAssured
+                .given()
+                .auth().preemptive().basic(getBasicAuthLogin(),getBasicAuthPassword())
+                .baseUri("https://skryabin.com/recruit/api/v1")
+                .log().all()
+                .when()
+                .delete("/candidates/" + id)
+                .then()
+                .log().all()
+                .statusCode(204);
+    }
+
     public void setBasicAuthCredentials(Map<String, String> credentials) {
         basicAuthCredentials = credentials;
     }
