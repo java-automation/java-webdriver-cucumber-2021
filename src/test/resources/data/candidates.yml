@@ -1,0 +1,24 @@
+new_candidate:
+  firstName: Katrine
+  middleName: null
+  lastName: Space
+  email: kate@example.com
+  password: qwerty
+  address: 6298 Beckholt Rd
+  city: Mount Vernon
+  state: OH
+  zip: "43050"
+  summary: Possesses pertinent skills and knowledge
+updated_candidate:
+  firstName: Katrine
+  middleName: null
+  lastName: Spacer
+  email: kate@example.com
+  password: qwerty
+  address: 6298 Beckholt Rd
+  city: Mount Vernon
+  state: OH
+  zip: "43050"
+  summary: Possesses pertinent skills and knowledge. Interpersonal effectiveness. Persuasive. Proactive.
+patched_candidate:
+  state: Ohio
