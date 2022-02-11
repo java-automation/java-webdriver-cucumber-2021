@@ -155,8 +155,144 @@ public class RestClient {
                 .then()
                 .log().all()
                 .statusCode(204);
+    }
+    /////////////////////////////// Candidate //////////////////////////////////////////////
 
+    public List<Map<String, Object>> getCandidates() {
+        // prepare a request
+        RequestSpecification request = RestAssured
+                .given()
+                .baseUri("https://skryabin.com/recruit/api/v1")
+                .log().all();
+
+        // execute request
+        Response response = request
+                .when()
+                .get("/candidate");
+
+        // parse response
+        List<Map<String, Object>> candidates = response
+                .then()
+                .log().all()
+                .statusCode(200)
+                .extract()
+                .jsonPath()
+                .getList("");
+
+        return candidates;
+    }
+
+
+    public Map<String, Object> getCandidateById(int id) {
+        // prepare a request
+        RequestSpecification request = RestAssured
+                .given()
+                .baseUri("https://skryabin.com/recruit/api/v1")
+                .log().all();
+
+        // execute request
+        Response response = request
+                .when()
+                .get("/candidate/" + id);
+
+        // parse response
+        Map<String, Object> candidate = response
+                .then()
+                .log().all()
+                .statusCode(200)
+                .extract()
+                .jsonPath()
+                .getMap("");
+
+        return candidate;
+    }
+
+    public int createCandidate(Map<String, String> candidate) {
+
+        Map<String, String> credentials = getData("candidate");
+
+        // prepare a request
+        RequestSpecification request = RestAssured
+                .given()
+                .auth().preemptive().basic(credentials.get("email"), credentials.get("password"))
+                .baseUri("https://skryabin.com/recruit/api/v1")
+                .header("Content-Type", "application/json")
+                .body(candidate)
+                .log().all();
+
+        // execute request
+        Response response = request
+                .when()
+                .post("/candidate");
+
+        // parse response
+        Map<String, Object> result = response
+                .then()
+                .log().all()
+                .statusCode(201)
+                .extract()
+                .jsonPath()
+                .getMap("");
+
+        int idCandidate = (Integer) result.get("id");
+
+        return idCandidate;
 
     }
+    public void updateCandidate(String field, String updatedValue, int id) {
+
+        Map<String, String> credentials = getData("candidate");
+        Map<String,String> updatedCandidate = new HashMap<>();
+        updatedCandidate.put(field,updatedValue);
+
+        // prepare a request
+        RequestSpecification request = RestAssured
+                .given()
+                .auth().preemptive().basic(credentials.get("email"), credentials.get("password"))
+                .baseUri("https://skryabin.com/recruit/api/v1")
+                .header("Content-Type", "application/json")
+                .body(updatedCandidate)
+                .log().all();
+
+        // execute request
+        Response response = request
+                .when()
+                .patch("/candidate" + id);
+
+        // parse response
+        Map<String, Object> result = response
+                .then()
+                .log().all()
+                .statusCode(200)
+                .extract()
+                .jsonPath()
+                .getMap("");
+
+    }
+
+    public void deleteCandidate(int id){
+        Map<String, String> credentials = getData("candidate");
+
+        RequestSpecification request = RestAssured
+                .given()
+                .auth().preemptive().basic(credentials.get("email"), credentials.get("password"))
+                .baseUri("https://skryabin.com/recruit/api/v1")
+                .header("Content-Type", "application/json")
+                .log().all();
+
+        // execute request
+        Response response = request
+                .when()
+                .delete("/candidate" + id);
+
+        // parse response
+
+        ValidatableResponse result = response
+                .then()
+                .log().all()
+                .statusCode(204);
+    }
+
+
 }
 
