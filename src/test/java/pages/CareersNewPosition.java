@@ -105,10 +105,9 @@ public class CareersNewPosition extends CareersRecruit {
         fillDescription(data.get("description"));
         fillCity(data.get("city"));
         selectState(data.get("state"));
-        pickDate(data.get("date"));
 
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MM/dd/yyyy");
-        LocalDate parsedDate = LocalDate.parse(data.get("date"), formatter);
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+        LocalDate parsedDate = LocalDate.parse(data.get("dateOpen"), formatter);
         pickDate(String.valueOf(parsedDate.getYear()),
                 parsedDate.getMonth().getDisplayName(TextStyle.FULL, Locale.US),
                 String.valueOf(parsedDate.getDayOfMonth()));
