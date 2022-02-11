@@ -13,7 +13,8 @@ public class RestStepDefs {
     Map<String, String> automation = getData("positions");
 
     @Given("I work with rest api")
-    public void iWorkWithRestApi() {
+    public void iWorkWithRestApi(){
+
         // CRUD operations for position
 
         // CREATE
@@ -25,12 +26,12 @@ public class RestStepDefs {
 
 
         // UPDATE
+        restClient.updatePosition("zip","10013", createdId);
 
 
         // DELETE
+        restClient.deletePosition(createdId);
 
     }
-
-
     }
 

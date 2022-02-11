@@ -2,8 +2,10 @@ package support;
 
 import io.restassured.RestAssured;
 import io.restassured.response.Response;
+import io.restassured.response.ValidatableResponse;
 import io.restassured.specification.RequestSpecification;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -99,6 +101,62 @@ public class RestClient {
         int id = (Integer) result.get("id");
 
         return id;
+    }
+
+    public void updatePosition(String field, String updatedValue, int id) {
+
+        Map<String, String> credentials = getData("recruiter");
+        Map<String,String> updatedPosition = new HashMap<>();
+        updatedPosition.put(field,updatedValue);
+
+        // prepare a request
+        RequestSpecification request = RestAssured
+                .given()
+                .auth().preemptive().basic(credentials.get("email"), credentials.get("password"))
+                .baseUri("https://skryabin.com/recruit/api/v1")
+                .header("Content-Type", "application/json")
+                .body(updatedPosition)
+                .log().all();
+
+        // execute request
+        Response response = request
+                .when()
+                .patch("/positions" + id);
+
+        // parse response
+        Map<String, Object> result = response
+                .then()
+                .log().all()
+                .statusCode(200)
+                .extract()
+                .jsonPath()
+                .getMap("");
+
+    }
+
+    public void deletePosition(int id){
+        Map<String, String> credentials = getData("recruiter");
+
+        RequestSpecification request = RestAssured
+                .given()
+                .auth().preemptive().basic(credentials.get("email"), credentials.get("password"))
+                .baseUri("https://skryabin.com/recruit/api/v1")
+                .header("Content-Type", "application/json")
+                .log().all();
+
+        // execute request
+        Response response = request
+                .when()
+                .delete("/positions" + id);
+
+        // parse response
+
+        ValidatableResponse result = response
+                .then()
+                .log().all()
+                .statusCode(204);
+
+
     }
 }
 
