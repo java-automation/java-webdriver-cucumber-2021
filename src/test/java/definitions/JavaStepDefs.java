@@ -1439,7 +1439,7 @@ public class JavaStepDefs {
     }
 
     private String generateBigLowercaseEnglishString(int len, int factor) {
-        String sourceString = "abcdefghijklmnopqrstuvxyz";
+        String sourceString = "abcdefghijklmnopqrstuvwxyz";
         StringBuilder sb = new StringBuilder();
         while (sb.length() < len) {
             int index = (int) (sourceString.length() * Math.random());
