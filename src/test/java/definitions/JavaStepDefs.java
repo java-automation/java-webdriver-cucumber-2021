@@ -1375,4 +1375,61 @@ public class JavaStepDefs {
         }
         return true;
     }
+
+    @And("I output modified string with char counts {string}")
+    public void iOutputModifiedStringWithCharCounts(String s) {
+        if (s.length() == 0) throw new Error("Nothing to count!");
+        System.out.println(printStringWithCharCounts(s));
+    }
+
+    private String printStringWithCharCounts(String s) {
+        int len = s.length();
+        StringBuilder sb = new StringBuilder();
+        char c;
+        int lastChangeIndex = 0;
+
+        for (int i = 1; i < len; i++) {
+            c = s.charAt(i - 1);
+            if (s.charAt(i) == c) continue;
+            sb.append(i - lastChangeIndex).append(c);
+            lastChangeIndex = i;
+        }
+        sb.append(len - lastChangeIndex).append(s.charAt(len - 1));
+        return sb.toString();
+    }
+
+    @And("I count islands and peninsulas")
+    public void iCountIslandsAndPeninsulas(List<List<Integer>> list) {
+        if ((list == null) || (list.size() == 0)) throw new Error("No matrix found!");
+        int rowCount = list.size();
+        int[][] matrix = new int[rowCount][];
+        for (int i = 0; i < rowCount; i ++) {
+            matrix[i] = convertListToPrimitiveArray(list.get(i));
+        }
+
+        System.out.println("Found " + countIslands(matrix) + " islands!");
+    }
+
+    private int countIslands(int[][] matrix) {
+        int count = 0;
+        int columns = matrix[0].length;
+        for (int i = 0; i < matrix.length; i++) {
+            for (int j = 0; j < columns; j++) {
+                if (matrix[i][j] == 1) {
+                    count++;
+                    processIsland(i, j, matrix);
+                }
+            }
+        }
+        return count;
+    }
+
+    private void processIsland(int i, int j, int[][] matrix) {
+        if ((i < 0) || (i >= matrix.length) || (j < 0) || (j >= matrix[0].length) || (matrix[i][j] == 0)) return;
+        matrix[i][j] = 0;
+        processIsland(i - 1, j, matrix);
+        processIsland(i + 1, j, matrix);
+        processIsland(i, j - 1, matrix);
+        processIsland(i, j + 1, matrix);
+    }
 }

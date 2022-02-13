@@ -230,3 +230,22 @@ Feature: Java experiments
   @java42
   Scenario: Anagrams
     And I check if "abababc" and "aacabbb" are anagrams of each other
+
+  @java43
+  Scenario: Count subset of characters
+    And I output modified string with char counts "aaaabbbccddddd"
+
+  @java44
+  Scenario: Count islands in a given matrix
+    And I count islands and peninsulas
+    #10
+    |  1 | 1 | 0 |  1 | 0 | 0 |  1 | 0 | 0 | 0 |
+    |  1 | 1 | 0 |  1 | 0 | 0 |  1 | 0 | 1 | 0 |
+    |  0 | 0 | 0 |  1 | 1 | 1 |  1 | 0 | 0 | 1 |
+    |  0 | 0 | 0 |  1 | 1 | 1 |  1 | 0 | 0 | 1 |
+    |  1 | 0 | 0 |  0 | 0 | 0 |  0 | 0 | 0 | 1 |
+    |  0 | 1 | 0 |  1 | 0 | 1 |  1 | 0 | 0 | 1 |
+    |  1 | 0 | 0 |  0 | 0 | 1 |  1 | 0 | 0 | 0 |
+    |  1 | 1 | 1 |  0 | 1 | 0 |  1 | 0 | 0 | 0 |
+    |  1 | 1 | 1 |  0 | 1 | 0 |  0 | 0 | 0 | 0 |
+    |  1 | 1 | 1 |  0 | 1 | 0 |  0 | 0 | 0 | 0 |
