@@ -5,7 +5,6 @@ import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import org.assertj.core.api.Assertions;
-import org.junit.Assert;
 import org.openqa.selenium.By;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebElement;
@@ -20,6 +19,7 @@ import static java.lang.Character.toChars;
 import static java.lang.String.valueOf;
 import static java.lang.System.out;
 import static java.util.Arrays.asList;
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 import static support.TestContext.getDriver;
 
@@ -86,7 +86,7 @@ public class JavaStepDefs {
         int currentMonth = Integer.parseInt(getAttribute("//select[@class='ui-datepicker-month']/option[@selected]", "value"));
         PredefinedStepDefs.iClickOnElementWithXpath("//a[contains(@class,'ui-datepicker-prev')]");
         int monthBack = Integer.parseInt(getAttribute("//select[@class='ui-datepicker-month']/option[@selected]", "value"));
-        Assert.assertEquals(currentMonth - 1, monthBack);
+        assertEquals(currentMonth - 1, monthBack);
     }
 
     public String getAttribute(String xpath, String attribute) {
@@ -100,7 +100,7 @@ public class JavaStepDefs {
         int selectedMonth = Integer.parseInt(getAttribute("//select[@class='ui-datepicker-month']/option[@selected]", "value"));
         PredefinedStepDefs.iClickOnElementWithXpath("//a[contains(@class,'ui-datepicker-next')]");
         int monthForward = Integer.parseInt(getAttribute("//select[@class='ui-datepicker-month']/option[@selected]", "value"));
-        Assert.assertEquals(selectedMonth + 1, monthForward);
+        assertEquals(selectedMonth + 1, monthForward);
     }
 
     @Then("I click keyUp in keyboard")
@@ -1062,21 +1062,26 @@ public class JavaStepDefs {
     }
 
     @Given("String {string} counts it's characters")
-    public void stringCountsItSCharacters(String text) {
+    public String stringCountsItSCharacters(String text) {
         int i = 0;
+        String result = "";
         while (i < text.length()) {
             char chr = text.charAt(i);
             int counter = 0;
             int j = i;
-            out.print(text.charAt(j));
             while ((j < text.length())
                     && (chr == text.charAt(j))) {
                 counter++;
                 j++;
             }
-            out.print(counter);
+            result = result + String.valueOf(counter) + text.charAt(i);
             i = j;
         }
+        return result;
     }
-    //out.println("j = " + j + ", chatAt(" + j + ") = " + text.charAt(j) + ", counter = " + counter);
+
+    @Given("String {string} counts it's characters and assert that result equals {string}")
+    public void stringCountsItSCharactersAndAssertThatResultEquals(String text, String result) {
+        assertEquals(stringCountsItSCharacters(text), result);
+    }
 }

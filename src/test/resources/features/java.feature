@@ -298,10 +298,19 @@ Feature: Java feature
     Given I read from "admin.yml" file in data folder
     And I getText from "downloadResume.txt"
 
-@java40
-Scenario: coding challenge "aaabbbccbbbaa" -> "a3b3c2b3a2"
-  Given String "aaabbbccbbbaa" counts it's characters
-  Given String "a" counts it's characters
+  @java40
+  Scenario Outline: coding challenge "aaabbbccbbbaa" -> "a3b3c2b3a2"
+    Given String "<text>" counts it's characters and assert that result equals "<result>"
+    Examples:
+      | text           | result     |
+      | aaabbbccbbbaa  | 3a3b2c3b2a |
+      | a              | 1a         |
+      | aaaabbbccaabbb | 4a3b2c2a3b |
+      | vvssssswww     | 2v5s3w     |
+      | aqqqttccc      | 1a3q2t3c   |
+      |                |            |
+
+
 
 
 
