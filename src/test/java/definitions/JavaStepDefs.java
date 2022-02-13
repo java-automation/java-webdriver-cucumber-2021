@@ -1021,17 +1021,18 @@ public class JavaStepDefs {
     }
 
     public StringBuilder getText(String fileName) throws FileNotFoundException {
-        try {StringBuilder textFromFile = new StringBuilder();
-        String path = System.getProperty("user.dir") + "/src/test/resources/data/" + fileName;
-        File file = new File(path);
-        Scanner scanner = new Scanner(file);
-        while (scanner.hasNextLine()) {
-            String line = scanner.nextLine();
-            textFromFile.append(line);
-            textFromFile.append("\n");
-        }
-        scanner.close();
-        return textFromFile;
+        try {
+            StringBuilder textFromFile = new StringBuilder();
+            String path = System.getProperty("user.dir") + "/src/test/resources/data/" + fileName;
+            File file = new File(path);
+            Scanner scanner = new Scanner(file);
+            while (scanner.hasNextLine()) {
+                String line = scanner.nextLine();
+                textFromFile.append(line);
+                textFromFile.append("\n");
+            }
+            scanner.close();
+            return textFromFile;
         } catch (FileNotFoundException e) {
             throw new Error(e);
         }
@@ -1041,4 +1042,41 @@ public class JavaStepDefs {
     public void iGetTextFrom(String fileName) throws FileNotFoundException {
         out.println(getText(fileName));
     }
+
+    private boolean isValid(String s) { //problem-solving with Vladimir, 02/02/2022 session
+        Stack<Character> stack = new Stack<>();
+        for (int i = 0; i < s.length(); i++) {
+            char c = s.charAt(i);
+            if (c == '(' || c == '[' || c == '{')
+                stack.push(c);
+            else if (stack.empty())
+                return false;
+            else if (c == ')' && stack.pop() != '(')
+                return false;
+            else if (c == ']' && stack.pop() != '[')
+                return false;
+            else if (c == '}' && stack.pop() != '{')
+                return false;
+        }
+        return stack.empty();
+    }
+
+    @Given("String {string} counts it's characters")
+    public void stringCountsItSCharacters(String text) {
+        int i = 0;
+        while (i < text.length()) {
+            char chr = text.charAt(i);
+            int counter = 0;
+            int j = i;
+            out.print(text.charAt(j));
+            while ((j < text.length())
+                    && (chr == text.charAt(j))) {
+                counter++;
+                j++;
+            }
+            out.print(counter);
+            i = j;
+        }
+    }
+    //out.println("j = " + j + ", chatAt(" + j + ") = " + text.charAt(j) + ", counter = " + counter);
 }

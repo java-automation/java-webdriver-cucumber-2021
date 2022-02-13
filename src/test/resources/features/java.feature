@@ -298,8 +298,10 @@ Feature: Java feature
     Given I read from "admin.yml" file in data folder
     And I getText from "downloadResume.txt"
 
-
-
+@java40
+Scenario: coding challenge "aaabbbccbbbaa" -> "a3b3c2b3a2"
+  Given String "aaabbbccbbbaa" counts it's characters
+  Given String "a" counts it's characters
 
 
 
