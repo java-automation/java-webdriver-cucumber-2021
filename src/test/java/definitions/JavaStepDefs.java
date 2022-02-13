@@ -1001,7 +1001,7 @@ public class JavaStepDefs {
             return false;
         }
 
-        for (int i = 3; i * i <= num; i+=2) {
+        for (int i = 3; i * i <= num; i += 2) {
             if (num % i == 0) {
                 System.out.println("Found divisor: " + i);
                 return false;
@@ -1227,7 +1227,7 @@ public class JavaStepDefs {
         if (num == 0) return "nulla";
 
         final String[] romanNumerals = {"I", "IV", "V", "IX", "X", "XL", "L", "XC", "C", "CD", "D", "CM", "M"};
-        final int[]    values        = { 1,   4,    5,   9,    10,  40,   50,  90,  100,  400, 500,  900, 1000};
+        final int[] values = {1, 4, 5, 9, 10, 40, 50, 90, 100, 400, 500, 900, 1000};
         int i = 12;
         String result = "";
 
@@ -1260,7 +1260,7 @@ public class JavaStepDefs {
                 if (groupIndex <= 4) highSymbol = romanSymbols[groupIndex + 1];
             }
             mod = digit % 5;
-            if (mod  == 4) result = (romanSymbols[groupIndex] + highSymbol).concat(result);
+            if (mod == 4) result = (romanSymbols[groupIndex] + highSymbol).concat(result);
             else result = (prefix + romanSymbols[groupIndex].repeat(mod)).concat(result);
             groupIndex += 2;
         }
@@ -1269,8 +1269,8 @@ public class JavaStepDefs {
 
     @And("I convert {string} to decimal")
     public void iConvertToDecimal(String romanNum) {
-         if (!(romanNum.matches("^M{0,3}(CM|CD|D?C{0,3})(XC|XL|L?X{0,3})(IX|IV|V?I{0,3})$")))
-             throw new Error("Invalid roman number: " + romanNum);
+        if (!(romanNum.matches("^M{0,3}(CM|CD|D?C{0,3})(XC|XL|L?X{0,3})(IX|IV|V?I{0,3})$")))
+            throw new Error("Invalid roman number: " + romanNum);
 
         System.out.println("Decimal number for " + romanNum + ": " + convertRomanToDecimal(romanNum));
     }
@@ -1370,7 +1370,7 @@ public class JavaStepDefs {
             buckets[word1.charAt(i) - 'a']++;
             buckets[word2.charAt(i) - 'a']--;
         }
-        for (int number : buckets ) {
+        for (int number : buckets) {
             if (number != 0) return false;
         }
         return true;
@@ -1403,7 +1403,7 @@ public class JavaStepDefs {
         if ((list == null) || (list.size() == 0)) throw new Error("No matrix found!");
         int rowCount = list.size();
         int[][] matrix = new int[rowCount][];
-        for (int i = 0; i < rowCount; i ++) {
+        for (int i = 0; i < rowCount; i++) {
             matrix[i] = convertListToPrimitiveArray(list.get(i));
         }
 
@@ -1431,5 +1431,20 @@ public class JavaStepDefs {
         processIsland(i + 1, j, matrix);
         processIsland(i, j - 1, matrix);
         processIsland(i, j + 1, matrix);
+    }
+
+    @And("I generate char counts for lowercase string of length {int} with a factor of {int}")
+    public void iGenerateCharCountsForLowercaseStringOfLengthWithAFactorOf(int len, int factor) {
+        System.out.println(printStringWithCharCounts(generateBigLowercaseEnglishString(len, factor)));
+    }
+
+    private String generateBigLowercaseEnglishString(int len, int factor) {
+        String sourceString = "abcdefghijklmnopqrstuvxyz";
+        StringBuilder sb = new StringBuilder();
+        while (sb.length() < len) {
+            int index = (int) (sourceString.length() * Math.random());
+            sb.append(String.valueOf(sourceString.charAt(index)).repeat((int)(factor * Math.random()) + 1));
+        }
+        return sb.substring(0, len);
     }
 }

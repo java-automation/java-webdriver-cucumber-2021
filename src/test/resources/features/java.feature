@@ -249,3 +249,7 @@ Feature: Java experiments
     |  1 | 1 | 1 |  0 | 1 | 0 |  1 | 0 | 0 | 0 |
     |  1 | 1 | 1 |  0 | 1 | 0 |  0 | 0 | 0 | 0 |
     |  1 | 1 | 1 |  0 | 1 | 0 |  0 | 0 | 0 | 0 |
+
+  @java45
+  Scenario: Generate big string
+    And I generate char counts for lowercase string of length 250000 with a factor of 20
