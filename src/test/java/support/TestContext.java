@@ -25,17 +25,40 @@ import java.io.FileNotFoundException;
 import java.io.InputStream;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
 public class TestContext {
 
-//    private static WebDriver driver;
-//
+    private static WebDriver driver;
+    private static Map<String, Object> testData = new HashMap<>();
+    private static String timestamp;
+
+    public static void saveTestData(String key, Object data) {
+        testData.put(key, data);
+    }
+
+    public static Integer readTestDataInteger(String key) {
+        return (Integer) testData.get(key);
+    }
+
+    public static String readTestDataString(String key) {
+        return (String) testData.get(key);
+    }
+
+    public static Map<String, Object> readTestDataMap(String key) {
+        return (Map<String, Object>) testData.get(key);
+    }
+    public static WebDriver getDriver() {
+        return driver;
+    }
+
 //    public static WebDriver getDriver() {
 //        return driver;
-//    }
+//  }
 //
 //    public static void initialize() {
 //        initialize(getConfig().browser, getConfig().runType, getConfig().headless);
@@ -148,17 +171,6 @@ public class TestContext {
 //    }
 //}
 
-
-
-
-    private static WebDriver driver;
-
-
-
-    public static WebDriver getDriver() {
-        return driver;
-    }
-
     public static void initialize() {
         initialize("chrome", "local", false);
     }
@@ -166,6 +178,7 @@ public class TestContext {
     public static void teardown() {
         driver.quit();
     }
+
 
     public static Map<String, String> getData(String fileNAme){
         try {
@@ -175,6 +188,29 @@ public class TestContext {
         } catch (FileNotFoundException e) {
             throw new Error(e);
         }
+    }
+    public static Map<String, String> getPositionDataFromFile(String dataKey, String project) {
+        Map<String, String> position = getData(dataKey, project);
+
+        String originalDateOpen = position.get("dateOpen");
+        if (originalDateOpen != null) {
+            String isoDate = new SimpleDateFormat("yyyy-MM-dd").format(new Date(originalDateOpen));
+            position.put("dateOpen", isoDate);
+        }
+
+        String originalTitle = position.get("title");
+        if (originalTitle != null) {
+            String newTitle = originalTitle + timestamp;
+            position.put("title", newTitle);
+        }
+        return position;
+    }
+
+    public static Map<String, String> getData(String dataKey, String project) {
+        InputStream stream = getStream(project);
+        Map<String, Map<String, String>> mapOfMaps = new Yaml().load(stream);
+        Map<String, String> testData = mapOfMaps.get(dataKey);
+        return testData;
     }
 
     public static void initialize(String browser, String testEnv, boolean isHeadless) {
@@ -246,5 +282,7 @@ public class TestContext {
         } else {
             throw new RuntimeException("Unsupported test environment: " + testEnv);
         }
+        driver.manage().window().setPosition(position);
+        driver.manage().window().setSize(size);
     }
 }
