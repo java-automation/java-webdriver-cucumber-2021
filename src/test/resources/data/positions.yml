@@ -6,3 +6,7 @@ automation:
   state: NY
   zip: "10012"
   dateOpen: 02/07/2022
+automation_updated:
+  city: San Francisco
+  state: CA
+  zip: "94011"

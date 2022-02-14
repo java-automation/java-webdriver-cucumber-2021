@@ -9,3 +9,18 @@ automation:
   state: CA
   zip: "12345"
   summary: "Candidate details (Required fields: firstName, lastName, email, password. Dynamic fields: id, positionsCount)"
+sdet:
+  firstName: Dima
+  middleName: J
+  lastName: Od
+  email: dima_sdet@email.com
+  password: welcome
+  address: 555, Some st.
+  city: Somecity
+  state: CA
+  zip: "12345"
+  summary: "Candidate details (Required fields: firstName, lastName, email, password. Dynamic fields: id, positionsCount)"
+sdet_updated:
+  city: Simcity
+  state: CA
+  zip: "55555"
