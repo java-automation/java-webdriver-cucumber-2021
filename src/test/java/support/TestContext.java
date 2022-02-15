@@ -122,9 +122,13 @@ public class TestContext {
         return map.get(recordKey);
     }
 
+    public static String getFullDataFilePath(String fileName, String extension) {
+        return System.getProperty("user.dir") + "/src/test/resources/data/" + fileName + "." + extension;
+    }
+
     private static InputStream getStream(String project) {
         try {
-            return new FileInputStream(System.getProperty("user.dir") + "/src/test/resources/data/" + project + ".yml");
+            return new FileInputStream(getFullDataFilePath(project,"yml"));
         } catch (FileNotFoundException e) {
             throw new Error("Couldn't stream project data for: " + project + ". Error: " + e);
         }
@@ -186,7 +190,7 @@ public class TestContext {
 
                     //adding ChroPath if needed
                     if (config.isUseChroPath()) {
-                        File chroPathFile = new File(System.getProperty("user.dir") + "/src/test/resources/data/ChroPath.crx");
+                        File chroPathFile = new File(getFullDataFilePath("ChroPath", "crx"));
                         chromeOptions.addExtensions(chroPathFile);
                     }
 

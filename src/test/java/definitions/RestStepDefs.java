@@ -6,6 +6,7 @@ import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 import support.RestClient;
 
+import java.io.*;
 import java.util.List;
 import java.util.Map;
 
@@ -199,5 +200,42 @@ public class RestStepDefs {
             int actualId = (Integer) actualCandidate.get("id");
             assertThat(actualId).isNotEqualTo(deletedId);
         }
+    }
+
+    @When("I add via REST API {string} resume to a new candidate")
+    public void iAddViaRESTAPIResumeToANewCandidate(String extension) {
+        int candidateId = readTestDataAsInteger("lastCreatedCandidateId");
+        File resumeFile = new File(getFullDataFilePath("resume", extension));
+        restClient.addResumeForCandidate(candidateId, resumeFile);
+    }
+
+    @Then("I verify via REST API that {string} resume has been added")
+    public void iVerifyViaRESTAPIThatResumeHasBeenAdded(String extension) {
+        int candidateId = readTestDataAsInteger("lastCreatedCandidateId");
+        String expectedFileName = "resume." + extension;
+        boolean isSameFile = false;
+
+        //passing expectedFileName for soft assertion on response (status code: 200; proper header with attachment filename)
+        InputStream actualFileStream = restClient.getResumeForCandidate(candidateId, expectedFileName);
+
+        try {
+            InputStream expectedFileStream = new FileInputStream(getFullDataFilePath("resume", extension));
+            int i = 0;
+            int j = 0;
+            while (i != -1) { //no need to check j
+                i = actualFileStream.read();
+                j = expectedFileStream.read();
+                if (i != j) break;
+            }
+            if (i != j) System.out.println("Files are different!");
+            else {
+                isSameFile = true;
+                System.out.println("Files are the same!");
+            }
+            expectedFileStream.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        assertThat(isSameFile).isTrue();
     }
 }
