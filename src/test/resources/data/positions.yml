@@ -1,6 +1,8 @@
 new_position:
   title: Automation Engineer
-  description: Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
+  description: Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore
+               et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi
+               ut aliquip ex ea commodo consequat.
   address: 123 First st
   city: New York
   state: NY
@@ -16,3 +18,18 @@ updated_position:
   dateOpen: 02/08/2022
 patched_position:
   dateOpen: 02/09/2022
+
+automation:
+  title: Sr Automation Engineer
+  description: Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore
+               et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi
+               ut aliquip ex ea commodo consequat.
+  address: 123 First st
+  city: New York
+  state: NY
+  zip: "10012"
+  dateOpen: 02/07/2022
+automation_updated:
+  city: San Francisco
+  state: CA
+  zip: "94011"

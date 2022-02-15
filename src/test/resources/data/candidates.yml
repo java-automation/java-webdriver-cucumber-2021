@@ -22,3 +22,17 @@ updated_candidate:
   summary: Possesses pertinent skills and knowledge. Interpersonal effectiveness. Persuasive. Proactive.
 patched_candidate:
   state: Ohio
+
+sdet:
+  firstName: Testion
+  middleName:
+  lastName: Engineeron
+  email: sdet@example.com
+  password: qwerty
+  address: 105 Manco Dr
+  city: Lindale
+  state: GA
+  zip: "30147"
+  summary: Development of software product as well as writing framework and tools to test that product.
+sdet_updated:
+  address: 125 Manco Dr

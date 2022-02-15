@@ -3,16 +3,20 @@ package support;
 import io.restassured.RestAssured;
 import io.restassured.http.ContentType;
 import io.restassured.response.Response;
+import io.restassured.response.ResponseBodyExtractionOptions;
 import io.restassured.specification.RequestSpecification;
 
+import java.io.File;
 import java.util.List;
 import java.util.Map;
 
 import static support.TestContext.getData;
+import static support.TestContext.saveTestData;
 
 public class RestClient {
 
     Map<String,String> credentials = getData("recruiter","careers");
+    private static String authToken;
 
 //    private String getBasicAuthHeader() {
 //        Map<String, String> credentials = getData("recruiter", "careers");
@@ -23,6 +27,36 @@ public class RestClient {
 //        String authHeader = "Basic " + encodedAuthString;
 //        return authHeader;
 //    }
+
+    public void login(Map<String, String> credentials) {
+
+        // prepare a request
+        RequestSpecification request = RestAssured
+                .given()
+                .baseUri("https://skryabin.com/recruit/api/v1")
+                .header("Content-Type", "application/json")
+                .body(credentials)
+                .log().all();
+
+        // execute request
+        Response response = request
+                .when()
+                .post("/login");
+
+        // parse response
+        Map<String, Object> result = response
+                .then()
+                .log().all()
+                .statusCode(200)
+                .extract()
+                .jsonPath()
+                .getMap("");
+
+        String token = (String) result.get("token");
+        System.out.println(token);
+
+        authToken = "Bearer " + token;
+    }
 
     public List<Map<String, Object>> getPositions() {
         // prepare request
@@ -82,7 +116,12 @@ public class RestClient {
                 .extract()
                 .jsonPath()
                 .getMap("");
-        return (Integer) createdPos.get("id");
+
+        int id = (Integer) createdPos.get("id");
+
+        saveTestData("lastCreatedPositionId", id);
+
+        return id;
     }
 
     public int updatePosition(int id, Map<String,String> position) {
@@ -141,7 +180,7 @@ public class RestClient {
                 .statusCode(204);
     }
 
-    public List<Map<String,String>> getCandidates() {
+    public List<Map<String,Object>> getCandidates() {
         RequestSpecification request = RestAssured
                 .given()
                 .log().all()
@@ -158,7 +197,7 @@ public class RestClient {
                 .getList("");
     }
 
-    public Map<String,String> getCandidateById(int id) {
+    public Map<String,Object> getCandidateById(int id) {
         RequestSpecification request = RestAssured
                 .given()
                 .log().all()
@@ -192,7 +231,13 @@ public class RestClient {
                 .extract()
                 .jsonPath()
                 .getMap("");
-        return (Integer) createdCandidate.get("id");
+
+        // HTTP/1.1 201 Created
+        // "password": "$2a$08$svMZbssCZgU4u6wSDV4vzekjrIetQ3GHkjsw8Jupg5iacEgFqui4C"
+        // ...
+        int id = (Integer) createdCandidate.get("id");
+        saveTestData("lastCreatedCandidateId", id);
+        return id;
     }
 
     public int updateCandidate(int id, Map<String,String> candidate) {
@@ -251,4 +296,72 @@ public class RestClient {
                 .statusCode(204);
     }
 
+    public void logout() {
+
+        System.out.println("---------------------------------------");
+        System.out.println("Logout Request Log");
+        System.out.println("---------------------------------------");
+        // prepare a request
+        RequestSpecification request = RestAssured
+                .given()
+                .baseUri("https://skryabin.com/recruit/api/v1")
+                .header("Content-Type", "application/json")
+                .header("Authorization", authToken)
+                .log().all();
+
+        // execute request
+        Response response = request
+                .when()
+                .post("/logout");
+
+        System.out.println("\n---------------------------------------");
+        System.out.println("Logout Response Log");
+        System.out.println("---------------------------------------");
+        // parse response
+        response
+                .then()
+                .log().all()
+                .statusCode(200);
+    }
+
+    public byte[] addResume(int candidateId, File file, String fileType) {
+        String mime; // a media type (also known as a Multipurpose Internet Mail Extensions or MIME type)
+        switch (fileType) {
+            case "pdf" : mime = "application/pdf";
+                         break;
+            default: mime = "application/octet-stream"; // generic binary data (or binary data whose true type is unknown)
+        }
+        RequestSpecification request = RestAssured
+                .given()
+                .baseUri("https://skryabin.com/recruit/api/v1")
+                .header("Authorization", authToken)
+                .multiPart("resume", file, mime)
+                .log().all();
+        Response response = request
+                .when()
+                .post("/candidates/" + candidateId + "/resume");
+        return response.then()
+                .log().all()
+                .statusCode(201)
+                .extract()
+                .body()
+                .asByteArray();
+    }
+
+    public byte[] getResume(int candidateId) {
+        RequestSpecification request = RestAssured
+                .given()
+                .baseUri("https://skryabin.com/recruit/api/v1")
+                .log().all();
+        Response response = request
+                .when()
+                .get("/candidates/" + candidateId + "/resume");
+        return response
+                .then()
+                .log().all()
+                .statusCode(200)
+                .extract()
+                .body()
+                .asByteArray();
+    }
 }
