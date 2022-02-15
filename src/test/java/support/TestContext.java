@@ -24,7 +24,9 @@ import java.io.FileNotFoundException;
 import java.io.InputStream;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -34,6 +36,34 @@ public class TestContext {
 
     public static WebDriver getDriver() {
         return driver;
+    }
+
+    private static Map<String, Object> testData = new HashMap<>();
+    private static String timestamp;
+
+    public static void setTimestamp() {
+        timestamp = new SimpleDateFormat("+yyyy-MM-dd-hh-mm-ss").format(new Date());
+    }
+
+    public String getTimestamp() {
+        return timestamp;
+    }
+
+    public static void saveTestData(String key, Object data) {
+        testData.put(key, data);
+
+    }
+
+    public static Integer readTestDataInteger(String key) {
+        return (Integer) testData.get(key);
+    }
+
+    public static String readTestDataString(String key) {
+        return (String) testData.get(key);
+    }
+
+    public static Map<String, Object> readTestDataMap(String key) {
+        return (Map<String, Object>) testData.get(key);
     }
 
     public static void initialize() {
@@ -52,6 +82,34 @@ public class TestContext {
         InputStream stream = getStream("config");
         Config config = new Yaml().loadAs(stream, Config.class);
         return config;
+    }
+
+    public static Map<String, String> getPositionDataFromFile(String dataKey, String project) {
+        Map<String, String> position = getData(dataKey, project);
+
+        String originalDateOpen = position.get("dateOpen");
+        if (originalDateOpen != null) {
+            String isoDate = new SimpleDateFormat("yyyy-MM-dd").format(new Date(originalDateOpen));
+            position.put("dateOpen", isoDate);
+        }
+
+        String originalTitle = position.get("title");
+        if (originalTitle != null) {
+            String newTitle = originalTitle + timestamp;
+            position.put("title", newTitle);
+        }
+        return position;
+    }
+
+    public static Map<String, String> getCandidateDataFromFile(String dataKey, String project) {
+        Map<String, String> candidate = getData(dataKey, project);
+
+        String originalEmail = candidate.get("email");
+        if (originalEmail != null) {
+            String newEmail = originalEmail.replace("@", timestamp + "@");
+            candidate.put("email", newEmail);
+        }
+        return candidate;
     }
 
     public static Map<String, String> getData(String dataKey, String project) {

@@ -8,10 +8,12 @@ import java.util.List;
 import java.util.Map;
 
 import static support.TestContext.getData;
+import static support.TestContext.saveTestData;
 
 public class RestClient {
+    private static String authToken;
 
-//    private String getBasicAuthHeader() {
+    //    private String getBasicAuthHeader() {
 //        Map<String, String> credentials = getData("recruiter", "careers");
 //        String username = credentials.get("email");
 //        String password = credentials.get("password");
@@ -20,6 +22,35 @@ public class RestClient {
 //        String authHeader = "Basic " + encodedAuthString;
 //        return authHeader;
 //    }
+    public void login(Map<String, String> credentials) {
+
+        // prepare a request
+        RequestSpecification request = RestAssured
+                .given()
+                .baseUri("https://skryabin.com/recruit/api/v1")
+                .header("Content-Type", "application/json")
+                .body(credentials)
+                .log().all();
+
+        // execute request
+        Response response = request
+                .when()
+                .post("/login");
+
+        // parse response
+        Map<String, Object> result = response
+                .then()
+                .log().all()
+                .statusCode(200)
+                .extract()
+                .jsonPath()
+                .getMap("");
+
+        String token = (String) result.get("token");
+        System.out.println(token);
+
+        authToken = "Bearer " + token;
+    }
 
     public List<Map<String, Object>> getPositions() {
         // prepare a request
@@ -103,6 +134,7 @@ public class RestClient {
                 .auth().preemptive().basic(credentials.get("email"), credentials.get("password"))
                 .baseUri("https://skryabin.com/recruit/api/v1")
                 .header("Content-Type", "application/json")
+                .header("Authorization", authToken)
                 .body(position)
                 .log().all();
 
@@ -121,8 +153,89 @@ public class RestClient {
                 .getMap("");
 
         int id = (Integer) result.get("id");
+        saveTestData("lastCreatedPositionId", id);
 
         return id;
+    }
+
+    public void updatePositionById(int id, Map<String, String> fieldsToUpdate) {
+        // prepare a request
+        RequestSpecification request = RestAssured
+                .given()
+                .baseUri("https://skryabin.com/recruit/api/v1")
+                .header("Content-Type", "application/json")
+                .header("Authorization", authToken)
+                .body(fieldsToUpdate)
+                .log().all();
+
+        // execute request
+        Response response = request
+                .when()
+                .patch("/positions/" + id);
+
+        // parse response
+        Map<String, Object> result = response
+                .then()
+                .log().all()
+                .statusCode(200)
+                .extract()
+                .jsonPath()
+                .getMap("");
+
+    }
+
+    public void deletePositionById(int id) {
+        System.out.println("---------------------------------------");
+        System.out.println("Delete Position By Id Request Log");
+        System.out.println("---------------------------------------");
+        // prepare a request
+        RequestSpecification request = RestAssured
+                .given()
+                .baseUri("https://skryabin.com/recruit/api/v1")
+                .header("Authorization", authToken)
+                .log().all();
+
+        // execute request
+        Response response = request
+                .when()
+                .delete("/positions/" + id);
+
+        System.out.println("\n---------------------------------------");
+        System.out.println("Delete Position By Id Response Log");
+        System.out.println("---------------------------------------");
+        // parse response
+        response
+                .then()
+                .log().all()
+                .statusCode(204);
+    }
+
+    public void logout() {
+
+        System.out.println("---------------------------------------");
+        System.out.println("Logout Request Log");
+        System.out.println("---------------------------------------");
+        // prepare a request
+        RequestSpecification request = RestAssured
+                .given()
+                .baseUri("https://skryabin.com/recruit/api/v1")
+                .header("Content-Type", "application/json")
+                .header("Authorization", authToken)
+                .log().all();
+
+        // execute request
+        Response response = request
+                .when()
+                .post("/logout");
+
+        System.out.println("\n---------------------------------------");
+        System.out.println("Logout Response Log");
+        System.out.println("---------------------------------------");
+        // parse response
+        response
+                .then()
+                .log().all()
+                .statusCode(200);
     }
 
     public List<Map<String, Object>> getCandidates() {
@@ -160,6 +273,7 @@ public class RestClient {
                 .auth().preemptive().basic(credentials.get("email"), credentials.get("password"))
                 .baseUri("https://skryabin.com/recruit/api/v1")
                 .header("Content-Type", "application/json")
+                .header("Authorization", authToken)
                 .body(candidate)
                 .log().all();
 
@@ -178,7 +292,59 @@ public class RestClient {
                 .getMap("");
 
         int id = (Integer) result.get("id");
-
-        return id;
+        saveTestData("lastCreatedCandidateId", id);
+        return (Integer) result.get("id");
     }
+
+    public void updateCandidateById(int id, Map<String, String> fieldsToUpdate) {
+        // prepare a request
+        RequestSpecification request = RestAssured
+                .given()
+                .baseUri("https://skryabin.com/recruit/api/v1")
+                .header("Content-Type", "application/json")
+                .header("Authorization", authToken)
+                .body(fieldsToUpdate)
+                .log().all();
+
+        // execute request
+        Response response = request
+                .when()
+                .patch("/candidates/" + id);
+
+        // parse response
+        Map<String, Object> result = response
+                .then()
+                .log().all()
+                .statusCode(200)
+                .extract()
+                .jsonPath()
+                .getMap("");
+
+    }
+    public void deleteCandidateById(int id) {
+        System.out.println("---------------------------------------");
+        System.out.println("Delete Candidate By Id Request Log");
+        System.out.println("---------------------------------------");
+        // prepare a request
+        RequestSpecification request = RestAssured
+                .given()
+                .baseUri("https://skryabin.com/recruit/api/v1")
+                .header("Authorization", authToken)
+                .log().all();
+
+        // execute request
+        Response response = request
+                .when()
+                .delete("/candidates/" + id);
+
+        System.out.println("\n---------------------------------------");
+        System.out.println("Delete Candidate By Id Response Log");
+        System.out.println("---------------------------------------");
+        // parse response
+        response
+                .then()
+                .log().all()
+                .statusCode(204);
+    }
+
 }
