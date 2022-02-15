@@ -17,3 +17,15 @@ candidateJD_updated:
   summary: I live in Canada!
   city: Calgary
   state: AB
+sdet:
+  firstName: Richard
+  lastName: Roe
+  address: 123 Main St
+  summary: Work-work!
+  city: Regina
+  state: SK
+sdet_updated:
+  address: 456 Important Ave
+  summary: Zug-zug!
+  city: Edmonton
+  state: AB

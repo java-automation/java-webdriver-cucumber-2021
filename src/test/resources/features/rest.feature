@@ -22,8 +22,8 @@ Feature: REST API
     Given I login via REST API as "recruiter"
     When  I create via REST API "sdet" candidate
     Then  I verify via REST API new "sdet" candidate is in the list
-    When  I add via REST API "pdf" resume to a new candidate
-    Then  I verify via REST API that "pdf" resume has been added
+    #When  I add via REST API "pdf" resume to a new candidate
+    #Then  I verify via REST API that "pdf" resume has been added
     When  I update via REST API new "sdet" candidate
     Then  I verify via REST API new "sdet" candidate is updated
     When  I delete via REST API new candidate

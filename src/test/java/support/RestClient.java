@@ -168,6 +168,7 @@ public class RestClient {
         RequestSpecification request = RestAssured
                 .given()
                 .baseUri("https://skryabin.com/recruit/api/v1")
+                .header("Authorization", bearerToken)
                 .contentType("application/json")
                 .body(candidateProfile)
                 .log().all();
@@ -185,6 +186,27 @@ public class RestClient {
                 .getMap("");
 
         return (Integer) result.get("id");
+    }
+
+    public List<Map<String, Object>> getCandidates() {
+        RequestSpecification request = RestAssured
+                .given()
+                .baseUri("https://skryabin.com/recruit/api/v1")
+                .log().all();
+
+        Response response = request
+                .when()
+                .get("/candidates");
+
+        List<Map<String, Object>> candidates = response
+                .then()
+                .log().all()
+                .statusCode(200)
+                .extract()
+                .jsonPath()
+                .getList("");
+
+        return candidates;
     }
 
     public Map<String, Object> getCandidateById(int id) {

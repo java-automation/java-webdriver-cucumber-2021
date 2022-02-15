@@ -135,4 +135,69 @@ public class RestStepDefs {
             assertThat(actualId).isNotEqualTo(deletedId);
         }
     }
+
+    @When("I create via REST API {string} candidate")
+    public void iCreateViaRESTAPICandidate(String candidate) {
+        int id = restClient.createCandidate(getCandidateDataFromFile(candidate, "careers"));
+        saveTestData("lastCreatedCandidateId", id);
+    }
+
+    @Then("I verify via REST API new {string} candidate is in the list")
+    public void iVerifyViaRESTAPINewCandidateIsInTheList(String candidate) {
+        Map<String, String> expectedCandidate = getCandidateDataFromFile(candidate, "careers");
+        List<Map<String, Object>> allCandidates = restClient.getCandidates();
+        int expectedId = readTestDataAsInteger("lastCreatedCandidateId");
+        boolean isFound = false;
+        for (Map<String, Object> actualCandidate : allCandidates) {
+            int actualId = (Integer) actualCandidate.get("id");
+            if (actualId == expectedId) {
+                isFound = true;
+                for (String key : expectedCandidate.keySet()) {
+                    if (key.equals("password")) continue;
+                    System.out.println("Verification for: " + key);
+                    System.out.println("Actual: " + actualCandidate.get(key));
+                    System.out.println("Expected: " + expectedCandidate.get(key));
+                    assertThat(actualCandidate.get(key)).isEqualTo(expectedCandidate.get(key));
+                }
+                break;
+            }
+        }
+        assertThat(isFound).isTrue();
+    }
+
+    @When("I update via REST API new {string} candidate")
+    public void iUpdateViaRESTAPINewCandidate(String candidate) {
+        Map<String, String> fieldsToUpdate = getCandidateDataFromFile(candidate + "_updated", "careers");
+        int candidateToUpdate = readTestDataAsInteger("lastCreatedCandidateId");
+        restClient.updateCandidateById(fieldsToUpdate, candidateToUpdate);
+    }
+
+    @Then("I verify via REST API new {string} candidate is updated")
+    public void iVerifyViaRESTAPINewCandidateIsUpdated(String candidate) {
+        int updatedCandidateId = readTestDataAsInteger("lastCreatedCandidateId");
+        Map<String, String> expectedFields = getCandidateDataFromFile(candidate + "_updated", "careers");
+        Map<String, Object> actualCandidate = restClient.getCandidateById(updatedCandidateId);
+        for (String key : expectedFields.keySet()) {
+            System.out.println("Verification for: " + key);
+            System.out.println("Actual: " + actualCandidate.get(key));
+            System.out.println("Expected: " + expectedFields.get(key));
+            assertThat(actualCandidate.get(key)).isEqualTo(expectedFields.get(key));
+        }
+    }
+
+    @When("I delete via REST API new candidate")
+    public void iDeleteViaRESTAPINewCandidate() {
+        int candidateIdToDelete = readTestDataAsInteger("lastCreatedCandidateId");
+        restClient.deleteCandidateById(candidateIdToDelete);
+    }
+
+    @Then("I verify via REST API new candidate is deleted")
+    public void iVerifyViaRESTAPINewCandidateIsDeleted() {
+        List<Map<String, Object>> allCandidates = restClient.getCandidates();
+        int deletedId = readTestDataAsInteger("lastCreatedCandidateId");
+        for (Map<String, Object> actualCandidate : allCandidates) {
+            int actualId = (Integer) actualCandidate.get("id");
+            assertThat(actualId).isNotEqualTo(deletedId);
+        }
+    }
 }

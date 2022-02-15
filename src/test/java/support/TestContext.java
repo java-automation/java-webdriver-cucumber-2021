@@ -26,7 +26,6 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Random;
 import java.util.logging.Level;
 
 public class TestContext {
@@ -37,7 +36,7 @@ public class TestContext {
     private static String timeStamp;
 
     public static void setTimestamp() {
-        timeStamp = new SimpleDateFormat("yyyy-MM-dd-hh-mm-ss").format(new Date());
+        timeStamp = new SimpleDateFormat("+yyyy-MM-dd-hh-mm-ss").format(new Date());
     }
 
     public static String getTimeStamp() {
@@ -90,9 +89,7 @@ public class TestContext {
         Map<String, String> candidateProfile = getData(key, project);
         String originalName = candidateProfile.get("firstName");
         if (originalName != null) {
-            Random r = new Random();
-            int rID = r.nextInt(10000) + 1;
-            String newName = originalName + " " + rID;
+            String newName = originalName + " " + timeStamp;
             candidateProfile.put("firstName", newName);
         }
 
