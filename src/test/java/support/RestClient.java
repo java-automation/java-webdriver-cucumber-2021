@@ -13,6 +13,36 @@ import static support.TestContext.saveTestData;
 public class RestClient {
     private static String authToken;
 
+    public void login(Map<String, String> credentials) {
+
+        // prepare a request
+        RequestSpecification request = RestAssured
+                .given()
+                .baseUri("https://skryabin.com/recruit/api/v1")
+                .header("Content-Type", "application/json")
+                .body(credentials)
+                .log().all();
+
+        // execute request
+        Response response = request
+                .when()
+                .post("/login");
+
+        // parse response
+        Map<String, Object> result = response
+                .then()
+                .log().all()
+                .statusCode(200)
+                .extract()
+                .jsonPath()
+                .getMap("");
+
+        String token = (String) result.get("token");
+        System.out.println(token);
+
+        authToken = "Bearer " + token;
+    }
+
 //    private String getBasicAuthHeader() {
 //        Map<String, String> credentials = getData("recruiter", "careers");
 //        String username = credentials.get("email");
@@ -154,6 +184,34 @@ public class RestClient {
                 .then()
                 .log().all()
                 .statusCode(204);
+    }
+
+    public void logout() {
+
+        System.out.println("---------------------------------------");
+        System.out.println("Logout Request Log");
+        System.out.println("---------------------------------------");
+        // prepare a request
+        RequestSpecification request = RestAssured
+                .given()
+                .baseUri("https://skryabin.com/recruit/api/v1")
+                .header("Content-Type", "application/json")
+                .header("Authorization", authToken)
+                .log().all();
+
+        // execute request
+        Response response = request
+                .when()
+                .post("/logout");
+
+        System.out.println("\n---------------------------------------");
+        System.out.println("Logout Response Log");
+        System.out.println("---------------------------------------");
+        // parse response
+        response
+                .then()
+                .log().all()
+                .statusCode(200);
     }
 
 }

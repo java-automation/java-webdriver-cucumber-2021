@@ -37,6 +37,14 @@ public class TestContext {
     private static Map<String, Object> testData = new HashMap<>();
     private static String timestamp;
 
+    public static void setTimestamp() {
+        timestamp = new SimpleDateFormat("+yyyy-MM-dd-hh-mm-ss").format(new Date());
+    }
+
+    public String getTimestamp() {
+        return timestamp;
+    }
+
     public static void saveTestData(String key, Object data) {
         testData.put(key, data);
     }
@@ -285,4 +293,6 @@ public class TestContext {
         driver.manage().window().setPosition(position);
         driver.manage().window().setSize(size);
     }
+
+
 }
