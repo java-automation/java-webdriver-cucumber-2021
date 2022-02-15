@@ -1,21 +1,30 @@
 package definitions;
 
 import io.cucumber.java.en.And;
+import io.cucumber.java.en.Given;
+import io.cucumber.java.en.Then;
+import io.cucumber.java.en.When;
 import support.RestClient;
 
+import java.util.List;
 import java.util.Map;
 
-import static support.TestContext.getData;
+import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
+import static support.TestContext.*;
 
 public class RestStepDefs {
 
-    Map<String, String> defaultCredentials = getData("recruiter", "secrets/careers");
-    RestClient restClient = new RestClient(defaultCredentials);
+    private final RestClient restClient = new RestClient();
+
+    private final Map<String, String> defaultCredentials = getData("recruiter", "secrets/careers");
 
     @And("I perform CRUD operations with positions")
     public void iPerformCRUDOperationsWithPositions() {
+        //LOGIN
+        restClient.login(defaultCredentials);
+
         //CREATE
-        Map<String, String> position = getData("position2", "careers");
+        Map<String, String> position = getPositionDataFromFile("leetProgrammer", "careers");
         int id = restClient.createPosition(position);
 
         //READ
@@ -23,11 +32,9 @@ public class RestStepDefs {
         restClient.getPositionById(id);
 
         //UPDATE
-        position.put("title", "new updated Leet Programmer");
-        position.put("description", "Moved office to Canada!");
-        position.put("city", "Calgary");
-        position.put("state", "AB");
-        restClient.updatePositionById(position, id);
+        Map<String, String> positionUpdated = getPositionDataFromFile("leetProgrammer_updated", "careers");
+        restClient.updatePositionById(positionUpdated, id);
+        restClient.getPositionById(id);
 
         //DELETE
         restClient.deletePositionById(id);
@@ -35,23 +42,97 @@ public class RestStepDefs {
 
     @And("I perform CRUD operations with candidates")
     public void iPerformCRUDOperationsWithCandidates() {
+        //LOGIN
+        restClient.login(defaultCredentials);
+
         //CREATE
-        Map<String, String> candidateProfile = getData("candidate2", "careers");
-        Map<String, String> candidateCredentials = getData("candidate2", "secrets/careers");
-        candidateProfile.putAll(candidateCredentials);
-        int id = restClient.createCandidate(candidateProfile);
+        Map<String, String> candidate = getCandidateDataFromFile("candidateJD", "careers");
+        int id = restClient.createCandidate(candidate);
 
         //READ
         restClient.getCandidateById(id);
 
         //UPDATE
-        candidateProfile.put("address", "123 Main St");
-        candidateProfile.put("summary", "I live in Canada!");
-        candidateProfile.put("city", "Calgary");
-        candidateProfile.put("state", "AB");
-        restClient.updateCandidateById(candidateProfile, id);
+        Map<String, String> candidateUpdated = getCandidateDataFromFile("candidateJD_updated", "careers");
+        restClient.updateCandidateById(candidateUpdated, id);
+        restClient.getCandidateById(id);
 
         //DELETE
         restClient.deleteCandidateById(id);
+    }
+
+    @Given("I login via REST API as {string}")
+    public void iLoginViaRESTAPIAs(String role) {
+        Map<String, String> credentials = getData(role, "secrets/careers");
+        restClient.login(credentials);
+    }
+
+    @And("I logout via REST API")
+    public void iLogoutViaRESTAPI() {
+        restClient.logout();
+    }
+
+    @When("I create via REST API {string} position")
+    public void iCreateViaRESTAPIPosition(String position) {
+        int id = restClient.createPosition(getPositionDataFromFile(position, "careers"));
+        saveTestData("lastCreatedPositionId", id);
+    }
+
+    @Then("I verify via REST API new {string} position is in the list")
+    public void iVerifyViaRESTAPINewPositionIsInTheList(String position) {
+        Map<String, String> expectedPosition = getPositionDataFromFile(position, "careers");
+        List<Map<String, Object>> allPositions = restClient.getPositions();
+        int expectedId = readTestDataAsInteger("lastCreatedPositionId");
+        boolean isFound = false;
+        for (Map<String, Object> actualPosition : allPositions) {
+            int actualId = (Integer) actualPosition.get("id");
+            if (actualId == expectedId) {
+                isFound = true;
+                for (String key : expectedPosition.keySet()) {
+                    System.out.println("Verification for: " + key);
+                    System.out.println("Actual: " + actualPosition.get(key));
+                    System.out.println("Expected: " + expectedPosition.get(key));
+                    assertThat(actualPosition.get(key)).isEqualTo(expectedPosition.get(key));
+                }
+                break;
+            }
+        }
+        assertThat(isFound).isTrue();
+    }
+
+    @When("I update via REST API new {string} position")
+    public void iUpdateViaRESTAPINewPosition(String position) {
+        Map<String, String> fieldsToUpdate = getPositionDataFromFile(position + "_updated", "careers");
+        int positionToUpdate = readTestDataAsInteger("lastCreatedPositionId");
+        restClient.updatePositionById(fieldsToUpdate, positionToUpdate);
+    }
+
+    @Then("I verify via REST API new {string} position is updated")
+    public void iVerifyViaRESTAPINewPositionIsUpdated(String position) {
+        int updatedPositionId = readTestDataAsInteger("lastCreatedPositionId");
+        Map<String, String> expectedFields = getPositionDataFromFile(position + "_updated", "careers");
+        Map<String, Object> actualPosition = restClient.getPositionById(updatedPositionId);
+        for (String key : expectedFields.keySet()) {
+            System.out.println("Verification for: " + key);
+            System.out.println("Actual: " + actualPosition.get(key));
+            System.out.println("Expected: " + expectedFields.get(key));
+            assertThat(actualPosition.get(key)).isEqualTo(expectedFields.get(key));
+        }
+    }
+
+    @When("I delete via REST API new position")
+    public void iDeleteViaRESTAPINewPosition() {
+        int positionIdToDelete = readTestDataAsInteger("lastCreatedPositionId");
+        restClient.deletePositionById(positionIdToDelete);
+    }
+
+    @Then("I verify via REST API new position is deleted")
+    public void iVerifyViaRESTAPINewPositionIsDeleted() {
+        List<Map<String, Object>> allPositions = restClient.getPositions();
+        int deletedId = readTestDataAsInteger("lastCreatedPositionId");
+        for (Map<String, Object> actualPosition : allPositions) {
+            int actualId = (Integer) actualPosition.get("id");
+            assertThat(actualId).isNotEqualTo(deletedId);
+        }
     }
 }

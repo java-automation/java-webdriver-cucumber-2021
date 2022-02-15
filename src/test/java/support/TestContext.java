@@ -22,21 +22,50 @@ import org.yaml.snakeyaml.Yaml;
 import java.io.*;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Random;
 import java.util.logging.Level;
 
 public class TestContext {
 
     private static WebDriver driver;
     private static Config config;
+    private static Map<String, Object> testData = new HashMap<>();
+    private static String timeStamp;
+
+    public static void setTimestamp() {
+        timeStamp = new SimpleDateFormat("yyyy-MM-dd-hh-mm-ss").format(new Date());
+    }
+
+    public static String getTimeStamp() {
+        return timeStamp;
+    }
+
+    public static void saveTestData(String key, Object data) {
+        testData.put(key, data);
+    }
+
+    public static Integer readTestDataAsInteger(String key) {
+        return (Integer) testData.get(key);
+    }
+
+    public static String readTestDataAsString(String key) {
+        return (String) testData.get(key);
+    }
+
+    public static Map<String, Object> readTestDataAsMap(String key) {
+        return (Map<String, Object>) testData.get(key);
+    }
 
     public static WebDriver getDriver() {
         return driver;
     }
 
     public static JavascriptExecutor getExecutor() {
-        return (JavascriptExecutor)driver;
+        return (JavascriptExecutor) driver;
     }
 
     public static Actions getActions() {
@@ -47,13 +76,37 @@ public class TestContext {
         return config;
     }
 
-    private static void setConfig() {
-        try {
-            config = new YAMLMapper().readValue(getStream("config"), Config.class);
-        } catch (IOException e) {
-            throw new Error("Couldn't process test config data! Error: " + e);
+    public static Map<String, String> getPositionDataFromFile(String key, String project) {
+        Map<String, String> position = getData(key, project);
+        String originalTitle = position.get("title");
+        if (originalTitle != null) {
+            String newTitle = originalTitle + " " + timeStamp;
+            position.put("title", newTitle);
         }
-        //config = new Yaml().loadAs(getStream("config"), Config.class);
+        return position;
+    }
+
+    public static Map<String, String> getCandidateDataFromFile(String key, String project) {
+        Map<String, String> candidateProfile = getData(key, project);
+        String originalName = candidateProfile.get("firstName");
+        if (originalName != null) {
+            Random r = new Random();
+            int rID = r.nextInt(10000) + 1;
+            String newName = originalName + " " + rID;
+            candidateProfile.put("firstName", newName);
+        }
+
+        Map<String, String> candidateCredentials = getData(key, "secrets/" + project);
+        if (candidateCredentials != null) { //if updating profile only - no _updated record in secrets
+            String originalLogin = candidateCredentials.get("email");
+            if (originalLogin != null) {
+                int atSignIndex = originalLogin.indexOf("@");
+                String newLogin = originalLogin.substring(0, atSignIndex) + timeStamp + originalLogin.substring(atSignIndex);
+                candidateCredentials.put("email", newLogin);
+                candidateProfile.putAll(candidateCredentials);
+            }
+        }
+        return candidateProfile;
     }
 
     public static Map<String, String> getData(String recordKey, String project) {
@@ -67,6 +120,15 @@ public class TestContext {
         } catch (FileNotFoundException e) {
             throw new Error("Couldn't stream project data for: " + project + ". Error: " + e);
         }
+    }
+
+    private static void setConfig() {
+        try {
+            config = new YAMLMapper().readValue(getStream("config"), Config.class);
+        } catch (IOException e) {
+            throw new Error("Couldn't process test config data! Error: " + e);
+        }
+        //config = new Yaml().loadAs(getStream("config"), Config.class);
     }
 
     public static void initialize() {

@@ -1,24 +1,19 @@
-position:
+leetProgrammer:
   title: Leet Programmer
   description: Need a programmer with a skill over 9000!
   city: Spokane
   state: WA
   dateOpen: "2022-03-01"
-position2:
-  title: Leet Programmer V2
-  description: Need another programmer with a skill over 9000!
-  city: Seattle
-  state: WA
-  dateOpen: "2022-03-01"
-position3:
-  title: Leet Programmer V3
-  description: Need third programmer with a skill over 9000!
-  city: Portland
-  state: OR
-  dateOpen: "2022-03-01"
-candidate1:
-  firstName: John II
+leetProgrammer_updated:
+  description: Need a programmer with a skill over 9000! (moved to Canada)
+  city: Calgary
+  state: AB
+  dateOpen: "2022-03-15"
+candidateJD:
+  firstName: John
   lastName: Doe
-candidate2:
-  firstName: Richard II
-  lastName: Roe
+candidateJD_updated:
+  address: 123 Main St
+  summary: I live in Canada!
+  city: Calgary
+  state: AB
