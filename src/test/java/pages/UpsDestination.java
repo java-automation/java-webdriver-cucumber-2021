@@ -7,6 +7,8 @@ import org.openqa.selenium.support.ui.Select;
 
 import java.util.List;
 
+import static support.TestContext.getWait;
+
 public class UpsDestination extends UpsCreateShipment {
 
     public UpsDestination() {

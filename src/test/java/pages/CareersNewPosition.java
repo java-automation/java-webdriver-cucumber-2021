@@ -13,6 +13,7 @@ import java.util.Locale;
 import java.util.Map;
 
 import static support.TestContext.getDriver;
+import static support.TestContext.getWait;
 
 public class CareersNewPosition extends CareersRecruit {
 

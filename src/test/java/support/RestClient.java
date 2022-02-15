@@ -17,9 +17,9 @@ public class RestClient {
         if ((bearerToken != null) && (!bearerToken.isEmpty())) logout();
         basicAuthCredentials = credientials;
 
-        System.out.println("\n------------------------------");
+        System.out.println("\n----------------------------------------------");
         System.out.println("Login Request Log");
-        System.out.println("------------------------------");
+        System.out.println("----------------------------------------------");
         RequestSpecification request = RestAssured
                 .given()
                 .auth().preemptive().basic(getBasicAuthLogin(),getBasicAuthPassword())
@@ -32,6 +32,9 @@ public class RestClient {
                 .when()
                 .post("/login");
 
+        System.out.println("\n----------------------------------------------");
+        System.out.println("Login Response Log");
+        System.out.println("----------------------------------------------");
         Map<String, Object> result = response
                 .then()
                 .log().all()
@@ -44,6 +47,9 @@ public class RestClient {
     }
 
     public void logout() {
+        System.out.println("\n----------------------------------------------");
+        System.out.println("Logout Request Log");
+        System.out.println("----------------------------------------------");
         RequestSpecification request = RestAssured
                 .given()
                 .baseUri("https://skryabin.com/recruit/api/v1")
@@ -55,6 +61,9 @@ public class RestClient {
                 .when()
                 .post("/logout");
 
+        System.out.println("\n----------------------------------------------");
+        System.out.println("Logout Response Log");
+        System.out.println("----------------------------------------------");
         response
                 .then()
                 .log().all()
@@ -62,6 +71,9 @@ public class RestClient {
     }
 
     public List<Map<String, Object>> getPositions() {
+        System.out.println("\n----------------------------------------------");
+        System.out.println("Get Positions Request Log");
+        System.out.println("----------------------------------------------");
         RequestSpecification request = RestAssured
                 .given()
                 .baseUri("https://skryabin.com/recruit/api/v1")
@@ -71,6 +83,9 @@ public class RestClient {
                 .when()
                 .get("/positions");
 
+        System.out.println("\n----------------------------------------------");
+        System.out.println("Get Positions Response Log");
+        System.out.println("----------------------------------------------");
         List<Map<String, Object>> positions = response
                 .then()
                 .log().all()
@@ -83,6 +98,9 @@ public class RestClient {
     }
 
     public Map<String, Object> getPositionById(int id) {
+        System.out.println("\n----------------------------------------------");
+        System.out.println("Get Position By ID Request Log");
+        System.out.println("----------------------------------------------");
         RequestSpecification request = RestAssured
                 .given()
                 .baseUri("https://skryabin.com/recruit/api/v1")
@@ -92,6 +110,9 @@ public class RestClient {
                 .when()
                 .get("/positions/" + id);
 
+        System.out.println("\n----------------------------------------------");
+        System.out.println("Get Position By ID Response Log");
+        System.out.println("----------------------------------------------");
         Map<String, Object> position = response
                 .then()
                 .log().all()
@@ -104,6 +125,9 @@ public class RestClient {
     }
 
     public int createPosition(Map<String, String> position) {
+        System.out.println("\n----------------------------------------------");
+        System.out.println("Create Position Request Log");
+        System.out.println("----------------------------------------------");
         RequestSpecification request = RestAssured
                 .given()
                 .baseUri("https://skryabin.com/recruit/api/v1")
@@ -116,6 +140,9 @@ public class RestClient {
                 .when()
                 .post("/positions");
 
+        System.out.println("\n----------------------------------------------");
+        System.out.println("Create Position Response Log");
+        System.out.println("----------------------------------------------");
         Map<String, Object> result = response
                 .then()
                 .log().all()
@@ -128,6 +155,9 @@ public class RestClient {
     }
 
     public Map<String, Object> updatePositionById(Map<String, String> position, int id) {
+        System.out.println("\n----------------------------------------------");
+        System.out.println("Update Position By ID Request Log");
+        System.out.println("----------------------------------------------");
         RequestSpecification request = RestAssured
                 .given()
                 .baseUri("https://skryabin.com/recruit/api/v1")
@@ -140,6 +170,9 @@ public class RestClient {
                 .when()
                 .patch("/positions/" + id);
 
+        System.out.println("\n----------------------------------------------");
+        System.out.println("Update Position By ID Response Log");
+        System.out.println("----------------------------------------------");
         Map<String, Object> result = response
                 .then()
                 .log().all()
@@ -152,6 +185,9 @@ public class RestClient {
     }
 
     public void deletePositionById(int id) {
+        System.out.println("\n----------------------------------------------");
+        System.out.println("Delete Position By ID Request & Response Logs");
+        System.out.println("----------------------------------------------");
         RestAssured
                 .given()
                 .baseUri("https://skryabin.com/recruit/api/v1")
@@ -165,6 +201,9 @@ public class RestClient {
     }
 
     public int createCandidate(Map<String, String> candidateProfile) {
+        System.out.println("\n----------------------------------------------");
+        System.out.println("Create Candidate Request Log");
+        System.out.println("----------------------------------------------");
         RequestSpecification request = RestAssured
                 .given()
                 .baseUri("https://skryabin.com/recruit/api/v1")
@@ -177,6 +216,9 @@ public class RestClient {
                 .when()
                 .post("/candidates");
 
+        System.out.println("\n----------------------------------------------");
+        System.out.println("Create Candidate Response Log");
+        System.out.println("----------------------------------------------");
         Map<String, Object> result = response
                 .then()
                 .log().all()
@@ -189,6 +231,9 @@ public class RestClient {
     }
 
     public List<Map<String, Object>> getCandidates() {
+        System.out.println("\n----------------------------------------------");
+        System.out.println("Get Candidates Request Log");
+        System.out.println("----------------------------------------------");
         RequestSpecification request = RestAssured
                 .given()
                 .baseUri("https://skryabin.com/recruit/api/v1")
@@ -198,6 +243,9 @@ public class RestClient {
                 .when()
                 .get("/candidates");
 
+        System.out.println("\n----------------------------------------------");
+        System.out.println("Get Candidates Response Log");
+        System.out.println("----------------------------------------------");
         List<Map<String, Object>> candidates = response
                 .then()
                 .log().all()
@@ -210,6 +258,9 @@ public class RestClient {
     }
 
     public Map<String, Object> getCandidateById(int id) {
+        System.out.println("\n----------------------------------------------");
+        System.out.println("Get Candidate By ID Request Log");
+        System.out.println("----------------------------------------------");
         RequestSpecification request = RestAssured
                 .given()
                 .baseUri("https://skryabin.com/recruit/api/v1")
@@ -219,6 +270,9 @@ public class RestClient {
                 .when()
                 .get("/candidates/" + id);
 
+        System.out.println("\n----------------------------------------------");
+        System.out.println("Get Candidate By ID Response Log");
+        System.out.println("----------------------------------------------");
         Map<String, Object> candidate = response
                 .then()
                 .log().all()
@@ -231,6 +285,9 @@ public class RestClient {
     }
 
     public Map<String, Object> updateCandidateById(Map<String, String> candidateProfile, int id) {
+        System.out.println("\n----------------------------------------------");
+        System.out.println("Update Candidate By ID Request Log");
+        System.out.println("----------------------------------------------");
         RequestSpecification request = RestAssured
                 .given()
                 .baseUri("https://skryabin.com/recruit/api/v1")
@@ -243,6 +300,9 @@ public class RestClient {
                 .when()
                 .patch("/candidates/" + id);
 
+        System.out.println("\n----------------------------------------------");
+        System.out.println("Update Candidate By ID Response Log");
+        System.out.println("----------------------------------------------");
         Map<String, Object> result = response
                 .then()
                 .log().all()
@@ -255,6 +315,9 @@ public class RestClient {
     }
 
     public void deleteCandidateById(int id) {
+        System.out.println("\n----------------------------------------------");
+        System.out.println("Delete Candidate By ID Request & Response Logs");
+        System.out.println("----------------------------------------------");
         RestAssured
                 .given()
                 .baseUri("https://skryabin.com/recruit/api/v1")

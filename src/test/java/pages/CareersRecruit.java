@@ -6,8 +6,7 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 
-import static support.TestContext.getActions;
-import static support.TestContext.getDriver;
+import static support.TestContext.*;
 
 public class CareersRecruit extends CareersHome {
 
@@ -16,10 +15,10 @@ public class CareersRecruit extends CareersHome {
         setTitle("Careers Portal");
     }
 
-    @FindBy(xpath = "//h4[@class='card-title'][normalize-space(.)='All candidates']")
+    @FindBy(xpath = "//a[@href='/candidates']/h4")
     private WebElement listCandidatesLink;
 
-    @FindBy(xpath = "//h4[@class='card-title'][normalize-space(.)='New Position']")
+    @FindBy(xpath = "//a[@href='/new_position']/h4")
     private WebElement createPositionLink;
 
     private String getPositionCardXPathByTitle(String title) {

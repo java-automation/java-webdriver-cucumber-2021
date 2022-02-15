@@ -3,7 +3,6 @@ package pages;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.logging.LogEntry;
 import org.openqa.selenium.support.PageFactory;
-import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.util.List;
 
@@ -14,11 +13,8 @@ public class Page {
     private String url;
     private String title;
 
-    private final WebDriverWait wait;
-
     public Page() {
         PageFactory.initElements(getDriver(), this);
-        wait = new WebDriverWait(getDriver(), getConfig().getExplicitTimeout());
     }
 
     public void open() {
@@ -45,10 +41,6 @@ public class Page {
         this.title = title;
     }
 
-    public WebDriverWait getWait() {
-        return wait;
-    }
-
     public List<LogEntry> getLogs(String type) {
         return getDriver().manage().logs().get(type).getAll();
     }
@@ -60,6 +52,6 @@ public class Page {
 
     public void waitForAjaxToComplete()
     {
-        wait.until(driver -> getExecutor().executeScript("return (window.jQuery != null) && (jQuery.active === 0);"));
+        getWait().until(driver -> getExecutor().executeScript("return (window.jQuery != null) && (jQuery.active === 0);"));
     }
 }

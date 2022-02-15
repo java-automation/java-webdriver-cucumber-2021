@@ -17,6 +17,7 @@ import org.openqa.selenium.remote.DesiredCapabilities;
 import org.openqa.selenium.remote.LocalFileDetector;
 import org.openqa.selenium.remote.RemoteWebDriver;
 import org.openqa.selenium.safari.SafariDriver;
+import org.openqa.selenium.support.ui.WebDriverWait;
 import org.yaml.snakeyaml.Yaml;
 
 import java.io.*;
@@ -32,8 +33,10 @@ public class TestContext {
 
     private static WebDriver driver;
     private static Config config;
-    private static Map<String, Object> testData = new HashMap<>();
+    private static WebDriverWait wait;
     private static String timeStamp;
+
+    private static final Map<String, Object> testData = new HashMap<>();
 
     public static void setTimestamp() {
         timeStamp = new SimpleDateFormat("+yyyy-MM-dd-hh-mm-ss").format(new Date());
@@ -75,6 +78,14 @@ public class TestContext {
         return config;
     }
 
+    public static WebDriverWait getWait() {
+        return wait;
+    }
+
+    public static WebDriverWait getWait(int customWait) {
+        return new WebDriverWait(driver, customWait);
+    }
+
     public static Map<String, String> getPositionDataFromFile(String key, String project) {
         Map<String, String> position = getData(key, project);
         String originalTitle = position.get("title");
@@ -97,8 +108,8 @@ public class TestContext {
         if (candidateCredentials != null) { //if updating profile only - no _updated record in secrets
             String originalLogin = candidateCredentials.get("email");
             if (originalLogin != null) {
-                int atSignIndex = originalLogin.indexOf("@");
-                String newLogin = originalLogin.substring(0, atSignIndex) + timeStamp + originalLogin.substring(atSignIndex);
+                String[] emailParts = originalLogin.split("@");
+                String newLogin = emailParts[0] + timeStamp + "@" + emailParts[1];
                 candidateCredentials.put("email", newLogin);
                 candidateProfile.putAll(candidateCredentials);
             }
@@ -258,6 +269,7 @@ public class TestContext {
         }
         driver.manage().window().setPosition(position);
         driver.manage().window().setSize(size);
+        wait = getWait(config.getExplicitTimeout());
     }
 
     public static void teardown() {

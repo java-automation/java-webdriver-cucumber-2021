@@ -12,6 +12,7 @@ import java.util.Map;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static support.TestContext.getData;
+import static support.TestContext.getPositionDataFromFile;
 
 public class CareersStepDefs {
 
@@ -27,7 +28,7 @@ public class CareersStepDefs {
     public void iLoginAs(String role) {
         homePage.openLoginPage();
 
-        Map<String, String> credentials = getData("recruiter", "secrets/careers");
+        Map<String, String> credentials = getData(role, "secrets/careers");
         String email = credentials.get("email");
         username = email.substring(0, email.indexOf('@'));
 
@@ -58,7 +59,7 @@ public class CareersStepDefs {
     public void iCreateNewPosition() {
         homePage.openRecruitPage();
         recruitPage.clickNewPosition();
-        positionData = getData("position", "careers");
+        positionData = getPositionDataFromFile("leetProgrammer", "careers");
         newPositionPage.createPositionFromMap(positionData);
     }
 
