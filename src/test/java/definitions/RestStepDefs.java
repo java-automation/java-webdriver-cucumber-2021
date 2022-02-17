@@ -15,8 +15,12 @@ import static support.TestContext.*;
 public class RestStepDefs {
 
     RestClient restClient = new RestClient();
-    Map<String, String> automation = getData("positions");
-    Map<String, String> fieldsToUpdate = getData("updatedPosition");
+
+    Map<String, String> automation = getPositionDataFromFile("automation", "positions1");
+    Map<String, String> fieldsToUpdate = getPositionDataFromFile("automation_updated", "positions1");
+
+//    Map<String, String> automation = getData("positions");
+//    Map<String, String> fieldsToUpdate = getData("updatedPosition");
 
     // Map<String, String> candidateInfo = getData("candidate");
 
@@ -25,6 +29,10 @@ public class RestStepDefs {
     public void iWorkWithRestApi() {
 
         // CRUD operations for position
+        Map<String, String> credentials = getData("recruiter", "careers");
+
+        // LOGIN
+        restClient.login(credentials);
 
         // CREATE position
         int createdId = restClient.createPosition(automation);
@@ -35,6 +43,8 @@ public class RestStepDefs {
 
 
         // UPDATE position
+        restClient.updatePositionById(createdId, fieldsToUpdate);
+
         // restClient.updatePositionById(createdId, fieldsToUpdate);
         // restClient.updatePosition("zip", "10013", createdId);
 
@@ -46,20 +56,23 @@ public class RestStepDefs {
     @Given("I login via REST API as {string}")
     public void iLoginViaRESTAPIAs(String role) {
         System.out.println(role);
-        Map<String, String> credentials = getData("recruiter");
+        Map<String, String> credentials = getData(role, "careers");
+        //Map<String, String> credentials = getData("recruiter");
         restClient.login(credentials);
 
     }
 
     @When("I create via REST API {string} position")
     public void iCreateViaRESTAPIPosition(String type) {
-        Map<String, String> positionFromFile = getData("positions");
+        Map<String, String> positionFromFile = getPositionDataFromFile(type, "positions1");
+       // Map<String, String> positionFromFile = getData("positions");
         restClient.createPosition(positionFromFile);
     }
 
     @Then("I verify via REST API new {string} position is in the list")
     public void iVerifyViaRESTAPINewPositionIsInTheList(String type) throws InterruptedException {
-        Map<String, String> expectedPosition = getData("positions");
+      //  Map<String, String> expectedPosition = getData("positions");
+        Map<String, String> expectedPosition = getPositionDataFromFile(type, "positions1");
         List<Map<String, Object>> allPositions = restClient.getPositions();
         int expectedId = readTestDataInteger("lastCreatedPositionId");
         boolean isFound = false;
@@ -82,7 +95,8 @@ public class RestStepDefs {
 
     @When("I update via REST API new {string} position")
     public void iUpdateViaRESTAPINewPosition(String type) {
-        Map<String, String> fieldsToUpdate = getPositionDataFromFile(type + "_updated", "positions");
+      //  Map<String, String> fieldsToUpdate = getPositionDataFromFile(type + "_updated", "positions");
+        Map<String, String> fieldsToUpdate = getPositionDataFromFile(type + "_updated", "positions1");
         int positionIdToUpdate = readTestDataInteger("lastCreatedPositionId");
         restClient.updatePositionById(positionIdToUpdate, fieldsToUpdate);
     }
@@ -90,7 +104,7 @@ public class RestStepDefs {
     @Then("I verify via REST API new {string} position is updated")
     public void iVerifyViaRESTAPINewPositionIsUpdated(String type) {
         int updatedPositionId = readTestDataInteger("lastCreatedPositionId");
-        Map<String, String> expectedFields = getPositionDataFromFile(type + "_updated", "positions");
+        Map<String, String> expectedFields = getPositionDataFromFile(type + "_updated", "positions1");
         Map<String, Object> actualPosition = restClient.getPositionById(updatedPositionId);
 
         for(String key : expectedFields.keySet()) {

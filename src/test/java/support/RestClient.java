@@ -103,7 +103,9 @@ public class RestClient {
 
     public int createPosition(Map<String, String> position) {
 
-        Map<String, String> credentials = getData("recruiter");
+        Map<String, String> credentials = getData("recruiter", "careers");
+
+       // Map<String, String> credentials = getData("recruiter");
 
         // prepare a request
         RequestSpecification request = RestAssured
