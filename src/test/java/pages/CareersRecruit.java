@@ -14,7 +14,7 @@ import static support.TestContext.getData;
 import static support.TestContext.getDriver;
 
 public class CareersRecruit extends Page {
-
+    Map<String, String> data;
 
     @FindBy(xpath = "//a[@class='text-blue text-decoration-none']/h4[text()='New Position']")
     private WebElement newPositionButton;
@@ -49,14 +49,25 @@ public class CareersRecruit extends Page {
         }
 
     }
-    boolean isCardCreated(){
-        Map<String,String> data = getData("position", "career");
+
+
+    public boolean isCardCreated() {
+        data = getData("position", "career");
         boolean result = false;
         String expCard = data.get("title");
         List<WebElement> cards = getDriver().findElements(By.xpath("//h4[@class='card-title']"));
-        for (WebElement el : cards ){
-
+        getWait().until(ExpectedConditions.visibilityOfAllElements(cards));
+        for (WebElement el : cards) {
+            if (el.getText().equals(expCard)) {
+                result = true;
+            }
         }
-    return  true;
+        return result;
+    }
+
+    public void removePosition(){
+
+        data = getData("position", "career");
+        removePositionByTitle(data.get("title"));
     }
 }

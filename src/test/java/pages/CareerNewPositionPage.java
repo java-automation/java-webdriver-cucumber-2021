@@ -8,7 +8,7 @@ import java.util.Map;
 
 public class CareerNewPositionPage extends Page{
 
-    @FindBy(xpath = "//label[@for='positionTitle']/../input")
+    @FindBy(xpath = "//label[@for='positionTitle']/../input") // or label[@for='positionTitle']
     private WebElement titleField;
 
     @FindBy(xpath = "//label[@for='positionDescription']/../textarea")

@@ -64,6 +64,17 @@ public class CareerStepDefs {
 
     @Then("I verify new position is created")
     public void iVerifyNewPositionIsCreated() {
-        recruitPage.
+       assertThat(recruitPage.isCardCreated()).isTrue();
+    }
+
+    @When("I remove new position")
+    public void iRemoveNewPosition() {
+        recruitPage.removePosition();
+
+    }
+
+    @And("I verify new position is removed")
+    public void iVerifyNewPositionIsRemoved() {
+        assertThat(recruitPage.isCardCreated()).isFalse();
     }
 }

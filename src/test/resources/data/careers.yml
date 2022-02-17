@@ -1,13 +1,13 @@
 recruiter:
   name: Student
-  email: student@example.com
-  password: welcome
+  email: "student@example.com"
+  password: "welcome"
 candidate:
-  email: student1@example.com
+  email: student@example.com
   password: welcome
 position:
   title: President of the Earth
-  description: The President is responsible for implementing and enforcing the laws written by Aliens.
+  description: "The President is responsible for implementing and enforcing the laws written by Aliens."
   address: Pushkinskaya Ulitsa, 221в
   city: Izhevsk
   zipcode: "426000"

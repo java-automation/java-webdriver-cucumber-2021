@@ -26,9 +26,8 @@ import java.io.FileNotFoundException;
 import java.io.InputStream;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
+import java.text.SimpleDateFormat;
+import java.util.*;
 
 public class TestContext {
 
@@ -61,6 +60,19 @@ public class TestContext {
         Map<String, Map<String, String>> mapOfMaps = new Yaml().load(stream);
         Map<String, String> testData = mapOfMaps.get(dataKey);
         return testData;
+    }
+
+    public static Map<String, String> getPositionDataFromFile(String dataKey, String project) {
+       Map<String, String> position = getData(dataKey, project);
+//        Random rand = new Random();
+//        int num = rand.nextInt(10000)+1;
+        String timestamp = new SimpleDateFormat("+yyy-MM-dd-hh-ss").format(new Date());
+        String originalTitle = position.get("title");
+        if (originalTitle !=null){
+        String newTitle = originalTitle + timestamp;
+        position.put("title",newTitle);
+        }
+       return position;
     }
 
     private static InputStream getStream(String project) {
