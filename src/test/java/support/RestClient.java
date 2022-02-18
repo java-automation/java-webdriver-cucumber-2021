@@ -4,6 +4,10 @@ import io.restassured.RestAssured;
 import io.restassured.response.Response;
 import io.restassured.specification.RequestSpecification;
 
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.List;
 import java.util.Map;
 
@@ -154,7 +158,7 @@ public class RestClient {
 
         int id = (Integer) result.get("id");
         saveTestData("lastCreatedPositionId", id);
-
+        saveTestData("lastCreatedPosition", result);
         return id;
     }
 
@@ -321,6 +325,7 @@ public class RestClient {
                 .getMap("");
 
     }
+
     public void deleteCandidateById(int id) {
         System.out.println("---------------------------------------");
         System.out.println("Delete Candidate By Id Request Log");
@@ -347,4 +352,77 @@ public class RestClient {
                 .statusCode(204);
     }
 
+    public List<Map<String, Object>> getResumeByCandidateId(int id) {
+
+        // prepare a request
+        RequestSpecification request = RestAssured
+                .given()
+                .baseUri("https://skryabin.com/recruit/api/v1")
+                .header("Authorization", authToken)
+                .contentType("multipart/form-data")
+                .log().all();
+
+        // execute request
+        Response response = request
+                .when()
+                .get("/candidates/" + id + "/resume");
+
+        // parse response
+        List<Map<String, Object>> resumeByCandidateId = response
+                .then()
+                .log().all()
+                .statusCode(200) // 200 -- Resume of the candidate
+                .extract()
+                .htmlPath()
+                .getList("");
+
+        return resumeByCandidateId;
+    }
+
+    public void createResumeByCandidateId(int id) throws IOException {
+        String resumeAbsolutePathToFile = "/Users/gavrilova/Downloads/SilverCamp/java-webdriver-cucumber/src/test/resources/data/downloadedResume.pdf";
+        Path pdfPath = Paths.get(resumeAbsolutePathToFile);
+        File resume = pdfPath.toFile();
+        // prepare a request
+        RequestSpecification request = RestAssured
+                .given()
+                .baseUri("https://skryabin.com/recruit/api/v1")
+                .header("Authorization", authToken)
+                .contentType("multipart/form-data")
+                .multiPart("resume", resume)
+                .log().all();
+
+        // execute request
+        Response response = request
+                .when()
+                .post("/candidates/" + id + "/resume/");
+
+        // parse response
+    }
+
+    public int getPositionIdByTitle(String title) {
+        //prepare a request
+        RequestSpecification requestSpecification = RestAssured
+                .given()
+                .baseUri("https://skryabin.com/recruit/api/v1")
+                .param("title", title)
+                .log().all();
+        //execute request
+        Response response = requestSpecification
+                .when()
+                .get("/positions");
+        //parse response
+        List<Map<String, Object>> positions = response
+                .then()
+                .log().all()
+                .statusCode(200)
+                .extract()
+                .jsonPath()
+                .getList("");
+
+        int id = (Integer) positions.get(0).get("id");
+        System.out.println("Position id to cleanUp = " + id);
+        System.out.println("Position title to cleanUp = " + positions.get(0).get("title"));
+        return id;
+    }
 }

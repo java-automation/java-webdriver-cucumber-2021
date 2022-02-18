@@ -6,6 +6,7 @@ import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 import support.RestClient;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 
@@ -14,9 +15,9 @@ import static support.TestContext.*;
 
 public class RestStepDefs {
     RestClient restClient = new RestClient();
-    Map<String, String> automation = getData("automation", "positions");
+    Map<String, String> automation = getPositionDataFromFile("automation", "positions");
     Map<String, String> fieldsToUpdate = getPositionDataFromFile("automation_updated", "positions");
-    Map<String, String> newCandidates = getData("new_candidate1", "careers");
+    Map<String, String> newCandidates = getPositionDataFromFile("new_candidate1", "careers");
     Map<String, String> fieldsToUpdateCandidate = getCandidateDataFromFile("sdet_updated", "careers");
     long currentTimeMillis = System.currentTimeMillis();
 
@@ -191,7 +192,9 @@ public class RestStepDefs {
     }
 
     @When("I add via REST API {string} resume to a new candidate")
-    public void iAddViaRESTAPIResumeToANewCandidate(String fileType) {
+    public void iAddViaRESTAPIResumeToANewCandidate(String fileType) throws IOException {
+        int id = readTestDataInteger("lastCreatedCandidateId");
+        restClient.createResumeByCandidateId(id);
 /*
 A hint on resume file addition headers in rest assured request:
 .multiPart("resume", resume)
@@ -201,6 +204,8 @@ Where resume is File type.
 
     @Then("I verify via REST API that {string} resume has been added")
     public void iVerifyViaRESTAPIThatResumeHasBeenAdded(String fileType) {
+        int id = readTestDataInteger("lastCreatedCandidateId");
+        restClient.getResumeByCandidateId(id);
     }
 
     @When("I update via REST API new {string} candidate")

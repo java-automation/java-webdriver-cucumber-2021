@@ -8,8 +8,7 @@ import org.openqa.selenium.TakesScreenshot;
 
 import java.util.concurrent.TimeUnit;
 
-import static support.TestContext.getConfig;
-import static support.TestContext.getDriver;
+import static support.TestContext.*;
 
 public class Hooks {
 
@@ -32,4 +31,21 @@ public class Hooks {
         TestContext.teardown();
     }
 
+    @After(value = "@cleanup_position")
+    public void cleanupPosition(Scenario scenario) {
+        if (scenario.isFailed()) {
+            RestClient client = new RestClient();
+            client.login(getData("recruiter", "careers"));
+            int id = client.getPositionIdByTitle(getPositionDataFromFile("automation", "positions").get("title"));
+            client.deletePositionById(id);
+        }
+    }
+    @Before(value = "@create_position")
+    public void createPosition(Scenario scenario) {
+        if (scenario.isFailed()) {
+            RestClient client = new RestClient();
+            client.login(getData("recruiter", "careers"));
+            client.createPosition(getPositionDataFromFile("automation", "positions"));
+        }
+    }
 }

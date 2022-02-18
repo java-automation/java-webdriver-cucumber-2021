@@ -10,16 +10,16 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.util.NoSuchElementException;
 
+import static support.TestContext.getConfig;
 import static support.TestContext.getDriver;
 
 public class Page {
 
+    public final WebDriverWait wait = new WebDriverWait(getDriver(), 10, 200);
     public static final By TOTAL_PRICE_BAR_HEADER = By.xpath("//div[@id='nbsBalanceBarHeader']");
     public static final By TOTAL_CHARGES_SPINNER = By.xpath("//*[@id='total-charges-spinner']");
-    public final WebDriverWait wait = new WebDriverWait(getDriver(), 10, 200);
     public final By CONTINUE_BUTTON_XPATH = By.xpath("//button[@id='nbsBackForwardNavigationContinueButton']");
     public final By PACKAGE_SECTION_XPATH = By.id("nbsShipmentPackagesPackage0");
-
     protected String url;
     protected String title;
 
@@ -35,6 +35,14 @@ public class Page {
 
     public void refreshPage() {
         getDriver().navigate().refresh();
+    }
+
+    public WebDriverWait getWait() {
+        return getWait(getConfig().explicitTimeout);
+    }
+
+    public WebDriverWait getWait(int timeout) {
+        return new WebDriverWait(getDriver(), timeout);
     }
 
     public boolean isPresent(By locator) {

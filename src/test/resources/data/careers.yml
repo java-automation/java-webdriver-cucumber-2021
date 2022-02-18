@@ -60,3 +60,19 @@ new_candidate2:
   zip: "78703"
   summary: "Let's add more candidates!"
 
+sdet:
+  firstName: Sarah
+  middleName: The Next Generation
+  lastName: Connor
+  email: sarah@example.com
+  password: welcome
+  address: 1717 W 6th street
+  city: Austin
+  state: TX
+  zip: "78703"
+  summary: "Let's add more candidates!"
+
+sdet_updated:
+  city: Round Rock
+  state: IL
+  zip: "78664"

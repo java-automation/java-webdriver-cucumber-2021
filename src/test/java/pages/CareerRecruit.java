@@ -2,6 +2,7 @@ package pages;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.NoSuchElementException;
+import org.openqa.selenium.TimeoutException;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.FindBy;
@@ -19,12 +20,17 @@ public class CareerRecruit extends Page {
     @FindBy(xpath = "//div[@class='card bg-white mb-3']//*[@class='card-title']")
     private List<WebElement> cardTitles;
 
-
+    ////h4[@class='position-name']
     @FindBy(xpath = "//a[@href='/new_position']//*[@class='card-title']")
     private WebElement newPositionLink;
 
+
     public WebElement positionCard(String title) { //it is an approach to deal with dynamic elements;
         return getDriver().findElement(By.xpath("//h4[text()='" + title + "']/ancestor::div[@class='card bg-white mb-3']"));
+    }
+
+    public By positionCardBy(String title) { //it is an approach to deal with dynamic elements;
+        return (By.xpath("//h4[text()='" + title + "']/ancestor::div[@class='card bg-white mb-3']"));
     }
 
     public WebElement positionCardCloseButton(String title) { //it is an approach to deal with dynamic elements;
@@ -35,20 +41,21 @@ public class CareerRecruit extends Page {
         new Actions(getDriver())
                 .moveToElement(positionCard(title))
                 .perform();
-        wait.until(ExpectedConditions.elementToBeClickable(positionCardCloseButton(title))).click();
-        wait.until(ExpectedConditions.invisibilityOf(positionCard(title)));
+        getWait().until(ExpectedConditions.elementToBeClickable(positionCardCloseButton(title))).click();
+        getWait().until(ExpectedConditions.invisibilityOf(positionCard(title)));
     }
 
 
     public boolean isPositionCardVisible(String title) {
         try {
-            return positionCard(title).isDisplayed();
-        } catch (NoSuchElementException e) {
+            getWait().until(ExpectedConditions.visibilityOf(positionCard(title)));
+            return true;
+        } catch (TimeoutException | NoSuchElementException e) {
             return false;
         }
     }
 
     public void clickNewPosition() {
-        wait.until(ExpectedConditions.visibilityOf(newPositionLink)).click();
+        getWait().until(ExpectedConditions.visibilityOf(newPositionLink)).click();
     }
 }

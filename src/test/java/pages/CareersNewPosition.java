@@ -4,6 +4,8 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.ui.Select;
 
+import java.util.Map;
+
 import static org.junit.Assert.assertEquals;
 
 public class CareersNewPosition extends Page {
@@ -15,6 +17,10 @@ public class CareersNewPosition extends Page {
     private WebElement title;
     @FindBy(xpath = "//label[@for='positionDescription']//../textarea")
     private WebElement description;
+    @FindBy(xpath = "//label[@for='positionAddress']//../input")
+    private WebElement address;
+    @FindBy(xpath = "//label[@for='positionZip']//../input")
+    private WebElement zipCode;
     @FindBy(xpath = "//label[@for='positionCity']//../input")
     private WebElement city;
     @FindBy(xpath = "//label[@for='positionState']//../select")
@@ -54,4 +60,16 @@ public class CareersNewPosition extends Page {
     public void submit() {
         submitButton.click();
     }
+
+    public void createPosition(Map<String, String> position) {
+        title.sendKeys(position.get("title"));
+        description.sendKeys(position.get("description"));
+        address.sendKeys(position.get("address"));
+        city.sendKeys(position.get("city"));
+        zipCode.sendKeys(position.get("zip"));
+        new Select(state).selectByValue(position.get("state"));
+        dateOpen.sendKeys(position.get("dateOpen"));
+        submitButton.click();
+    }
+
 }

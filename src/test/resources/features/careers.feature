@@ -10,7 +10,7 @@ Feature: careers site testing
     And I verify "Principal Automation Engineer" position is removed
 
 
-  @careers2
+  @careers2 @create_position @cleanup_position
   Scenario: Recruiter creates position
     Given I go to "careers" page oop
     And I login as "recruiter"
