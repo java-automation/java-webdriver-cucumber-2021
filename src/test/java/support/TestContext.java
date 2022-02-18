@@ -101,6 +101,18 @@ public class TestContext {
         return position;
     }
 
+    public static Candidate getCandidateDataFromFile(String fileName) {
+        InputStream stream = getStream(fileName);
+        Candidate candidate = new Yaml().loadAs(stream, Candidate.class);
+        String originalEmail = candidate.getEmail();
+        if (originalEmail != null && !originalEmail.isEmpty()) {
+            String[] emailParts = originalEmail.split("@");
+            String newEmail = emailParts[0] + timestamp + "@" + emailParts[1];
+            candidate.setEmail(newEmail);
+        }
+        return candidate;
+    }
+
     public static Map<String, String> getCandidateDataFromFile(String dataKey, String project) {
         Map<String, String> candidate = getData(dataKey, project);
 

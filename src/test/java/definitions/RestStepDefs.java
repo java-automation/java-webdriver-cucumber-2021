@@ -4,9 +4,9 @@ import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
+import support.Candidate;
 import support.RestClient;
 
-import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 
@@ -192,9 +192,9 @@ public class RestStepDefs {
     }
 
     @When("I add via REST API {string} resume to a new candidate")
-    public void iAddViaRESTAPIResumeToANewCandidate(String fileType) throws IOException {
+    public void iAddViaRESTAPIResumeToANewCandidate(String fileType) {
         int id = readTestDataInteger("lastCreatedCandidateId");
-        restClient.createResumeByCandidateId(id);
+        restClient.createResumeByCandidateId(id, fileType);
 /*
 A hint on resume file addition headers in rest assured request:
 .multiPart("resume", resume)
@@ -243,5 +243,11 @@ Where resume is File type.
             int actualId = (Integer) actualCandidate.get("id");
             assertThat(actualId).isNotEqualTo(deletedCandidateId);
         }
+    }
+
+    @When("I create via REST API {string} candidate data") //not with Map of Maps, but with custom data
+    //the data, we take from the file can be mapped to actual object and send over in RESt API and same mapper class can be used;
+    public void iCreateViaRESTAPICandidateData(String role) {
+        Candidate candidate = getCandidateDataFromFile(role);
     }
 }

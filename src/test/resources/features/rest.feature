@@ -36,7 +36,7 @@ Feature: REST API
     Given I login via REST API as "recruiter"
     When I create via REST API "sdet" candidate
     Then I verify via REST API new "sdet" candidate is in the list
-    When I add via REST API "pdf" resume to a new candidate
+    When I add via REST API "downloadedResume.pdf" resume to a new candidate
     Then I verify via REST API that "pdf" resume has been added
     When I update via REST API new "sdet" candidate
     Then I verify via REST API new "sdet" candidate is updated
@@ -44,3 +44,15 @@ Feature: REST API
     Then I verify via REST API new candidate is deleted
     And I logout via REST API
 
+  @rest8
+  Scenario: REST API Candidates CRUD with Data //ability to create Candidate with data
+    Given I login via REST API as "recruiter"
+    When I create via REST API "sdet" candidate data
+    Then I verify via REST API new "sdet" candidate is in the list data
+    When I add via REST API "pdf" resume to a new candidate data
+    Then I verify via REST API that "pdf" resume has been added data
+#    When I update via REST API new "sdet" candidate
+#    Then I verify via REST API new "sdet" candidate is updated
+#    When I delete via REST API new candidate
+#    Then I verify via REST API new candidate is deleted
+    And I logout via REST API

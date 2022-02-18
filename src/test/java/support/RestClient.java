@@ -5,7 +5,6 @@ import io.restassured.response.Response;
 import io.restassured.specification.RequestSpecification;
 
 import java.io.File;
-import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
@@ -379,8 +378,8 @@ public class RestClient {
         return resumeByCandidateId;
     }
 
-    public void createResumeByCandidateId(int id) throws IOException {
-        String resumeAbsolutePathToFile = "/Users/gavrilova/Downloads/SilverCamp/java-webdriver-cucumber/src/test/resources/data/downloadedResume.pdf";
+    public void createResumeByCandidateId(int id, String fileType){
+        String resumeAbsolutePathToFile = "/Users/gavrilova/Downloads/SilverCamp/java-webdriver-cucumber/src/test/resources/data/" + fileType;
         Path pdfPath = Paths.get(resumeAbsolutePathToFile);
         File resume = pdfPath.toFile();
         // prepare a request
