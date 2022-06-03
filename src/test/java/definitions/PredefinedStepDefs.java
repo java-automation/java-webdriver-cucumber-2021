@@ -10,6 +10,7 @@ import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import java.io.File;
+import java.time.Duration;
 import java.util.Date;
 import java.util.Iterator;
 import static org.assertj.core.api.Assertions.*;
@@ -20,7 +21,6 @@ public class PredefinedStepDefs {
     public void iOpenUrl(String url) {
         getDriver().get(url);
     }
-
     @Then("I resize window to {int} and {int}")
     public void iResizeWindowToAnd(int width, int height) {
         Dimension dimension = new Dimension(width, height);
@@ -52,12 +52,12 @@ public class PredefinedStepDefs {
 
     @Then("I wait for element with xpath {string} to be present")
     public void iWaitForElementWithXpathToBePresent(String xpath) {
-        new WebDriverWait(getDriver(), 10, 200).until(ExpectedConditions.presenceOfElementLocated(By.xpath(xpath)));
+        new WebDriverWait(getDriver(), Duration.ofSeconds(10)).until(ExpectedConditions.presenceOfElementLocated(By.xpath(xpath)));
     }
 
     @Then("I wait for element with xpath {string} to not be present")
     public void iWaitForElementWithXpathToNotBePresent(String xpath) {
-        new WebDriverWait(getDriver(), 10, 200).until(ExpectedConditions.not(ExpectedConditions.presenceOfElementLocated(By.xpath(xpath))));
+        new WebDriverWait(getDriver(), Duration.ofSeconds(10)).until(ExpectedConditions.not(ExpectedConditions.presenceOfElementLocated(By.xpath(xpath))));
     }
 
     @Then("element with xpath {string} should be displayed")
